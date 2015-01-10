@@ -29,7 +29,6 @@ class ColorScheme(object):
 
 
 class ColorSchemes(object):
-
     # A green based color scheme resembling military avionics displays
     military = ColorScheme(background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255))
 
@@ -71,6 +70,7 @@ class DisplaySettings(object):
 
 
 class MFDController(object):
+    display = None
 
     def __init__(self, display):
         self.display = display
@@ -96,53 +96,76 @@ class MFDController(object):
 
 class MFDPage(object):
 
+    controller = None
+    display = None
+
+    def __init__(self, controller):
+        self.controller = controller
+        self.display = controller.display
+
+    def render_headers(self, font, font_color, headers, start_x, end_x, y, line_offset=0):
+        num_headers = len(headers)
+        if num_headers > 0:
+
+            # Do division up front
+            header_offset = (end_x - start_x) / num_headers
+            half_offset = (header_offset / 2.0)
+
+            # Render from left to right
+            x_offset = 0
+            for header in headers:
+                x = start_x + x_offset + half_offset
+                pos = render_text(self.controller.display, font, header, x, y, font_color)
+                if line_offset < 0:
+                    pygame.draw.line(self.controller.display.surface, font_color, (x + (pos.width / 2), y - 2),
+                                     (x + (pos.width / 2), y - 2 - abs(line_offset)))
+                elif line_offset > 0:
+                    pygame.draw.line(self.controller.display.surface, font_color, (x + (pos.width / 2), y + pos.height),
+                                     (x + (pos.width / 2), y + pos.height + line_offset))
+
+                x_offset += header_offset
+
     pass
 
 
 class MFDRootPage(MFDPage):
 
     def render(self, display):
-        # Draw our App Headers
-        top_headers = ('[SCH]', 'PRG', 'GAM', 'SOC', 'SYS')
-        btm_headers = ('TASK', 'MAIL', 'CAL', 'NAV', 'FOR')
-        render_headers(display, display.font_normal, display.color_scheme.foreground, top_headers, display.padding_x,
-                       display.res_x - display.padding_x, display.padding_y, line_offset=-5)
-        render_headers(display, display.font_normal, display.color_scheme.foreground, btm_headers, display.padding_x,
-                       display.res_x - display.padding_x, display.res_y - display.font_size_normal, line_offset=5)
 
-        center_rect = render_text_centered(display, display.font_normal, app_name + ' ' + app_version,
-                                           display.res_x / 2, (display.res_y / 2) - (display.font_size_normal / 2),
-                                           display.color_scheme.highlight)
-        render_text_centered(display, display.font_normal, 'Systems Test', display.res_x / 2,
+        top_headers = ('SCH', 'PRG', 'GAM', 'SOC', 'SYS')
+        btm_headers = ('TASK', 'MAIL', 'CAL', 'NAV', 'FOR')
+
+        self.render_headers(self.display.font_normal,
+                            display.color_scheme.foreground,
+                            top_headers,
+                            display.padding_x,
+                            self.display.res_x - display.padding_x,
+                            display.padding_y, line_offset=-5)
+
+        self.render_headers(self.display.font_normal,
+                            display.color_scheme.foreground,
+                            btm_headers,
+                            display.padding_x,
+                            self.display.res_x - display.padding_x,
+                            display.res_y - display.font_size_normal,
+                            line_offset=5)
+
+        center_rect = render_text_centered(self.display,
+                                           self.display.font_normal,
+                                           app_name + ' ' + app_version,
+                                           self.display.res_x / 2,
+                                           (self.display.res_y / 2) - (self.display.font_size_normal / 2),
+                                           self.display.color_scheme.highlight)
+
+        render_text_centered(self.display,
+                             display.font_normal,
+                             'Systems Test',
+                             display.res_x / 2,
                              center_rect.top + display.font_size_normal + display.padding_y,
                              display.color_scheme.highlight)
 
 
-def render_headers(display, font, font_color, headers, start_x, end_x, y, line_offset=0):
-    num_headers = len(headers)
-    if num_headers > 0:
-
-        # Do division up front
-        header_offset = (end_x - start_x) / num_headers
-        half_offset = (header_offset / 2.0)
-
-        # Render from left to right
-        x_offset = 0
-        for header in headers:
-            x = start_x + x_offset + half_offset
-            pos = render_text(display, font, header, x, y, font_color)
-            if line_offset < 0:
-                pygame.draw.line(display.surface, font_color, (x + (pos.width / 2), y - 2),
-                                 (x + (pos.width / 2), y - 2 - abs(line_offset)))
-            elif line_offset > 0:
-                pygame.draw.line(display.surface, font_color, (x + (pos.width / 2), y + pos.height),
-                                 (x + (pos.width / 2), y + pos.height + line_offset))
-
-            x_offset += header_offset
-
-
 def start_mfd(display):
-
     # Start up PyGame
     init_pygame_graphics(display, app_name)
 
@@ -150,11 +173,10 @@ def start_mfd(display):
     clock = pygame.time.Clock()
 
     controller = MFDController(display)
-    page = MFDRootPage()
+    page = MFDRootPage(controller)
 
     # Main Processing Loop
     while controller.continue_executing:
-
         # Fill the background with black
         display.surface.fill(display.color_scheme.background)
 
