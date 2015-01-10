@@ -5,6 +5,41 @@ from PygameHelpers import *
 __author__ = 'Matt Eland'
 
 
+class ColorScheme:
+
+    def __init__(self, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255)):
+        self.background = background
+        self.foreground = foreground
+        self.highlight = highlight
+        pass
+
+    def clone_to(self, target):
+        target.background = self.background
+        target.foreground = self.foreground
+        target.highlight = self.highlight
+        return target
+
+    background = (0, 0, 0)
+    foreground = (0, 255, 0)
+    highlight = (255, 255, 255)
+
+    pass
+
+
+class ColorSchemes:
+
+    def __init__(self):
+        pass
+
+    # A green based color scheme resembling military avionics displays
+    military = ColorScheme(background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255))
+
+    # A cyan display
+    cyan = ColorScheme(background=(0, 0, 32), foreground=(0, 255, 255), highlight=(0, 0, 255))
+
+    pass
+
+
 class DisplaySettings:
     """Contains information related to the drawing dimensions of the application window as well as the drawing surface."""
 
@@ -21,6 +56,7 @@ class DisplaySettings:
     padding_x = 0
     padding_y = 8
     surface = None
+    color_scheme = ColorSchemes.military
     pass
 
 
@@ -58,9 +94,6 @@ def start_mfd(display):
     # Set up Font
     font_size = 24
     font = build_font(font_size)
-    color_white = (255, 255, 255)
-    color_black = (0, 0, 0)
-    color_green = (0, 255, 0)
 
     # Standard Timer
     clock = pygame.time.Clock()
@@ -71,16 +104,16 @@ def start_mfd(display):
     while keep_rendering:
 
         # Fill the background with black
-        display.surface.fill(color_black)
+        display.surface.fill(display.color_scheme.background)
 
         # Draw our App Headers
         top_headers = ('[SCH]', 'PRG', 'GAM', 'SOC', 'SYS')
         btm_headers = ('TASK', 'MAIL', 'CAL', 'NAV', 'FOR')
-        render_headers(display, font, color_green, top_headers, display.padding_x, display.res_x - display.padding_x, display.padding_y, line_offset=-5)
-        render_headers(display, font, color_green, btm_headers, display.padding_x, display.res_x - display.padding_x, display.res_y - font_size, line_offset=5)
+        render_headers(display, font, display.color_scheme.foreground, top_headers, display.padding_x, display.res_x - display.padding_x, display.padding_y, line_offset=-5)
+        render_headers(display, font, display.color_scheme.foreground, btm_headers, display.padding_x, display.res_x - display.padding_x, display.res_y - font_size, line_offset=5)
 
-        center_rect = render_text_centered(display, font, app_name + ' ' + app_version, display.res_x / 2, (display.res_y / 2) - (font_size / 2), color_white)
-        render_text_centered(display, font, 'Systems Test', display.res_x / 2, center_rect.top + font_size + display.padding_y, color_white)
+        center_rect = render_text_centered(display, font, app_name + ' ' + app_version, display.res_x / 2, (display.res_y / 2) - (font_size / 2), display.color_scheme.highlight)
+        render_text_centered(display, font, 'Systems Test', display.res_x / 2, center_rect.top + font_size + display.padding_y, display.color_scheme.highlight)
 
         # Process all events
         events = pygame.event.get()
