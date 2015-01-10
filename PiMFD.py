@@ -234,7 +234,6 @@ class SysClockPage(MFDPage):
         time_format = '%m/%d/%Y - %H:%M:%S'
 
         # TODO: It should be simpler to render 3 lines of text
-
         rect = render_text(display,
                            display.font_normal,
                            "Current Time",
