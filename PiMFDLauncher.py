@@ -4,4 +4,6 @@ __author__ = 'Matt Eland'
 from PiMFD import *
 
 
-start_mfd()
+display = DisplaySettings()
+
+display.start_mfd()

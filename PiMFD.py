@@ -1,7 +1,27 @@
-__author__ = 'Matt Eland'
-
 from TextUtilities import *
 from PygameHelpers import *
+
+
+__author__ = 'Matt Eland'
+
+
+class DisplaySettings:
+    """Contains information related to the drawing dimensions of the application window as well as the drawing surface."""
+
+    def __init__(self, x=800, y=480):
+        self.res_x = x
+        self.res_y = y
+        pass
+
+    def start_mfd(self):
+        start_mfd(self)
+
+    res_x = 800
+    res_y = 480
+    padding_x = 0
+    padding_y = 8
+    surface = None
+    pass
 
 
 def render_headers(display, font, font_color, headers, start_x, end_x, y, line_offset=0):
@@ -19,27 +39,21 @@ def render_headers(display, font, font_color, headers, start_x, end_x, y, line_o
             x = start_x + x_offset + half_offset
             pos = render_text(display, font, header, x, y, font_color)
             if line_offset < 0:
-                pygame.draw.line(display, font_color, (x + (pos.width / 2), y - 2), (x + (pos.width / 2), y - 2 - abs(line_offset)))
+                pygame.draw.line(display.surface, font_color, (x + (pos.width / 2), y - 2), (x + (pos.width / 2), y - 2 - abs(line_offset)))
             elif line_offset > 0:
-                pygame.draw.line(display, font_color, (x + (pos.width / 2), y + pos.height), (x + (pos.width / 2), y + pos.height + line_offset))
+                pygame.draw.line(display.surface, font_color, (x + (pos.width / 2), y + pos.height), (x + (pos.width / 2), y + pos.height + line_offset))
 
             x_offset += header_offset
 
 
-def start_mfd():
+def start_mfd(display):
 
     # App Info
     app_name = 'Pi MFD'
     app_version = '0.01 Development Version'
 
-    # Display Constants
-    res_x = 800
-    res_y = 480
-    padding_x = 0
-    padding_y = 8
-
     # Start up PyGame
-    lcd = init_pygame_graphics(res_x, res_y, app_name)
+    init_pygame_graphics(display, app_name)
 
     # Set up Font
     font_size = 24
@@ -57,16 +71,16 @@ def start_mfd():
     while keep_rendering:
 
         # Fill the background with black
-        lcd.fill(color_black)
+        display.surface.fill(color_black)
 
         # Draw our App Headers
         top_headers = ('[SCH]', 'PRG', 'GAM', 'SOC', 'SYS')
         btm_headers = ('TASK', 'MAIL', 'CAL', 'NAV', 'FOR')
-        render_headers(lcd, font, color_green, top_headers, padding_x, res_x - padding_x, padding_y, line_offset=-5)
-        render_headers(lcd, font, color_green, btm_headers, padding_x, res_x - padding_x, res_y - font_size, line_offset=5)
+        render_headers(display, font, color_green, top_headers, display.padding_x, display.res_x - display.padding_x, display.padding_y, line_offset=-5)
+        render_headers(display, font, color_green, btm_headers, display.padding_x, display.res_x - display.padding_x, display.res_y - font_size, line_offset=5)
 
-        center_rect = render_text_centered(lcd, font, app_name + ' ' + app_version, res_x / 2, (res_y / 2) - (font_size / 2), color_white)
-        render_text_centered(lcd, font, 'Systems Test', res_x / 2, center_rect.top + font_size + padding_y, color_white)
+        center_rect = render_text_centered(display, font, app_name + ' ' + app_version, display.res_x / 2, (display.res_y / 2) - (font_size / 2), color_white)
+        render_text_centered(display, font, 'Systems Test', display.res_x / 2, center_rect.top + font_size + display.padding_y, color_white)
 
         # Process all events
         events = pygame.event.get()
