@@ -73,12 +73,14 @@ class DisplaySettings(object):
 
 
 class MFDController(object):
+
     display = None
+    active_page = None
+    continue_executing = True
 
     def __init__(self, display):
         self.display = display
-
-    continue_executing = True
+        self.active_page = MFDRootPage(self)
 
     def process_events(self):
         # Process all events
@@ -95,6 +97,24 @@ class MFDController(object):
                 # Handle escape by closing the app.
                 if event.key == pygame.K_ESCAPE:
                     self.continue_executing = False
+
+    def update_application(self):
+
+        page = self.active_page
+
+        page.top_headers = list()
+        page.top_headers.append(MFDButton("SCH", selected=True))
+        page.top_headers.append(MFDButton("PRG"))
+        page.top_headers.append(MFDButton("GAM"))
+        page.top_headers.append(MFDButton("SOC"))
+        page.top_headers.append(MFDButton("SYS"))
+
+        page.bottom_headers = list()
+        page.bottom_headers.append(MFDButton('TASK'))
+        page.bottom_headers.append(MFDButton('MAIL'))
+        page.bottom_headers.append(MFDButton('CAL'))
+        page.bottom_headers.append(MFDButton('NAV'))
+        page.bottom_headers.append(MFDButton('WTHR'))
 
 
 class MFDButton(object):
@@ -195,34 +215,29 @@ class MFDRootPage(MFDPage):
 
 
 def start_mfd(display):
-    # Start up PyGame
+
+    # TODO: This should not need to know anything about pygame
+
+    # Start up the graphics engine
     init_pygame_graphics(display, app_name)
 
     # Standard Timer
     clock = pygame.time.Clock()
 
+    # Initialize the controller
     controller = MFDController(display)
-    page = MFDRootPage(controller)
-
-    page.top_headers.append(MFDButton("SCH", selected=True))
-    page.top_headers.append(MFDButton("PRG"))
-    page.top_headers.append(MFDButton("GAM"))
-    page.top_headers.append(MFDButton("SOC"))
-    page.top_headers.append(MFDButton("SYS"))
-
-    page.bottom_headers.append(MFDButton('TASK'))
-    page.bottom_headers.append(MFDButton('MAIL'))
-    page.bottom_headers.append(MFDButton('CAL'))
-    page.bottom_headers.append(MFDButton('NAV'))
-    page.bottom_headers.append(MFDButton('WTHR'))
 
     # Main Processing Loop
     while controller.continue_executing:
+
         # Fill the background with black
         display.surface.fill(display.color_scheme.background)
 
+        # Update the headers
+        controller.update_application()
+
         # Render the current page
-        page.render(display)
+        controller.active_page.render(display)
 
         # Handle input, allow user to close window / exit / control the app
         controller.process_events()
