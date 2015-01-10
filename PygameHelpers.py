@@ -13,7 +13,12 @@ def init_pygame_graphics(displaySettings, title):
     pygame.init()
 
     # Prepare the Display
-    display = pygame.display.set_mode((displaySettings.res_x, displaySettings.res_y))
+    if displaySettings.is_fullscreen:
+        display = pygame.display.set_mode((displaySettings.res_x, displaySettings.res_y), pygame.FULLSCREEN)
+    else:
+        display = pygame.display.set_mode((displaySettings.res_x, displaySettings.res_y))
+
+    # Don't settle with that silly "pygame window" label
     pygame.display.set_caption(title)
 
     # Return the Display

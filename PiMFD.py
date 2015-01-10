@@ -56,6 +56,7 @@ class DisplaySettings:
     padding_x = 0
     padding_y = 8
     surface = None
+    is_fullscreen = True
     color_scheme = ColorSchemes.military
     pass
 

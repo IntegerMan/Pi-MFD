@@ -5,6 +5,7 @@ from PiMFD import *
 
 
 display = DisplaySettings()
-display.color_scheme = ColorSchemes.cyan
+display.color_scheme = ColorSchemes.military
+display.is_fullscreen = False
 
 display.start_mfd()
