@@ -9,9 +9,10 @@ app_version = '0.01 Development Version'
 
 
 class ColorScheme(object):
-    def __init__(self, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255)):
+    def __init__(self, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255), selected=(255, 255, 255)):
         self.background = background
         self.foreground = foreground
+        self.selected = selected
         self.highlight = highlight
         pass
 
@@ -19,21 +20,23 @@ class ColorScheme(object):
         target.background = self.background
         target.foreground = self.foreground
         target.highlight = self.highlight
+        target.selected = self.selected
         return target
 
     background = (0, 0, 0)
     foreground = (0, 255, 0)
     highlight = (255, 255, 255)
+    selected = (255, 255, 255)
 
     pass
 
 
 class ColorSchemes(object):
     # A green based color scheme resembling military avionics displays
-    military = ColorScheme(background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255))
+    military = ColorScheme(background=(0, 8, 0), foreground=(0, 150, 0), selected=(0, 255, 0), highlight=(255, 255, 255))
 
     # A cyan display
-    cyan = ColorScheme(background=(0, 0, 32), foreground=(0, 255, 255), highlight=(0, 0, 255))
+    cyan = ColorScheme(background=(0, 0, 32), foreground=(0, 170, 170), selected=(0, 255, 255), highlight=(0, 0, 255))
 
     pass
 
@@ -94,7 +97,49 @@ class MFDController(object):
                     self.continue_executing = False
 
 
+class MFDButton(object):
+
+    text = None
+    enabled = True
+    selected = False
+
+    def __init__(self, text, selected=False, enabled=True):
+        self.text = text
+        self.selected = selected
+        self.enabled = enabled
+
+    def render(self, display, x, is_top):
+
+        # Figure out where we're starting vertically
+        y = display.padding_y
+        if not is_top:
+            y = display.res_y - display.padding_y - display.font_size_normal
+
+        font_color = display.color_scheme.foreground
+
+        label = self.text
+
+        # If it's selected, use a different color and surround with brackets
+        if self.selected:
+            font_color = display.color_scheme.selected
+            label = '[' + label + ']'
+
+        pos = render_text(display, display.font_normal, label, x, y, font_color)
+
+        line_length = 5
+
+        if is_top:
+            pygame.draw.line(display.surface, font_color, (x + (pos.width / 2), y - 2),
+                             (x + (pos.width / 2), y - 2 - line_length))
+        else:
+            pygame.draw.line(display.surface, font_color, (x + (pos.width / 2), y + pos.height),
+                             (x + (pos.width / 2), y + pos.height + line_length))
+
+
 class MFDPage(object):
+
+    top_headers = list()
+    bottom_headers = list()
 
     controller = None
     display = None
@@ -103,7 +148,11 @@ class MFDPage(object):
         self.controller = controller
         self.display = controller.display
 
-    def render_headers(self, font, font_color, headers, start_x, end_x, y, line_offset=0):
+    def render_button_row(self, headers, is_top):
+
+        start_x = self.display.padding_x
+        end_x = self.display.res_x - self.display.padding_x
+
         num_headers = len(headers)
         if num_headers > 0:
 
@@ -115,40 +164,20 @@ class MFDPage(object):
             x_offset = 0
             for header in headers:
                 x = start_x + x_offset + half_offset
-                pos = render_text(self.controller.display, font, header, x, y, font_color)
-                if line_offset < 0:
-                    pygame.draw.line(self.controller.display.surface, font_color, (x + (pos.width / 2), y - 2),
-                                     (x + (pos.width / 2), y - 2 - abs(line_offset)))
-                elif line_offset > 0:
-                    pygame.draw.line(self.controller.display.surface, font_color, (x + (pos.width / 2), y + pos.height),
-                                     (x + (pos.width / 2), y + pos.height + line_offset))
-
+                header.render(self.controller.display, x, is_top)
                 x_offset += header_offset
 
-    pass
+    def render_button_rows(self):
+        self.render_button_row(self.top_headers, True)
+        self.render_button_row(self.bottom_headers, False)
 
 
 class MFDRootPage(MFDPage):
 
     def render(self, display):
 
-        top_headers = ('SCH', 'PRG', 'GAM', 'SOC', 'SYS')
-        btm_headers = ('TASK', 'MAIL', 'CAL', 'NAV', 'FOR')
-
-        self.render_headers(self.display.font_normal,
-                            display.color_scheme.foreground,
-                            top_headers,
-                            display.padding_x,
-                            self.display.res_x - display.padding_x,
-                            display.padding_y, line_offset=-5)
-
-        self.render_headers(self.display.font_normal,
-                            display.color_scheme.foreground,
-                            btm_headers,
-                            display.padding_x,
-                            self.display.res_x - display.padding_x,
-                            display.res_y - display.font_size_normal,
-                            line_offset=5)
+        # Render the headers
+        self.render_button_rows()
 
         center_rect = render_text_centered(self.display,
                                            self.display.font_normal,
@@ -174,6 +203,18 @@ def start_mfd(display):
 
     controller = MFDController(display)
     page = MFDRootPage(controller)
+
+    page.top_headers.append(MFDButton("SCH", selected=True))
+    page.top_headers.append(MFDButton("PRG"))
+    page.top_headers.append(MFDButton("GAM"))
+    page.top_headers.append(MFDButton("SOC"))
+    page.top_headers.append(MFDButton("SYS"))
+
+    page.bottom_headers.append(MFDButton('TASK'))
+    page.bottom_headers.append(MFDButton('MAIL'))
+    page.bottom_headers.append(MFDButton('CAL'))
+    page.bottom_headers.append(MFDButton('NAV'))
+    page.bottom_headers.append(MFDButton('WTHR'))
 
     # Main Processing Loop
     while controller.continue_executing:
