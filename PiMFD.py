@@ -1,3 +1,4 @@
+from time import strftime, gmtime
 from TextUtilities import *
 from PygameHelpers import *
 
@@ -55,7 +56,7 @@ class DisplaySettings(object):
     res_x = 800
     res_y = 480
 
-    padding_x = 0
+    padding_x = 8
     padding_y = 8
 
     surface = None
@@ -68,6 +69,9 @@ class DisplaySettings(object):
 
     font_size_normal = 24
     font_normal = None
+
+    def get_content_start_y(self):
+        return (self.padding_y * 2) + self.font_size_normal
 
     pass
 
@@ -191,13 +195,18 @@ class MFDPage(object):
         self.render_button_row(self.top_headers, True)
         self.render_button_row(self.bottom_headers, False)
 
-
-class MFDRootPage(MFDPage):
-
     def render(self, display):
 
         # Render the headers
         self.render_button_rows()
+
+        pass
+
+
+class MFDRootPage(MFDPage):
+
+    def render(self, display):
+        super(MFDRootPage, self).render(display)
 
         center_rect = render_text_centered(self.display,
                                            self.display.font_normal,
@@ -214,6 +223,44 @@ class MFDRootPage(MFDPage):
                              display.color_scheme.highlight)
 
 
+class SysClockPage(MFDPage):
+
+    def render(self, display):
+        super(SysClockPage, self).render(display)
+
+        x = display.padding_x
+        y = display.get_content_start_y()
+
+        time_format = '%m/%d/%Y - %H:%M:%S'
+
+        # TODO: It should be simpler to render 3 lines of text
+
+        rect = render_text(display,
+                           display.font_normal,
+                           "Current Time",
+                           x,
+                           y,
+                           self.display.color_scheme.highlight)
+
+        y = rect.bottom + display.padding_y
+
+        rect = render_text(display,
+                           display.font_normal,
+                           strftime("SYS: " + time_format),
+                           x,
+                           y,
+                           self.display.color_scheme.foreground)
+
+        y = rect.bottom + display.padding_y
+
+        render_text(display,
+                    display.font_normal,
+                    strftime("GMT: " + time_format, gmtime()),
+                    x,
+                    y,
+                    display.color_scheme.foreground)
+
+
 def start_mfd(display):
 
     # TODO: This should not need to know anything about pygame
@@ -226,6 +273,7 @@ def start_mfd(display):
 
     # Initialize the controller
     controller = MFDController(display)
+    controller.active_page = SysClockPage(controller)
 
     # Main Processing Loop
     while controller.continue_executing:
