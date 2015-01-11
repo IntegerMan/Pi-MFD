@@ -1,7 +1,7 @@
-from time import strftime, gmtime
 from PiMFD.ColorScheme import ColorSchemes
+from PiMFD.Pages.MFDPage import MFDRootPage
+from PiMFD.Pages.SystemPages import SysClockPage
 
-from PiMFD.TextUtilities import *
 from PiMFD.PygameHelpers import *
 
 
@@ -15,8 +15,8 @@ class MFDAppOptions(object):
     display = None
 
 
-class DisplaySettings(object):
-    """Contains information related to the drawing dimensions of the application window as well as the drawing surface."""
+class DisplayManager(object):
+    """Contains information and functions related to the drawing dimensions of the application window as well as the drawing surface."""
 
     def __init__(self, x=800, y=480):
         self.res_x = x
@@ -47,6 +47,26 @@ class DisplaySettings(object):
         return (self.padding_y * 2) + self.font_size_normal
 
     pass
+
+    def render_text(self, font, text, left, top, color, background=None):
+        text_surface = font.render(text, True, color)
+        rect = text_surface.get_rect(top=top, left=left)
+
+        if background is not None:
+            self.surface.fill(background, rect=rect)
+
+        self.surface.blit(text_surface, rect)
+        return rect
+
+    def render_text_centered(self, font, text, left, top, color, background=None):
+        text_surface = font.render(text, True, color)
+        rect = text_surface.get_rect(center=(left, top))
+
+        if background is not None:
+            self.surface.fill(background, rect=rect)
+
+        self.surface.blit(text_surface, rect)
+        return rect
 
 
 class MFDController(object):
@@ -122,7 +142,7 @@ class MFDButton(object):
             background = display.color_scheme.foreground
             label = '[' + label + ']'
 
-        pos = render_text(display, display.font_normal, label, x, y, font_color, background=background)
+        pos = display.render_text(display.font_normal, label, x, y, font_color, background=background)
 
         line_length = 5
 
@@ -132,106 +152,6 @@ class MFDButton(object):
         else:
             pygame.draw.line(display.surface, display.color_scheme.foreground, (x + (pos.width / 2), y + pos.height),
                              (x + (pos.width / 2), y + pos.height + line_length))
-
-
-class MFDPage(object):
-
-    top_headers = list()
-    bottom_headers = list()
-
-    controller = None
-    display = None
-
-    def __init__(self, controller):
-        self.controller = controller
-        self.display = controller.display
-
-    def render_button_row(self, headers, is_top):
-
-        start_x = self.display.padding_x
-        end_x = self.display.res_x - self.display.padding_x
-
-        num_headers = len(headers)
-        if num_headers > 0:
-
-            # Do division up front
-            header_offset = (end_x - start_x) / num_headers
-            half_offset = (header_offset / 2.0)
-
-            # Render from left to right
-            x_offset = 0
-            for header in headers:
-                x = start_x + x_offset + half_offset
-                header.render(self.controller.display, x, is_top)
-                x_offset += header_offset
-
-    def render_button_rows(self):
-        self.render_button_row(self.top_headers, True)
-        self.render_button_row(self.bottom_headers, False)
-
-    def render(self, display):
-
-        # Render the headers
-        self.render_button_rows()
-
-        pass
-
-
-class MFDRootPage(MFDPage):
-
-    def render(self, display):
-        super(MFDRootPage, self).render(display)
-
-        center_rect = render_text_centered(self.display,
-                                           self.display.font_normal,
-                                           self.controller.app_name + ' ' + self.controller.app_version,
-                                           self.display.res_x / 2,
-                                           (self.display.res_y / 2) - (self.display.font_size_normal / 2),
-                                           self.display.color_scheme.highlight)
-
-        render_text_centered(self.display,
-                             display.font_normal,
-                             'Systems Test',
-                             display.res_x / 2,
-                             center_rect.top + display.font_size_normal + display.padding_y,
-                             display.color_scheme.highlight)
-
-
-class SysClockPage(MFDPage):
-
-    def render(self, display):
-        super(SysClockPage, self).render(display)
-
-        x = display.padding_x
-        y = display.get_content_start_y()
-
-        time_format = '%m/%d/%Y - %H:%M:%S'
-
-        # TODO: It should be simpler to render 3 lines of text
-        rect = render_text(display,
-                           display.font_normal,
-                           "Current Time",
-                           x,
-                           y,
-                           self.display.color_scheme.highlight)
-
-        y = rect.bottom + display.padding_y
-
-        rect = render_text(display,
-                           display.font_normal,
-                           strftime("SYS: " + time_format),
-                           x,
-                           y,
-                           self.display.color_scheme.foreground)
-
-        y = rect.bottom + display.padding_y
-
-        render_text(display,
-                    display.font_normal,
-                    strftime("GMT: " + time_format, gmtime()),
-                    x,
-                    y,
-                    display.color_scheme.foreground)
 
 
 def start_mfd(display, app_options):

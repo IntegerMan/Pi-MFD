@@ -5,8 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>cc0777f3-5714-4e5a-aa5d-bbe710e4d3dd</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>
-    </StartupFile>
+    <StartupFile>WinLauncher.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -15,6 +14,7 @@
     <RootNamespace>Pi-MFD</RootNamespace>
     <InterpreterId>{9a7a9026-48c1-4688-9d5d-e5699d47d074}</InterpreterId>
     <InterpreterVersion>2.7</InterpreterVersion>
+    <IsWindowsApplication>True</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,8 +26,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FSLauncher.py" />
+    <Compile Include="PiMFD\ColorScheme.py" />
+    <Compile Include="PiMFD\Pages\MFDPage.py" />
+    <Compile Include="PiMFD\Pages\SystemPages.py" />
+    <Compile Include="PiMFD\Pages\__init__.py" />
     <Compile Include="PiMFD\PygameHelpers.py" />
-    <Compile Include="PiMFD\TextUtilities.py" />
     <Compile Include="PiMFD\__init__.py" />
     <Compile Include="WinLauncher.py" />
   </ItemGroup>
@@ -48,6 +51,7 @@
   <ItemGroup>
     <Folder Include="Fonts\" />
     <Folder Include="PiMFD\" />
+    <Folder Include="PiMFD\Pages\" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\2.7" />
