@@ -6,8 +6,12 @@ from PiMFD.PygameHelpers import *
 
 __author__ = 'Matt Eland'
 
-app_name = 'Pi-MFD'
-app_version = '0.01 Development Version'
+
+class MFDAppOptions(object):
+    app_name = 'Pi-MFD'
+    app_version = '0.01 Development Version'
+    font_name = 'Fonts\VeraMono.ttf'
+    display = None
 
 
 class ColorScheme(object):
@@ -51,8 +55,8 @@ class DisplaySettings(object):
         self.res_y = y
         pass
 
-    def start_mfd(self):
-        start_mfd(self)
+    def start_mfd(self, app_options):
+        start_mfd(self, app_options)
 
     res_x = 800
     res_y = 480
@@ -85,7 +89,6 @@ class MFDController(object):
 
     def __init__(self, display):
         self.display = display
-        self.active_page = MFDRootPage(self)
 
     def process_events(self):
         # Process all events
@@ -211,7 +214,7 @@ class MFDRootPage(MFDPage):
 
         center_rect = render_text_centered(self.display,
                                            self.display.font_normal,
-                                           app_name + ' ' + app_version,
+                                           self.controller.app_name + ' ' + self.controller.app_version,
                                            self.display.res_x / 2,
                                            (self.display.res_y / 2) - (self.display.font_size_normal / 2),
                                            self.display.color_scheme.highlight)
@@ -261,18 +264,21 @@ class SysClockPage(MFDPage):
                     display.color_scheme.foreground)
 
 
-def start_mfd(display):
+def start_mfd(display, app_options):
 
     # TODO: This should not need to know anything about pygame
 
     # Start up the graphics engine
-    init_pygame_graphics(display, app_name)
+    init_pygame_graphics(display, app_options.app_name, app_options.font_name)
 
     # Standard Timer
     clock = pygame.time.Clock()
 
     # Initialize the controller
     controller = MFDController(display)
+    controller.app_name = app_options.app_name
+    controller.app_version = app_options.app_version
+
     controller.active_page = SysClockPage(controller)
 
     # Main Processing Loop
@@ -280,6 +286,10 @@ def start_mfd(display):
 
         # Fill the background with black
         display.surface.fill(display.color_scheme.background)
+
+        # Ensure a page is selected
+        if controller.active_page is None:
+            controller.active_page = MFDRootPage(controller)
 
         # Update the headers
         controller.update_application()

@@ -4,7 +4,7 @@ __author__ = 'Matt Eland'
 import pygame
 
 
-def init_pygame_graphics(display_settings, title):
+def init_pygame_graphics(display_settings, title, font_name):
 
     pygame.init()
 
@@ -17,7 +17,7 @@ def init_pygame_graphics(display_settings, title):
     # Don't settle with that silly "pygame window" label
     pygame.display.set_caption(title)
 
-    display_settings.font_normal = pygame.font.Font(None, display_settings.font_size_normal)
+    display_settings.font_normal = pygame.font.Font(font_name, display_settings.font_size_normal)
 
     # Return the Display
     display_settings.surface = display
