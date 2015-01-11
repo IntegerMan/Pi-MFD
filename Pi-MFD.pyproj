@@ -5,7 +5,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>cc0777f3-5714-4e5a-aa5d-bbe710e4d3dd</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>PiMFDLauncher.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,16 +25,28 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="PiMFDLauncher.py" />
+    <Compile Include="FSLauncher.py" />
     <Compile Include="PiMFD\PygameHelpers.py" />
     <Compile Include="PiMFD\TextUtilities.py" />
     <Compile Include="PiMFD\__init__.py" />
+    <Compile Include="WinLauncher.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Fonts\Anonymous_Pro.ttf" />
+    <Content Include="Fonts\Anonymous_Pro_B.ttf" />
+    <Content Include="Fonts\Anonymous_Pro_BI.ttf" />
+    <Content Include="Fonts\Anonymous_Pro_I.ttf" />
+    <Content Include="Fonts\Bitstream Vera License.txt" />
+    <Content Include="Fonts\SIL Open Font License.txt" />
+    <Content Include="Fonts\VeraMono-Bold-Italic.ttf" />
+    <Content Include="Fonts\VeraMono-Bold.ttf" />
+    <Content Include="Fonts\VeraMono-Italic.ttf" />
+    <Content Include="Fonts\VeraMono.ttf" />
     <Content Include="LICENSE" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Fonts\" />
     <Folder Include="PiMFD\" />
   </ItemGroup>
   <ItemGroup>
