@@ -1,7 +1,8 @@
+import pygame
+
 __author__ = 'Matt Eland'
 
-
-import pygame
+# TODO: I'd like this collection of helpers to not exist
 
 
 def grab_dimensions_from_current_resolution(display_settings):

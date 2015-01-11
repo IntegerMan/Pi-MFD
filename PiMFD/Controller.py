@@ -8,9 +8,13 @@ __author__ = 'Matt Eland'
 class MFDController(object):
 
     display = None
-    active_page = None
     continue_executing = True
     clock = None
+
+    active_page = None
+    active_app = None
+
+    applications = list()
 
     def __init__(self, display, app_options):
 
@@ -48,12 +52,13 @@ class MFDController(object):
         page.top_headers.append(MFDButton("MED"))
         page.top_headers.append(MFDButton("SYS", selected=True))
 
-        page.bottom_headers = list()
-        page.bottom_headers.append(MFDButton('TIME', selected=True))
-        page.bottom_headers.append(MFDButton('PERF'))
-        page.bottom_headers.append(MFDButton('NET'))
-        page.bottom_headers.append(MFDButton('OPTS'))
-        page.bottom_headers.append(MFDButton('EXIT'))
+        # Ask the current application for available buttons
+        if self.active_app is not None:
+            bottom_buttons = self.active_app.get_buttons()
+            page.bottom_headers = bottom_buttons
+        else:
+            # Perhaps this will need to ask the current page for options in this case, but for now, just go empty
+            page.bottom_headers = list()
 
     def execute_main_loop(self):
 

@@ -26,6 +26,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FSLauncher.py" />
+    <Compile Include="PiMFD\Applications\Application.py" />
+    <Compile Include="PiMFD\Applications\SystemApplication.py" />
     <Compile Include="PiMFD\Button.py" />
     <Compile Include="PiMFD\ColorScheme.py" />
     <Compile Include="PiMFD\Controller.py" />
@@ -54,6 +56,7 @@
   <ItemGroup>
     <Folder Include="Fonts\" />
     <Folder Include="PiMFD\" />
+    <Folder Include="PiMFD\Applications\" />
     <Folder Include="PiMFD\Pages\" />
   </ItemGroup>
   <ItemGroup>

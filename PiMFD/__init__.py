@@ -1,3 +1,4 @@
+from PiMFD.Applications.SystemApplication import SysApplication
 from PiMFD.Controller import MFDController
 from PiMFD.Pages.SystemPages import SysClockPage
 from PiMFD.PygameHelpers import init_pygame_graphics
@@ -19,6 +20,7 @@ def start_mfd(display, app_options):
 
     # Initialize the controller
     controller = MFDController(display, app_options)
+    controller.active_app = SysApplication(controller)
     controller.active_page = SysClockPage(controller)
 
     # Main Processing Loop

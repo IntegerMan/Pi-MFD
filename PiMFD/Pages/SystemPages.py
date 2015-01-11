@@ -5,6 +5,7 @@ __author__ = 'Matt Eland'
 
 
 class SysClockPage(MFDPage):
+    
     def render(self, display):
         super(SysClockPage, self).render(display)
 
