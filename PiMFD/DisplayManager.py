@@ -1,4 +1,5 @@
-from PiMFD import ColorSchemes, start_mfd
+from PiMFD import start_mfd
+from PiMFD.ColorScheme import ColorSchemes
 
 __author__ = 'Matt Eland'
 
