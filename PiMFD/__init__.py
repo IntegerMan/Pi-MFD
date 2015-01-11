@@ -63,7 +63,7 @@ class DisplaySettings(object):
 
     surface = None
 
-    is_fullscreen = True
+    is_fullscreen = False
 
     frames_per_second = 30
 
