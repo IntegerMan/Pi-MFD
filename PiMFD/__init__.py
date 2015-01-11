@@ -1,4 +1,5 @@
 from PiMFD.ColorScheme import ColorSchemes
+from PiMFD.MFDButton import MFDButton
 from PiMFD.Pages.MFDPage import MFDRootPage
 from PiMFD.Pages.SystemPages import SysClockPage
 
@@ -99,59 +100,18 @@ class MFDController(object):
         page = self.active_page
 
         page.top_headers = list()
-        page.top_headers.append(MFDButton("SCH", selected=True))
-        page.top_headers.append(MFDButton("PRG"))
-        page.top_headers.append(MFDButton("GAM"))
+        page.top_headers.append(MFDButton("SCH"))
+        page.top_headers.append(MFDButton("NAV"))
         page.top_headers.append(MFDButton("SOC"))
-        page.top_headers.append(MFDButton("SYS"))
+        page.top_headers.append(MFDButton("MED"))
+        page.top_headers.append(MFDButton("SYS", selected=True))
 
         page.bottom_headers = list()
-        page.bottom_headers.append(MFDButton('TASK'))
-        page.bottom_headers.append(MFDButton('MAIL'))
-        page.bottom_headers.append(MFDButton('CAL'))
-        page.bottom_headers.append(MFDButton('NAV'))
-        page.bottom_headers.append(MFDButton('WTHR'))
-
-
-class MFDButton(object):
-
-    text = None
-    enabled = True
-    selected = False
-
-    def __init__(self, text, selected=False, enabled=True):
-        self.text = text
-        self.selected = selected
-        self.enabled = enabled
-
-    def render(self, display, x, is_top):
-
-        # Figure out where we're starting vertically
-        y = display.padding_y
-        if not is_top:
-            y = display.res_y - display.padding_y - display.font_size_normal
-
-        font_color = display.color_scheme.foreground
-        background = None
-
-        label = self.text
-
-        # If it's selected, use a different color and surround with brackets
-        if self.selected:
-            font_color = display.color_scheme.background
-            background = display.color_scheme.foreground
-            label = '[' + label + ']'
-
-        pos = display.render_text(display.font_normal, label, x, y, font_color, background=background)
-
-        line_length = 5
-
-        if is_top:
-            pygame.draw.line(display.surface, display.color_scheme.foreground, (x + (pos.width / 2), y - 2),
-                             (x + (pos.width / 2), y - 2 - line_length))
-        else:
-            pygame.draw.line(display.surface, display.color_scheme.foreground, (x + (pos.width / 2), y + pos.height),
-                             (x + (pos.width / 2), y + pos.height + line_length))
+        page.bottom_headers.append(MFDButton('TIME', selected=True))
+        page.bottom_headers.append(MFDButton('PERF'))
+        page.bottom_headers.append(MFDButton('NET'))
+        page.bottom_headers.append(MFDButton('OPTS'))
+        page.bottom_headers.append(MFDButton('EXIT'))
 
 
 def start_mfd(display, app_options):

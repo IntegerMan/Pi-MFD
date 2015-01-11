@@ -78,7 +78,7 @@ Planned applications and their pages are listed as follows:
 
 ### System (SYS)
 
-#### Clock (CLK) - Done
+#### System Time (TIME) - Done
 Displays the current time in system and GMT time.
 
 #### Performance (PERF)  - Planned
