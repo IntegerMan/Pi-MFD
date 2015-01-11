@@ -27,6 +27,8 @@
   <ItemGroup>
     <Compile Include="FSLauncher.py" />
     <Compile Include="PiMFD\ColorScheme.py" />
+    <Compile Include="PiMFD\DisplayManager.py" />
+    <Compile Include="PiMFD\MFDButton.py" />
     <Compile Include="PiMFD\Pages\MFDPage.py" />
     <Compile Include="PiMFD\Pages\SystemPages.py" />
     <Compile Include="PiMFD\Pages\__init__.py" />

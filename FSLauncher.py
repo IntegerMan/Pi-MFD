@@ -1,10 +1,9 @@
+from PiMFD import MFDAppOptions
+from PiMFD.DisplayManager import DisplayManager
+
 __author__ = 'Matt Eland'
 
-
-from PiMFD import *
-
 log = open("PiMFD.log", "w")
-
 try:
     app_options = MFDAppOptions()
 
