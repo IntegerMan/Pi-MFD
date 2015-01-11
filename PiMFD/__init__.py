@@ -1,6 +1,7 @@
 from time import strftime, gmtime
-from TextUtilities import *
-from PygameHelpers import *
+
+from PiMFD.TextUtilities import *
+from PiMFD.PygameHelpers import *
 
 
 __author__ = 'Matt Eland'

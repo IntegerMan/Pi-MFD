@@ -12,6 +12,8 @@
     <OutputPath>.</OutputPath>
     <Name>Pi-MFD</Name>
     <RootNamespace>Pi-MFD</RootNamespace>
+    <InterpreterId>{9a7a9026-48c1-4688-9d5d-e5699d47d074}</InterpreterId>
+    <InterpreterVersion>2.7</InterpreterVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,14 +24,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="PiMFD.py" />
     <Compile Include="PiMFDLauncher.py" />
-    <Compile Include="PygameHelpers.py" />
-    <Compile Include="TextUtilities.py" />
+    <Compile Include="PiMFD\PygameHelpers.py" />
+    <Compile Include="PiMFD\TextUtilities.py" />
+    <Compile Include="PiMFD\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LICENSE" />
     <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PiMFD\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\2.7" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
