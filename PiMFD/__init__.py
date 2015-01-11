@@ -15,10 +15,9 @@ class MFDAppOptions(object):
 
 
 class ColorScheme(object):
-    def __init__(self, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255), selected=(255, 255, 255)):
+    def __init__(self, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255)):
         self.background = background
         self.foreground = foreground
-        self.selected = selected
         self.highlight = highlight
         pass
 
@@ -26,23 +25,21 @@ class ColorScheme(object):
         target.background = self.background
         target.foreground = self.foreground
         target.highlight = self.highlight
-        target.selected = self.selected
         return target
 
     background = (0, 0, 0)
     foreground = (0, 255, 0)
     highlight = (255, 255, 255)
-    selected = (255, 255, 255)
 
     pass
 
 
 class ColorSchemes(object):
     # A green based color scheme resembling military avionics displays
-    military = ColorScheme(background=(0, 8, 0), foreground=(0, 150, 0), selected=(0, 255, 0), highlight=(255, 255, 255))
+    military = ColorScheme(background=(0, 8, 0), foreground=(0, 255, 0), highlight=(255, 255, 255))
 
     # A cyan display
-    cyan = ColorScheme(background=(0, 0, 32), foreground=(0, 170, 170), selected=(0, 255, 255), highlight=(0, 0, 255))
+    cyan = ColorScheme(background=(0, 0, 32), foreground=(0, 170, 170), highlight=(0, 0, 255))
 
     pass
 
@@ -144,23 +141,25 @@ class MFDButton(object):
             y = display.res_y - display.padding_y - display.font_size_normal
 
         font_color = display.color_scheme.foreground
+        background = None
 
         label = self.text
 
         # If it's selected, use a different color and surround with brackets
         if self.selected:
-            font_color = display.color_scheme.selected
+            font_color = display.color_scheme.background
+            background = display.color_scheme.foreground
             label = '[' + label + ']'
 
-        pos = render_text(display, display.font_normal, label, x, y, font_color)
+        pos = render_text(display, display.font_normal, label, x, y, font_color, background=background)
 
         line_length = 5
 
         if is_top:
-            pygame.draw.line(display.surface, font_color, (x + (pos.width / 2), y - 2),
+            pygame.draw.line(display.surface, display.color_scheme.foreground, (x + (pos.width / 2), y - 2),
                              (x + (pos.width / 2), y - 2 - line_length))
         else:
-            pygame.draw.line(display.surface, font_color, (x + (pos.width / 2), y + pos.height),
+            pygame.draw.line(display.surface, display.color_scheme.foreground, (x + (pos.width / 2), y + pos.height),
                              (x + (pos.width / 2), y + pos.height + line_length))
 
 
