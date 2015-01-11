@@ -56,5 +56,16 @@ class MFDRootPage(MFDPage):
         display.render_text_centered(display.font_normal,
                                      'Systems Test',
                                      display.res_x / 2,
-                                     center_rect.top + display.font_size_normal + display.padding_y,
+                                     center_rect.bottom + display.font_size_normal + display.padding_y,
                                      display.color_scheme.highlight)
+
+
+class NotImplementedPage(MFDPage):
+    def render(self, display):
+        super(NotImplementedPage, self).render(display)
+
+        display.render_text_centered(self.display.font_normal,
+                                     "Not Implemented",
+                                     self.display.res_x / 2,
+                                     (self.display.res_y / 2) - (self.display.font_size_normal / 2),
+                                     self.display.color_scheme.foreground)

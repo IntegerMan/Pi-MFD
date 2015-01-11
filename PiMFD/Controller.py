@@ -67,7 +67,10 @@ class MFDController(object):
 
         # Ensure a page is selected
         if self.active_page is None:
-            self.active_page = MFDRootPage(self)
+            if self.active_app is None:
+                self.active_page = MFDRootPage(self)
+            else:
+                self.active_page = self.active_app.get_default_page()
 
         # Update the headers
         self.update_application()

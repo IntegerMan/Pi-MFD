@@ -13,3 +13,6 @@ class MFDApplication(object):
     def get_buttons(self):
         # Sub-classes will return a real implementation. By default, go with an empty list.
         return list()
+
+    def get_default_page(self):
+        return None
