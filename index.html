@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Pi-MFD by IntegerMan</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Pi-MFD</h1>
+        <h2>A Multi-Function Display application framework for use with Raspberry Pi and intended to be integrated with hardware buttons.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/IntegerMan/Pi-MFD/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/IntegerMan/Pi-MFD/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/IntegerMan/Pi-MFD" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="pi-mfd" class="anchor" href="#pi-mfd" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pi-MFD</h1>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>This project is an attempt to build a Python-based dashboard application that works with a 7 inch Raspberry Pi display. 
+This came out of a desire to tinker with Raspberry Pi, learn Python and become more exposed to Unix and Physical computing.</p>
+
+<h2>
+<a id="current-status" class="anchor" href="#current-status" aria-hidden="true"><span class="octicon octicon-link"></span></a>Current Status</h2>
+
+<p>The application is essentially a loose collection of partially implemented modules with a simple navigation capability using the F1-F5 and F8-F12 keys. It's not useable except as a clock.</p>
+
+<h2>
+<a id="deployment-target" class="anchor" href="#deployment-target" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deployment Target</h2>
+
+<p>The intended deployment target of this software during development is a ThermalTake Core V1 mini-atx case hosting a 
+Raspberry Pi B+ running Raspbian and outputting on a 7 inch external display. The display is augmented with 5 hardware
+buttons mounted above and below the case.</p>
+
+<h3>
+<a id="compatible-platforms" class="anchor" href="#compatible-platforms" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compatible Platforms</h3>
+
+<p>Pi MFD has been tested in its current state on the following platforms: Windows 8 x64, Windows 10 x86, Rasbian, Ubuntu</p>
+
+<h2>
+<a id="development-disclaimer" class="anchor" href="#development-disclaimer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development Disclaimer</h2>
+
+<p>This code is still very early under development and is not intended for external use and does not represent working software.</p>
+
+<p>An additional note: I have no prior experience with the python language.</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>This code is available under the GNU General Public License. See LICENSE for more information. </p>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<p>Pi-MFD requires: Python 2.7 or higher and a version of pygame compatible with the installed version of Python.</p>
+
+<h2>
+<a id="user-interface" class="anchor" href="#user-interface" aria-hidden="true"><span class="octicon octicon-link"></span></a>User Interface</h2>
+
+<h3>
+<a id="principles" class="anchor" href="#principles" aria-hidden="true"><span class="octicon octicon-link"></span></a>Principles</h3>
+
+<p>Pi-MFD intentionally goes for a toned down military / console style of user interface inspired somewhat by avionics
+displays found on modern aircraft. The application should feel as a whole like a ruggedized / spartan dashboard application.</p>
+
+<p>Ease of learning should intentionally not be a prime concern.</p>
+
+<h3>
+<a id="top-row" class="anchor" href="#top-row" aria-hidden="true"><span class="octicon octicon-link"></span></a>Top Row</h3>
+
+<p>The top row relates to the current application or application silo and allows users to change contexts.</p>
+
+<h3>
+<a id="bottom-row" class="anchor" href="#bottom-row" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bottom Row</h3>
+
+<p>The bottom row relates to pages inside the current application stack.
+Pressing on a page when it is already selected will allow the user to </p>
+
+<h3>
+<a id="number-pad" class="anchor" href="#number-pad" aria-hidden="true"><span class="octicon octicon-link"></span></a>Number Pad</h3>
+
+<p>The number pad allows for interaction with the current page, including navigating up, down, left, right, and selecting items.
+The keypad will not allow users to select items on the top or bottom row.</p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<p>Pi-MFD is planned to integrate several disparate application modules and display dashboard information for each module.</p>
+
+<p>Planned applications and their pages are listed as follows:</p>
+
+<h3>
+<a id="scheduling-sch" class="anchor" href="#scheduling-sch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scheduling (SCH)</h3>
+
+<h4>
+<a id="tasks-task---planned" class="anchor" href="#tasks-task---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tasks (TASK) - Planned</h4>
+
+<h4>
+<a id="mail-mail---planned" class="anchor" href="#mail-mail---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mail (MAIL) - Planned</h4>
+
+<h4>
+<a id="calendar-cal---planned" class="anchor" href="#calendar-cal---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Calendar (CAL) - Planned</h4>
+
+<h4>
+<a id="weather-wthr---planned" class="anchor" href="#weather-wthr---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Weather (WTHR) - Planned</h4>
+
+<h3>
+<a id="navigation-nav" class="anchor" href="#navigation-nav" aria-hidden="true"><span class="octicon octicon-link"></span></a>Navigation (NAV)</h3>
+
+<h4>
+<a id="map-map---planned" class="anchor" href="#map-map---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Map (MAP) - Planned</h4>
+
+<h4>
+<a id="gas-gas---planned" class="anchor" href="#gas-gas---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gas (GAS) - Planned</h4>
+
+<h4>
+<a id="food-food---planned" class="anchor" href="#food-food---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Food (FOOD) - Planned</h4>
+
+<h4>
+<a id="traffic-traf---planned" class="anchor" href="#traffic-traf---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Traffic (TRAF) - Planned</h4>
+
+<h4>
+<a id="weather-conditions-cond---planned" class="anchor" href="#weather-conditions-cond---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Weather Conditions (COND) - Planned</h4>
+
+<h3>
+<a id="social-soc" class="anchor" href="#social-soc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Social (SOC)</h3>
+
+<h4>
+<a id="news-news---planned" class="anchor" href="#news-news---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>News (NEWS) - Planned</h4>
+
+<h4>
+<a id="facebook-face---planned" class="anchor" href="#facebook-face---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Facebook (FACE) - Planned</h4>
+
+<h4>
+<a id="twitter-twtr---planned" class="anchor" href="#twitter-twtr---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Twitter (TWTR) - Planned</h4>
+
+<h4>
+<a id="feedly-rss---planned" class="anchor" href="#feedly-rss---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Feedly (RSS) - Planned</h4>
+
+<h4>
+<a id="browser-web---planned" class="anchor" href="#browser-web---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Browser (WEB) - Planned</h4>
+
+<h3>
+<a id="media-med" class="anchor" href="#media-med" aria-hidden="true"><span class="octicon octicon-link"></span></a>Media (MED)</h3>
+
+<h4>
+<a id="images-img---planned" class="anchor" href="#images-img---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Images (IMG) - Planned</h4>
+
+<h4>
+<a id="pandora-pand---planned" class="anchor" href="#pandora-pand---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pandora (PAND) - Planned</h4>
+
+<h4>
+<a id="youtube-tube---planned" class="anchor" href="#youtube-tube---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>YouTube (TUBE) - Planned</h4>
+
+<h4>
+<a id="netflix-flix---planned" class="anchor" href="#netflix-flix---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Netflix (FLIX) - Planned</h4>
+
+<h4>
+<a id="amazon-instant-watch-aziw---planned" class="anchor" href="#amazon-instant-watch-aziw---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Amazon Instant Watch (AZIW) - Planned</h4>
+
+<h3>
+<a id="system-sys" class="anchor" href="#system-sys" aria-hidden="true"><span class="octicon octicon-link"></span></a>System (SYS)</h3>
+
+<h4>
+<a id="system-time-time---done" class="anchor" href="#system-time-time---done" aria-hidden="true"><span class="octicon octicon-link"></span></a>System Time (TIME) - Done</h4>
+
+<p>Displays the current time in system and GMT time.</p>
+
+<h4>
+<a id="performance-perf----planned" class="anchor" href="#performance-perf----planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Performance (PERF)  - Planned</h4>
+
+<h4>
+<a id="network-net---planned" class="anchor" href="#network-net---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Network (NET) - Planned</h4>
+
+<h4>
+<a id="options-opts---planned" class="anchor" href="#options-opts---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options (OPTS) - Planned</h4>
+
+<h4>
+<a id="exit-exit---planned" class="anchor" href="#exit-exit---planned" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exit (EXIT) - Planned</h4>
+
+<p>Exits the application</p>
+
+<h2>
+<a id="future-integrations" class="anchor" href="#future-integrations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Future Integrations</h2>
+
+<p>Pi-MFD is currently planned to expand to allow handling of GPIO devices as button handlers and to allow for deployment to Android.</p>
+
+<p>Hardware buttons are currently simulated as F1-F5 for top row buttons and F8-F12 for bottom row buttons. F6 and F7 are reserved for future expansion.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
