@@ -7,6 +7,7 @@ class MFDApplication(object):
 
     pages = list()
 
+    active_page = None
     controller = None
     display = None
 
@@ -28,18 +29,28 @@ class MFDApplication(object):
         return 'UNKN'
 
     def handle_unselected(self):
-        self.active_page = None
+        self.select_page(None)
 
     def handle_selected(self):
-        self.active_page = self.get_default_page()
+        self.select_page(self.get_default_page())
 
     def handle_reselected(self):
+        self.select_page(self.get_default_page())
+
+    def page_reselected(self, page):
         pass
 
-    def select_page(self, index):
+    def select_page_by_index(self, index):
 
         # Figure out what we clicked
-        page = self.pages[index]
+        if index < len(self.pages):
+            page = self.pages[index]
+        else:
+            page = None
+
+        self.select_page(page)
+
+    def select_page(self, page):
 
         # Don't allow switching to a "none" page
         if page is None:
@@ -59,8 +70,6 @@ class MFDApplication(object):
             # Update the current page to the new page and tell it that it's been selected
             self.active_page = page
             page.handle_selected()
-
-        pass
 
 
 class PlaceholderApp(MFDApplication):

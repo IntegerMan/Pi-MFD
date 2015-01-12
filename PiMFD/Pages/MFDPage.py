@@ -21,7 +21,7 @@ class MFDPage(object):
         pass
 
     def handle_reselected(self):
-        pass
+        self.application.page_reselected(self)
 
     def get_button_text(self):
         return 'UNKN'

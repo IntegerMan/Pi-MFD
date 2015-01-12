@@ -13,6 +13,9 @@ class MFDController(object):
     continue_executing = True
     clock = None
 
+    app_author = 'Matt Eland'
+    copyright_year = 2015
+
     active_app = None
 
     sys_app = None
@@ -31,6 +34,8 @@ class MFDController(object):
         if app_options is not None:
             self.app_name = app_options.app_name
             self.app_version = app_options.app_version
+            self.app_author = app_options.app_author
+            self.copyright_year = app_options.copyright_year
 
         self.nav_app = PlaceholderApp(self, 'NAV')
         self.sch_app = PlaceholderApp(self, 'SCH')
@@ -167,14 +172,21 @@ class MFDController(object):
 
         # Pass on the selection command to the owner
         if is_top_row:
-            self.select_app(index)
+            self.select_app_by_index(index)
         elif self.active_app is not None:
-            self.active_app.select_page(index)
+            self.active_app.select_page_by_index(index)
 
-    def select_app(self, index):
+    def select_app_by_index(self, index):
 
         # Figure out where we're going
-        new_app = self.applications[index]
+        if index < len(self.applications):
+            new_app = self.applications[index]
+        else:
+            new_app = None
+
+        self.select_app(new_app)
+
+    def select_app(self, new_app):
 
         # Don't allow users to select blank spots
         if new_app is None:
