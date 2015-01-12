@@ -12,6 +12,9 @@ class MFDPage(object):
         self.controller = controller
         self.display = controller.display
 
+    def get_button_text(self):
+        return 'UNKN'
+
     def render_button_row(self, headers, is_top):
 
         start_x = self.display.padding_x
@@ -40,8 +43,6 @@ class MFDPage(object):
         # Render the headers
         self.render_button_rows()
 
-        pass
-
 
 class MFDRootPage(MFDPage):
     def render(self, display):
@@ -60,12 +61,24 @@ class MFDRootPage(MFDPage):
                                      display.color_scheme.highlight)
 
 
-class NotImplementedPage(MFDPage):
+class SimpleMessagePage(MFDPage):
+
+    button_text = "NI"
+    message = "Not Implemented"
+
+    def __init__(self, controller, label, message='Not Implemented'):
+        super(SimpleMessagePage, self).__init__(controller)
+        self.button_text = label
+        self.message = message
+
+    def get_button_text(self):
+        return self.button_text
+
     def render(self, display):
-        super(NotImplementedPage, self).render(display)
+        super(SimpleMessagePage, self).render(display)
 
         display.render_text_centered(self.display.font_normal,
-                                     "Not Implemented",
+                                     self.message,
                                      self.display.res_x / 2,
                                      (self.display.res_y / 2) - (self.display.font_size_normal / 2),
                                      self.display.color_scheme.foreground)

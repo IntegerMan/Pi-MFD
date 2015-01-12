@@ -6,6 +6,9 @@ __author__ = 'Matt Eland'
 
 class SysClockPage(MFDPage):
     
+    def get_button_text(self):
+        return "TIME"
+
     def render(self, display):
         super(SysClockPage, self).render(display)
 
