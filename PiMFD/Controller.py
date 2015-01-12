@@ -1,6 +1,8 @@
 import pygame
 from PiMFD.Pages.MFDPage import MFDRootPage
 from PiMFD.Button import MFDButton
+from PiMFD.Applications.SystemApplication import SysApplication
+from PiMFD.Applications.Application import PlaceholderApp
 
 __author__ = 'Matt Eland'
 
@@ -14,6 +16,12 @@ class MFDController(object):
     active_page = None
     active_app = None
 
+    sys_app = None
+    sch_app = None
+    nav_app = None
+    med_app = None
+    soc_app = None
+
     applications = list()
 
     def __init__(self, display, app_options):
@@ -24,6 +32,16 @@ class MFDController(object):
         if app_options is not None:
             self.app_name = app_options.app_name
             self.app_version = app_options.app_version
+
+        self.sys_app = SysApplication(self)
+        self.nav_app = PlaceholderApp(self, 'NAV')
+        self.sch_app = PlaceholderApp(self, 'SCH')
+        self.med_app = PlaceholderApp(self, 'MED')
+        self.soc_app = PlaceholderApp(self, 'SOC')
+
+        self.applications = list([self.sys_app, self.nav_app, self.sch_app, self.med_app, self.soc_app])
+        
+        self.active_app = self.sys_app
 
     def process_events(self):
         # Process all events
@@ -45,12 +63,10 @@ class MFDController(object):
 
         page = self.active_page
 
+        # Render our applications
         page.top_headers = list()
-        page.top_headers.append(MFDButton("SCH"))
-        page.top_headers.append(MFDButton("NAV"))
-        page.top_headers.append(MFDButton("SOC"))
-        page.top_headers.append(MFDButton("MED"))
-        page.top_headers.append(MFDButton("SYS", selected=True))
+        for app in self.applications:
+            page.top_headers.append(MFDButton(app.get_button_text(), selected=(app is self.active_app)))
 
         # Ask the current application for available buttons
         if self.active_app is not None:

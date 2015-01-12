@@ -20,7 +20,6 @@ def start_mfd(display, app_options):
 
     # Initialize the controller
     controller = MFDController(display, app_options)
-    controller.active_app = SysApplication(controller)
 
     # Main Processing Loop
     while controller.continue_executing:

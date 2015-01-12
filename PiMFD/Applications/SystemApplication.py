@@ -37,5 +37,7 @@ class SysApplication(MFDApplication):
     def get_default_page(self):
         return self.clock_page
 
+    def get_button_text(self):
+        return 'SYS'
 
 

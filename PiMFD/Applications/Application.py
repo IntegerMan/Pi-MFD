@@ -16,3 +16,17 @@ class MFDApplication(object):
 
     def get_default_page(self):
         return None
+
+    def get_button_text(self):
+        return 'UNKN'
+
+class PlaceholderApp(MFDApplication):
+
+    button_text = 'UNKN'
+
+    def __init__(self, controller, label):
+        super(PlaceholderApp, self).__init__(controller)
+        self.button_text = label
+
+    def get_button_text(self):
+        return self.button_text
