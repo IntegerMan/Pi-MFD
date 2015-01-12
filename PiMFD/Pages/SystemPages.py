@@ -12,7 +12,7 @@ class SysClockPage(MFDPage):
     def render(self, display):
         super(SysClockPage, self).render(display)
 
-        x = display.padding_x
+        x = display.get_content_start_x()
         y = display.get_content_start_y()
 
         time_format = '%m/%d/%Y - %H:%M:%S'

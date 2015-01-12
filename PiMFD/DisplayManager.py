@@ -18,7 +18,7 @@ class DisplayManager(object):
     res_x = 800
     res_y = 480
 
-    padding_x = 8
+    padding_x = 16
     padding_y = 8
 
     surface = None
@@ -32,8 +32,11 @@ class DisplayManager(object):
     font_size_normal = 24
     font_normal = None
 
+    def get_content_start_x(self):
+        return self.padding_x * 2
+
     def get_content_start_y(self):
-        return (self.padding_y * 2) + self.font_size_normal
+        return (self.padding_y * 4) + self.font_size_normal
 
     pass
 
@@ -41,7 +44,7 @@ class DisplayManager(object):
         text_surface = font.render(text, True, color)
         rect = text_surface.get_rect(top=top, left=left)
 
-        if background is not None:
+        if background:
             self.surface.fill(background, rect=rect)
 
         self.surface.blit(text_surface, rect)
@@ -51,7 +54,7 @@ class DisplayManager(object):
         text_surface = font.render(text, True, color)
         rect = text_surface.get_rect(center=(left, top))
 
-        if background is not None:
+        if background:
             self.surface.fill(background, rect=rect)
 
         self.surface.blit(text_surface, rect)

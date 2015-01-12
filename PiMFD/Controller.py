@@ -33,11 +33,11 @@ class MFDController(object):
             self.app_name = app_options.app_name
             self.app_version = app_options.app_version
 
-        self.sys_app = SysApplication(self)
         self.nav_app = PlaceholderApp(self, 'NAV')
         self.sch_app = PlaceholderApp(self, 'SCH')
         self.med_app = PlaceholderApp(self, 'MED')
-        self.soc_app = PlaceholderApp(self, 'SOC')
+        self.soc_app = PlaceholderApp(self, 'SCL')
+        self.sys_app = SysApplication(self)
 
         self.applications = list([self.sys_app, self.nav_app, self.sch_app, self.med_app, self.soc_app])
         

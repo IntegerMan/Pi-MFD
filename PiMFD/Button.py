@@ -26,11 +26,11 @@ class MFDButton(object):
 
         label = self.text
 
-        # If it's selected, use a different color and surround with brackets
+        # If it's selected, use inverted colors
         if self.selected:
             font_color = display.color_scheme.background
             background = display.color_scheme.foreground
-            label = '[' + label + ']'
+            label = ' ' + label + ' '  # Pad out the display so it appears wider with a background
 
         pos = display.render_text(display.font_normal, label, x, y, font_color, background=background)
 
