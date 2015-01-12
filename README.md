@@ -61,7 +61,7 @@ Planned applications and their pages are listed as follows:
 #### Map (MAP) - Planned
 #### Gas (GAS) - Planned
 #### Food (FOOD) - Planned
-#### Traffic (TRFC) - Planned
+#### Traffic (TRAF) - Planned
 #### Weather Conditions (COND) - Planned
 
 ### Social (SOC)
@@ -73,9 +73,9 @@ Planned applications and their pages are listed as follows:
 
 ### Media (MED)
 #### Images (IMG) - Planned
+#### Pandora (PAND) - Planned
 #### YouTube (TUBE) - Planned
 #### Netflix (FLIX) - Planned
-#### Hulu (HULU) - Planned
 #### Amazon Instant Watch (AZIW) - Planned
 
 ### System (SYS)

@@ -5,7 +5,7 @@ __author__ = 'Matt Eland'
 
 class MFDApplication(object):
 
-    pages = list()
+    pages = None
 
     active_page = None
     controller = None
@@ -14,10 +14,11 @@ class MFDApplication(object):
     def __init__(self, controller):
         self.controller = controller
         self.display = controller.display
+        self.pages = list()
 
     def get_buttons(self):
         buttons = list()
-        for page in self.pages:
+        for page in self.pages[0:self.controller.max_page_buttons]:  # TODO: Support paging for > max_page_buttons pages
             buttons.append(MFDButton(page.get_button_text(), selected=(self.active_page is page)))
 
         return buttons

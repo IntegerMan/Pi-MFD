@@ -1,5 +1,5 @@
 import pygame
-from PiMFD.Pages.MFDPage import MFDRootPage, SimpleMessagePage
+from PiMFD.Pages.MFDPage import SimpleMessagePage
 from PiMFD.Button import MFDButton
 from PiMFD.Applications.SystemApplication import SysApplication
 from PiMFD.Applications.Application import PlaceholderApp
@@ -21,6 +21,9 @@ class MFDController(object):
     top_headers = list()
     bottom_headers = list()
 
+    max_app_buttons = 5
+    max_page_buttons = 5
+
     sys_app = None
     sch_app = None
     nav_app = None
@@ -40,10 +43,37 @@ class MFDController(object):
             self.app_author = app_options.app_author
             self.copyright_year = app_options.copyright_year
 
+        # Placeholders for navigation app
         self.nav_app = PlaceholderApp(self, 'NAV')
+        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'MAP'))
+        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'GAS'))
+        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'FOOD'))
+        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'TRAF'))
+        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'COND'))
+
+        # Placeholders for scheduling app
         self.sch_app = PlaceholderApp(self, 'SCH')
+        self.sch_app.pages.append(SimpleMessagePage(self, self.sch_app, 'TASK'))
+        self.sch_app.pages.append(SimpleMessagePage(self, self.sch_app, 'MAIL'))
+        self.sch_app.pages.append(SimpleMessagePage(self, self.sch_app, 'CAL'))
+        self.sch_app.pages.append(SimpleMessagePage(self, self.sch_app, 'WTHR'))
+
+        # Placeholders for media app
         self.med_app = PlaceholderApp(self, 'MED')
-        self.soc_app = PlaceholderApp(self, 'SCL')
+        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'IMG'))
+        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'PAND'))
+        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'TUBE'))
+        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'FLIX'))
+        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'AZIW'))
+
+        # Placeholders for social app
+        self.soc_app = PlaceholderApp(self, 'SOCL')
+        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'NEWS'))
+        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'FACE'))
+        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'TWTR'))
+        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'RSS'))
+        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'WEB'))
+
         self.sys_app = SysApplication(self)
 
         self.applications = list([self.sys_app, self.nav_app, self.sch_app, self.med_app, self.soc_app])
@@ -95,19 +125,16 @@ class MFDController(object):
         start_x = self.display.padding_x
         end_x = self.display.res_x - self.display.padding_x
 
-        num_headers = len(headers)
-        if num_headers > 0:
+        # Do division up front
+        header_offset = (end_x - start_x) / self.max_app_buttons
+        half_offset = (header_offset / 2.0)
 
-            # Do division up front
-            header_offset = (end_x - start_x) / num_headers
-            half_offset = (header_offset / 2.0)
-
-            # Render from left to right
-            x_offset = 0
-            for header in headers:
-                x = start_x + x_offset + half_offset
-                header.render(self.display, x, is_top)
-                x_offset += header_offset
+        # Render from left to right
+        x_offset = 0
+        for header in headers[0:self.max_app_buttons]:  # TODO: Support > max_app_buttons apps by allowing paging
+            x = start_x + x_offset + half_offset
+            header.render(self.display, x, is_top)
+            x_offset += header_offset
 
     def render_button_rows(self):
         self.render_button_row(self.top_headers, True)
@@ -123,13 +150,7 @@ class MFDController(object):
         # Ask the current application for available buttons
         if self.active_app is not None:
 
-            # Get the currently selected page
-            page = self.active_app.active_page
-
-            if page is not None:
-                self.bottom_headers = self.active_app.get_buttons()
-            else:
-                self.bottom_headers = list()
+            self.bottom_headers = self.active_app.get_buttons()
 
         else:
             # Perhaps this will need to ask the current page for options in this case, but for now, just go empty

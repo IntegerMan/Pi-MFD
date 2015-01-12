@@ -30,24 +30,6 @@ class MFDPage(object):
         pass
 
 
-class MFDRootPage(MFDPage):
-
-    def render(self, display):
-        super(MFDRootPage, self).render(display)
-
-        center_rect = display.render_text_centered(self.display.font_normal,
-                                                   self.controller.app_name + ' ' + self.controller.app_version,
-                                                   self.display.res_x / 2,
-                                                   (self.display.res_y / 2) - (self.display.font_size_normal / 2),
-                                                   self.display.color_scheme.highlight)
-
-        display.render_text_centered(display.font_normal,
-                                     'Systems Test',
-                                     display.res_x / 2,
-                                     center_rect.bottom + display.font_size_normal + display.padding_y,
-                                     display.color_scheme.highlight)
-
-
 class SimpleMessagePage(MFDPage):
 
     button_text = "NI"
