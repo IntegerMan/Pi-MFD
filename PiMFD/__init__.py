@@ -25,7 +25,7 @@ def start_mfd(display, app_options):
     controller = MFDController(display, app_options)
 
     # Main Processing Loop
-    while controller.continue_executing:
+    while not controller.requested_exit:
         controller.execute_main_loop()
 
     # Shutdown things that require it

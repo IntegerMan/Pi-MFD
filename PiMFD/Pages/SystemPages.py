@@ -27,6 +27,32 @@ class SysRootPage(MFDPage):
         display.render_text(font, "Copyright (c) " + self.controller.app_author + " " + str(self.controller.copyright_year), x, y, cs.foreground)
 
 
+class SysExitPage(MFDPage):
+
+    def get_button_text(self):
+        return "EXIT"
+
+    def render(self, display):
+        super(SysExitPage, self).render(display)
+
+        x = display.get_content_start_x()
+        y = display.get_content_start_y()
+
+        font = display.font_normal
+        cs = display.color_scheme
+
+        if not self.controller.requested_exit:
+            rect = display.render_text(font, "Exit Application", x, y, cs.highlight)
+            y = rect.bottom + display.padding_y
+
+            display.render_text(font, "Confirm exit by re-selecting '" + self.get_button_text() + "'", x, y, cs.foreground)
+        else:
+            display.render_text(font, "The application will now close.", x, y, cs.foreground)
+
+    def handle_reselected(self):
+        self.controller.requested_exit = True
+
+
 class SysClockPage(MFDPage):
     
     def get_button_text(self):

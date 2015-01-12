@@ -10,13 +10,16 @@ __author__ = 'Matt Eland'
 class MFDController(object):
 
     display = None
-    continue_executing = True
+    requested_exit = False
     clock = None
 
     app_author = 'Matt Eland'
     copyright_year = 2015
 
     active_app = None
+
+    top_headers = list()
+    bottom_headers = list()
 
     sys_app = None
     sch_app = None
@@ -55,13 +58,13 @@ class MFDController(object):
 
             # Check for Window Close
             if event.type == pygame.QUIT:
-                self.continue_executing = False
+                self.requested_exit = True
 
             # Check for Keyboard Input
             if event.type == pygame.KEYDOWN:
 
                 if event.key == pygame.K_ESCAPE:  # Handle escape by closing the app.
-                    self.continue_executing = False
+                    self.requested_exit = True
                 elif event.key == pygame.K_F1:    # Simulate Hardware Upper Button 1
                     self.handle_button(0, True)
                 elif event.key == pygame.K_F2:    # Simulate Hardware Upper Button 2
