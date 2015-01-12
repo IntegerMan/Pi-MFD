@@ -5,12 +5,16 @@ This project is an attempt to build a Python-based dashboard application that wo
 This came out of a desire to tinker with Raspberry Pi, learn Python and become more exposed to Unix and Physical computing.
 
 ## Current Status
-The application is essentially a loose framework of display components that does not allow for user-interactivity.
+The application is essentially a loose collection of partially implemented modules with a simple navigation capability using the F1-F5 and F8-F12 keys. It's not useable except as a clock.
 
 ## Deployment Target
 The intended deployment target of this software during development is a ThermalTake Core V1 mini-atx case hosting a 
 Raspberry Pi B+ running Raspbian and outputting on a 7 inch external display. The display is augmented with 5 hardware
 buttons mounted above and below the case.
+
+### Compatible Platforms
+
+Pi MFD has been tested in its current state on the following platforms: Windows 8 x64, Windows 10 x86, Rasbian, Ubuntu
 
 ## Development Disclaimer
 This code is still very early under development and is not intended for external use and does not represent working software.
@@ -21,9 +25,7 @@ An additional note: I have no prior experience with the python language.
 This code is available under the GNU General Public License. See LICENSE for more information. 
 
 ## Requirements
-Pi-MFD requires:
-    * Python 2.7 or higher
-    * A version of pygame compatible with the installed version of Python.
+Pi-MFD requires: Python 2.7 or higher and a version of pygame compatible with the installed version of Python.
 
 ## User Interface
 
@@ -86,3 +88,9 @@ Displays the current time in system and GMT time.
 #### Options (OPTS) - Planned
 #### Exit (EXIT) - Planned
 Exits the application
+
+## Future Integrations
+
+Pi-MFD is currently planned to expand to allow handling of GPIO devices as button handlers and to allow for deployment to Android.
+
+Hardware buttons are currently simulated as F1-F5 for top row buttons and F8-F12 for bottom row buttons. F6 and F7 are reserved for future expansion.

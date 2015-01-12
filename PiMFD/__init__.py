@@ -1,3 +1,4 @@
+import pygame
 from PiMFD.Applications.SystemApplication import SysApplication
 from PiMFD.Controller import MFDController
 from PiMFD.Pages.SystemPages import SysClockPage
@@ -24,3 +25,6 @@ def start_mfd(display, app_options):
     # Main Processing Loop
     while controller.continue_executing:
         controller.execute_main_loop()
+
+    # Shutdown things that require it
+    pygame.quit()

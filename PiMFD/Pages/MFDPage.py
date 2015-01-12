@@ -5,46 +5,33 @@ class MFDPage(object):
     top_headers = list()
     bottom_headers = list()
 
+    application = None
     controller = None
     display = None
 
-    def __init__(self, controller):
+    def __init__(self, controller, application):
         self.controller = controller
         self.display = controller.display
+        self.application = application
+
+    def handle_unselected(self):
+        pass
+
+    def handle_selected(self):
+        pass
+
+    def handle_reselected(self):
+        pass
 
     def get_button_text(self):
         return 'UNKN'
 
-    def render_button_row(self, headers, is_top):
-
-        start_x = self.display.padding_x
-        end_x = self.display.res_x - self.display.padding_x
-
-        num_headers = len(headers)
-        if num_headers > 0:
-
-            # Do division up front
-            header_offset = (end_x - start_x) / num_headers
-            half_offset = (header_offset / 2.0)
-
-            # Render from left to right
-            x_offset = 0
-            for header in headers:
-                x = start_x + x_offset + half_offset
-                header.render(self.controller.display, x, is_top)
-                x_offset += header_offset
-
-    def render_button_rows(self):
-        self.render_button_row(self.top_headers, True)
-        self.render_button_row(self.bottom_headers, False)
-
     def render(self, display):
-
-        # Render the headers
-        self.render_button_rows()
+        pass
 
 
 class MFDRootPage(MFDPage):
+
     def render(self, display):
         super(MFDRootPage, self).render(display)
 
@@ -66,8 +53,8 @@ class SimpleMessagePage(MFDPage):
     button_text = "NI"
     message = "Not Implemented"
 
-    def __init__(self, controller, label, message='Not Implemented'):
-        super(SimpleMessagePage, self).__init__(controller)
+    def __init__(self, controller, application, label, message='Not Implemented'):
+        super(SimpleMessagePage, self).__init__(controller, application)
         self.button_text = label
         self.message = message
 
