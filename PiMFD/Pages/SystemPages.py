@@ -76,12 +76,8 @@ class SysClockPage(MFDPage):
         font = display.font_normal
         cs = display.color_scheme
 
-        rect = display.render_text(font, "Current Time", x, y, cs.highlight)
-        y = rect.bottom + display.padding_y
-
-        rect = display.render_text(font, strftime("SYS: " + time_format), x, y, cs.foreground)
-        y = rect.bottom + display.padding_y
-
-        display.render_text(font, strftime("GMT: " + time_format, gmtime()), x, y, cs.foreground)
+        y += display.render_text(font, "Current Time", x, y, cs.highlight).height + display.padding_y
+        y += display.render_text(font, strftime("SYS: " + time_format), x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, strftime("GMT: " + time_format, gmtime()), x, y, cs.foreground).height + display.padding_y
 
 
