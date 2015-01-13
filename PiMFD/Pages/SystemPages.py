@@ -25,7 +25,7 @@ class SysRootPage(MFDPage):
         y += display.render_text(font, " Legal: Copyright (c) " + self.controller.app_author + " " + str(self.controller.copyright_year), x, y, cs.foreground).height + display.padding_y
 
         # Separator Line
-        y += (display.padding_y * 2) + display.font_size_normal
+        y += display.get_spacer_line_height()
 
         # System Data - TODO: These can be long and will need truncated or wrapping in some cases
         y += display.render_text(font, "System Information", x, y, cs.highlight).height + display.padding_y

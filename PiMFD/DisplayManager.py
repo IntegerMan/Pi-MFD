@@ -38,7 +38,12 @@ class DisplayManager(object):
     def get_content_start_y(self):
         return (self.padding_y * 4) + self.font_size_normal
 
-    pass
+    def get_spacer_line_height(self, font_size=None):
+
+        if font_size is None:
+            font_size = self.font_size_normal
+
+        return (self.padding_y * 2) + font_size
 
     def render_text(self, font, text, left, top, color, background=None):
         text_surface = font.render(text, True, color)
