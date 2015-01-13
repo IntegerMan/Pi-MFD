@@ -155,8 +155,7 @@ class MFDController(object):
 
     def execute_main_loop(self):
 
-        # Fill the background with black
-        self.display.surface.fill(self.display.color_scheme.background)
+        self.display.render_background()
 
         # Ensure an app is selected
         if self.active_app is None:

@@ -1,5 +1,3 @@
-import pygame
-
 __author__ = 'Matt Eland'
 
 
@@ -36,12 +34,11 @@ class MFDButton(object):
 
         line_length = 5
 
-        # TODO: This shouldn't have to know anything about pygame. Abstract that to display.
+        # Render tick marks
         if is_top:
-            pygame.draw.line(display.surface, display.color_scheme.foreground, (x + (pos.width / 2), y - 2),
-                             (x + (pos.width / 2), y - 2 - line_length))
+            display.draw_vertical_line(display.color_scheme.foreground, x + (pos.width / 2), y - 2, y - 2 - line_length)
         else:
-            pygame.draw.line(display.surface, display.color_scheme.foreground, (x + (pos.width / 2), y + pos.height),
-                             (x + (pos.width / 2), y + pos.height + line_length))
+            display.draw_vertical_line(display.color_scheme.foreground, x + (pos.width / 2), y + pos.height, y + pos.height + line_length)
+
 
 

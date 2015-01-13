@@ -1,3 +1,4 @@
+import pygame
 from PiMFD import start_mfd
 from PiMFD.ColorScheme import ColorSchemes
 
@@ -31,6 +32,23 @@ class DisplayManager(object):
 
     font_size_normal = 24
     font_normal = None
+
+    def render_background(self):
+
+        # Fill the background with black
+        self.surface.fill(self.color_scheme.background)
+
+        if self.color_scheme.interlace_color is not None:
+            y = 1
+            while y < self.res_y - 1:
+                self.draw_horizontal_line(self.color_scheme.interlace_color, 0, self.res_x - 1, y)
+                y += 2  # Move two lines down
+
+    def draw_horizontal_line(self, color, x1, x2, y):
+        pygame.draw.line(self.surface, color, (x1, y), (x2, y))
+
+    def draw_vertical_line(self, color, x, y1, y2):
+        pygame.draw.line(self.surface, color, (x, y1), (x, y2))
 
     def get_content_start_x(self):
         return self.padding_x * 2
