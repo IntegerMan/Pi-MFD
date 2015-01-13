@@ -27,6 +27,7 @@
   <ItemGroup>
     <Compile Include="FSLauncher.py" />
     <Compile Include="PiMFD\Applications\Application.py" />
+    <Compile Include="PiMFD\Applications\ScheduleApplication.py" />
     <Compile Include="PiMFD\Applications\SystemApplication.py" />
     <Compile Include="PiMFD\Button.py" />
     <Compile Include="PiMFD\ColorScheme.py" />
@@ -34,6 +35,7 @@
     <Compile Include="PiMFD\DisplayManager.py" />
     <Compile Include="PiMFD\Pages\MFDPage.py" />
     <Compile Include="PiMFD\Pages\SystemPages.py" />
+    <Compile Include="PiMFD\Pages\WeatherPages.py" />
     <Compile Include="PiMFD\Pages\__init__.py" />
     <Compile Include="PiMFD\PygameHelpers.py" />
     <Compile Include="PiMFD\__init__.py" />
