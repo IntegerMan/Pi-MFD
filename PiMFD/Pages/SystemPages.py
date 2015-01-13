@@ -1,5 +1,6 @@
 from time import strftime, gmtime
 from PiMFD.Pages.MFDPage import MFDPage
+import platform
 
 __author__ = 'Matt Eland'
 
@@ -21,9 +22,19 @@ class SysRootPage(MFDPage):
         rect = display.render_text(font, "System Information", x, y, cs.highlight)
         y = rect.bottom + display.padding_y
 
+        # App Version
         rect = display.render_text(font, self.controller.app_name + " - " + self.controller.app_version, x, y, cs.foreground)
         y = rect.bottom + display.padding_y
 
+        # System Data 
+        sysinfo = platform.uname()
+        
+        y += display.render_text(font, 'Net ID: ' + platform.node(), x, y, cs.foreground).bottom + display.padding_y
+        y += display.render_text(font, 'Machine: ' + platform.machine(), x, y, cs.foreground).bottom + display.padding_y
+        y += display.render_text(font, 'Processor: ' + platform.processor(), x, y, cs.foreground).bottom + display.padding_y
+        y += display.render_text(font, 'Platform: ' + platform.platform(), x, y, cs.foreground).bottom + display.padding_y
+        y += display.render_text(font, 'Python Version: ' + platform.python_build()[0], x, y, cs.foreground).bottom + display.padding_y
+    
         display.render_text(font, "Copyright (c) " + self.controller.app_author + " " + str(self.controller.copyright_year), x, y, cs.foreground)
 
 
