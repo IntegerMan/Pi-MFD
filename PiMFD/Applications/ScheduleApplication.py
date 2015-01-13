@@ -1,5 +1,6 @@
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Pages.MFDPage import SimpleMessagePage
+from PiMFD.Pages.WeatherPages import WeatherPage
 
 __author__ = 'Matt Eland'
 
@@ -21,7 +22,7 @@ class ScheduleApp(MFDApplication):
         self.task_page = SimpleMessagePage(controller, self, "TASK")
         self.mail_page = SimpleMessagePage(controller, self, "MAIL")
         self.calendar_page = SimpleMessagePage(controller, self, "CAL")
-        self.weather_page = SimpleMessagePage(controller, self, "WTHR")
+        self.weather_page = WeatherPage(controller, self)
 
         self.pages = list([self.task_page, self.mail_page, self.calendar_page, self.weather_page])
 
