@@ -34,6 +34,7 @@ class SysRootPage(MFDPage):
         y += display.render_text(font, 'Net ID: ' + platform.node(), x, y, cs.foreground).height + display.padding_y
         y += display.render_text(font, 'Python: ' + platform.python_version() + ' ' + platform.python_implementation() + ' ' + platform.python_compiler(), x, y, cs.foreground).height + display.padding_y
 
+
 class SysExitPage(MFDPage):
 
     def get_button_text(self):

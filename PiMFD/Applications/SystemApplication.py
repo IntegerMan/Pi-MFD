@@ -8,7 +8,6 @@ __author__ = 'Matt Eland'
 class SysApplication(MFDApplication):
 
     root_page = None
-    active_page = None
     clock_page = None
     perf_page = None
     net_page = None

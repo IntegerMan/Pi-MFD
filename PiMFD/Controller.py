@@ -1,4 +1,5 @@
 import pygame
+from PiMFD.Applications.ScheduleApplication import ScheduleApp
 from PiMFD.Pages.MFDPage import SimpleMessagePage
 from PiMFD.Button import MFDButton
 from PiMFD.Applications.SystemApplication import SysApplication
@@ -51,12 +52,8 @@ class MFDController(object):
         self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'TRAF'))
         self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'COND'))
 
-        # Placeholders for scheduling app
-        self.sch_app = PlaceholderApp(self, 'SCH')
-        self.sch_app.pages.append(SimpleMessagePage(self, self.sch_app, 'TASK'))
-        self.sch_app.pages.append(SimpleMessagePage(self, self.sch_app, 'MAIL'))
-        self.sch_app.pages.append(SimpleMessagePage(self, self.sch_app, 'CAL'))
-        self.sch_app.pages.append(SimpleMessagePage(self, self.sch_app, 'WTHR'))
+        # Scheduling App
+        self.sch_app = ScheduleApp(self)
 
         # Placeholders for media app
         self.med_app = PlaceholderApp(self, 'MED')
