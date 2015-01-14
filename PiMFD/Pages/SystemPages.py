@@ -73,13 +73,11 @@ class SysClockPage(MFDPage):
         x = display.get_content_start_x()
         y = display.get_content_start_y()
 
-        time_format = '%m/%d/%Y - %H:%M:%S'
-
         font = display.font_normal
         cs = display.color_scheme
 
         y += display.render_text(font, "Current Time", x, y, cs.highlight).height + display.padding_y
-        y += display.render_text(font, strftime("SYS: " + time_format), x, y, cs.foreground).height + display.padding_y
-        y += display.render_text(font, strftime("GMT: " + time_format, gmtime()), x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, strftime("SYS: " + self.controller.time_format), x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, strftime("GMT: " + self.controller.time_format, gmtime()), x, y, cs.foreground).height + display.padding_y
 
 

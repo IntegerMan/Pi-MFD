@@ -17,10 +17,12 @@ class WeatherPage(MFDPage):
         font = display.font_normal
         cs = display.color_scheme
 
+        weather = self.application.weather_data
+
         # Current Conditions - TODO: Grab current data
         y += display.render_text(font, "Current Weather", x, y, cs.highlight).height + display.padding_y
-        y += display.render_text(font, "Temperature Unavailable", x, y, cs.foreground).height + display.padding_y
-        y += display.render_text(font, "Conditions Unavailable", x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "Temperature: " + weather.current_temperature, x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "Conditions: " + weather.current_conditions, x, y, cs.foreground).height + display.padding_y
 
         # Separator Line
         y += display.get_spacer_line_height()
@@ -29,4 +31,9 @@ class WeatherPage(MFDPage):
         y += display.render_text(font, "Forecast", x, y, cs.highlight).height + display.padding_y
         y += display.render_text(font, 'Forecast Unavailable', x, y, cs.foreground).height + display.padding_y
 
+        # Separator Line
+        y += display.get_spacer_line_height()
+
+        # Indicate Weather Data as of...
+        y += display.render_text(font, weather.last_result, x, y, cs.foreground).height + display.padding_y
 

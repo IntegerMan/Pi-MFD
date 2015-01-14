@@ -1,4 +1,6 @@
 from PiMFD.Applications.Application import MFDApplication
+from PiMFD.Data.WeatherAPIWrapper import WeatherAPI
+from PiMFD.Data.WeatherData import WeatherData
 from PiMFD.Pages.MFDPage import SimpleMessagePage
 from PiMFD.Pages.WeatherPages import WeatherPage
 
@@ -13,6 +15,9 @@ class ScheduleApp(MFDApplication):
     calendar_page = None
     weather_page = None
 
+    weather_data = WeatherData()
+    weather_api = WeatherAPI()
+
     def __init__(self, controller):
 
         super(ScheduleApp, self).__init__(controller)
@@ -26,10 +31,16 @@ class ScheduleApp(MFDApplication):
 
         self.pages = list([self.task_page, self.mail_page, self.calendar_page, self.weather_page])
 
+        self.get_weather()
+
+    def get_weather(self):
+        self.weather_data = self.weather_api.get_yahoo_weather(self.controller.location)
+
     def get_default_page(self):
         return self.root_page
 
     def get_button_text(self):
         return 'SCH'
+
 
 
