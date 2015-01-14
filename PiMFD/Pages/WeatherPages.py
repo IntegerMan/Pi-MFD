@@ -11,8 +11,8 @@ class WeatherPage(MFDPage):
     def render(self, display):
         super(WeatherPage, self).render(display)
 
-        x = display.get_content_start_x()
-        y = display.get_content_start_y()
+        start_x = display.get_content_start_x()
+        start_y = display.get_content_start_y()
 
         font = display.font_normal
         cs = display.color_scheme
@@ -20,20 +20,22 @@ class WeatherPage(MFDPage):
         weather = self.application.weather_data
 
         # Current Conditions - TODO: Grab current data
-        y += display.render_text(font, "Current Weather", x, y, cs.highlight).height + display.padding_y
-        y += display.render_text(font, "Temperature: " + weather.current_temperature, x, y, cs.foreground).height + display.padding_y
-        y += display.render_text(font, "Conditions: " + weather.current_conditions, x, y, cs.foreground).height + display.padding_y
-
-        # Separator Line
-        y += display.get_spacer_line_height()
+        x = start_x
+        y = start_y
+        y += display.render_text(font, weather.city + " Weather", x, y, cs.highlight).height + display.padding_y
+        y += display.render_text(font, "       GPS: " + weather.lat + ', ' + weather.long, x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "      Temp: " + weather.temperature + ' (Chill: ' + weather.windchill + ')', x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "Conditions: " + weather.conditions, x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "      Wind: " + weather.wind_speed + ' ' + weather.wind_cardinal_direction, x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "  Humidity: " + weather.humidity, x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "Visibility: " + weather.visibility, x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "  Pressure: " + weather.pressure, x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "       Sun: " + weather.sunrise + ' - ' + weather.sunset, x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, "   Updated: " + weather.last_result, x, y, cs.foreground).height + display.padding_y
 
         # Forecast - TODO: Grab forecasts
+        x = display.res_x - display.padding_x - 250
+        y = start_y
         y += display.render_text(font, "Forecast", x, y, cs.highlight).height + display.padding_y
         y += display.render_text(font, 'Forecast Unavailable', x, y, cs.foreground).height + display.padding_y
-
-        # Separator Line
-        y += display.get_spacer_line_height()
-
-        # Indicate Weather Data as of...
-        y += display.render_text(font, weather.last_result, x, y, cs.foreground).height + display.padding_y
 

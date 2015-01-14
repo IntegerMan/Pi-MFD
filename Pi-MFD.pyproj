@@ -25,6 +25,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="APIs\pywbapi\pywapi.py" />
     <Compile Include="FSLauncher.py" />
     <Compile Include="PiMFD\Applications\Application.py" />
     <Compile Include="PiMFD\Applications\ScheduleApplication.py" />
@@ -32,6 +33,8 @@
     <Compile Include="PiMFD\Button.py" />
     <Compile Include="PiMFD\ColorScheme.py" />
     <Compile Include="PiMFD\Controller.py" />
+    <Compile Include="PiMFD\Data\WeatherAPIWrapper.py" />
+    <Compile Include="PiMFD\Data\WeatherData.py" />
     <Compile Include="PiMFD\DisplayManager.py" />
     <Compile Include="PiMFD\Pages\MFDPage.py" />
     <Compile Include="PiMFD\Pages\SystemPages.py" />
@@ -42,6 +45,7 @@
     <Compile Include="WinLauncher.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="APIs\pywbapi\LICENSE" />
     <Content Include="Fonts\Anonymous_Pro.ttf" />
     <Content Include="Fonts\Anonymous_Pro_B.ttf" />
     <Content Include="Fonts\Anonymous_Pro_BI.ttf" />
@@ -56,9 +60,12 @@
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="APIs\" />
+    <Folder Include="APIs\pywbapi\" />
     <Folder Include="Fonts\" />
     <Folder Include="PiMFD\" />
     <Folder Include="PiMFD\Applications\" />
+    <Folder Include="PiMFD\Data\" />
     <Folder Include="PiMFD\Pages\" />
   </ItemGroup>
   <ItemGroup>
