@@ -32,6 +32,7 @@ class SysRootPage(MFDPage):
         y += display.render_text(font, 'System: ' + platform.platform() + ' ' + platform.release() + ' ' + platform.machine(), x, y, cs.foreground).height + display.padding_y
         y += display.render_text(font, '  Proc: ' + platform.processor(), x, y, cs.foreground).height + display.padding_y
         y += display.render_text(font, 'Net ID: ' + platform.node(), x, y, cs.foreground).height + display.padding_y
+        y += display.render_text(font, '  Disp: ' + str(self.display.res_x) + 'x' + str(self.display.res_y), x, y, cs.foreground).height + display.padding_y
         y += display.render_text(font, 'Python: ' + platform.python_version() + ' ' + platform.python_implementation() + ' ' + platform.python_compiler(), x, y, cs.foreground).height + display.padding_y
 
 
