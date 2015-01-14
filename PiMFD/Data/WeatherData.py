@@ -3,6 +3,26 @@ from time import strftime
 __author__ = 'Matt Eland'
 
 
+class ForecastData(object):
+
+    data = None
+    date = None
+    day = None
+    high = 'UKN'
+    low = 'UKN'
+    temp_range = 'Unknown'
+    precipitation_chance = 'UKN'
+
+    def parse_yahoo_data(self, data, temp_suffix):
+        self.data = data
+        self.conditions = data["text"]
+        self.high = data["high"] + temp_suffix
+        self.low = data["low"] + temp_suffix
+        self.temp_range = data["low"] + '-' + data["high"] + temp_suffix
+        self.date = data["date"]
+        self.day = data["day"]
+
+
 class WeatherData(object):
 
     time_format = '%H:%M:%S'
@@ -22,18 +42,19 @@ class WeatherData(object):
     city = 'Unknown'
     lat = 'UNK'
     long = 'UNK'
+    forecasts = list()
 
-    yahoo_data = None
+    data = None
 
     def parse_yahoo_data(self, yahoo_data):
 
         degree_sign = u'\N{DEGREE SIGN}'
 
-        self.yahoo_data = yahoo_data
+        self.data = yahoo_data
 
         degree_symbol = str(yahoo_data['units']['temperature'])
 
-        # Grab subcollections
+        # Grab sub-collections
         condition = yahoo_data['condition']
         wind = yahoo_data['wind']
         units = yahoo_data['units']
@@ -58,6 +79,14 @@ class WeatherData(object):
         self.last_result = str(condition['date'])
         self.lat = str(geo['lat']) + degree_sign
         self.long = str(geo['long']) + degree_sign
+
+        # Interpret forecasts
+        self.forecasts = list()
+        for forecast_data in yahoo_data['forecasts']:
+            forecast = ForecastData()
+            forecast.parse_yahoo_data(forecast_data, degree_sign + degree_symbol)
+            self.forecasts.append(forecast)
+
 
     @staticmethod
     def get_cardinal_direction(degree):

@@ -31,6 +31,8 @@ class ScheduleApp(MFDApplication):
 
         self.pages = list([self.task_page, self.mail_page, self.calendar_page, self.weather_page])
 
+        # TODO: There's no mechanism to refresh weather data. It probably should do so either automatically 
+        #       at interval or the first time the sch. app or weather has been activated in the last X minutes.
         self.get_weather()
 
     def get_weather(self):
