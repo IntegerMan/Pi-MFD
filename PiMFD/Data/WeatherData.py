@@ -22,15 +22,14 @@ class ForecastData(object):
         self.date = data["date"]
         self.day = data["day"]
 
-
 class WeatherData(object):
 
     time_format = '%H:%M:%S'
 
     conditions = 'Unknown'
-    temperature = 'Unknown'
+    temperature = 'UNK'
     last_result = 'No Data Available'
-    windchill = 'Unknown'
+    windchill = 'UNK'
     wind_speed = 'Unknown'
     wind_direction = 'Unknown'
     wind_cardinal_direction = 'Unknown'
@@ -46,13 +45,34 @@ class WeatherData(object):
 
     data = None
 
+    def set_default_values(self):
+        self.conditions = 'Unknown'
+        self.temperature = 'UNK'
+        self.last_result = 'No Data Available'
+        self.windchill = 'UNK'
+        self.wind_speed = 'Unknown'
+        self.wind_direction = 'Unknown'
+        self.wind_cardinal_direction = 'Unknown'
+        self.sunrise = 'Unknown'
+        self.sunset = 'Unknown'
+        self.humidity = 'Unknown'
+        self.pressure = 'Unknown'
+        self.visibility = 'Unknown'
+        self.city = 'Unknown'
+        self.lat = 'UNK'
+        self.long = 'UNK'
+        self.forecasts = list()
+
     def parse_yahoo_data(self, yahoo_data):
 
         degree_sign = u'\N{DEGREE SIGN}'
 
         self.data = yahoo_data
 
-        degree_symbol = str(yahoo_data['units']['temperature'])
+        if 'error' in yahoo_data:
+            self.set_default_values()
+            self.last_result = "Error: " + yahoo_data['error']
+            return
 
         # Grab sub-collections
         condition = yahoo_data['condition']
@@ -62,6 +82,7 @@ class WeatherData(object):
         atmosphere = yahoo_data['atmosphere']
         astronomy = yahoo_data['astronomy']
         geo = yahoo_data['geo']
+        degree_symbol = str(units['temperature'])
 
         # TODO: This really needs to be safer with possibly excluded results
         self.conditions = str(condition['text'])

@@ -27,7 +27,7 @@ class MFDController(object):
 
     # TODO: Grab location from GPS
     # TODO: Allow user to manually set location
-    location = '43035'
+    location = '43035'  # or 43212
 
     time_format = '%m/%d/%Y - %H:%M:%S'
 
