@@ -87,8 +87,16 @@ class MFDController(object):
             if event.type == pygame.QUIT:
                 self.requested_exit = True
 
+            # Respond to screen size changes
+            # TODO: It'd be nice to be able to enforce a minimum width / height - we don't support watch-sized resolutions yet
+            elif event.type == pygame.VIDEORESIZE:
+                pygame.display.set_mode(event.dict['size'], pygame.RESIZABLE)
+                self.display.res_x = event.dict['size'][0]
+                self.display.res_y = event.dict['size'][1]
+                pygame.display.update()
+
             # Check for Keyboard Input
-            if event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
 
                 if event.key == pygame.K_ESCAPE:  # Handle escape by closing the app.
                     self.requested_exit = True

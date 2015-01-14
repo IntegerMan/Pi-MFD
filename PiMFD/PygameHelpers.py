@@ -23,7 +23,7 @@ def init_pygame_graphics(display_settings, title, font_name):
     if display_settings.is_fullscreen:
         display = pygame.display.set_mode((display_settings.res_x, display_settings.res_y), pygame.FULLSCREEN)
     else:
-        display = pygame.display.set_mode((display_settings.res_x, display_settings.res_y))
+        display = pygame.display.set_mode((display_settings.res_x, display_settings.res_y), pygame.RESIZABLE)
 
     # Don't settle with that silly "pygame window" label
     pygame.display.set_caption(title)
