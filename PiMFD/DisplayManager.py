@@ -75,7 +75,7 @@ class DisplayManager(object):
 
     def render_text_centered(self, font, text, left, top, color, background=None):
         text_surface = font.render(text, True, color)
-        rect = text_surface.get_rect(center=(left, top))
+        rect = text_surface.get_rect(center=(left, top + (font.size(text)[1] / 2)))
 
         if background:
             self.surface.fill(background, rect=rect)

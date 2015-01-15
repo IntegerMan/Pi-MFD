@@ -141,13 +141,12 @@ class MFDController(object):
 
         # Do division up front
         header_offset = (end_x - start_x) / self.max_app_buttons
-        half_offset = (header_offset / 2.0)
 
         # Render from left to right
         x_offset = 0
         for header in headers[0:self.max_app_buttons]:  # TODO: Support > max_app_buttons apps by allowing paging
-            x = start_x + x_offset + half_offset
-            header.render(self.display, x, is_top)
+            x = x_offset
+            header.render(self.display, x, x + header_offset, is_top)
             x_offset += header_offset
 
     def render_button_rows(self):
