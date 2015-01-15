@@ -11,6 +11,7 @@ class ForecastData(object):
     low = 'UKN'
     temp_range = 'Unknown'
     precipitation_chance = 'UKN'
+    conditions = 'Unknown'
 
     def parse_yahoo_data(self, data, temp_suffix):
         self.data = data
