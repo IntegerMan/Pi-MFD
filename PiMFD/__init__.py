@@ -1,8 +1,10 @@
 import pygame
-from PiMFD.Applications.SystemApplication import SysApplication
+
+from PiMFD.Applications.System.SystemApplication import SysApplication
 from PiMFD.Controller import MFDController
-from PiMFD.Pages.SystemPages import SysClockPage
+from PiMFD.Applications.System.SystemPages import SysClockPage
 from PiMFD.PygameHelpers import init_pygame_graphics
+
 
 __author__ = 'Matt Eland'
 

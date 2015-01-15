@@ -1,4 +1,4 @@
-from PiMFD.Pages.MFDPage import MFDPage
+from PiMFD.Applications.MFDPage import MFDPage
 
 __author__ = 'Matt Eland'
 

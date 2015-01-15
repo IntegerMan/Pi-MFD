@@ -28,18 +28,15 @@
     <Compile Include="APIs\pywbapi\pywapi.py" />
     <Compile Include="FSLauncher.py" />
     <Compile Include="PiMFD\Applications\Application.py" />
-    <Compile Include="PiMFD\Applications\ScheduleApplication.py" />
-    <Compile Include="PiMFD\Applications\SystemApplication.py" />
+    <Compile Include="PiMFD\Applications\MFDPage.py" />
+    <Compile Include="PiMFD\Applications\Scheduling\ScheduleApplication.py" />
+    <Compile Include="PiMFD\Applications\Scheduling\Weather\WeatherAPIWrapper.py" />
+    <Compile Include="PiMFD\Applications\Scheduling\Weather\WeatherData.py" />
+    <Compile Include="PiMFD\Applications\Scheduling\Weather\WeatherPages.py" />
     <Compile Include="PiMFD\Button.py" />
     <Compile Include="PiMFD\ColorScheme.py" />
     <Compile Include="PiMFD\Controller.py" />
-    <Compile Include="PiMFD\Data\WeatherAPIWrapper.py" />
-    <Compile Include="PiMFD\Data\WeatherData.py" />
     <Compile Include="PiMFD\DisplayManager.py" />
-    <Compile Include="PiMFD\Pages\MFDPage.py" />
-    <Compile Include="PiMFD\Pages\SystemPages.py" />
-    <Compile Include="PiMFD\Pages\WeatherPages.py" />
-    <Compile Include="PiMFD\Pages\__init__.py" />
     <Compile Include="PiMFD\PygameHelpers.py" />
     <Compile Include="PiMFD\__init__.py" />
     <Compile Include="WinLauncher.py" />
@@ -65,8 +62,8 @@
     <Folder Include="Fonts\" />
     <Folder Include="PiMFD\" />
     <Folder Include="PiMFD\Applications\" />
-    <Folder Include="PiMFD\Data\" />
-    <Folder Include="PiMFD\Pages\" />
+    <Folder Include="PiMFD\Applications\Scheduling\" />
+    <Folder Include="PiMFD\Applications\Scheduling\Weather\" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\2.7" />

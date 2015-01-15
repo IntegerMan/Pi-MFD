@@ -1,5 +1,5 @@
 import pywapi
-from PiMFD.Data.WeatherData import WeatherData
+from PiMFD.Applications.Scheduling.Weather.WeatherData import WeatherData
 
 __author__ = 'Matt Eland'
 

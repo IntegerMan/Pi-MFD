@@ -1,6 +1,6 @@
 from PiMFD.Applications.Application import MFDApplication
-from PiMFD.Pages.MFDPage import SimpleMessagePage
-from PiMFD.Pages.SystemPages import SysClockPage, SysRootPage, SysExitPage
+from PiMFD.Applications.MFDPage import SimpleMessagePage
+from PiMFD.Applications.System.SystemPages import SysRootPage, SysClockPage, SysExitPage
 
 __author__ = 'Matt Eland'
 

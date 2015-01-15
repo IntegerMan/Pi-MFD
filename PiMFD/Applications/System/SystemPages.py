@@ -1,6 +1,7 @@
 from time import strftime, gmtime
-from PiMFD.Pages.MFDPage import MFDPage
 import platform
+from PiMFD.Applications.MFDPage import MFDPage
+
 
 __author__ = 'Matt Eland'
 

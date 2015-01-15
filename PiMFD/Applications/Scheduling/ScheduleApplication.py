@@ -1,8 +1,8 @@
 from PiMFD.Applications.Application import MFDApplication
-from PiMFD.Data.WeatherAPIWrapper import WeatherAPI
-from PiMFD.Data.WeatherData import WeatherData
-from PiMFD.Pages.MFDPage import SimpleMessagePage
-from PiMFD.Pages.WeatherPages import WeatherPage
+from PiMFD.Applications.MFDPage import SimpleMessagePage
+from PiMFD.Applications.Scheduling.Weather.WeatherAPIWrapper import WeatherAPI
+from PiMFD.Applications.Scheduling.Weather.WeatherData import WeatherData
+from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
 
 __author__ = 'Matt Eland'
 

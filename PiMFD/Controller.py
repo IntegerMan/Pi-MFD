@@ -1,9 +1,11 @@
 import pygame
-from PiMFD.Applications.ScheduleApplication import ScheduleApp
-from PiMFD.Pages.MFDPage import SimpleMessagePage
+
+from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
+from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Button import MFDButton
-from PiMFD.Applications.SystemApplication import SysApplication
+from PiMFD.Applications.System.SystemApplication import SysApplication
 from PiMFD.Applications.Application import PlaceholderApp
+
 
 __author__ = 'Matt Eland'
 
