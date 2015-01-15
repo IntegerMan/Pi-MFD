@@ -16,6 +16,7 @@ class MFDAppOptions(object):
     copyright_year = 2015
     font_name = 'Fonts/VeraMono.ttf'
     display = None
+    location = '43035'
 
 
 def start_mfd(display, app_options):

@@ -29,7 +29,7 @@ class MFDController(object):
 
     # TODO: Grab location from GPS
     # TODO: Allow user to manually set location
-    location = '43035'  # or 43212
+    location = '43035'
 
     time_format = '%m/%d/%Y - %H:%M:%S'
 
@@ -51,6 +51,7 @@ class MFDController(object):
             self.app_version = app_options.app_version
             self.app_author = app_options.app_author
             self.copyright_year = app_options.copyright_year
+            self.location = app_options.location
 
         # Placeholders for navigation app
         self.nav_app = PlaceholderApp(self, 'NAV')

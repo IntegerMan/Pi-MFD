@@ -25,6 +25,7 @@ class ColorScheme(object):
 
 
 class ColorSchemes(object):
+
     # A green based color scheme resembling military avionics displays
     military = ColorScheme(background=(0, 8, 0), foreground=(0, 255, 0), highlight=(255, 255, 255), interlace_color=(0, 32, 0))
 
