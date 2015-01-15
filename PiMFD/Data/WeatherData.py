@@ -1,9 +1,8 @@
-from time import strftime
-
 __author__ = 'Matt Eland'
 
 
 class ForecastData(object):
+    """ Contains information on a specific forecast period in format suitable for display. """
 
     data = None
     date = None
@@ -22,7 +21,9 @@ class ForecastData(object):
         self.date = data["date"]
         self.day = data["day"]
 
+
 class WeatherData(object):
+    """ Contains information on weather conditions that can be displayed easily in a view to users. """
 
     time_format = '%H:%M:%S'
 
@@ -46,6 +47,10 @@ class WeatherData(object):
     data = None
 
     def set_default_values(self):
+        """
+        Clears this instance down to its default values.
+        """
+
         self.conditions = 'Unknown'
         self.temperature = 'UNK'
         self.last_result = 'No Data Available'
@@ -64,6 +69,12 @@ class WeatherData(object):
         self.forecasts = list()
 
     def parse_yahoo_data(self, yahoo_data):
+        """
+        Takes data from Yahoo Weather services, in the form of a dictionary, and parses it into an object that can be
+        interpreted at a view level.
+        :type yahoo_data: dict containing weather data
+        :return: No return value.
+        """
 
         degree_sign = u'\N{DEGREE SIGN}'
 
@@ -111,8 +122,12 @@ class WeatherData(object):
 
     @staticmethod
     def get_cardinal_direction(degree):
+        """
+        Converts degrees to a cardinal direction abbreviation (e.g. 0 is N, 45 is NE, etc.)
+        :param degree: The degree to convert to a direction.
+        :return: A cardinal direction abbreviation based on the degree.
+        """
 
-        # Based on http://climate.umn.edu/snow_fence/Components/winddirectionanddegreeswithouttable3.htm
         if degree <= 11.25:
             return 'N'
         elif degree <= 33.75:
