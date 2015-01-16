@@ -1,3 +1,7 @@
+# coding=utf-8
+"""
+A windowed-mode entry point for Pi-MFD
+"""
 from PiMFD.DisplayManager import DisplayManager
 from PiMFD.Options import MFDAppOptions
 
@@ -6,7 +10,10 @@ __author__ = 'Matt Eland'
 log = open("PiMFD.log", "w")
 
 try:
+    # Initialize our settings. This will create a default settings file if none exists
     app_options = MFDAppOptions()
+    app_options.load_from_settings()
+    app_options.save_to_settings()
 
     # Build a display using the standard windowed sizes. This is great for desktop testing.
     display = DisplayManager()
