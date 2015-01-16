@@ -1,14 +1,29 @@
+# coding=utf-8
+"""
+Holds the weather page
+"""
 from PiMFD.Applications.MFDPage import MFDPage
 
 __author__ = 'Matt Eland'
 
 
 class WeatherPage(MFDPage):
+    """
+    A page containing weather and forecast data.
+    """
 
     def get_button_text(self):
+        """
+        Gets the text for the application's button
+        :return: Text for the application's button
+        """
         return "WTHR"
 
     def render(self, display):
+        """
+        Renders the weather page
+        :type display: PiMFD.DisplayManager.DisplayManager The DisplayManager
+        """
         super(WeatherPage, self).render(display)
 
         start_x = display.get_content_start_x()
@@ -22,6 +37,7 @@ class WeatherPage(MFDPage):
         # Current Conditions
         x = start_x
         y = start_y
+        # TODO: It'd be nice to devise a system where it's simpler to print text.
         y += display.render_text(font, weather.city + " Weather", x, y, cs.highlight).height + display.padding_y
         y += display.render_text(font, "      Temp: " + weather.temperature + ' (Chill: ' + weather.windchill + ')', x, y, cs.foreground).height + display.padding_y
         y += display.render_text(font, "Conditions: " + weather.conditions, x, y, cs.foreground).height + display.padding_y
