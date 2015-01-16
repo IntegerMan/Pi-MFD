@@ -3,7 +3,6 @@ import pygame
 from PiMFD.Applications.System.SystemApplication import SysApplication
 from PiMFD.Controller import MFDController
 from PiMFD.Applications.System.SystemPages import SysClockPage
-from PiMFD.PygameHelpers import init_pygame_graphics
 
 
 __author__ = 'Matt Eland'
@@ -17,7 +16,7 @@ def start_mfd(display, app_options):
     """
 
     # Start up the graphics engine
-    init_pygame_graphics(display, app_options.app_name, app_options.font_name)
+    display.init_graphics(app_options.app_name, app_options.font_name)
 
     # Initialize the controller
     controller = MFDController(display, app_options)

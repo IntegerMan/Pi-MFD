@@ -155,3 +155,36 @@ class DisplayManager(object):
 
         self.surface.blit(text_surface, rect)
         return rect
+
+    def init_graphics(self, title, font_name):
+        """
+        Initializes graphics via pygame.
+        :param title: The title of the application
+        :param font_name: The font to use for the primary application font
+        """
+        pygame.init()
+
+        # If we haven't configured width / height, grab them from the current resolution
+        if self.res_x is None or self.res_x < 8 or self.res_y is None or self.res_y < 8:
+            self.grab_dimensions_from_current_resolution()
+
+        # Prepare the Display
+        if self.is_fullscreen:
+            display = pygame.display.set_mode((self.res_x, self.res_y), pygame.FULLSCREEN)
+        else:
+            display = pygame.display.set_mode((self.res_x, self.res_y), pygame.RESIZABLE)
+
+        # Don't settle with that silly "pygame window" label
+        pygame.display.set_caption(title)
+
+        # Time to use our output
+        self.font_normal = pygame.font.Font(font_name, self.font_size_normal)
+        self.surface = display
+
+    def grab_dimensions_from_current_resolution(self):
+        """
+        Sets the dimensions of this object based on the current screen's resolution.
+        """
+        info = pygame.display.Info()
+        self.res_x = info.current_w
+        self.res_y = info.current_h
