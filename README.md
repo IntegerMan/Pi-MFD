@@ -5,7 +5,8 @@ This project is an attempt to build a Python-based dashboard application that wo
 This came out of a desire to tinker with Raspberry Pi, learn Python and become more exposed to Unix and Physical computing.
 
 ## Current Status
-The application is essentially a loose collection of partially implemented modules with a simple navigation capability using the F1-F5 and F8-F12 keys. It's not useable except as a clock.
+The application is essentially a loose collection of partially implemented modules with a simple navigation capability 
+using mouse buttons or F1-F5 and F8-F12 keys.
 
 ## Deployment Target
 The intended deployment target of this software during development is a ThermalTake Core V1 mini-atx case hosting a 
@@ -13,19 +14,27 @@ Raspberry Pi B+ running Raspbian and outputting on a 7 inch external display. Th
 buttons mounted above and below the case.
 
 ### Compatible Platforms
-
-Pi MFD has been tested in its current state on the following platforms: Windows 8 x64, Windows 10 x86, Rasbian, Ubuntu
+Pi MFD has been tested in its current state on the following platforms: 
+- Windows 7 x64
+- Windows 8 x64
+- Windows 10 x86 
+- Rasbian
+- Ubuntu
 
 ## Development Disclaimer
 This code is still very early under development and is not intended for external use and does not represent working software.
 
-An additional note: I have no prior experience with the python language.
+An additional note: I have no prior experience with the python language. This project is a learning project and does
+not necessarily represent Python standards or ideal patterns.
 
 ## License
 This code is available under the GNU General Public License. See LICENSE for more information. 
 
 ## Requirements
-Pi-MFD requires: Python 2.7 or higher and a version of pygame compatible with the installed version of Python.
+Pi-MFD requires:
+- Python 2.7 or higher
+- Pygame
+- Pywapi
 
 ## User Interface
 
@@ -55,7 +64,8 @@ Planned applications and their pages are listed as follows:
 #### Tasks (TASK) - Planned
 #### Mail (MAIL) - Planned
 #### Calendar (CAL) - Planned
-#### Weather (WTHR) - Planned
+#### Weather (WTHR)
+Displays current weather conditions and a 5 day forecast
 
 ### Navigation (NAV)
 #### Map (MAP) - Planned
@@ -84,9 +94,11 @@ Planned applications and their pages are listed as follows:
 Displays the current time in system and GMT time.
 
 #### Performance (PERF)  - Planned
+Displays performance metrics for this machine or a machine running WMI.
+
 #### Network (NET) - Planned
 #### Options (OPTS) - Planned
-#### Exit (EXIT) - Planned
+#### Exit (EXIT)
 Exits the application
 
 ## Future Integrations

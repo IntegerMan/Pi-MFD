@@ -1,3 +1,8 @@
+# coding=utf-8
+"""
+UI Button related functionality
+"""
+
 from pygame.rect import Rect
 
 __author__ = 'Matt Eland'
@@ -76,4 +81,3 @@ class MFDButton(object):
         :return: True if pos is inside the bounds of this button, otherwise False.
         """
         return self.bounds.collidepoint(pos)
-

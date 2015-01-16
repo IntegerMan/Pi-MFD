@@ -1,3 +1,8 @@
+# coding=utf-8
+"""
+The primary display control module responsible for arranging and rendering components on the display and acting as a
+liaison between the application and Pygame.
+"""
 import pygame
 
 from PiMFD import start_mfd
@@ -19,6 +24,10 @@ class DisplayManager(object):
         pass
 
     def start_mfd(self, app_options):
+        """
+        Starts the MFD Application
+        :type app_options: PiMFD.MFDAppOptions the app options
+        """
         start_mfd(self, app_options)
 
     res_x = 800
@@ -83,19 +92,41 @@ class DisplayManager(object):
         pygame.draw.rect(self.surface, color, rect, width)
 
     def get_content_start_x(self):
+        """
+        Gets the X indentation level for content
+        :return: The X location at which content rendering is acceptable
+        """
         return self.padding_x * 2
 
     def get_content_start_y(self):
+        """
+        Gets the Y indentation level for content
+        :return: The Y location at which content rendering is acceptable
+        """
         return (self.padding_y * 4) + self.font_size_normal
 
     def get_spacer_line_height(self, font_size=None):
-
+        """
+        Calculates the Y amount of padding needed for a single blank line
+        :type font_size: int The size of the font or None to use the height from font_size_normal
+        :return:
+        """
         if font_size is None:
             font_size = self.font_size_normal
 
         return (self.padding_y * 2) + font_size
 
     def render_text(self, font, text, left, top, color, background=None):
+        """
+        Renders text to the screen at the specified coordinates with the specified display parameters
+        :type font: pygame.ftfont.Font The font used to render the text
+        :type text: str The text to render
+        :type left: int The x coordinate for the left edge of the text block
+        :type top: int The y coordinate for the top edge of the text block
+        :type color: tuple The RGB color to render the text using
+        :type background: unknown or tuple The RGB color to render the background or None (default) for transparent
+        :return: A Rect representing the rendered area for the text
+        """
         text_surface = font.render(text, True, color)
         rect = text_surface.get_rect(top=top, left=left)
 
@@ -106,6 +137,16 @@ class DisplayManager(object):
         return rect
 
     def render_text_centered(self, font, text, left, top, color, background=None):
+        """
+        Renders text centered horizontally around the specified points
+        :type font: pygame.ftfont.Font The font used to render the text
+        :type text: str The text to render
+        :type left: int The x coordinate for the center of the text block
+        :type top: int The y coordinate for the top of the text block
+        :type color: tuple The RGB color to render the text using
+        :type background: unknown or tuple The RGB color to render the background or None (default) for transparent
+        :return: A Rect representing the rendered area for the text
+        """
         text_surface = font.render(text, True, color)
         rect = text_surface.get_rect(center=(left, top + (font.size(text)[1] / 2)))
 
