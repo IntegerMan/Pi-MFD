@@ -1,5 +1,5 @@
-from PiMFD import MFDAppOptions
 from PiMFD.DisplayManager import DisplayManager
+from PiMFD.Options import MFDAppOptions
 
 __author__ = 'Matt Eland'
 

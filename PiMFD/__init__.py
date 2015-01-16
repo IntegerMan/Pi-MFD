@@ -9,17 +9,12 @@ from PiMFD.PygameHelpers import init_pygame_graphics
 __author__ = 'Matt Eland'
 
 
-class MFDAppOptions(object):
-    app_name = 'Pi-MFD'
-    app_version = '0.01 Development Version'
-    app_author = 'Matt Eland'
-    copyright_year = 2015
-    font_name = 'Fonts/VeraMono.ttf'
-    display = None
-    location = '43035'
-
-
 def start_mfd(display, app_options):
+    """
+    Initializes Pi-MFD and starts the main execution loop.
+    :type display: PiMFD.DisplayManager.DisplayManager The DisplayManager that runs the graphical settings
+    :type app_options: PiMFD.MFDAppOptions Options for the application
+    """
 
     # Start up the graphics engine
     init_pygame_graphics(display, app_options.app_name, app_options.font_name)
