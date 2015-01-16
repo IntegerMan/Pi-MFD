@@ -1,3 +1,9 @@
+# coding=utf-8
+"""
+Contains data models used to insulate the weather data from the web API and used by the pages to get data in displayable
+format.
+"""
+
 __author__ = 'Matt Eland'
 
 
