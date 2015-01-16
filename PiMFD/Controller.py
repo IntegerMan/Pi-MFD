@@ -87,8 +87,10 @@ class MFDController(object):
         self.active_app = self.sys_app
 
     def process_events(self):
-
-        # Process all events
+        """
+        Processes events such as keyboard, mouse, and hardware input as well as external events such as window resize
+        or application closing notifications.
+        """
         events = pygame.event.get()
         for event in events:
 
@@ -103,6 +105,11 @@ class MFDController(object):
                 self.display.res_x = event.dict['size'][0]
                 self.display.res_y = event.dict['size'][1]
                 pygame.display.update()
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+
+                if event.button == 1:  # Left Mouse Button
+                    self.handle_mouse_left_click(event.pos)
 
             # Check for Keyboard Input
             elif event.type == pygame.KEYDOWN:
@@ -135,12 +142,13 @@ class MFDController(object):
                     self.handle_button(4, False)
 
     def render_button_row(self, headers, is_top):
-
-        start_x = self.display.padding_x
-        end_x = self.display.res_x - self.display.padding_x
-
+        """
+        Renders a row of buttons.
+        :type headers: list The buttons to render
+        :type is_top: bool True if this is the top row, False for the bottom row
+        """
         # Do division up front
-        header_offset = (end_x - start_x) / self.max_app_buttons
+        header_offset = self.display.res_x / float(self.max_app_buttons)
 
         # Render from left to right
         x_offset = 0
@@ -242,3 +250,26 @@ class MFDController(object):
             # Tell the new app it's now selected
             self.active_app = new_app
             new_app.handle_selected()
+
+    def handle_mouse_left_click(self, pos):
+
+        # Check Top Buttons and respond to the first match
+        index = 0
+        for button in self.top_headers:
+            if button.enabled and button.contains_point(pos):
+                self.handle_button(index, True)
+                return
+
+            index += 1
+
+        # Check Bottom Buttons and respond to the first match
+        index = 0
+        for button in self.bottom_headers:
+            if button.enabled and button.contains_point(pos):
+                self.handle_button(index, False)
+                return
+
+            index += 1
+
+
+

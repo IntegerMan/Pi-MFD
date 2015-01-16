@@ -6,7 +6,10 @@ __author__ = 'Matt Eland'
 
 
 class DisplayManager(object):
-    """Contains information and functions related to the drawing dimensions of the application window as well as the drawing surface."""
+    """
+    Contains information and functions related to the drawing dimensions of the application window as well as
+    the drawing surface.
+    """
 
     def __init__(self, x=800, y=480):
         self.res_x = x
@@ -34,10 +37,14 @@ class DisplayManager(object):
     font_normal = None
 
     def render_background(self):
+        """
+        Renders the application background
+        """
 
-        # Fill the background with black
+        # Fill the background with a solid color
         self.surface.fill(self.color_scheme.background)
 
+        # If we're using an interlace color, render it on every other line
         if self.color_scheme.interlace_color is not None:
             y = 1
             while y < self.res_y - 1:
@@ -45,10 +52,33 @@ class DisplayManager(object):
                 y += 2  # Move two lines down
 
     def draw_horizontal_line(self, color, x1, x2, y):
+        """
+        Renders a horizontal line along a single vertical plane
+        :type color: The RGB value to render
+        :type x1: int the starting X coordinate of the line
+        :type x2: int the ending X coordinate of the line
+        :type y: int the Y coordinate for both ends of the line
+        """
         pygame.draw.line(self.surface, color, (x1, y), (x2, y))
 
     def draw_vertical_line(self, color, x, y1, y2):
+        """
+        Renders a vertical line along a single horizontal plane
+        :type color: The RGB value to render
+        :type x: int the X coordinate for both ends of the line
+        :type y1: int the starting X coordinate of the line
+        :type y2: int the ending X coordinate of the line
+        """
         pygame.draw.line(self.surface, color, (x, y1), (x, y2))
+
+    def draw_rectangle(self, color, rect, width=1):
+        """
+        Draws a rectangle
+        :param color: The color to use to draw
+        :param rect: The bounds of the rectangle
+        :param width: The width of the rectangle. If 0, this will be a solid fill. Defaults to 1.
+        """
+        pygame.draw.rect(self.surface, color, rect, width)
 
     def get_content_start_x(self):
         return self.padding_x * 2
