@@ -1,5 +1,6 @@
 from time import strftime, gmtime
 import platform
+
 from PiMFD.Applications.MFDPage import MFDPage
 
 

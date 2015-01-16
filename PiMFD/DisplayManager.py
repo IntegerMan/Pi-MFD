@@ -1,6 +1,8 @@
 import pygame
+
 from PiMFD import start_mfd
 from PiMFD.ColorScheme import ColorSchemes
+
 
 __author__ = 'Matt Eland'
 
