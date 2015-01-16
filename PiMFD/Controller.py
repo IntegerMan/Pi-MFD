@@ -1,3 +1,9 @@
+# coding=utf-8
+
+"""
+Contains application control logic for Pi-MFD.
+"""
+
 import pygame
 
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
@@ -11,7 +17,12 @@ __author__ = 'Matt Eland'
 
 
 class MFDController(object):
-
+    """
+    The MFDController coordinates between the various applications and pages and determines what actions and
+    navigation should occur in response to apps, pages, and user input.
+    :type display: PiMFD.DisplayManager.DisplayManager The DisplayManager used to render the user interface
+    :type app_options: PiMFD.MFDAppOptions Application options
+    """
     display = None
     requested_exit = False
     clock = None
@@ -158,10 +169,19 @@ class MFDController(object):
             x_offset += header_offset
 
     def render_button_rows(self):
+        """
+        Renders the top and bottom rows of buttons
+        """
         self.render_button_row(self.top_headers, True)
         self.render_button_row(self.bottom_headers, False)
 
     def update_application(self):
+        """
+        Causes the applications to regenerate their list of buttons (as needed)
+        """
+
+        # TODO: This really should not be instantiating new button objects every render cycle. Those should live at the
+        # app-level
 
         # Render our applications
         self.top_headers = list()
@@ -178,7 +198,10 @@ class MFDController(object):
             self.bottom_headers = list()
 
     def execute_main_loop(self):
-
+        """
+        The main processing loop of the system. Renders the current page, ensures events are responded to, and
+        coordinates with the graphics engine to maintain proper display frame rates.
+        """
         self.display.render_background()
 
         # Ensure an app is selected
@@ -211,6 +234,11 @@ class MFDController(object):
         pass
 
     def handle_button(self, index, is_top_row):
+        """
+        Responds to a button click
+        :type index: int The 0-based index of the button in its row.
+        :type is_top_row: bool True if it was a top row button, False for a bottom row button
+        """
 
         # TODO: Render this as a click by bordering the clickable area in a special color
 
@@ -221,6 +249,10 @@ class MFDController(object):
             self.active_app.select_page_by_index(index)
 
     def select_app_by_index(self, index):
+        """
+        Selects an application by its index in the list of apps.
+        :type index: int The 0-based application index.
+        """
 
         # Figure out where we're going
         if index < len(self.applications):
@@ -231,6 +263,10 @@ class MFDController(object):
         self.select_app(new_app)
 
     def select_app(self, new_app):
+        """
+        Selects the specified app and tells it that it is now active, coordinating with the prior app.
+        :type new_app: MFDApplication to select.
+        """
 
         # Don't allow users to select blank spots
         if new_app is None:
@@ -252,13 +288,18 @@ class MFDController(object):
             new_app.handle_selected()
 
     def handle_mouse_left_click(self, pos):
+        """
+        Maps mouse left clicks to clicks on any button in range
+        :type pos: tuple The position where the mouse was when the click occurred
+        :return: True if the click was handled, otherwise False
+        """
 
         # Check Top Buttons and respond to the first match
         index = 0
         for button in self.top_headers:
             if button.enabled and button.contains_point(pos):
                 self.handle_button(index, True)
-                return
+                return True
 
             index += 1
 
@@ -267,9 +308,12 @@ class MFDController(object):
         for button in self.bottom_headers:
             if button.enabled and button.contains_point(pos):
                 self.handle_button(index, False)
-                return
+                return True
 
             index += 1
+
+        # No takers
+        return False
 
 
 
