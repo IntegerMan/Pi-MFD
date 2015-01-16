@@ -1,3 +1,7 @@
+# coding=utf-8
+"""
+Holds system pages for use in the system application.
+"""
 from time import strftime, gmtime
 import platform
 
@@ -8,11 +12,22 @@ __author__ = 'Matt Eland'
 
 
 class SysRootPage(MFDPage):
+    """
+    The root level page for the system app
+    """
 
     def get_button_text(self):
+        """
+        Gets the button text for the application
+        :return: the button text for the application
+        """
         return "SYS"  # Though this shouldn't get invoked since it's not going to be available
 
     def render(self, display):
+        """
+        Renders the page.
+        :type display: PiMFD.DisplayManager.DisplayManager The DisplayManager that manages the page we're rendering.
+        """
         super(SysRootPage, self).render(display)
 
         x = display.get_content_start_x()
@@ -39,11 +54,22 @@ class SysRootPage(MFDPage):
 
 
 class SysExitPage(MFDPage):
+    """
+    The exit Pi_MFD confirm page. Allows users to double select to quit the app.
+    """
 
     def get_button_text(self):
+        """
+        Gets the button text
+        :return: The button text.
+        """
         return "EXIT"
 
     def render(self, display):
+        """
+        Renders the exit page.
+        :param display: The DisplayManager used to manage the display.
+        """
         super(SysExitPage, self).render(display)
 
         x = display.get_content_start_x()
@@ -61,15 +87,29 @@ class SysExitPage(MFDPage):
             display.render_text(font, "The application will now close.", x, y, cs.foreground)
 
     def handle_reselected(self):
+        """
+        Handles the reselected event of the page.
+        """
         self.controller.requested_exit = True
 
 
 class SysClockPage(MFDPage):
+    """
+    A system clock page displaying the time in GMT and the current time zone.
+    """
     
     def get_button_text(self):
+        """
+        Gets the button text.
+        :return: The button text.
+        """
         return "TIME"
 
     def render(self, display):
+        """
+        Renders the system clock page.
+        :param display: The DisplayManager.
+        """
         super(SysClockPage, self).render(display)
 
         x = display.get_content_start_x()

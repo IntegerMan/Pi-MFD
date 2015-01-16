@@ -6,7 +6,10 @@ __author__ = 'Matt Eland'
 
 
 class SysApplication(MFDApplication):
-
+    """
+    The system application.
+    :type controller: PiMFD.Controller.MFDController The controller
+    """
     root_page = None
     clock_page = None
     perf_page = None
@@ -29,9 +32,17 @@ class SysApplication(MFDApplication):
         self.pages = list([self.clock_page, self.perf_page, self.net_page, self.opts_page, self.exit_page])
 
     def get_default_page(self):
+        """
+        Gets the default page for the application
+        :return: The default page for the application.
+        """
         return self.root_page
 
     def get_button_text(self):
+        """
+        Gets the button text for the application
+        :return: The button text for the application
+        """
         return 'SYS'
 
 
