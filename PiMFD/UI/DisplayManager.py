@@ -61,6 +61,7 @@ class DisplayManager(object):
         """
         pygame.display.update()
         self.overlay_surface = pygame.Surface((self.res_x, self.res_y), pygame.SRCALPHA)
+        self.overlay_surface.convert_alpha()
 
     def wait_for_next_frame(self):
         """
@@ -253,7 +254,9 @@ class DisplayManager(object):
 
         # Time to use our output
         self.surface = display
+        self.surface.convert()
         self.overlay_surface = pygame.Surface((self.res_x, self.res_y), pygame.SRCALPHA)
+        self.overlay_surface.convert_alpha()
 
     def grab_dimensions_from_current_resolution(self):
         """
