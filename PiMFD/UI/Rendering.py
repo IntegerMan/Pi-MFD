@@ -7,10 +7,10 @@ import pygame
 __author__ = 'Matt Eland'
 
 
-def draw_horizontal_line(displaymanager, color, x1, x2, y, surface=None):
+def draw_horizontal_line(display_manager, color, x1, x2, y, surface=None):
     """
     Renders a horizontal line along a single vertical plane
-    :param displaymanager: The DisplayManager
+    :param display_manager: The DisplayManager
     :type color: The RGB value to render
     :type x1: int the starting X coordinate of the line
     :type x2: int the ending X coordinate of the line
@@ -18,15 +18,15 @@ def draw_horizontal_line(displaymanager, color, x1, x2, y, surface=None):
     :param surface: The surface to render to. Defaults to the primary surface.
     """
     if surface is None:
-        surface = displaymanager.surface
+        surface = display_manager.surface
 
     pygame.draw.line(surface, color, (x1, y), (x2, y))
 
 
-def draw_vertical_line(displaymanager, color, x, y1, y2, surface=None):
+def draw_vertical_line(display_manager, color, x, y1, y2, surface=None):
     """
     Renders a vertical line along a single horizontal plane
-    :param displaymanager: The DisplayManager
+    :param display_manager: The DisplayManager
     :type color: The RGB value to render
     :type x: int the X coordinate for both ends of the line
     :type y1: int the starting X coordinate of the line
@@ -34,7 +34,7 @@ def draw_vertical_line(displaymanager, color, x, y1, y2, surface=None):
     :param surface: The surface to render to. Defaults to the primary surface.
     """
     if surface is None:
-        surface = displaymanager.surface
+        surface = display_manager.surface
 
     pygame.draw.line(surface, color, (x, y1), (x, y2))
 
