@@ -60,6 +60,7 @@ class DisplayManager(object):
         Causes the graphics mode to refresh to take into account new resolutions
         """
         pygame.display.update()
+        self.overlay_surface = pygame.Surface((self.res_x, self.res_y), pygame.SRCALPHA)
 
     def wait_for_next_frame(self):
         """
