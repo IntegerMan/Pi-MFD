@@ -3,7 +3,7 @@
 """
 Contains classes capable of performing various graphical overlay functions on the transparency layer
 """
-from PiMFD.UI.Rendering import draw_horizontal_line, render_text
+from PiMFD.UI.Rendering import draw_horizontal_line, render_text, to_rgba
 
 __author__ = 'Matt Eland'
 
@@ -46,7 +46,7 @@ class ScanlineOverlay(Overlay):
         c = display.color_scheme.highlight
         for i in range(0, self.height):
             alpha = (i * self.intensity)
-            draw_horizontal_line(display, display.to_rgba(c, alpha), 0, max_x, self.y + i, surface=surface)
+            draw_horizontal_line(display, to_rgba(c, alpha), 0, max_x, self.y + i, surface=surface)
 
         # Animate downwards - try to keep a constant perceived pace, regardless of FPS setting
         effective_speed = self.speed * (60.0 / display.frames_per_second)

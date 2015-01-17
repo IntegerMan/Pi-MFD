@@ -104,3 +104,13 @@ def render_text_centered(display_manager, font, text, left, top, color, backgrou
 
     surface.blit(text_surface, rect)
     return rect
+
+
+def to_rgba(color, alpha=255):
+    """
+    Takes a RGB color tuple and adds an alpha value to it
+    :param color: The RGB color
+    :param alpha: The alpha value (0-255)
+    :return: A RGBA color structure
+    """
+    return color[0], color[1], color[2], alpha

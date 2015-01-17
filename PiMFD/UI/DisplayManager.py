@@ -126,16 +126,6 @@ class DisplayManager(object):
 
         return (self.padding_y * 2) + font_size
 
-    @staticmethod
-    def to_rgba(color, alpha=255):
-        """
-        Takes a RGB color tuple and adds an alpha value to it
-        :param color: The RGB color
-        :param alpha: The alpha value (0-255)
-        :return: A RGBA color structure
-        """
-        return color[0], color[1], color[2], alpha
-
     def init_graphics(self, title, font_name):
         """
         Initializes graphics via pygame.
