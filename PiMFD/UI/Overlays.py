@@ -48,9 +48,10 @@ class ScanlineOverlay(Overlay):
             alpha = (i * self.intensity)
             draw_horizontal_line(display, display.to_rgba(c, alpha), 0, max_x, self.y + i, surface=surface)
 
-        # Advance to the next row
-        if self.y < display.res_y + self.height + (self.delay * self.speed):
-            self.y += self.speed
+        # Animate downwards - try to keep a constant perceived pace, regardless of FPS setting
+        effective_speed = self.speed * (60.0 / display.frames_per_second)
+        if self.y < display.res_y + self.height + (self.delay * effective_speed):
+            self.y += effective_speed
         else:
             self.y = -self.height
 
