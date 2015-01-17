@@ -5,6 +5,9 @@ UI Button related functionality
 
 from pygame.rect import Rect
 
+from PiMFD.UI.Rendering import draw_vertical_line
+
+
 __author__ = 'Matt Eland'
 
 
@@ -57,12 +60,21 @@ class MFDButton(object):
         # Render tick marks
         line_length = 5
         if is_top:
-            display.draw_vertical_line(display.color_scheme.foreground, midpoint, y - 2, y - 2 - line_length)
+            draw_vertical_line(display,
+                               display.color_scheme.foreground,
+                               midpoint,
+                               y - 2,
+                               y - 2 - line_length)
+
             top = y - 2 - line_length
             bottom = pos.bottom
         else:
-            display.draw_vertical_line(display.color_scheme.foreground, midpoint, y + pos.height - 2,
-                                       y + pos.height + line_length - 2)
+            draw_vertical_line(display,
+                               display.color_scheme.foreground,
+                               midpoint,
+                               y + pos.height - 2,
+                               y + pos.height + line_length - 2)
+
             top = pos.top
             bottom = y + pos.height + line_length - 2
 

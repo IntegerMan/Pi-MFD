@@ -7,6 +7,7 @@ import pygame
 
 from PiMFD import start_mfd
 from PiMFD.UI.ColorScheme import ColorSchemes
+from PiMFD.UI.Rendering import draw_horizontal_line
 
 
 __author__ = 'Matt Eland'
@@ -82,7 +83,7 @@ class DisplayManager(object):
         if self.color_scheme.interlace_color is not None:
             y = 1
             while y < self.res_y - 1:
-                self.draw_horizontal_line(self.color_scheme.interlace_color, 0, self.res_x - 1, y)
+                draw_horizontal_line(self, self.color_scheme.interlace_color, 0, self.res_x - 1, y)
                 y += 2  # Move two lines down
 
     def render_overlays(self):
@@ -99,34 +100,6 @@ class DisplayManager(object):
 
         # Pass the contents on to the primary surface
         self.surface.blit(self.overlay_surface, (0, 0))
-
-    def draw_horizontal_line(self, color, x1, x2, y, surface=None):
-        """
-        Renders a horizontal line along a single vertical plane
-        :type color: The RGB value to render
-        :type x1: int the starting X coordinate of the line
-        :type x2: int the ending X coordinate of the line
-        :type y: int the Y coordinate for both ends of the line
-        :param surface: The surface to render to. Defaults to the primary surface.
-        """
-        if surface is None:
-            surface = self.surface
-
-        pygame.draw.line(surface, color, (x1, y), (x2, y))
-
-    def draw_vertical_line(self, color, x, y1, y2, surface=None):
-        """
-        Renders a vertical line along a single horizontal plane
-        :type color: The RGB value to render
-        :type x: int the X coordinate for both ends of the line
-        :type y1: int the starting X coordinate of the line
-        :type y2: int the ending X coordinate of the line
-        :param surface: The surface to render to. Defaults to the primary surface.
-        """
-        if surface is None:
-            surface = self.surface
-
-        pygame.draw.line(surface, color, (x, y1), (x, y2))
 
     def draw_rectangle(self, color, rect, width=1, surface=None):
         """

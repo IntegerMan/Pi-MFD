@@ -35,11 +35,12 @@
     <Compile Include="PiMFD\Applications\Scheduling\Weather\WeatherPages.py" />
     <Compile Include="PiMFD\Applications\System\SystemApplication.py" />
     <Compile Include="PiMFD\Applications\System\SystemPages.py" />
-    <Compile Include="PiMFD\Button.py" />
-    <Compile Include="PiMFD\ColorScheme.py" />
     <Compile Include="PiMFD\Controller.py" />
-    <Compile Include="PiMFD\DisplayManager.py" />
-    <Compile Include="PiMFD\PygameHelpers.py" />
+    <Compile Include="PiMFD\UI\Button.py" />
+    <Compile Include="PiMFD\UI\ColorScheme.py" />
+    <Compile Include="PiMFD\UI\DisplayManager.py" />
+    <Compile Include="PiMFD\UI\Overlays.py" />
+    <Compile Include="PiMFD\UI\Rendering.py" />
     <Compile Include="PiMFD\__init__.py" />
     <Compile Include="WinLauncher.py" />
   </ItemGroup>
@@ -67,6 +68,7 @@
     <Folder Include="PiMFD\Applications\Scheduling\" />
     <Folder Include="PiMFD\Applications\Scheduling\Weather\" />
     <Folder Include="PiMFD\Applications\System\" />
+    <Folder Include="PiMFD\UI\" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\2.7" />

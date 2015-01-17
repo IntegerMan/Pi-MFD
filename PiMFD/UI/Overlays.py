@@ -3,6 +3,7 @@
 """
 Contains classes capable of performing various graphical overlay functions on the transparency layer
 """
+from PiMFD.UI.Rendering import draw_horizontal_line
 
 __author__ = 'Matt Eland'
 
@@ -45,7 +46,7 @@ class ScanlineOverlay(Overlay):
         c = display.color_scheme.highlight
         for i in range(0, self.height):
             alpha = (i * self.intensity)
-            display.draw_horizontal_line(display.to_rgba(c, alpha), 0, max_x, self.y + i, surface=surface)
+            draw_horizontal_line(display, display.to_rgba(c, alpha), 0, max_x, self.y + i, surface=surface)
 
         # Advance to the next row
         if self.y < display.res_y + self.height + (self.delay * self.speed):
