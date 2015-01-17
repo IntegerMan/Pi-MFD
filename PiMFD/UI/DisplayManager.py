@@ -6,7 +6,7 @@ liaison between the application and Pygame.
 import pygame
 
 from PiMFD import start_mfd
-from PiMFD.ColorScheme import ColorSchemes
+from PiMFD.UI.ColorScheme import ColorSchemes
 
 
 __author__ = 'Matt Eland'

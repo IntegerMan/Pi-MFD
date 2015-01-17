@@ -2,8 +2,8 @@
 """
 A windowed-mode entry point for Pi-MFD
 """
-from PiMFD.DisplayManager import DisplayManager
 from PiMFD.Options import MFDAppOptions
+from PiMFD.UI.DisplayManager import DisplayManager
 
 __author__ = 'Matt Eland'
 

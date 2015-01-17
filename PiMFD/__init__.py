@@ -1,3 +1,4 @@
+# coding=utf-8
 import pygame
 
 from PiMFD.Applications.System.SystemApplication import SysApplication

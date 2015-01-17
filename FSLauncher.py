@@ -2,7 +2,7 @@
 """
 A fullscreen entry mode for Pi-MFD
 """
-from PiMFD.DisplayManager import DisplayManager
+from PiMFD.UI.DisplayManager import DisplayManager
 from PiMFD.Options import MFDAppOptions
 
 __author__ = 'Matt Eland'

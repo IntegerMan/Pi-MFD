@@ -2,7 +2,7 @@
 """
 Contains core application definition and placeholders.
 """
-from PiMFD.Button import MFDButton
+from PiMFD.UI.Button import MFDButton
 
 __author__ = 'Matt Eland'
 
