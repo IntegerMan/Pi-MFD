@@ -46,13 +46,37 @@ class ColorSchemes(object):
     A collection of available color schemes.
     """
 
-    # TODO: Stick these in a list so I can iterate it and store a color scheme preference in the settings file.
+    @staticmethod
+    def get_military_color_scheme():
+        """
+        Gets a green based color scheme resembling military avionics displays
+        :return: A green based color scheme resembling military avionics displays
+        """
+        return ColorScheme(background=(0, 8, 0),
+                           foreground=(0, 255, 0),
+                           highlight=(255, 255, 255),
+                           interlace_color=(0, 32, 0))
 
-    # A green based color scheme resembling military avionics displays
-    military = ColorScheme(background=(0, 8, 0), foreground=(0, 255, 0), highlight=(255, 255, 255), interlace_color=(0, 32, 0))
+    @staticmethod
+    def get_cyan_color_scheme():
+        """
+        Gets a cyan based color scheme
+        :return: A cyan based color scheme
+        """
+        return ColorScheme(background=(0, 0, 32),
+                           foreground=(0, 170, 170),
+                           highlight=(0, 0, 255),
+                           interlace_color=(0, 0, 8))
 
-    # A cyan display
-    cyan = ColorScheme(background=(0, 0, 32), foreground=(0, 170, 170), highlight=(0, 0, 255), interlace_color=(0, 0, 8))
+    @staticmethod
+    def get_monochrome_color_scheme():
+        """
+        Gets a monochrome based color scheme
+        :return: A monochrome based color scheme
+        """
+        return ColorScheme(background=(0, 0, 0),
+                           foreground=(150, 150, 150),
+                           highlight=(255, 255, 255),
+                           interlace_color=(24, 24, 24))
 
-    pass
 
