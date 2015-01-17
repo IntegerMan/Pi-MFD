@@ -21,7 +21,7 @@ class DisplayManager(object):
     def __init__(self, x=800, y=480):
         self.res_x = x
         self.res_y = y
-        pass
+        self.overlays = list()
 
     def start_mfd(self, app_options):
         """
@@ -36,16 +36,25 @@ class DisplayManager(object):
     padding_x = 16
     padding_y = 8
 
+    overlays = None
+
     surface = None
+    overlay_surface = None
 
     is_fullscreen = False
 
-    frames_per_second = 30
+    frames_per_second = 60
 
     color_scheme = ColorSchemes.get_green_color_scheme()
 
     font_size_normal = 24
     font_normal = None
+
+    def update_graphics_mode(self):
+        """
+        Causes the graphics mode to refresh to take into account new resolutions
+        """
+        pygame.display.update()
 
     def render_background(self):
         """
@@ -62,34 +71,61 @@ class DisplayManager(object):
                 self.draw_horizontal_line(self.color_scheme.interlace_color, 0, self.res_x - 1, y)
                 y += 2  # Move two lines down
 
-    def draw_horizontal_line(self, color, x1, x2, y):
+    def render_overlays(self):
+        """
+        Renders overlays on top of the application's normal graphics layer
+        """
+
+        # Start fully transparent
+        self.overlay_surface.fill((0, 0, 0, 0))
+
+        # Render all overlays onto the surface
+        for overlay in self.overlays:
+            overlay.render(self, self.overlay_surface)
+
+        # Pass the contents on to the primary surface
+        self.surface.blit(self.overlay_surface, (0, 0))
+
+    def draw_horizontal_line(self, color, x1, x2, y, surface=None):
         """
         Renders a horizontal line along a single vertical plane
         :type color: The RGB value to render
         :type x1: int the starting X coordinate of the line
         :type x2: int the ending X coordinate of the line
         :type y: int the Y coordinate for both ends of the line
+        :param surface: The surface to render to. Defaults to the primary surface.
         """
-        pygame.draw.line(self.surface, color, (x1, y), (x2, y))
+        if surface is None:
+            surface = self.surface
 
-    def draw_vertical_line(self, color, x, y1, y2):
+        pygame.draw.line(surface, color, (x1, y), (x2, y))
+
+    def draw_vertical_line(self, color, x, y1, y2, surface=None):
         """
         Renders a vertical line along a single horizontal plane
         :type color: The RGB value to render
         :type x: int the X coordinate for both ends of the line
         :type y1: int the starting X coordinate of the line
         :type y2: int the ending X coordinate of the line
+        :param surface: The surface to render to. Defaults to the primary surface.
         """
-        pygame.draw.line(self.surface, color, (x, y1), (x, y2))
+        if surface is None:
+            surface = self.surface
 
-    def draw_rectangle(self, color, rect, width=1):
+        pygame.draw.line(surface, color, (x, y1), (x, y2))
+
+    def draw_rectangle(self, color, rect, width=1, surface=None):
         """
         Draws a rectangle
         :param color: The color to use to draw
         :param rect: The bounds of the rectangle
         :param width: The width of the rectangle. If 0, this will be a solid fill. Defaults to 1.
+        :param surface: The surface to render to. Defaults to the primary surface.
         """
-        pygame.draw.rect(self.surface, color, rect, width)
+        if surface is None:
+            surface = self.surface
+
+        pygame.draw.rect(surface, color, rect, width)
 
     def get_content_start_x(self):
         """
@@ -180,6 +216,7 @@ class DisplayManager(object):
         # Time to use our output
         self.font_normal = pygame.font.Font(font_name, self.font_size_normal)
         self.surface = display
+        self.overlay_surface = pygame.Surface((self.res_x, self.res_y), pygame.SRCALPHA)
 
     def grab_dimensions_from_current_resolution(self):
         """

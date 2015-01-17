@@ -4,6 +4,7 @@ A fullscreen entry mode for Pi-MFD
 """
 from PiMFD.UI.DisplayManager import DisplayManager
 from PiMFD.Options import MFDAppOptions
+from PiMFD.UI.Overlays import ScanlineOverlay
 
 __author__ = 'Matt Eland'
 
@@ -17,6 +18,7 @@ try:
     # Create a new display in fullscreen mode without specifying resolution. Resolution will be auto-detected.
     display = DisplayManager(None, None)
     display.is_fullscreen = True
+    display.overlays.append(ScanlineOverlay())
 
     # Launch!
     display.start_mfd(app_options)

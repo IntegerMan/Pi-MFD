@@ -115,7 +115,7 @@ class MFDController(object):
                 pygame.display.set_mode(event.dict['size'], pygame.RESIZABLE)
                 self.display.res_x = event.dict['size'][0]
                 self.display.res_y = event.dict['size'][1]
-                pygame.display.update()
+                self.display.update_graphics_mode()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -202,6 +202,8 @@ class MFDController(object):
         The main processing loop of the system. Renders the current page, ensures events are responded to, and
         coordinates with the graphics engine to maintain proper display frame rates.
         """
+
+        # Renders the background of the application
         self.display.render_background()
 
         # Ensure an app is selected
@@ -223,6 +225,9 @@ class MFDController(object):
         else:
             # No content defined for the app. Render a not implemented message
             SimpleMessagePage(self, self.active_app, 'N/A').render(self.display)
+
+        # Render the overlay layer
+        self.display.render_overlays()
 
         # Handle input, allow user to close window / exit / control the app
         self.process_events()
