@@ -55,7 +55,6 @@ class MFDController(object):
     def __init__(self, display, app_options):
 
         self.display = display
-        self.clock = pygame.time.Clock()
 
         if app_options is not None:
             self.app_name = app_options.app_name
@@ -233,8 +232,7 @@ class MFDController(object):
         self.process_events()
 
         # Update the UI and give a bit of time before going again
-        pygame.display.update()
-        self.clock.tick(self.display.frames_per_second)
+        self.display.wait_for_next_frame()
 
         pass
 

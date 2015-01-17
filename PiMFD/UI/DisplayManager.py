@@ -18,20 +18,10 @@ class DisplayManager(object):
     the drawing surface.
     """
 
-    def __init__(self, x=800, y=480):
-        self.res_x = x
-        self.res_y = y
-        self.overlays = list()
-
-    def start_mfd(self, app_options):
-        """
-        Starts the MFD Application
-        :type app_options: PiMFD.MFDAppOptions the app options
-        """
-        start_mfd(self, app_options)
-
     res_x = 800
     res_y = 480
+
+    clock = None
 
     padding_x = 16
     padding_y = 8
@@ -50,11 +40,33 @@ class DisplayManager(object):
     font_size_normal = 24
     font_normal = None
 
+    font_size_small = 12
+    font_small = None
+
+    def __init__(self, x=800, y=480):
+        self.res_x = x
+        self.res_y = y
+        self.overlays = list()
+
+    def start_mfd(self, app_options):
+        """
+        Starts the MFD Application
+        :type app_options: PiMFD.MFDAppOptions the app options
+        """
+        start_mfd(self, app_options)
+
     def update_graphics_mode(self):
         """
         Causes the graphics mode to refresh to take into account new resolutions
         """
         pygame.display.update()
+
+    def wait_for_next_frame(self):
+        """
+        Updates the display and waits until it's time to render the next frame (prevent us from going too fast)
+        """
+        pygame.display.update()
+        self.clock.tick(self.frames_per_second)
 
     def render_background(self):
         """
@@ -152,7 +164,7 @@ class DisplayManager(object):
 
         return (self.padding_y * 2) + font_size
 
-    def render_text(self, font, text, left, top, color, background=None):
+    def render_text(self, font, text, left, top, color, background=None, surface=None):
         """
         Renders text to the screen at the specified coordinates with the specified display parameters
         :type font: pygame.ftfont.Font The font used to render the text
@@ -161,18 +173,22 @@ class DisplayManager(object):
         :type top: int The y coordinate for the top edge of the text block
         :type color: tuple The RGB color to render the text using
         :type background: unknown or tuple The RGB color to render the background or None (default) for transparent
+        :param surface: The surface to render to. Defaults to the primary surface.
         :return: A Rect representing the rendered area for the text
         """
         text_surface = font.render(text, True, color)
         rect = text_surface.get_rect(top=top, left=left)
 
-        if background:
-            self.surface.fill(background, rect=rect)
+        if surface is None:
+            surface = self.surface
 
-        self.surface.blit(text_surface, rect)
+        if background:
+            surface.fill(background, rect=rect)
+
+        surface.blit(text_surface, rect)
         return rect
 
-    def render_text_centered(self, font, text, left, top, color, background=None):
+    def render_text_centered(self, font, text, left, top, color, background=None, surface=None):
         """
         Renders text centered horizontally around the specified points
         :type font: pygame.ftfont.Font The font used to render the text
@@ -181,16 +197,30 @@ class DisplayManager(object):
         :type top: int The y coordinate for the top of the text block
         :type color: tuple The RGB color to render the text using
         :type background: unknown or tuple The RGB color to render the background or None (default) for transparent
+        :param surface: The surface to render to. Defaults to the primary surface.
         :return: A Rect representing the rendered area for the text
         """
         text_surface = font.render(text, True, color)
         rect = text_surface.get_rect(center=(left, top + (font.size(text)[1] / 2)))
 
-        if background:
-            self.surface.fill(background, rect=rect)
+        if surface is None:
+            surface = self.surface
 
-        self.surface.blit(text_surface, rect)
+        if background:
+            surface.fill(background, rect=rect)
+
+        surface.blit(text_surface, rect)
         return rect
+
+    @staticmethod
+    def to_rgba(color, alpha=255):
+        """
+        Takes a RGB color tuple and adds an alpha value to it
+        :param color: The RGB color
+        :param alpha: The alpha value (0-255)
+        :return: A RGBA color structure
+        """
+        return color[0], color[1], color[2], alpha
 
     def init_graphics(self, title, font_name):
         """
@@ -198,7 +228,10 @@ class DisplayManager(object):
         :param title: The title of the application
         :param font_name: The font to use for the primary application font
         """
+
+        # Initialize the pygame engine
         pygame.init()
+        self.clock = pygame.time.Clock()
 
         # If we haven't configured width / height, grab them from the current resolution
         if self.res_x is None or self.res_x < 8 or self.res_y is None or self.res_y < 8:
@@ -210,11 +243,14 @@ class DisplayManager(object):
         else:
             display = pygame.display.set_mode((self.res_x, self.res_y), pygame.RESIZABLE)
 
-        # Don't settle with that silly "pygame window" label
+        # Customize the Window
         pygame.display.set_caption(title)
 
-        # Time to use our output
+        # Set up Fonts
+        self.font_small = pygame.font.Font(font_name, self.font_size_small)
         self.font_normal = pygame.font.Font(font_name, self.font_size_normal)
+
+        # Time to use our output
         self.surface = display
         self.overlay_surface = pygame.Surface((self.res_x, self.res_y), pygame.SRCALPHA)
 

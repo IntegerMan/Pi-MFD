@@ -44,11 +44,33 @@ class ScanlineOverlay(Overlay):
         # Draw our line
         c = display.color_scheme.highlight
         for i in range(0, self.height):
-            display.draw_horizontal_line((c[0], c[1], c[2], (i * self.intensity)), 0, max_x, self.y + i,
-                                         surface=surface)
+            alpha = (i * self.intensity)
+            display.draw_horizontal_line(display.to_rgba(c, alpha), 0, max_x, self.y + i, surface=surface)
 
         # Advance to the next row
         if self.y < display.res_y + self.height + (self.delay * self.speed):
             self.y += self.speed
         else:
             self.y = -self.height
+
+
+class FPSOverlay(Overlay):
+    """
+    Renders Frames Per Second to the Screen
+    """
+
+    y = 14
+    x = 4
+
+    def render(self, display, surface):
+        """
+        Renders the overlay
+        :param display: The DisplayManager
+        :param surface: The overlay graphical surface to render to
+        """
+
+        fps = display.clock.get_fps()
+        text = "{:.2f}".format(fps)
+        color = display.color_scheme.highlight
+
+        display.render_text(display.font_small, text, self.x, self.y, color, surface=surface)
