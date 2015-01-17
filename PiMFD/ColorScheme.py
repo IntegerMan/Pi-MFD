@@ -47,21 +47,21 @@ class ColorSchemes(object):
     """
 
     @staticmethod
-    def get_military_color_scheme():
+    def get_green_color_scheme():
         """
-        Gets a green based color scheme resembling military avionics displays
-        :return: A green based color scheme resembling military avionics displays
+        Gets a green-based color scheme resembling military avionics displays
+        :return: A green-based color scheme resembling military avionics displays
         """
-        return ColorScheme(background=(0, 8, 0),
-                           foreground=(0, 255, 0),
-                           highlight=(255, 255, 255),
+        return ColorScheme(background=(0, 24, 0),
+                           foreground=(0, 170, 0),
+                           highlight=(170, 170, 170),
                            interlace_color=(0, 32, 0))
 
     @staticmethod
     def get_cyan_color_scheme():
         """
-        Gets a cyan based color scheme
-        :return: A cyan based color scheme
+        Gets a cyan-based color scheme
+        :return: A cyan-based color scheme
         """
         return ColorScheme(background=(0, 0, 32),
                            foreground=(0, 170, 170),
@@ -69,14 +69,46 @@ class ColorSchemes(object):
                            interlace_color=(0, 0, 8))
 
     @staticmethod
-    def get_monochrome_color_scheme():
+    def get_blue_color_scheme():
         """
-        Gets a monochrome based color scheme
-        :return: A monochrome based color scheme
+        Gets an ice-blue-based color scheme
+        :return: An ice-blue-based color scheme
+        """
+        return ColorScheme(background=(0, 0, 32),
+                           foreground=(0, 128, 255),
+                           highlight=(255, 255, 255),
+                           interlace_color=(0, 16, 64))
+
+    @staticmethod
+    def get_white_color_scheme():
+        """
+        Gets a white / monochrome-based color scheme
+        :return: A white / monochrome-based color scheme
         """
         return ColorScheme(background=(0, 0, 0),
                            foreground=(150, 150, 150),
                            highlight=(255, 255, 255),
                            interlace_color=(24, 24, 24))
 
+    @staticmethod
+    def get_red_color_scheme():
+        """
+        Gets a red-based color scheme
+        :return: A red-based color scheme
+        """
+        return ColorScheme(background=(32, 0, 0),
+                           foreground=(170, 0, 0),
+                           highlight=(255, 0, 0),
+                           interlace_color=(8, 0, 0))
+
+    @staticmethod
+    def get_amber_color_scheme():
+        """
+        Gets an amber-based color scheme
+        :return: A amber-based color scheme
+        """
+        return ColorScheme(background=(63, 47, 20),
+                           foreground=(231, 176, 75),
+                           highlight=(255, 201, 14),
+                           interlace_color=(102, 75, 30))
 

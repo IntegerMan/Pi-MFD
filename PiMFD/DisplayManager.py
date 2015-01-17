@@ -42,7 +42,7 @@ class DisplayManager(object):
 
     frames_per_second = 30
 
-    color_scheme = ColorSchemes.get_monochrome_color_scheme()
+    color_scheme = ColorSchemes.get_green_color_scheme()
 
     font_size_normal = 24
     font_normal = None
