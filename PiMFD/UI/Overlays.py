@@ -3,7 +3,7 @@
 """
 Contains classes capable of performing various graphical overlay functions on the transparency layer
 """
-from PiMFD.UI.Rendering import draw_horizontal_line
+from PiMFD.UI.Rendering import draw_horizontal_line, render_text
 
 __author__ = 'Matt Eland'
 
@@ -75,4 +75,4 @@ class FPSOverlay(Overlay):
         text = "{:.2f}".format(fps)
         color = display.color_scheme.highlight
 
-        display.render_text(display.font_small, text, self.x, self.y, color, surface=surface)
+        render_text(display, display.font_small, text, self.x, self.y, color, surface=surface)

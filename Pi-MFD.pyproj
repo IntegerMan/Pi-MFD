@@ -25,7 +25,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="APIs\pywbapi\pywapi.py" />
+    <Compile Include="APIs\pywapi\pywapi.py" />
     <Compile Include="FSLauncher.py" />
     <Compile Include="PiMFD\Applications\Application.py" />
     <Compile Include="PiMFD\Applications\MFDPage.py" />
@@ -33,19 +33,25 @@
     <Compile Include="PiMFD\Applications\Scheduling\Weather\WeatherAPIWrapper.py" />
     <Compile Include="PiMFD\Applications\Scheduling\Weather\WeatherData.py" />
     <Compile Include="PiMFD\Applications\Scheduling\Weather\WeatherPages.py" />
+    <Compile Include="PiMFD\Applications\Scheduling\Weather\__init__.py" />
+    <Compile Include="PiMFD\Applications\Scheduling\__init__.py" />
     <Compile Include="PiMFD\Applications\System\SystemApplication.py" />
     <Compile Include="PiMFD\Applications\System\SystemPages.py" />
+    <Compile Include="PiMFD\Applications\System\__init__.py" />
+    <Compile Include="PiMFD\Applications\__init__.py" />
     <Compile Include="PiMFD\Controller.py" />
+    <Compile Include="PiMFD\Options.py" />
     <Compile Include="PiMFD\UI\Button.py" />
     <Compile Include="PiMFD\UI\ColorScheme.py" />
     <Compile Include="PiMFD\UI\DisplayManager.py" />
     <Compile Include="PiMFD\UI\Overlays.py" />
     <Compile Include="PiMFD\UI\Rendering.py" />
+    <Compile Include="PiMFD\UI\__init__.py" />
     <Compile Include="PiMFD\__init__.py" />
     <Compile Include="WinLauncher.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="APIs\pywbapi\LICENSE" />
+    <Content Include="APIs\pywapi\LICENSE" />
     <Content Include="Fonts\Anonymous_Pro.ttf" />
     <Content Include="Fonts\Anonymous_Pro_B.ttf" />
     <Content Include="Fonts\Anonymous_Pro_BI.ttf" />
@@ -61,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIs\" />
-    <Folder Include="APIs\pywbapi\" />
+    <Folder Include="APIs\pywapi\" />
     <Folder Include="Fonts\" />
     <Folder Include="PiMFD\" />
     <Folder Include="PiMFD\Applications\" />

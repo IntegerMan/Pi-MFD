@@ -52,3 +52,55 @@ def draw_rectangle(display_manager, color, rect, width=1, surface=None):
         surface = display_manager.surface
 
     pygame.draw.rect(surface, color, rect, width)
+
+
+def render_text(display_manager, font, text, left, top, color, background=None, surface=None):
+    """
+    Renders text to the screen at the specified coordinates with the specified display parameters
+    :param display_manager: The DisplayManager
+    :type font: pygame.ftfont.Font The font used to render the text
+    :type text: str The text to render
+    :type left: int The x coordinate for the left edge of the text block
+    :type top: int The y coordinate for the top edge of the text block
+    :type color: tuple The RGB color to render the text using
+    :type background: unknown or tuple The RGB color to render the background or None (default) for transparent
+    :param surface: The surface to render to. Defaults to the primary surface.
+    :return: A Rect representing the rendered area for the text
+    """
+    text_surface = font.render(text, True, color)
+    rect = text_surface.get_rect(top=top, left=left)
+
+    if surface is None:
+        surface = display_manager.surface
+
+    if background:
+        surface.fill(background, rect=rect)
+
+    surface.blit(text_surface, rect)
+    return rect
+
+
+def render_text_centered(display_manager, font, text, left, top, color, background=None, surface=None):
+    """
+    Renders text centered horizontally around the specified points
+    :param display_manager: The DisplayManager
+    :type font: pygame.ftfont.Font The font used to render the text
+    :type text: str The text to render
+    :type left: int The x coordinate for the center of the text block
+    :type top: int The y coordinate for the top of the text block
+    :type color: tuple The RGB color to render the text using
+    :type background: unknown or tuple The RGB color to render the background or None (default) for transparent
+    :param surface: The surface to render to. Defaults to the primary surface.
+    :return: A Rect representing the rendered area for the text
+    """
+    text_surface = font.render(text, True, color)
+    rect = text_surface.get_rect(center=(left, top + (font.size(text)[1] / 2)))
+
+    if surface is None:
+        surface = display_manager.surface
+
+    if background:
+        surface.fill(background, rect=rect)
+
+    surface.blit(text_surface, rect)
+    return rect

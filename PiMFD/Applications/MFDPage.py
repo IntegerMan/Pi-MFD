@@ -2,6 +2,7 @@
 """
 Defines the MFDPage used as a root for other pages in the application.
 """
+from PiMFD.UI.Rendering import render_text_centered
 
 __author__ = 'Matt Eland'
 
@@ -84,8 +85,9 @@ class SimpleMessagePage(MFDPage):
         """
         super(SimpleMessagePage, self).render(display)
 
-        display.render_text_centered(self.display.font_normal,
-                                     self.message,
-                                     self.display.res_x / 2,
-                                     (self.display.res_y / 2) - (self.display.font_size_normal / 2),
-                                     self.display.color_scheme.foreground)
+        render_text_centered(display,
+                             display.font_normal,
+                             self.message,
+                             display.res_x / 2,
+                             (display.res_y / 2) - (display.font_size_normal / 2),
+                             display.color_scheme.foreground)

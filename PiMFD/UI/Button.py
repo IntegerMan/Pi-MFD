@@ -5,7 +5,7 @@ UI Button related functionality
 
 from pygame.rect import Rect
 
-from PiMFD.UI.Rendering import draw_vertical_line, draw_rectangle
+from PiMFD.UI.Rendering import draw_vertical_line, draw_rectangle, render_text_centered
 
 
 __author__ = 'Matt Eland'
@@ -55,7 +55,7 @@ class MFDButton(object):
 
         midpoint = ((x_end - x_start) / 2) + x_start
 
-        pos = display.render_text_centered(display.font_normal, label, midpoint, y, font_color, background=background)
+        pos = render_text_centered(display, display.font_normal, label, midpoint, y, font_color, background=background)
 
         # Render tick marks
         line_length = 5
