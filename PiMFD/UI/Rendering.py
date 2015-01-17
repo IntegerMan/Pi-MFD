@@ -38,3 +38,17 @@ def draw_vertical_line(display_manager, color, x, y1, y2, surface=None):
 
     pygame.draw.line(surface, color, (x, y1), (x, y2))
 
+
+def draw_rectangle(display_manager, color, rect, width=1, surface=None):
+    """
+    Draws a rectangle
+    :param display_manager: The DisplayManager
+    :param color: The color to use to draw
+    :param rect: The bounds of the rectangle
+    :param width: The width of the rectangle. If 0, this will be a solid fill. Defaults to 1.
+    :param surface: The surface to render to. Defaults to the primary surface.
+    """
+    if surface is None:
+        surface = display_manager.surface
+
+    pygame.draw.rect(surface, color, rect, width)

@@ -101,19 +101,6 @@ class DisplayManager(object):
         # Pass the contents on to the primary surface
         self.surface.blit(self.overlay_surface, (0, 0))
 
-    def draw_rectangle(self, color, rect, width=1, surface=None):
-        """
-        Draws a rectangle
-        :param color: The color to use to draw
-        :param rect: The bounds of the rectangle
-        :param width: The width of the rectangle. If 0, this will be a solid fill. Defaults to 1.
-        :param surface: The surface to render to. Defaults to the primary surface.
-        """
-        if surface is None:
-            surface = self.surface
-
-        pygame.draw.rect(surface, color, rect, width)
-
     def get_content_start_x(self):
         """
         Gets the X indentation level for content

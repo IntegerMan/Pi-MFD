@@ -5,7 +5,7 @@ UI Button related functionality
 
 from pygame.rect import Rect
 
-from PiMFD.UI.Rendering import draw_vertical_line
+from PiMFD.UI.Rendering import draw_vertical_line, draw_rectangle
 
 
 __author__ = 'Matt Eland'
@@ -83,7 +83,7 @@ class MFDButton(object):
 
         # Render the bounds of the rectangle
         if self.draw_border:
-            display.draw_rectangle(display.color_scheme.foreground, self.bounds)
+            draw_rectangle(display, display.color_scheme.foreground, self.bounds)
 
     def contains_point(self, pos):
         """
