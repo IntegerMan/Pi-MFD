@@ -1,7 +1,6 @@
 # coding=utf-8
 """
-The primary display control module responsible for arranging and rendering components on the display and acting as a
-liaison between the application and Pygame.
+Contains DisplayManager.
 """
 import pygame
 
@@ -15,8 +14,8 @@ __author__ = 'Matt Eland'
 
 class DisplayManager(object):
     """
-    Contains information and functions related to the drawing dimensions of the application window as well as
-    the drawing surface.
+    Handles surface management, resolution, frames per second, and overall coordination of the graphical engine.
+    Individual rendering methods are now found in Rendering.py
     """
 
     res_x = 800
