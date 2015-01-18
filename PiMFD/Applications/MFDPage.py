@@ -22,6 +22,7 @@ class MFDPage(object):
     application = None
     controller = None
     display = None
+    focus = None
 
     def __init__(self, controller, application):
         self.controller = controller
@@ -30,6 +31,34 @@ class MFDPage(object):
         self.top_headers = list()
         self.bottom_headers = list()
         self.panel = StackPanel(controller.display, self)
+
+    def set_focus(self, widget):
+        """
+        Sets focused to the specified control. The prior focus (if one is present) will receive a lost_focus call and
+        the newly focused control (if one is present) will receive a got_focus control
+        :param widget: The widget to focus. Can be None.
+        :return:
+        """
+
+        # If this is a non-event, just go away
+        if self.focus is widget:
+            return
+
+        # Tell the old focus it's old news
+        if self.focus:
+            self.focus.lost_focus()
+
+        self.focus = widget
+
+        # Tell the new focus it's getting some TLC
+        if widget:
+            widget.got_focus()
+
+    def clear_focus(self):
+        """
+        Clears the currently focused control (if any was present)
+        """
+        self.set_focus(None)
 
     def get_label(self, text):
         """

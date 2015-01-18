@@ -80,6 +80,19 @@ class UIWidget(object):
 
         return self.rect
 
+    # noinspection PyMethodMayBeStatic
+    def got_focus(self):
+        """
+        Occurs when the control gets focus
+        """
+        pass
+
+    # noinspection PyMethodMayBeStatic
+    def lost_focus(self):
+        """
+        Occurs when the control loses focus
+        """
+        pass
 
 class UIPanel(UIWidget):
     """
@@ -120,10 +133,6 @@ class StackPanel(UIPanel):
         self.top = y
         self.left = x
 
-        """
-        Renders all children in the panel
-        :return: A Rect representing the bounds of the panel
-        """
         for child in self.children:
 
             # Position the child relative to where it should be and render it

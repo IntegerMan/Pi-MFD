@@ -129,8 +129,7 @@ class DisplayManager(object):
     def init_graphics(self, options):
         """
         Initializes graphics via pygame.
-        :param title: The title of the application
-        :param font_name: The font to use for the primary application font
+        :param options: The application options
         """
 
         # Initialize the pygame engine
@@ -172,6 +171,10 @@ class DisplayManager(object):
         self.res_y = info.current_h
 
     def init_overlays(self, options):
+        """
+        Initializes the overlays layer
+        :type options: PiMFD.Options.MFDAppOptions
+        """
         self.overlays.append(ScanlineOverlay(options))
         self.overlays.append(InterlaceOverlay(options))
         self.overlays.append(FPSOverlay(options))
