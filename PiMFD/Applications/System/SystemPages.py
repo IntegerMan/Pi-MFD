@@ -7,7 +7,6 @@ import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
-from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Rendering import render_text
 from PiMFD.UI.Text import TextBlock
 
@@ -72,6 +71,11 @@ class SysExitPage(MFDPage):
     """
     The exit Pi_MFD confirm page. Allows users to double select to quit the app.
     """
+
+    def __init__(self, controller, application):
+        super(SysExitPage, self).__init__(controller, application)
+
+
 
     def get_button_text(self):
         """
@@ -146,7 +150,6 @@ class SettingsPage(MFDPage):
     A page for viewing and managing user settings
     """
 
-    pnl_settings = None
     lbl_settings = None
     chk_scanline = None
     ddl_color_scheme = None
@@ -161,17 +164,14 @@ class SettingsPage(MFDPage):
         self.chk_scanline = CheckBox(controller.display, "Scanline:")
         self.ddl_color_scheme = TextBlock(controller.display, "Color Scheme: {}")
 
-        # Add Controls to the panel
-        self.pnl_settings = StackPanel(controller.display)
-        self.pnl_settings.children = [self.lbl_settings, self.num_zipcode, self.chk_scanline, self.ddl_color_scheme]
+        # Add Controls to the page's panel
+        self.panel.children = [self.lbl_settings, self.num_zipcode, self.chk_scanline, self.ddl_color_scheme]
 
     def render(self, display):
         """
         Renders the page.
         :param display: The DisplayManager.
         """
-        super(SettingsPage, self).render(display)
-
         opts = self.controller.options
 
         # Update properties on controls
@@ -180,7 +180,7 @@ class SettingsPage(MFDPage):
         self.chk_scanline.checked = opts.enable_scan_line
 
         # Render all controls
-        self.pnl_settings.render_at(display.get_content_start_pos())
+        super(SettingsPage, self).render(display)
 
     def get_button_text(self):
         """

@@ -2,6 +2,7 @@
 """
 Defines the MFDPage used as a root for other pages in the application.
 """
+from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Rendering import render_text_centered
 
 __author__ = 'Matt Eland'
@@ -15,8 +16,8 @@ class MFDPage(object):
     """
     top_headers = list()
     bottom_headers = list()
-    controls = list()
 
+    panel = None
     application = None
     controller = None
     display = None
@@ -25,9 +26,9 @@ class MFDPage(object):
         self.controller = controller
         self.display = controller.display
         self.application = application
-        self.controls = list()
         self.top_headers = list()
         self.bottom_headers = list()
+        self.panel = StackPanel(controller.display)
 
     # noinspection PyMethodMayBeStatic
     def handle_unselected(self):
@@ -61,7 +62,7 @@ class MFDPage(object):
         Handles rendering the page.
         :type display: PiMFD.DisplayManager.DisplayManager The display manager.
         """
-        pass
+        self.panel.render_at(self.display.get_content_start_pos())
 
 
 class SimpleMessagePage(MFDPage):
