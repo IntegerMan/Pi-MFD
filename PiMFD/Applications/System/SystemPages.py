@@ -155,6 +155,9 @@ class SettingsPage(MFDPage):
         self.panel.children = [header, self.num_zipcode, self.chk_scanline, self.chk_interlace, self.chk_fps,
                                self.ddl_color_scheme]
 
+        # We DO care about input on this page. Set up our input.
+        self.set_focus(self.chk_scanline)
+
     def render(self, display):
         """
         Renders the page.

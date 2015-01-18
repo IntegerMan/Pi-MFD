@@ -80,20 +80,6 @@ class UIWidget(object):
 
         return self.rect
 
-    # noinspection PyMethodMayBeStatic
-    def got_focus(self):
-        """
-        Occurs when the control gets focus
-        """
-        pass
-
-    # noinspection PyMethodMayBeStatic
-    def lost_focus(self):
-        """
-        Occurs when the control loses focus
-        """
-        pass
-
 class UIPanel(UIWidget):
     """
     A base class for panels used for UIWidget arrangement

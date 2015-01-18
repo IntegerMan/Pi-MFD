@@ -37,7 +37,16 @@ class ColorScheme(object):
     highlight = (255, 255, 255)
     name = None
 
-    pass
+    def get_focus_color(self, is_focused):
+        """
+        Gets the color to use for rendering a foreground depending on if the control is focused or not
+        :param is_focused: Whether the control is focused
+        :return: The color to use. This will be highlight for focused and foreground for unfocused
+        """
+        if is_focused:
+            return self.highlight
+        else:
+            return self.foreground
 
 
 class ColorSchemes(object):

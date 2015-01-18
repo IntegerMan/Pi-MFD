@@ -5,9 +5,12 @@ Contains checkbox style controls for manipulating pages
 """
 from pygame.rect import Rect
 
+from PiMFD.UI.Focus import FocusableWidget
+
 from PiMFD.UI.Panels import UIWidget, StackPanel
 from PiMFD.UI.Rendering import draw_rectangle
 from PiMFD.UI.Text import TextBlock
+
 
 __author__ = 'Matt Eland'
 
@@ -19,6 +22,7 @@ class CheckBoxGlyph(UIWidget):
     """
 
     checked = False
+    render_focus = False
 
     def __init__(self, display, page, checked=False):
         super(CheckBoxGlyph, self).__init__(display, page)
@@ -36,8 +40,10 @@ class CheckBoxGlyph(UIWidget):
 
         self.rect = Rect(self.pos[0], self.pos[1], rect_size, rect_size)
 
+        focus_color = self.display.color_scheme.get_focus_color(self.render_focus)
+
         # Draw the border
-        draw_rectangle(self.display, self.display.color_scheme.foreground, self.rect)
+        draw_rectangle(self.display, focus_color, self.rect)
 
         # Draw checkmark (if checked)
         if self.checked:
@@ -46,13 +52,13 @@ class CheckBoxGlyph(UIWidget):
                                 rect_size - (check_pad * 2),
                                 rect_size - (check_pad * 2))
 
-            draw_rectangle(self.display, self.display.color_scheme.foreground, checked_rect, width=0)
+            draw_rectangle(self.display, focus_color, checked_rect, width=0)
 
         # Update and return our dimensions
         return self.set_dimensions_from_rect(self.rect)
 
 
-class CheckBox(UIWidget):
+class CheckBox(FocusableWidget):
     """
     A CheckBox with an associated label.
     """
@@ -88,3 +94,23 @@ class CheckBox(UIWidget):
         self.panel.render()
 
         return self.set_dimensions_from(self.panel)
+
+    def got_focus(self):
+        """
+        Occurs when the control gets focus
+        """
+        self.label.is_highlighted = True
+        self.glyph.render_focus = True
+        super(CheckBox, self).got_focus()
+
+    def lost_focus(self):
+        """
+        Occurs when the control loses focus
+        """
+        self.label.is_highlighted = False
+        self.glyph.render_focus = False
+        super(CheckBox, self).lost_focus()
+
+
+
+
