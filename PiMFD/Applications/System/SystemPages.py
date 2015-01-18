@@ -156,16 +156,14 @@ class SettingsPage(MFDPage):
 
         # Build basic controls
         self.lbl_settings = TextBlock(controller.display, "Settings")
+        self.lbl_settings.is_highlighted = True
         self.num_zipcode = TextBlock(controller.display, "Zip Code: {}")
         self.chk_scanline = TextBlock(controller.display, "Scanline: {}")
         self.ddl_color_scheme = TextBlock(controller.display, "Color Scheme: {}")
 
         # Add Controls to the panel
         self.pnl_settings = StackPanel(controller.display)
-        self.pnl_settings.children.append(self.lbl_settings)
-        self.pnl_settings.children.append(self.num_zipcode)
-        self.pnl_settings.children.append(self.chk_scanline)
-        self.pnl_settings.children.append(self.ddl_color_scheme)
+        self.pnl_settings.children = [self.lbl_settings, self.num_zipcode, self.chk_scanline, self.ddl_color_scheme]
 
     def render(self, display):
         """
@@ -178,7 +176,6 @@ class SettingsPage(MFDPage):
         opts = self.controller.options
 
         # Update properties on controls
-        self.lbl_settings.foreground = cs.highlight
         self.num_zipcode.format_data = opts.location
         self.ddl_color_scheme.format_data = cs.name
         self.chk_scanline.format_data = to_enabled_disabled(opts.enable_scan_line)

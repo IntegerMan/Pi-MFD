@@ -16,16 +16,30 @@ class TextBlock(UIWidget):
     Represents a segment of text
     """
 
-    foreground = (255, 255, 255, 255)
     font = None
     text = None
     format_data = None
+    is_highlighted = False
 
     def __init__(self, display, text):
         super(TextBlock, self).__init__(display)
         self.font = display.font_normal
-        self.foreground = display.color_scheme.foreground
         self.text = text
+
+    def get_foreground(self):
+        """
+        Gets the calculated foreground color based on the label's attributes and the current color scheme.
+        By having foreground be calculated like this, it provides a poor man's binding system where we can
+        always grab the correct color from the color scheme, even when the color scheme changes.
+        :return: The foreground
+        """
+        cs = self.display.color_scheme
+
+        if self.is_highlighted:
+            return cs.highlight
+        else:
+            return cs.foreground
+
 
     def render(self):
         """
@@ -37,12 +51,13 @@ class TextBlock(UIWidget):
         self.top = self.pos[1]
 
         # Do string formatting as needed
-        effectiveText = self.text
+        effective_text = self.text
         if self.text is not None:
-            effectiveText = self.text.format(self.format_data)
+            effective_text = self.text.format(self.format_data)
 
-        if self.font is not None and effectiveText is not None:
-            self.rect = render_text(self.display, self.font, effectiveText, self.pos[0], self.pos[1], self.foreground)
+        if self.font is not None and effective_text is not None:
+            color = self.get_foreground()
+            self.rect = render_text(self.display, self.font, effective_text, self.pos[0], self.pos[1], color)
             self.bottom = self.rect.bottom
             self.right = self.rect.right
         else:
