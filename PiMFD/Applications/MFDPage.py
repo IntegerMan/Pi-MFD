@@ -62,7 +62,7 @@ class MFDPage(object):
         Handles rendering the page.
         :type display: PiMFD.DisplayManager.DisplayManager The display manager.
         """
-        self.panel.render_at(self.display.get_content_start_pos())
+        return self.panel.render_at(self.display.get_content_start_pos())
 
 
 class SimpleMessagePage(MFDPage):

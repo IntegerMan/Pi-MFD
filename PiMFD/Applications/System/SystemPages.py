@@ -180,7 +180,7 @@ class SettingsPage(MFDPage):
         self.chk_scanline.checked = opts.enable_scan_line
 
         # Render all controls
-        super(SettingsPage, self).render(display)
+        return super(SettingsPage, self).render(display)
 
     def get_button_text(self):
         """
