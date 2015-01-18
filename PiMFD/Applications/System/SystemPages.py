@@ -7,6 +7,7 @@ import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Rendering import render_text, to_enabled_disabled
+from PiMFD.UI.Text import TextBlock
 
 
 __author__ = 'Matt Eland'
@@ -143,12 +144,14 @@ class SettingsPage(MFDPage):
     A page for viewing and managing user settings
     """
 
+    lbl_settings = None
     chk_scanline = None
     ddl_color_scheme = None
     num_zipcode = None
 
     def __init__(self, controller, application):
         super(SettingsPage, self).__init__(controller, application)
+        self.lbl_settings = TextBlock(controller.display, "Settings")
 
     def render(self, display):
         """
@@ -162,10 +165,13 @@ class SettingsPage(MFDPage):
 
         font = display.font_normal
         cs = display.color_scheme
-
         opts = self.controller.options
 
-        y += render_text(display, font, "Settings", x, y, cs.highlight).height + display.padding_y
+        self.lbl_settings.foreground = cs.highlight
+        self.lbl_settings.pos = x, y
+
+        self.lbl_settings.render()
+        y = self.lbl_settings.bottom + display.padding_y
         y += render_text(display, font, "Zip Code: {}".format(opts.location), x, y,
                          cs.foreground).height + display.padding_y
         y += render_text(display, font, "Color Scheme: {}".format(cs.name), x, y,
