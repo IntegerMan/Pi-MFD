@@ -181,9 +181,7 @@ class SettingsPage(MFDPage):
         self.chk_scanline.format_data = to_enabled_disabled(opts.enable_scan_line)
 
         # Render all controls
-        x = display.get_content_start_x()
-        y = display.get_content_start_y()
-        self.pnl_settings.pos = x, y
+        self.pnl_settings.pos = display.get_content_start_pos()
         self.pnl_settings.render()
 
     def get_button_text(self):

@@ -114,6 +114,14 @@ class DisplayManager(object):
         """
         return (self.padding_y * 4) + self.font_size_normal
 
+    def get_content_start_pos(self):
+        """
+        Gets positional coordinates for X and Y start for content
+        :return: positional coordinates for X and Y start
+        """
+        return self.get_content_start_x(), self.get_content_start_y()
+
+
     def get_spacer_line_height(self, font_size=None):
         """
         Calculates the Y amount of padding needed for a single blank line
