@@ -21,10 +21,11 @@ class TextBlock(UIWidget):
     format_data = None
     is_highlighted = False
 
-    def __init__(self, display, text):
+    def __init__(self, display, text, is_highlighted=False):
         super(TextBlock, self).__init__(display)
         self.font = display.font_normal
         self.text = text
+        self.is_highlighted = is_highlighted
 
     def get_foreground(self):
         """
@@ -39,7 +40,6 @@ class TextBlock(UIWidget):
             return cs.highlight
         else:
             return cs.foreground
-
 
     def render(self):
         """
@@ -58,14 +58,7 @@ class TextBlock(UIWidget):
         if self.font is not None and effective_text is not None:
             color = self.get_foreground()
             self.rect = render_text(self.display, self.font, effective_text, self.pos[0], self.pos[1], color)
-            self.bottom = self.rect.bottom
-            self.right = self.rect.right
         else:
-            self.bottom = self.pos[1]
-            self.right = self.pos[0]
             self.rect = Rect(self.left, self.top, 0, 0)
 
-        self.width = self.right - self.left
-        self.height = self.bottom - self.top
-
-        return self.rect
+        return self.set_dimensions_from_rect(self.rect)

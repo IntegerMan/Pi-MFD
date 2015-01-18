@@ -26,6 +26,15 @@ class UIWidget(object):
     def __init__(self, display):
         self.display = display
 
+    def render_at(self, pos):
+        """
+        A convenience method to position and render the control in one statement
+        :param pos: The position
+        :return: The rect of the dimensions returned by render.
+        """
+        self.pos = pos
+        return self.render()
+
     # noinspection PyMethodMayBeStatic
     def render(self):
         """
@@ -37,6 +46,7 @@ class UIWidget(object):
         """
         Clones all dimension attributes from the target object
         :param target: The target to take values from
+        :returns: Returns self.rect for convenience
         """
         self.pos = target.pos
         self.size = target.size
@@ -48,10 +58,13 @@ class UIWidget(object):
         self.height = target.height
         self.rect = target.rect
 
+        return self.rect
+
     def set_dimensions_from_rect(self, rect):
         """
         Copies dimensional attributes from the specified rect
         :param rect: The rectangle
+        :returns: Returns self.rect for convenience
         """
         self.rect = rect
         self.pos = rect.x, rect.y
@@ -62,6 +75,8 @@ class UIWidget(object):
         self.bottom = rect.bottom
         self.width = rect.width
         self.height = rect.height
+
+        return self.rect
 
 
 class UIPanel(UIWidget):
@@ -110,17 +125,14 @@ class StackPanel(UIPanel):
         for child in self.children:
 
             # Position the child relative to where it should be and render it
-            child.pos = x, y
-            child_rect = child.render()
+            child_rect = child.render_at((x, y))
 
             # Now that we've rendered, we need to adjust our running dimensions
             # and figure out where to put the next one
             if self.is_horizontal:
 
                 # Horizontal layout mode - go left to right
-                if child_rect.height > self.height:
-                    self.height = child_rect.height
-
+                self.height = max(self.height, child_rect.height)
                 self.width = child.right - self.left
 
                 x = child.right + self.padding[0]
@@ -128,14 +140,11 @@ class StackPanel(UIPanel):
             else:
 
                 # Vertical layout mode (default) - go top to bottom
-                if child_rect.width > self.width:
-                    self.width = child_rect.width
-
+                self.width = max(self.width, child_rect.width)
                 self.height = child.bottom - self.top
 
                 y = child.bottom + self.padding[1]
 
         # Update and return our bounds
         self.rect = Rect(self.left, self.top, self.width, self.height)
-        self.set_dimensions_from_rect(self.rect)
-        return self.rect
+        return self.set_dimensions_from_rect(self.rect)

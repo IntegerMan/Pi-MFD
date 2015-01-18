@@ -30,7 +30,9 @@ class CheckBoxGlyph(UIWidget):
         :return: The dimensions of the glyph
         """
 
-        rect_size = 28
+        # Size Constants
+        check_pad = 4
+        rect_size = self.display.font_size_normal + check_pad
 
         self.rect = Rect(self.pos[0], self.pos[1], rect_size, rect_size)
 
@@ -39,7 +41,6 @@ class CheckBoxGlyph(UIWidget):
 
         # Draw checkmark (if checked)
         if self.checked:
-            check_pad = 4
             checked_rect = Rect(self.pos[0] + check_pad,
                                 self.pos[1] + check_pad,
                                 rect_size - (check_pad * 2),
@@ -48,8 +49,7 @@ class CheckBoxGlyph(UIWidget):
             draw_rectangle(self.display, self.display.color_scheme.foreground, checked_rect, width=0)
 
         # Update and return our dimensions
-        self.set_dimensions_from_rect(self.rect)
-        return self.rect
+        return self.set_dimensions_from_rect(self.rect)
 
 
 class CheckBox(UIWidget):
@@ -65,9 +65,11 @@ class CheckBox(UIWidget):
 
     def __init__(self, display, label):
         super(CheckBox, self).__init__(display)
-        self.label = TextBlock(display, label)
+
         self.text = label
+        self.label = TextBlock(display, label)
         self.glyph = CheckBoxGlyph(display)
+
         self.panel = StackPanel(display, is_horizontal=True)
         self.panel.children = [self.label, self.glyph]
 
@@ -85,6 +87,4 @@ class CheckBox(UIWidget):
         self.panel.set_dimensions_from(self)
         self.panel.render()
 
-        self.set_dimensions_from(self.panel)
-
-        return self.panel.rect
+        return self.set_dimensions_from(self.panel)

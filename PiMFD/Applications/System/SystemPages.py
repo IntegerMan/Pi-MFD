@@ -156,8 +156,7 @@ class SettingsPage(MFDPage):
         super(SettingsPage, self).__init__(controller, application)
 
         # Build basic controls
-        self.lbl_settings = TextBlock(controller.display, "Settings")
-        self.lbl_settings.is_highlighted = True
+        self.lbl_settings = TextBlock(controller.display, "Settings", is_highlighted=True)
         self.num_zipcode = TextBlock(controller.display, "Zip Code: {}")
         self.chk_scanline = CheckBox(controller.display, "Scanline:")
         self.ddl_color_scheme = TextBlock(controller.display, "Color Scheme: {}")
@@ -173,17 +172,15 @@ class SettingsPage(MFDPage):
         """
         super(SettingsPage, self).render(display)
 
-        cs = display.color_scheme
         opts = self.controller.options
 
         # Update properties on controls
         self.num_zipcode.format_data = opts.location
-        self.ddl_color_scheme.format_data = cs.name
+        self.ddl_color_scheme.format_data = display.color_scheme.name
         self.chk_scanline.checked = opts.enable_scan_line
 
         # Render all controls
-        self.pnl_settings.pos = display.get_content_start_pos()
-        self.pnl_settings.render()
+        self.pnl_settings.render_at(display.get_content_start_pos())
 
     def get_button_text(self):
         """
