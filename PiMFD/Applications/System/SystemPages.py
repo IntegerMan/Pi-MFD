@@ -107,8 +107,8 @@ class SysClockPage(MFDPage):
         super(SysClockPage, self).__init__(controller, application)
 
         header = self.get_header_label("Current Time")
-        self.lbl_sys_time = TextBlock(controller.display, "SYS: {}")
-        self.lbl_gmt_time = TextBlock(controller.display, "GMT: {}")
+        self.lbl_sys_time = self.get_label("SYS: {}")
+        self.lbl_gmt_time = self.get_label("GMT: {}")
         self.panel.children = [header, self.lbl_sys_time, self.lbl_gmt_time]
 
 
@@ -146,9 +146,9 @@ class SettingsPage(MFDPage):
 
         # Build basic controls
         header = self.get_header_label("Settings")
-        self.num_zipcode = TextBlock(controller.display, "Zip Code: {}")
+        self.num_zipcode = self.get_label("Zip Code: {}")
         self.chk_scanline = CheckBox(controller.display, "Scanline:")
-        self.ddl_color_scheme = TextBlock(controller.display, "Color Scheme: {}")
+        self.ddl_color_scheme = self.get_label("Color Scheme: {}")
 
         # Add Controls to the page's panel
         self.panel.children = [header, self.num_zipcode, self.chk_scanline, self.ddl_color_scheme]
