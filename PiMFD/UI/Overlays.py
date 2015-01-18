@@ -56,6 +56,28 @@ class ScanlineOverlay(Overlay):
             self.y = -self.height
 
 
+class InterlaceOverlay(Overlay):
+    """
+    Renders an alternating row interlace effect
+    """
+
+    alpha = 50
+
+    def render(self, display, surface):
+        """
+        Renders an interlaced effect over everything
+        :param display: The DisplayManager
+        :param surface: The overlay graphical surface to render to
+        """
+
+        color = (0, 0, 0, self.alpha)
+
+        y = 1
+        while y < display.res_y - 1:
+            draw_horizontal_line(display, color, 0, display.res_x - 1, y, surface=surface)
+            y += 2  # Move two lines down
+
+
 class FPSOverlay(Overlay):
     """
     Renders Frames Per Second to the Screen

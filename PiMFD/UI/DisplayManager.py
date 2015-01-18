@@ -6,7 +6,6 @@ import pygame
 
 from PiMFD import start_mfd
 from PiMFD.UI.ColorScheme import ColorSchemes
-from PiMFD.UI.Rendering import draw_horizontal_line
 
 
 __author__ = 'Matt Eland'
@@ -77,13 +76,6 @@ class DisplayManager(object):
 
         # Fill the background with a solid color
         self.surface.fill(self.color_scheme.background)
-
-        # If we're using an interlace color, render it on every other line
-        if self.color_scheme.interlace_color is not None:
-            y = 1
-            while y < self.res_y - 1:
-                draw_horizontal_line(self, self.color_scheme.interlace_color, 0, self.res_x - 1, y)
-                y += 2  # Move two lines down
 
     def render_overlays(self):
         """
