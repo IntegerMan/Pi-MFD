@@ -4,7 +4,6 @@ A windowed-mode entry point for Pi-MFD
 """
 from PiMFD.Options import MFDAppOptions
 from PiMFD.UI.DisplayManager import DisplayManager
-from PiMFD.UI.Overlays import ScanlineOverlay, FPSOverlay, InterlaceOverlay
 
 __author__ = 'Matt Eland'
 
@@ -19,9 +18,6 @@ try:
     # Build a display using the standard windowed sizes. This is great for desktop testing.
     display = DisplayManager()
     display.is_fullscreen = False
-    display.overlays.append(ScanlineOverlay())
-    display.overlays.append(InterlaceOverlay())
-    display.overlays.append(FPSOverlay())
 
     # Launch
     display.start_mfd(app_options)

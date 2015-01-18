@@ -20,6 +20,8 @@ class MFDAppOptions(object):
     display = None
     location = '43035'
     enable_scan_line = True
+    enable_interlacing = True
+    enable_fps = True
 
     def load_from_settings(self, filename='settings.ini'):
         """
@@ -36,7 +38,9 @@ class MFDAppOptions(object):
             version = 0.01
 
         if 'ui' in settings.sections():
-            self.enable_scan_line = settings.get('ui', 'enable_scan_line')
+            self.enable_scan_line = settings.getboolean('ui', 'enable_scan_line')
+            self.enable_interlacing = settings.getboolean('ui', 'enable_interlacing')
+            self.enable_fps = settings.getboolean('ui', 'enable_fps')
 
         if 'location' in settings.sections():
             self.location = settings.get('location', 'zipcode')
@@ -57,7 +61,9 @@ class MFDAppOptions(object):
         settings.set('location', 'zipcode', self.location)
 
         settings.add_section('ui')
-        settings.set('ui', 'enable_scan_line', self.enable_scan_line)
+        settings.set('ui', 'enable_scan_line', bool(self.enable_scan_line))
+        settings.set('ui', 'enable_interlacing', bool(self.enable_interlacing))
+        settings.set('ui', 'enable_fps', bool(self.enable_fps))
 
         # Output to the file
         config_file = open(filename, 'w')

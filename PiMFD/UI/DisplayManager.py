@@ -6,6 +6,7 @@ import pygame
 
 from PiMFD import start_mfd
 from PiMFD.UI.ColorScheme import ColorSchemes
+from PiMFD.UI.Overlays import ScanlineOverlay, InterlaceOverlay, FPSOverlay
 
 
 __author__ = 'Matt Eland'
@@ -125,7 +126,7 @@ class DisplayManager(object):
 
         return (self.padding_y * 2) + font_size
 
-    def init_graphics(self, title, font_name):
+    def init_graphics(self, options):
         """
         Initializes graphics via pygame.
         :param title: The title of the application
@@ -147,17 +148,20 @@ class DisplayManager(object):
             display = pygame.display.set_mode((self.res_x, self.res_y), pygame.RESIZABLE)
 
         # Customize the Window
-        pygame.display.set_caption(title)
+        pygame.display.set_caption(options.app_name)
 
         # Set up Fonts
-        self.font_small = pygame.font.Font(font_name, self.font_size_small)
-        self.font_normal = pygame.font.Font(font_name, self.font_size_normal)
+        self.font_small = pygame.font.Font(options.font_name, self.font_size_small)
+        self.font_normal = pygame.font.Font(options.font_name, self.font_size_normal)
 
         # Time to use our output
         self.surface = display
         self.surface.convert()
         self.overlay_surface = pygame.Surface((self.res_x, self.res_y), pygame.SRCALPHA)
         self.overlay_surface.convert_alpha()
+
+        # Initialize our overlays
+        self.init_overlays(options)
 
     def grab_dimensions_from_current_resolution(self):
         """
@@ -166,3 +170,10 @@ class DisplayManager(object):
         info = pygame.display.Info()
         self.res_x = info.current_w
         self.res_y = info.current_h
+
+    def init_overlays(self, options):
+        self.overlays.append(ScanlineOverlay(options))
+        self.overlays.append(InterlaceOverlay(options))
+        self.overlays.append(FPSOverlay(options))
+
+

@@ -111,7 +111,6 @@ class SysClockPage(MFDPage):
         self.lbl_gmt_time = self.get_label("GMT: {}")
         self.panel.children = [header, self.lbl_sys_time, self.lbl_gmt_time]
 
-
     def get_button_text(self):
         """
         Gets the button text.
@@ -148,10 +147,13 @@ class SettingsPage(MFDPage):
         header = self.get_header_label("Settings")
         self.num_zipcode = self.get_label("Zip Code: {}")
         self.chk_scanline = CheckBox(controller.display, "Scanline:")
+        self.chk_interlace = CheckBox(controller.display, "Interlace:")
+        self.chk_fps = CheckBox(controller.display, "FPS:")
         self.ddl_color_scheme = self.get_label("Color Scheme: {}")
 
         # Add Controls to the page's panel
-        self.panel.children = [header, self.num_zipcode, self.chk_scanline, self.ddl_color_scheme]
+        self.panel.children = [header, self.num_zipcode, self.chk_scanline, self.chk_interlace, self.chk_fps,
+                               self.ddl_color_scheme]
 
     def render(self, display):
         """
@@ -164,6 +166,8 @@ class SettingsPage(MFDPage):
         self.num_zipcode.text_data = opts.location
         self.ddl_color_scheme.text_data = display.color_scheme.name
         self.chk_scanline.checked = opts.enable_scan_line
+        self.chk_interlace.checked = opts.enable_interlacing
+        self.chk_fps.checked = opts.enable_fps
 
         # Render all controls
         return super(SettingsPage, self).render(display)

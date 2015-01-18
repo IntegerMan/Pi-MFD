@@ -13,6 +13,11 @@ class Overlay(object):
     An abstract class that contains common methods for overlays
     """
 
+    def __init__(self, options):
+        super(Overlay, self).__init__()
+        self.options = options
+
+
     def render(self, display, surface):
         """
         Renders the overlay
@@ -39,6 +44,9 @@ class ScanlineOverlay(Overlay):
         :param display: The DisplayManager
         :param surface: The overlay graphical surface to render to
         """
+
+        if not self.options.enable_scan_line:
+            return
 
         max_x = display.res_x - 1
 
@@ -70,6 +78,9 @@ class InterlaceOverlay(Overlay):
         :param surface: The overlay graphical surface to render to
         """
 
+        if not self.options.enable_interlacing:
+            return
+
         color = (0, 0, 0, self.alpha)
 
         y = 1
@@ -92,6 +103,9 @@ class FPSOverlay(Overlay):
         :param display: The DisplayManager
         :param surface: The overlay graphical surface to render to
         """
+
+        if not self.options.enable_fps:
+            return
 
         fps = display.clock.get_fps()
         text = "{:.2f}".format(fps)

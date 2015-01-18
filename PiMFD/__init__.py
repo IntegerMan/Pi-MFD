@@ -17,7 +17,7 @@ def start_mfd(display, app_options):
     """
 
     # Start up the graphics engine
-    display.init_graphics(app_options.app_name, app_options.font_name)
+    display.init_graphics(app_options)
 
     # Initialize the controller
     controller = MFDController(display, app_options)
