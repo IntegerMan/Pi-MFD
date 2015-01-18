@@ -7,7 +7,7 @@ import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
-from PiMFD.UI.Text import TextBlock
+from PiMFD.UI.Text import TextBlock, SpacerLine
 
 
 __author__ = 'Matt Eland'
@@ -35,7 +35,7 @@ class SysRootPage(MFDPage):
             self.lbl_app_header,
             self.lbl_app_version,
             self.lbl_app_legal,
-            # TODO: It'd be good to add a spacer line here
+            SpacerLine(self.display),
             lbl_sys_header,
             self.lbl_sys_name,
             self.lbl_sys_processor,
