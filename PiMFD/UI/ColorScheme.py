@@ -14,11 +14,13 @@ class ColorScheme(object):
     :type interlace_color: tuple RGB values indicating the alternate rows of the background or None for no interlacing.
     """
 
-    def __init__(self, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255), interlace_color=(2, 2, 2)):
+    def __init__(self, name, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255),
+                 interlace_color=(2, 2, 2)):
         self.background = background
         self.foreground = foreground
         self.highlight = highlight
         self.interlace_color = interlace_color
+        self.name = name
         pass
 
     def clone_to(self, target):
@@ -31,12 +33,14 @@ class ColorScheme(object):
         target.foreground = self.foreground
         target.highlight = self.highlight
         target.interlace_color = self.interlace_color
+        target.name = self.name
         return target
 
     background = (0, 0, 0)
     interlace_color = (2, 2, 2)
     foreground = (0, 255, 0)
     highlight = (255, 255, 255)
+    name = None
 
     pass
 
@@ -52,7 +56,8 @@ class ColorSchemes(object):
         Gets a green-based color scheme resembling military avionics displays
         :return: A green-based color scheme resembling military avionics displays
         """
-        return ColorScheme(background=(0, 24, 0),
+        return ColorScheme(name='Green',
+                           background=(0, 24, 0),
                            foreground=(0, 170, 0),
                            highlight=(170, 170, 170),
                            interlace_color=(0, 32, 0))
@@ -63,7 +68,8 @@ class ColorSchemes(object):
         Gets a cyan-based color scheme
         :return: A cyan-based color scheme
         """
-        return ColorScheme(background=(0, 0, 32),
+        return ColorScheme(name='Cyan',
+                           background=(0, 0, 32),
                            foreground=(0, 170, 170),
                            highlight=(0, 0, 255),
                            interlace_color=(0, 0, 8))
@@ -74,7 +80,8 @@ class ColorSchemes(object):
         Gets an ice-blue-based color scheme
         :return: An ice-blue-based color scheme
         """
-        return ColorScheme(background=(0, 0, 32),
+        return ColorScheme(name='Blue',
+                           background=(0, 0, 32),
                            foreground=(0, 128, 255),
                            highlight=(255, 255, 255),
                            interlace_color=(0, 16, 64))
@@ -85,7 +92,8 @@ class ColorSchemes(object):
         Gets a white / monochrome-based color scheme
         :return: A white / monochrome-based color scheme
         """
-        return ColorScheme(background=(0, 0, 0),
+        return ColorScheme(name='White',
+                           background=(0, 0, 0),
                            foreground=(150, 150, 150),
                            highlight=(255, 255, 255),
                            interlace_color=(24, 24, 24))
@@ -96,7 +104,8 @@ class ColorSchemes(object):
         Gets a red-based color scheme
         :return: A red-based color scheme
         """
-        return ColorScheme(background=(32, 0, 0),
+        return ColorScheme(name='Red',
+                           background=(32, 0, 0),
                            foreground=(170, 0, 0),
                            highlight=(255, 0, 0),
                            interlace_color=(8, 0, 0))
@@ -107,7 +116,8 @@ class ColorSchemes(object):
         Gets an amber-based color scheme
         :return: A amber-based color scheme
         """
-        return ColorScheme(background=(63, 47, 20),
+        return ColorScheme(name='Amber',
+                           background=(63, 47, 20),
                            foreground=(231, 176, 75),
                            highlight=(255, 201, 14),
                            interlace_color=(102, 75, 30))

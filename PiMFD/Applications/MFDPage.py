@@ -15,6 +15,7 @@ class MFDPage(object):
     """
     top_headers = list()
     bottom_headers = list()
+    controls = list()
 
     application = None
     controller = None
@@ -24,13 +25,18 @@ class MFDPage(object):
         self.controller = controller
         self.display = controller.display
         self.application = application
+        self.controls = list()
+        self.top_headers = list()
+        self.bottom_headers = list()
 
+    # noinspection PyMethodMayBeStatic
     def handle_unselected(self):
         """
         Occurs when a page was the selected page within an application but no longer is the selected page.
         """
         pass
 
+    # noinspection PyMethodMayBeStatic
     def handle_selected(self):
         """
         Occurs when a page was selected but another page was selected instead, causing this page to be unselected.

@@ -1,6 +1,7 @@
+# coding=utf-8
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.MFDPage import SimpleMessagePage
-from PiMFD.Applications.System.SystemPages import SysRootPage, SysClockPage, SysExitPage
+from PiMFD.Applications.System.SystemPages import SysRootPage, SysClockPage, SysExitPage, SettingsPage
 
 __author__ = 'Matt Eland'
 
@@ -26,7 +27,7 @@ class SysApplication(MFDApplication):
         self.clock_page = SysClockPage(controller, self)
         self.perf_page = SimpleMessagePage(controller, self, "PERF")
         self.net_page = SimpleMessagePage(controller, self, "NET")
-        self.opts_page = SimpleMessagePage(controller, self, "OPTS")
+        self.opts_page = SettingsPage(controller, self)
         self.exit_page = SysExitPage(controller, self)
 
         self.pages = list([self.clock_page, self.perf_page, self.net_page, self.opts_page, self.exit_page])

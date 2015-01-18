@@ -8,6 +8,7 @@ import pygame
 
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
 from PiMFD.Applications.MFDPage import SimpleMessagePage
+from PiMFD.Options import MFDAppOptions
 from PiMFD.UI.Button import MFDButton
 from PiMFD.Applications.System.SystemApplication import SysApplication
 from PiMFD.Applications.Application import PlaceholderApp
@@ -57,11 +58,9 @@ class MFDController(object):
         self.display = display
 
         if app_options is not None:
-            self.app_name = app_options.app_name
-            self.app_version = app_options.app_version
-            self.app_author = app_options.app_author
-            self.copyright_year = app_options.copyright_year
-            self.location = app_options.location
+            self.options = app_options
+        else:
+            self.options = MFDAppOptions()
 
         # Placeholders for navigation app
         self.nav_app = PlaceholderApp(self, 'NAV')

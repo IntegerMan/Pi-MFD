@@ -37,13 +37,15 @@ class SysRootPage(MFDPage):
         font = display.font_normal
         cs = display.color_scheme
 
+        opts = self.controller.options
+
         # App Version
-        y += render_text(display, font, self.controller.app_name + " Information", x, y,
+        y += render_text(display, font, opts.app_name + " Information", x, y,
                          cs.highlight).height + display.padding_y
-        y += render_text(display, font, "   Ver: " + self.controller.app_version, x, y,
+        y += render_text(display, font, "   Ver: " + opts.app_version, x, y,
                          cs.foreground).height + display.padding_y
-        y += render_text(display, font, " Legal: Copyright (c) " + self.controller.app_author + " " + str(
-            self.controller.copyright_year), x, y, cs.foreground).height + display.padding_y
+        y += render_text(display, font, " Legal: Copyright (c) " + opts.app_author + " " + str(
+            opts.copyright_year), x, y, cs.foreground).height + display.padding_y
 
         # Separator Line
         y += display.get_spacer_line_height()
@@ -135,4 +137,46 @@ class SysClockPage(MFDPage):
         y += render_text(display, font, strftime("GMT: " + self.controller.time_format, gmtime()), x, y,
                          cs.foreground).height + display.padding_y
 
+
+class SettingsPage(MFDPage):
+    """
+    A page for viewing and managing user settings
+    """
+
+    chk_scanline = None
+    ddl_color_scheme = None
+    num_zipcode = None
+
+    def __init__(self, controller, application):
+        super(SettingsPage, self).__init__(controller, application)
+
+    def render(self, display):
+        """
+        Renders the page.
+        :param display: The DisplayManager.
+        """
+        super(SettingsPage, self).render(display)
+
+        x = display.get_content_start_x()
+        y = display.get_content_start_y()
+
+        font = display.font_normal
+        cs = display.color_scheme
+
+        opts = self.controller.options
+
+        y += render_text(display, font, "Settings", x, y, cs.highlight).height + display.padding_y
+        y += render_text(display, font, "Zip Code: {}".format(opts.location), x, y,
+                         cs.foreground).height + display.padding_y
+        y += render_text(display, font, "Color Scheme: {}".format(cs.name), x, y,
+                         cs.foreground).height + display.padding_y
+        y += render_text(display, font, "Scanline: {}".format(opts.enable_scan_line), x, y,
+                         cs.foreground).height + display.padding_y
+
+    def get_button_text(self):
+        """
+        Gets the button text.
+        :return: The button text.
+        """
+        return "OPTS"
 
