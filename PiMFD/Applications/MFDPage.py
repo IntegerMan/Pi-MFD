@@ -29,7 +29,7 @@ class MFDPage(object):
         self.application = application
         self.top_headers = list()
         self.bottom_headers = list()
-        self.panel = StackPanel(controller.display)
+        self.panel = StackPanel(controller.display, self)
 
     def get_label(self, text):
         """
@@ -37,7 +37,7 @@ class MFDPage(object):
         :param text: The text for the label
         :return: The TextBlock
         """
-        return TextBlock(self.display, text)
+        return TextBlock(self.display, self, text)
 
     def get_header_label(self, text):
         """
@@ -46,7 +46,7 @@ class MFDPage(object):
         :param text: The text for the label
         :return: The TextBlock
         """
-        return TextBlock(self.display, text, is_highlighted=True)
+        return TextBlock(self.display, self, text, is_highlighted=True)
 
     # noinspection PyMethodMayBeStatic
     def handle_unselected(self):

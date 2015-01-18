@@ -19,12 +19,14 @@ class UIWidget(object):
     width = 0
     height = 0
     rect = Rect(0, 0, 0, 0)
+    page = None
 
     # We'll need a reference to the display manager in order to render properly
     display = None
 
-    def __init__(self, display):
+    def __init__(self, display, page):
         self.display = display
+        self.page = page
 
     def render_at(self, pos):
         """
@@ -86,8 +88,8 @@ class UIPanel(UIWidget):
 
     children = list()
 
-    def __init__(self, display):
-        super(UIPanel, self).__init__(display)
+    def __init__(self, display, page):
+        super(UIPanel, self).__init__(display, page)
         self.children = list()
 
 
@@ -99,8 +101,8 @@ class StackPanel(UIPanel):
     padding = 8, 8
     is_horizontal = False
 
-    def __init__(self, display, is_horizontal=False):
-        super(StackPanel, self).__init__(display)
+    def __init__(self, display, page, is_horizontal=False):
+        super(StackPanel, self).__init__(display, page)
         self.padding = display.padding_x, display.padding_y
         self.is_horizontal = is_horizontal
 

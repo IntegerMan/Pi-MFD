@@ -20,8 +20,8 @@ class CheckBoxGlyph(UIWidget):
 
     checked = False
 
-    def __init__(self, display, checked=False):
-        super(CheckBoxGlyph, self).__init__(display)
+    def __init__(self, display, page, checked=False):
+        super(CheckBoxGlyph, self).__init__(display, page)
         self.checked = checked
 
     def render(self):
@@ -63,14 +63,14 @@ class CheckBox(UIWidget):
     glyph = None
     checked = False
 
-    def __init__(self, display, label):
-        super(CheckBox, self).__init__(display)
+    def __init__(self, display, page, label):
+        super(CheckBox, self).__init__(display, page)
 
         self.text = label
-        self.label = TextBlock(display, label)
-        self.glyph = CheckBoxGlyph(display)
+        self.label = TextBlock(display, page, label)
+        self.glyph = CheckBoxGlyph(display, page)
 
-        self.panel = StackPanel(display, is_horizontal=True)
+        self.panel = StackPanel(display, page, is_horizontal=True)
         self.panel.children = [self.label, self.glyph]
 
     def render(self):

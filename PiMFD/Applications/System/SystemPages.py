@@ -7,7 +7,7 @@ import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
-from PiMFD.UI.Text import TextBlock, SpacerLine
+from PiMFD.UI.Text import SpacerLine
 
 
 __author__ = 'Matt Eland'
@@ -35,7 +35,7 @@ class SysRootPage(MFDPage):
             self.lbl_app_header,
             self.lbl_app_version,
             self.lbl_app_legal,
-            SpacerLine(self.display),
+            SpacerLine(self.display, self),
             lbl_sys_header,
             self.lbl_sys_name,
             self.lbl_sys_processor,
@@ -80,7 +80,7 @@ class SysExitPage(MFDPage):
         super(SysExitPage, self).__init__(controller, application)
 
         header = self.get_header_label("Exit Application")
-        confirm = TextBlock(controller.display, "Confirm exit by re-selecting '" + self.get_button_text() + "'")
+        confirm = self.get_label("Confirm exit by re-selecting '" + self.get_button_text() + "'")
 
         self.panel.children = [header, confirm]
 
@@ -146,9 +146,9 @@ class SettingsPage(MFDPage):
         # Build basic controls
         header = self.get_header_label("Settings")
         self.num_zipcode = self.get_label("Zip Code: {}")
-        self.chk_scanline = CheckBox(controller.display, "Scanline:")
-        self.chk_interlace = CheckBox(controller.display, "Interlace:")
-        self.chk_fps = CheckBox(controller.display, "FPS:")
+        self.chk_scanline = CheckBox(controller.display, self, "Scanline:")
+        self.chk_interlace = CheckBox(controller.display, self, "Interlace:")
+        self.chk_fps = CheckBox(controller.display, self, "FPS:")
         self.ddl_color_scheme = self.get_label("Color Scheme: {}")
 
         # Add Controls to the page's panel

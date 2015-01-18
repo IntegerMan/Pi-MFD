@@ -34,8 +34,8 @@ class TextBlock(UIWidget):
     text_data = None
     is_highlighted = False
 
-    def __init__(self, display, text, is_highlighted=False):
-        super(TextBlock, self).__init__(display)
+    def __init__(self, display, page, text, is_highlighted=False):
+        super(TextBlock, self).__init__(display, page)
         self.font = display.font_normal
         self.text = text
         self.is_highlighted = is_highlighted
