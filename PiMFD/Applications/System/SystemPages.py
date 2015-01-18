@@ -6,7 +6,7 @@ from time import strftime, gmtime
 import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
-from PiMFD.UI.Rendering import render_text
+from PiMFD.UI.Rendering import render_text, to_enabled_disabled
 
 
 __author__ = 'Matt Eland'
@@ -170,7 +170,7 @@ class SettingsPage(MFDPage):
                          cs.foreground).height + display.padding_y
         y += render_text(display, font, "Color Scheme: {}".format(cs.name), x, y,
                          cs.foreground).height + display.padding_y
-        y += render_text(display, font, "Scanline: {}".format(opts.enable_scan_line), x, y,
+        y += render_text(display, font, "Scanline: {}".format(to_enabled_disabled(opts.enable_scan_line)), x, y,
                          cs.foreground).height + display.padding_y
 
     def get_button_text(self):

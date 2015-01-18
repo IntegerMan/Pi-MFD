@@ -114,3 +114,15 @@ def to_rgba(color, alpha=255):
     :return: A RGBA color structure
     """
     return color[0], color[1], color[2], alpha
+
+
+def to_enabled_disabled(condition):
+    """
+    Returns 'Enabled' if the condition is True, otherwise returns 'Disabled'
+    :param condition: The condition
+    :return: 'Enabled' if the condition is True, otherwise returns 'Disabled'
+    """
+    if condition:
+        return "Enabled"
+    else:
+        return "Disabled"
