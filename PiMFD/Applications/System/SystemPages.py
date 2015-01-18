@@ -153,11 +153,19 @@ class SettingsPage(MFDPage):
 
     def __init__(self, controller, application):
         super(SettingsPage, self).__init__(controller, application)
+
+        # Build basic controls
         self.lbl_settings = TextBlock(controller.display, "Settings")
         self.num_zipcode = TextBlock(controller.display, "Zip Code: {}")
+        self.chk_scanline = TextBlock(controller.display, "Scanline: {}")
+        self.ddl_color_scheme = TextBlock(controller.display, "Color Scheme: {}")
+
+        # Add Controls to the panel
         self.pnl_settings = StackPanel(controller.display)
         self.pnl_settings.children.append(self.lbl_settings)
         self.pnl_settings.children.append(self.num_zipcode)
+        self.pnl_settings.children.append(self.chk_scanline)
+        self.pnl_settings.children.append(self.ddl_color_scheme)
 
     def render(self, display):
         """
@@ -166,25 +174,20 @@ class SettingsPage(MFDPage):
         """
         super(SettingsPage, self).render(display)
 
-        x = display.get_content_start_x()
-        y = display.get_content_start_y()
-
-        font = display.font_normal
         cs = display.color_scheme
         opts = self.controller.options
 
+        # Update properties on controls
         self.lbl_settings.foreground = cs.highlight
         self.num_zipcode.format_data = opts.location
+        self.ddl_color_scheme.format_data = cs.name
+        self.chk_scanline.format_data = to_enabled_disabled(opts.enable_scan_line)
 
+        # Render all controls
+        x = display.get_content_start_x()
+        y = display.get_content_start_y()
         self.pnl_settings.pos = x, y
         self.pnl_settings.render()
-
-        y = self.pnl_settings.bottom + display.padding_y
-
-        y += render_text(display, font, "Color Scheme: {}".format(cs.name), x, y,
-                         cs.foreground).height + display.padding_y
-        y += render_text(display, font, "Scanline: {}".format(to_enabled_disabled(opts.enable_scan_line)), x, y,
-                         cs.foreground).height + display.padding_y
 
     def get_button_text(self):
         """
