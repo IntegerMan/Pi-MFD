@@ -45,7 +45,9 @@
     <Compile Include="PiMFD\UI\ColorScheme.py" />
     <Compile Include="PiMFD\UI\DisplayManager.py" />
     <Compile Include="PiMFD\UI\Overlays.py" />
+    <Compile Include="PiMFD\UI\Panels.py" />
     <Compile Include="PiMFD\UI\Rendering.py" />
+    <Compile Include="PiMFD\UI\Text.py" />
     <Compile Include="PiMFD\UI\__init__.py" />
     <Compile Include="PiMFD\__init__.py" />
     <Compile Include="WinLauncher.py" />

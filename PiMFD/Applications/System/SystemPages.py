@@ -6,6 +6,7 @@ from time import strftime, gmtime
 import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
+from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Rendering import render_text, to_enabled_disabled
 from PiMFD.UI.Text import TextBlock
 
@@ -144,6 +145,7 @@ class SettingsPage(MFDPage):
     A page for viewing and managing user settings
     """
 
+    pnl_settings = None
     lbl_settings = None
     chk_scanline = None
     ddl_color_scheme = None
@@ -152,6 +154,10 @@ class SettingsPage(MFDPage):
     def __init__(self, controller, application):
         super(SettingsPage, self).__init__(controller, application)
         self.lbl_settings = TextBlock(controller.display, "Settings")
+        self.num_zipcode = TextBlock(controller.display, "Zip Code: {}")
+        self.pnl_settings = StackPanel(controller.display)
+        self.pnl_settings.children.append(self.lbl_settings)
+        self.pnl_settings.children.append(self.num_zipcode)
 
     def render(self, display):
         """
@@ -168,12 +174,13 @@ class SettingsPage(MFDPage):
         opts = self.controller.options
 
         self.lbl_settings.foreground = cs.highlight
-        self.lbl_settings.pos = x, y
+        self.num_zipcode.format_data = opts.location
 
-        self.lbl_settings.render()
-        y = self.lbl_settings.bottom + display.padding_y
-        y += render_text(display, font, "Zip Code: {}".format(opts.location), x, y,
-                         cs.foreground).height + display.padding_y
+        self.pnl_settings.pos = x, y
+        self.pnl_settings.render()
+
+        y = self.pnl_settings.bottom + display.padding_y
+
         y += render_text(display, font, "Color Scheme: {}".format(cs.name), x, y,
                          cs.foreground).height + display.padding_y
         y += render_text(display, font, "Scanline: {}".format(to_enabled_disabled(opts.enable_scan_line)), x, y,
