@@ -33,8 +33,42 @@ class UIWidget(object):
         """
         return self.rect
 
+    def set_dimensions_from(self, target):
+        """
+        Clones all dimension attributes from the target object
+        :param target: The target to take values from
+        """
+        self.pos = target.pos
+        self.size = target.size
+        self.left = target.left
+        self.right = target.right
+        self.top = target.top
+        self.bottom = target.bottom
+        self.width = target.width
+        self.height = target.height
+        self.rect = target.rect
+
+    def set_dimensions_from_rect(self, rect):
+        """
+        Copies dimensional attributes from the specified rect
+        :param rect: The rectangle
+        """
+        self.rect = rect
+        self.pos = rect.x, rect.y
+        self.size = rect.size
+        self.left = rect.left
+        self.right = rect.right
+        self.top = rect.top
+        self.bottom = rect.bottom
+        self.width = rect.width
+        self.height = rect.height
+
 
 class UIPanel(UIWidget):
+    """
+    A base class for panels used for UIWidget arrangement
+    """
+
     children = list()
 
     def __init__(self, display):
@@ -43,17 +77,23 @@ class UIPanel(UIWidget):
 
 
 class StackPanel(UIPanel):
-    padding_y = 8
+    """
+    A class used for vertical or horizontal arrangement of UIWidgets in sequence
+    """
 
-    def __init__(self, display):
+    padding = 8, 8
+    is_horizontal = False
+
+    def __init__(self, display, is_horizontal=False):
         super(StackPanel, self).__init__(display)
-        self.padding_y = display.padding_y
-
-    # TODO: It'd be good to support horizontal rendering as well
-
-
+        self.padding = display.padding_x, display.padding_y
+        self.is_horizontal = is_horizontal
 
     def render(self):
+        """
+        Renders the panel and all of its children
+        :return: A rect indicating the dimensions of the panel
+        """
 
         self.width = 0
         self.height = 0
@@ -69,18 +109,33 @@ class StackPanel(UIPanel):
         """
         for child in self.children:
 
-            # Position the child relative to where it should be.
+            # Position the child relative to where it should be and render it
             child.pos = x, y
-
             child_rect = child.render()
-            if child_rect.width > self.width:
-                self.width = child_rect.width
 
-            self.height = child.bottom - self.top
+            # Now that we've rendered, we need to adjust our running dimensions
+            # and figure out where to put the next one
+            if self.is_horizontal:
 
-            y = child.bottom + self.padding_y
+                # Horizontal layout mode - go left to right
+                if child_rect.height > self.height:
+                    self.height = child_rect.height
+
+                self.width = child.right - self.left
+
+                x = child.right + self.padding[0]
+
+            else:
+
+                # Vertical layout mode (default) - go top to bottom
+                if child_rect.width > self.width:
+                    self.width = child_rect.width
+
+                self.height = child.bottom - self.top
+
+                y = child.bottom + self.padding[1]
 
         # Update and return our bounds
         self.rect = Rect(self.left, self.top, self.width, self.height)
-        self.right, self.bottom = self.rect.right, self.rect.bottom
+        self.set_dimensions_from_rect(self.rect)
         return self.rect

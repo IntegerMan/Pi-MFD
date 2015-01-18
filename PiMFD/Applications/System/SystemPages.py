@@ -6,8 +6,9 @@ from time import strftime, gmtime
 import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
+from PiMFD.UI.Checkboxes import CheckBox
 from PiMFD.UI.Panels import StackPanel
-from PiMFD.UI.Rendering import render_text, to_enabled_disabled
+from PiMFD.UI.Rendering import render_text
 from PiMFD.UI.Text import TextBlock
 
 
@@ -158,7 +159,7 @@ class SettingsPage(MFDPage):
         self.lbl_settings = TextBlock(controller.display, "Settings")
         self.lbl_settings.is_highlighted = True
         self.num_zipcode = TextBlock(controller.display, "Zip Code: {}")
-        self.chk_scanline = TextBlock(controller.display, "Scanline: {}")
+        self.chk_scanline = CheckBox(controller.display, "Scanline:")
         self.ddl_color_scheme = TextBlock(controller.display, "Color Scheme: {}")
 
         # Add Controls to the panel
@@ -178,7 +179,7 @@ class SettingsPage(MFDPage):
         # Update properties on controls
         self.num_zipcode.format_data = opts.location
         self.ddl_color_scheme.format_data = cs.name
-        self.chk_scanline.format_data = to_enabled_disabled(opts.enable_scan_line)
+        self.chk_scanline.checked = opts.enable_scan_line
 
         # Render all controls
         self.pnl_settings.pos = display.get_content_start_pos()
