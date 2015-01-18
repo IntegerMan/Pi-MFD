@@ -31,9 +31,18 @@ class MFDPage(object):
         self.bottom_headers = list()
         self.panel = StackPanel(controller.display)
 
+    def get_label(self, text):
+        """
+        Builds a label with the specified text. This is a conveinence method since labels are extremely common
+        :param text: The text for the label
+        :return: The TextBlock
+        """
+        return TextBlock(self.display, text)
+
     def get_header_label(self, text):
         """
-        Builds a highlighted header label with the specified text
+        Builds a highlighted header label with the specified text.
+        This is a conveinence method since header labels are extremely common
         :param text: The text for the label
         :return: The TextBlock
         """

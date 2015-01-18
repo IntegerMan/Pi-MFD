@@ -53,7 +53,10 @@ class TextBlock(UIWidget):
         # Do string formatting as needed
         effective_text = self.text
         if self.text is not None:
-            effective_text = self.text.format(self.text_data)
+            if isinstance(self.text_data, tuple):
+                effective_text = self.text.format(*self.text_data)
+            else:
+                effective_text = self.text.format(self.text_data)
 
         if self.font is not None and effective_text is not None:
             color = self.get_foreground()

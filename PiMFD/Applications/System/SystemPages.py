@@ -7,7 +7,6 @@ import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
-from PiMFD.UI.Rendering import render_text
 from PiMFD.UI.Text import TextBlock
 
 
@@ -18,6 +17,33 @@ class SysRootPage(MFDPage):
     """
     The root level page for the system app
     """
+
+    def __init__(self, controller, application):
+        super(SysRootPage, self).__init__(controller, application)
+
+        self.lbl_app_header = self.get_header_label("{} Information")
+        self.lbl_app_version = self.get_label("   Ver: {}")
+        self.lbl_app_legal = self.get_label(" Legal: Copyright (c) {} {}")
+        lbl_sys_header = self.get_header_label("System Information")
+        self.lbl_sys_name = self.get_label("System: {} {} {}")
+        self.lbl_sys_processor = self.get_label("  Proc: {}")
+        self.lbl_sys_net_id = self.get_label("Net ID: {}")
+        self.lbl_sys_display = self.get_label("  Disp: {}x{}")
+        self.lbl_sys_python = self.get_label("Python: {} {} {}")
+
+        self.panel.children = (
+            self.lbl_app_header,
+            self.lbl_app_version,
+            self.lbl_app_legal,
+            # TODO: It'd be good to add a spacer line here
+            lbl_sys_header,
+            self.lbl_sys_name,
+            self.lbl_sys_processor,
+            self.lbl_sys_net_id,
+            self.lbl_sys_display,
+            self.lbl_sys_python
+        )
+
 
     def get_button_text(self):
         """
@@ -31,41 +57,19 @@ class SysRootPage(MFDPage):
         Renders the page.
         :type display: PiMFD.DisplayManager.DisplayManager The DisplayManager that manages the page we're rendering.
         """
-        super(SysRootPage, self).render(display)
-
-        x = display.get_content_start_x()
-        y = display.get_content_start_y()
-
-        font = display.font_normal
-        cs = display.color_scheme
 
         opts = self.controller.options
 
-        # App Version
-        y += render_text(display, font, opts.app_name + " Information", x, y,
-                         cs.highlight).height + display.padding_y
-        y += render_text(display, font, "   Ver: " + opts.app_version, x, y,
-                         cs.foreground).height + display.padding_y
-        y += render_text(display, font, " Legal: Copyright (c) " + opts.app_author + " " + str(
-            opts.copyright_year), x, y, cs.foreground).height + display.padding_y
+        self.lbl_app_header.text_data = opts.app_name
+        self.lbl_app_version.text_data = opts.app_version
+        self.lbl_app_legal.text_data = opts.app_author, opts.copyright_year
+        self.lbl_sys_name.text_data = platform.platform(), platform.release(), platform.machine()
+        self.lbl_sys_processor.text_data = platform.processor()
+        self.lbl_sys_net_id.text_data = platform.node()
+        self.lbl_sys_display.text_data = display.res_x, display.res_y
+        self.lbl_sys_python.text_data = platform.python_version(), platform.python_implementation(), platform.python_compiler()
 
-        # Separator Line
-        y += display.get_spacer_line_height()
-
-        # System Data - TODO: These can be long and will need truncated or wrapping in some cases
-        y += render_text(display, font, "System Information", x, y, cs.highlight).height + display.padding_y
-        y += render_text(display, font,
-                         'System: ' + platform.platform() + ' ' + platform.release() + ' ' + platform.machine(), x, y,
-                         cs.foreground).height + display.padding_y
-        y += render_text(display, font, '  Proc: ' + platform.processor(), x, y,
-                         cs.foreground).height + display.padding_y
-        y += render_text(display, font, 'Net ID: ' + platform.node(), x, y, cs.foreground).height + display.padding_y
-        y += render_text(display, font, '  Disp: ' + str(self.display.res_x) + 'x' + str(self.display.res_y), x, y,
-                         cs.foreground).height + display.padding_y
-        y += render_text(display, font,
-                         'Python: ' + platform.python_version() + ' ' + platform.python_implementation() + ' ' + platform.python_compiler(),
-                         x, y, cs.foreground).height + display.padding_y
-
+        return super(SysRootPage, self).render(display)
 
 class SysExitPage(MFDPage):
     """
