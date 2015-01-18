@@ -4,6 +4,7 @@ Defines the MFDPage used as a root for other pages in the application.
 """
 from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Rendering import render_text_centered
+from PiMFD.UI.Text import TextBlock
 
 __author__ = 'Matt Eland'
 
@@ -29,6 +30,14 @@ class MFDPage(object):
         self.top_headers = list()
         self.bottom_headers = list()
         self.panel = StackPanel(controller.display)
+
+    def get_header_label(self, text):
+        """
+        Builds a highlighted header label with the specified text
+        :param text: The text for the label
+        :return: The TextBlock
+        """
+        return TextBlock(self.display, text, is_highlighted=True)
 
     # noinspection PyMethodMayBeStatic
     def handle_unselected(self):

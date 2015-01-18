@@ -75,7 +75,10 @@ class SysExitPage(MFDPage):
     def __init__(self, controller, application):
         super(SysExitPage, self).__init__(controller, application)
 
+        header = self.get_header_label("Exit Application")
+        confirm = TextBlock(controller.display, "Confirm exit by re-selecting '" + self.get_button_text() + "'")
 
+        self.panel.children = [header, confirm]
 
     def get_button_text(self):
         """
@@ -83,28 +86,6 @@ class SysExitPage(MFDPage):
         :return: The button text.
         """
         return "EXIT"
-
-    def render(self, display):
-        """
-        Renders the exit page.
-        :param display: The DisplayManager used to manage the display.
-        """
-        super(SysExitPage, self).render(display)
-
-        x = display.get_content_start_x()
-        y = display.get_content_start_y()
-
-        font = display.font_normal
-        cs = display.color_scheme
-
-        if not self.controller.requested_exit:
-            rect = render_text(display, font, "Exit Application", x, y, cs.highlight)
-            y = rect.bottom + display.padding_y
-
-            render_text(display, font, "Confirm exit by re-selecting '" + self.get_button_text() + "'", x, y,
-                        cs.foreground)
-        else:
-            render_text(display, font, "The application will now close.", x, y, cs.foreground)
 
     def handle_reselected(self):
         """
@@ -150,7 +131,6 @@ class SettingsPage(MFDPage):
     A page for viewing and managing user settings
     """
 
-    lbl_settings = None
     chk_scanline = None
     ddl_color_scheme = None
     num_zipcode = None
@@ -159,13 +139,13 @@ class SettingsPage(MFDPage):
         super(SettingsPage, self).__init__(controller, application)
 
         # Build basic controls
-        self.lbl_settings = TextBlock(controller.display, "Settings", is_highlighted=True)
+        header = self.get_header_label("Settings")
         self.num_zipcode = TextBlock(controller.display, "Zip Code: {}")
         self.chk_scanline = CheckBox(controller.display, "Scanline:")
         self.ddl_color_scheme = TextBlock(controller.display, "Color Scheme: {}")
 
         # Add Controls to the page's panel
-        self.panel.children = [self.lbl_settings, self.num_zipcode, self.chk_scanline, self.ddl_color_scheme]
+        self.panel.children = [header, self.num_zipcode, self.chk_scanline, self.ddl_color_scheme]
 
     def render(self, display):
         """
