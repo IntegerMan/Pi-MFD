@@ -18,7 +18,7 @@ class TextBlock(UIWidget):
 
     font = None
     text = None
-    format_data = None
+    text_data = None
     is_highlighted = False
 
     def __init__(self, display, text, is_highlighted=False):
@@ -53,7 +53,7 @@ class TextBlock(UIWidget):
         # Do string formatting as needed
         effective_text = self.text
         if self.text is not None:
-            effective_text = self.text.format(self.format_data)
+            effective_text = self.text.format(self.text_data)
 
         if self.font is not None and effective_text is not None:
             color = self.get_foreground()

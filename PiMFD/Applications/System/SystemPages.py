@@ -98,7 +98,16 @@ class SysClockPage(MFDPage):
     """
     A system clock page displaying the time in GMT and the current time zone.
     """
-    
+
+    def __init__(self, controller, application):
+        super(SysClockPage, self).__init__(controller, application)
+
+        header = self.get_header_label("Current Time")
+        self.lbl_sys_time = TextBlock(controller.display, "SYS: {}")
+        self.lbl_gmt_time = TextBlock(controller.display, "GMT: {}")
+        self.panel.children = [header, self.lbl_sys_time, self.lbl_gmt_time]
+
+
     def get_button_text(self):
         """
         Gets the button text.
@@ -111,19 +120,12 @@ class SysClockPage(MFDPage):
         Renders the system clock page.
         :param display: The DisplayManager.
         """
-        super(SysClockPage, self).render(display)
 
-        x = display.get_content_start_x()
-        y = display.get_content_start_y()
+        # Grab the time and stick it in the labels
+        self.lbl_sys_time.text_data = strftime(self.controller.time_format)
+        self.lbl_gmt_time.text_data = strftime(self.controller.time_format, gmtime())
 
-        font = display.font_normal
-        cs = display.color_scheme
-
-        y += render_text(display, font, "Current Time", x, y, cs.highlight).height + display.padding_y
-        y += render_text(display, font, strftime("SYS: " + self.controller.time_format), x, y,
-                         cs.foreground).height + display.padding_y
-        y += render_text(display, font, strftime("GMT: " + self.controller.time_format, gmtime()), x, y,
-                         cs.foreground).height + display.padding_y
+        return super(SysClockPage, self).render(display)
 
 
 class SettingsPage(MFDPage):
@@ -155,8 +157,8 @@ class SettingsPage(MFDPage):
         opts = self.controller.options
 
         # Update properties on controls
-        self.num_zipcode.format_data = opts.location
-        self.ddl_color_scheme.format_data = display.color_scheme.name
+        self.num_zipcode.text_data = opts.location
+        self.ddl_color_scheme.text_data = display.color_scheme.name
         self.chk_scanline.checked = opts.enable_scan_line
 
         # Render all controls
