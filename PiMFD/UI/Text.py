@@ -12,9 +12,17 @@ class UIWidget(object):
     Represents a basic UI widget that the system is capable of arranging and rendering.
     """
 
+    # Basic Arrangement Attributes
     pos = (0, 0)
     size = (0, 0)
+    left = 0
+    right = 0
+    top = 0
+    bottom = 0
+    width = 0
+    height = 0
 
+    # We'll need a reference to the display manager in order to render properly
     display = None
 
     def __init__(self, display):
