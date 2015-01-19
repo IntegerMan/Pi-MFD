@@ -45,7 +45,6 @@ class SysRootPage(MFDPage):
             self.lbl_sys_python
         )
 
-
     def get_button_text(self):
         """
         Gets the button text for the application
@@ -163,6 +162,10 @@ class SettingsPage(MFDPage):
         # We DO care about input on this page. Set up our input.
         self.set_focus(self.chk_scanline)
 
+    def handle_selected(self):
+        super(SettingsPage, self).handle_selected()
+        self.num_zipcode.text = self.controller.options.location
+
     def render(self, display):
         """
         Renders the page.
@@ -171,7 +174,6 @@ class SettingsPage(MFDPage):
         opts = self.controller.options
 
         # Update properties on controls
-        self.num_zipcode.text = opts.location
         self.ddl_color_scheme.text_data = display.color_scheme.name
         self.chk_scanline.checked = opts.enable_scan_line
         self.chk_interlace.checked = opts.enable_interlacing

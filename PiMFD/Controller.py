@@ -9,6 +9,7 @@ import pygame
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
 from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Options import MFDAppOptions
+from PiMFD.UI import Keycodes
 from PiMFD.UI.Button import MFDButton
 from PiMFD.Applications.System.SystemApplication import SysApplication
 from PiMFD.Applications.Application import PlaceholderApp
@@ -99,6 +100,7 @@ class MFDController(object):
         Processes events such as keyboard, mouse, and hardware input as well as external events such as window resize
         or application closing notifications.
         """
+
         events = pygame.event.get()
         for event in events:
 
@@ -115,54 +117,73 @@ class MFDController(object):
                 self.display.update_graphics_mode()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-
                 if event.button == 1:  # Left Mouse Button
                     self.handle_mouse_left_click(event.pos)
 
-            # Check for Keyboard Input
             elif event.type == pygame.KEYDOWN:
+                self.handle_keyboard_event(event.key)
 
-                if event.key == pygame.K_ESCAPE:  # Handle escape by closing the app.
-                    self.requested_exit = True
-                elif event.key == pygame.K_F1:    # Simulate Hardware Upper Button 1
-                    self.handle_button(0, True)
-                elif event.key == pygame.K_F2:    # Simulate Hardware Upper Button 2
-                    self.handle_button(1, True)
-                elif event.key == pygame.K_F3:    # Simulate Hardware Upper Button 3
-                    self.handle_button(2, True)
-                elif event.key == pygame.K_F4:    # Simulate Hardware Upper Button 4
-                    self.handle_button(3, True)
-                elif event.key == pygame.K_F5:    # Simulate Hardware Upper Button 5
-                    self.handle_button(4, True)
-                elif event.key == pygame.K_F6:    # Simulate Hardware Upper Special Button (reserved for future)
-                    pass
-                elif event.key == pygame.K_F7:    # Simulate Hardware Lower Special Button (reserved for future)
-                    pass
-                elif event.key == pygame.K_F8:    # Simulate Hardware Lower Button 1
-                    self.handle_button(0, False)
-                elif event.key == pygame.K_F9:    # Simulate Hardware Lower Button 2
-                    self.handle_button(1, False)
-                elif event.key == pygame.K_F10:   # Simulate Hardware Lower Button 3
-                    self.handle_button(2, False)
-                elif event.key == pygame.K_F11:   # Simulate Hardware Lower Button 4
-                    self.handle_button(3, False)
-                elif event.key == pygame.K_F12:   # Simulate Hardware Lower Button 5
-                    self.handle_button(4, False)
-                elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
-                    if self.active_app is not None and self.active_app.active_page is not None:
-                        self.active_app.active_page.handle_enter_key()
-                elif event.key == pygame.K_KP8 or event.key == pygame.K_UP:
-                    if self.active_app is not None and self.active_app.active_page is not None:
-                        self.active_app.active_page.handle_up_key()
-                elif event.key == pygame.K_KP2 or event.key == pygame.K_DOWN:
-                    if self.active_app is not None and self.active_app.active_page is not None:
-                        self.active_app.active_page.handle_down_key()
-                elif event.key == pygame.K_KP6 or event.key == pygame.K_RIGHT:
-                    if self.active_app is not None and self.active_app.active_page is not None:
-                        self.active_app.active_page.handle_right_key()
-                elif event.key == pygame.K_KP4 or event.key == pygame.K_LEFT:
-                    if self.active_app is not None and self.active_app.active_page is not None:
-                        self.active_app.active_page.handle_left_key()
+    def get_active_page(self):
+        """
+        Returns the active page or None if no page is active
+        :return: The active page or None if no page is active
+        """
+        if self.active_app is not None:
+            return self.active_app.active_page
+        else:
+            return None
+
+
+    def handle_keyboard_event(self, key):
+        """
+        Processes keyboard input
+        :param key: The keyboard data
+        """
+        active_page = self.get_active_page()
+
+        if key == Keycodes.KEY_ESCAPE:  # Handle escape by closing the app.
+            self.requested_exit = True
+        elif key == Keycodes.KEY_F1:  # Simulate Hardware Upper Button 1
+            self.handle_button(0, True)
+        elif key == Keycodes.KEY_F2:  # Simulate Hardware Upper Button 2
+            self.handle_button(1, True)
+        elif key == Keycodes.KEY_F3:  # Simulate Hardware Upper Button 3
+            self.handle_button(2, True)
+        elif key == Keycodes.KEY_F4:  # Simulate Hardware Upper Button 4
+            self.handle_button(3, True)
+        elif key == Keycodes.KEY_F5:  # Simulate Hardware Upper Button 5
+            self.handle_button(4, True)
+        elif key == Keycodes.KEY_F6:  # Simulate Hardware Upper Special Button (reserved for future)
+            pass
+        elif key == Keycodes.KEY_F7:  # Simulate Hardware Lower Special Button (reserved for future)
+            pass
+        elif key == Keycodes.KEY_F8:  # Simulate Hardware Lower Button 1
+            self.handle_button(0, False)
+        elif key == Keycodes.KEY_F9:  # Simulate Hardware Lower Button 2
+            self.handle_button(1, False)
+        elif key == Keycodes.KEY_F10:  # Simulate Hardware Lower Button 3
+            self.handle_button(2, False)
+        elif key == Keycodes.KEY_F11:  # Simulate Hardware Lower Button 4
+            self.handle_button(3, False)
+        elif key == Keycodes.KEY_F12:  # Simulate Hardware Lower Button 5
+            self.handle_button(4, False)
+        elif key == Keycodes.KEY_RETURN or key == Keycodes.KEY_KP_ENTER:
+            if active_page:
+                active_page.handle_enter_key()
+        elif key == Keycodes.KEY_KP8 or key == Keycodes.KEY_UP:
+            if active_page:
+                active_page.handle_up_key()
+        elif key == Keycodes.KEY_KP2 or key == Keycodes.KEY_DOWN:
+            if active_page:
+                active_page.handle_down_key()
+        elif key == Keycodes.KEY_KP6 or key == Keycodes.KEY_RIGHT:
+            if active_page:
+                active_page.handle_right_key()
+        elif key == Keycodes.KEY_KP4 or key == Keycodes.KEY_LEFT:
+            if active_page:
+                active_page.handle_left_key()
+        elif active_page:
+            active_page.handle_key(key)
 
 
     def render_button_row(self, headers, is_top):

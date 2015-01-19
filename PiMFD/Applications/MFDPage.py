@@ -160,16 +160,28 @@ class MFDPage(object):
         else:
             self.focus_first_eligibile()
 
+    # noinspection PyMethodMayBeStatic
+    def handle_key(self, key):
+        """
+        Handles a miscellaneous keyboard input
+        :param key: The keycode
+        :return: True if the code was handled, otherwise false
+        """
+        pass
 
+    # noinspection PyMethodMayBeStatic
     def handle_left_key(self):
         """
         Handles a left keypress
         """
+        pass
 
+    # noinspection PyMethodMayBeStatic
     def handle_right_key(self):
         """
         Handles a right keypress
         """
+        pass
 
     # noinspection PyMethodMayBeStatic
     def handle_control_state_changed(self, widget):
