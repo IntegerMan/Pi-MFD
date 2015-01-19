@@ -182,3 +182,23 @@ class SettingsPage(MFDPage):
         """
         return "OPTS"
 
+    def handle_control_state_changed(self, widget):
+        """
+        Responds to control state changes
+        :param widget:
+        :return:
+        """
+        super(SettingsPage, self).handle_control_state_changed(widget)
+
+        opts = self.controller.options
+
+        if widget is self.chk_scanline:
+            opts.enable_scan_line = widget.checked
+        elif widget is self.chk_fps:
+            opts.enable_fps = widget.checked
+        elif widget is self.chk_interlace:
+            opts.enable_interlacing = widget.checked
+
+        # Persist to disk
+        opts.save_to_settings()
+

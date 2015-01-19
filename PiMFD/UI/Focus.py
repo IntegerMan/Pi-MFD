@@ -32,3 +32,10 @@ class FocusableWidget(UIWidget):
         Occurs when the control loses focus
         """
         pass
+
+    # noinspection PyMethodMayBeStatic
+    def handle_enter_key(self):
+        """
+        Handles an enter or keypad enter keypress
+        """
+        pass

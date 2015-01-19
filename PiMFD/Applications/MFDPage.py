@@ -111,6 +111,21 @@ class MFDPage(object):
         """
         return self.panel.render_at(self.display.get_content_start_pos())
 
+    def handle_enter_key(self):
+        """
+        Handles an enter or keypad enter keypress
+        """
+        if self.focus:
+            self.focus.handle_enter_key()
+
+    # noinspection PyMethodMayBeStatic
+    def handle_control_state_changed(self, widget):
+        """
+        Responds to a state changed event in the specified widget
+        :param widget: The widget whose state changed
+        """
+        pass
+
 
 class SimpleMessagePage(MFDPage):
     """

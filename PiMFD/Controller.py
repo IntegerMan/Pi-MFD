@@ -40,7 +40,6 @@ class MFDController(object):
     max_page_buttons = 5
 
     # TODO: Grab location from GPS
-    # TODO: Allow user to manually set location
     location = '43035'
 
     time_format = '%m/%d/%Y - %H:%M:%S'
@@ -149,6 +148,9 @@ class MFDController(object):
                     self.handle_button(3, False)
                 elif event.key == pygame.K_F12:   # Simulate Hardware Lower Button 5
                     self.handle_button(4, False)
+                elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                    if self.active_app is not None and self.active_app.active_page is not None:
+                        self.active_app.active_page.handle_enter_key()
 
     def render_button_row(self, headers, is_top):
         """

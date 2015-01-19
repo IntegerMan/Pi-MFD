@@ -111,6 +111,20 @@ class CheckBox(FocusableWidget):
         self.glyph.render_focus = False
         super(CheckBox, self).lost_focus()
 
+    def handle_enter_key(self):
+        """
+        Handles when the enter / keypad enter key is pressed while the checkbox is pressed
+        """
+        # TODO: Support space for windows?
+
+        super(CheckBox, self).handle_enter_key()
+
+        if self.checked:
+            self.checked = False
+        else:
+            self.checked = True
+
+        self.page.handle_control_state_changed(self)
 
 
 
