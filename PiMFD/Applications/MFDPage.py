@@ -2,6 +2,7 @@
 """
 Defines the MFDPage used as a root for other pages in the application.
 """
+from PiMFD.UI.Keycodes import is_enter_key
 from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Rendering import render_text_centered
 from PiMFD.UI.Text import TextBlock
@@ -115,13 +116,6 @@ class MFDPage(object):
         """
         return self.panel.render_at(self.display.get_content_start_pos())
 
-    def handle_enter_key(self):
-        """
-        Handles an enter or keypad enter keypress
-        """
-        if self.focus:
-            self.focus.handle_enter_key()
-
     def focus_first_eligibile(self):
         """
         Focuses the first eligible input element
@@ -165,9 +159,13 @@ class MFDPage(object):
         """
         Handles a miscellaneous keyboard input
         :param key: The keycode
-        :return: True if the code was handled, otherwise false
+        :return: True if the code was handled, otherwise False
         """
-        pass
+        if is_enter_key(key):
+            if self.focus:
+                return self.focus.handle_enter_key()
+
+        return False
 
     # noinspection PyMethodMayBeStatic
     def handle_left_key(self):

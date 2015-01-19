@@ -6,6 +6,15 @@ A collection of common keycodes used to provide a degree of abstraction between 
 
 __author__ = 'Matt Eland'
 
+
+def is_enter_key(key):
+    """
+    Determines if the key specified is enter on the keyboard or number pad
+    :param key: The keyboard key code
+    :return: True if the key is Enter, otherwise False
+    """
+    return key in (KEY_RETURN, KEY_KP_ENTER)
+
 KEY_0 = 48
 KEY_1 = 49
 KEY_2 = 50
