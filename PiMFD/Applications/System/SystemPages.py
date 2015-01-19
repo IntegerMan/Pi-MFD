@@ -7,6 +7,7 @@ import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
+from PiMFD.UI.Input import TextBox
 from PiMFD.UI.Text import SpacerLine
 
 
@@ -148,16 +149,16 @@ class SettingsPage(MFDPage):
         self.chk_scanline = CheckBox(controller.display, self, "Scanline:")
         self.chk_interlace = CheckBox(controller.display, self, "Interlace:")
         self.chk_fps = CheckBox(controller.display, self, "FPS:")
+        self.num_zipcode = TextBox(controller.display, self, label="Zip Code:")
         self.ddl_color_scheme = self.get_label("Color Scheme: {}")
-        self.num_zipcode = self.get_label("Zip Code: {}")
 
         # Add Controls to the page's panel
         self.panel.children = [header,
                                self.chk_scanline,
                                self.chk_interlace,
                                self.chk_fps,
-                               self.ddl_color_scheme,
-                               self.num_zipcode]
+                               self.num_zipcode,
+                               self.ddl_color_scheme]
 
         # We DO care about input on this page. Set up our input.
         self.set_focus(self.chk_scanline)
@@ -170,7 +171,7 @@ class SettingsPage(MFDPage):
         opts = self.controller.options
 
         # Update properties on controls
-        self.num_zipcode.text_data = opts.location
+        self.num_zipcode.text = opts.location
         self.ddl_color_scheme.text_data = display.color_scheme.name
         self.chk_scanline.checked = opts.enable_scan_line
         self.chk_interlace.checked = opts.enable_interlacing
