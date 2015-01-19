@@ -145,15 +145,19 @@ class SettingsPage(MFDPage):
 
         # Build basic controls
         header = self.get_header_label("Settings")
-        self.num_zipcode = self.get_label("Zip Code: {}")
         self.chk_scanline = CheckBox(controller.display, self, "Scanline:")
         self.chk_interlace = CheckBox(controller.display, self, "Interlace:")
         self.chk_fps = CheckBox(controller.display, self, "FPS:")
         self.ddl_color_scheme = self.get_label("Color Scheme: {}")
+        self.num_zipcode = self.get_label("Zip Code: {}")
 
         # Add Controls to the page's panel
-        self.panel.children = [header, self.num_zipcode, self.chk_scanline, self.chk_interlace, self.chk_fps,
-                               self.ddl_color_scheme]
+        self.panel.children = [header,
+                               self.chk_scanline,
+                               self.chk_interlace,
+                               self.chk_fps,
+                               self.ddl_color_scheme,
+                               self.num_zipcode]
 
         # We DO care about input on this page. Set up our input.
         self.set_focus(self.chk_scanline)

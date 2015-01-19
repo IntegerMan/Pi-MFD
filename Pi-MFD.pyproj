@@ -42,8 +42,10 @@
     <Compile Include="PiMFD\Controller.py" />
     <Compile Include="PiMFD\Options.py" />
     <Compile Include="PiMFD\UI\Button.py" />
+    <Compile Include="PiMFD\UI\Checkboxes.py" />
     <Compile Include="PiMFD\UI\ColorScheme.py" />
     <Compile Include="PiMFD\UI\DisplayManager.py" />
+    <Compile Include="PiMFD\UI\Focus.py" />
     <Compile Include="PiMFD\UI\Overlays.py" />
     <Compile Include="PiMFD\UI\Panels.py" />
     <Compile Include="PiMFD\UI\Rendering.py" />
@@ -65,7 +67,9 @@
     <Content Include="Fonts\VeraMono-Italic.ttf" />
     <Content Include="Fonts\VeraMono.ttf" />
     <Content Include="LICENSE" />
+    <Content Include="PiMFD.log" />
     <Content Include="README.md" />
+    <Content Include="settings.ini" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIs\" />

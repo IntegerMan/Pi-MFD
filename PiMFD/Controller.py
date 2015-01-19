@@ -151,6 +151,19 @@ class MFDController(object):
                 elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                     if self.active_app is not None and self.active_app.active_page is not None:
                         self.active_app.active_page.handle_enter_key()
+                elif event.key == pygame.K_KP8 or event.key == pygame.K_UP:
+                    if self.active_app is not None and self.active_app.active_page is not None:
+                        self.active_app.active_page.handle_up_key()
+                elif event.key == pygame.K_KP2 or event.key == pygame.K_DOWN:
+                    if self.active_app is not None and self.active_app.active_page is not None:
+                        self.active_app.active_page.handle_down_key()
+                elif event.key == pygame.K_KP6 or event.key == pygame.K_RIGHT:
+                    if self.active_app is not None and self.active_app.active_page is not None:
+                        self.active_app.active_page.handle_right_key()
+                elif event.key == pygame.K_KP4 or event.key == pygame.K_LEFT:
+                    if self.active_app is not None and self.active_app.active_page is not None:
+                        self.active_app.active_page.handle_left_key()
+
 
     def render_button_row(self, headers, is_top):
         """

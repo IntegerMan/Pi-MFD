@@ -17,6 +17,7 @@ class MFDPage(object):
     """
     top_headers = list()
     bottom_headers = list()
+    focusables = list()
 
     panel = None
     application = None
@@ -31,13 +32,14 @@ class MFDPage(object):
         self.top_headers = list()
         self.bottom_headers = list()
         self.panel = StackPanel(controller.display, self)
+        self.focusables = list()
 
     def set_focus(self, widget):
         """
         Sets focused to the specified control. The prior focus (if one is present) will receive a lost_focus call and
         the newly focused control (if one is present) will receive a got_focus control
         :param widget: The widget to focus. Can be None.
-        :return:
+        :return: The new focus
         """
 
         # If this is a non-event, just go away
@@ -53,6 +55,8 @@ class MFDPage(object):
         # Tell the new focus it's getting some TLC
         if widget:
             widget.got_focus()
+
+        return self.focus
 
     def clear_focus(self):
         """
@@ -118,6 +122,55 @@ class MFDPage(object):
         if self.focus:
             self.focus.handle_enter_key()
 
+    def focus_first_eligibile(self):
+        """
+        Focuses the first eligible input element
+        :return: the first eligible input element
+        """
+        if len(self.focusables) > 0:
+            return self.set_focus(self.focusables[0])
+        else:
+            return None
+
+    def handle_up_key(self):
+        """
+        Handles an up keypress
+        """
+        if self.focus:
+            index = self.focusables.index(self.focus)
+            if index == 0:
+                self.set_focus(self.focusables[-1])
+            elif index < 0:
+                self.focus_first_eligibile()
+            else:
+                self.set_focus(self.focusables[index - 1])
+        else:
+            self.focus_first_eligibile()
+
+    def handle_down_key(self):
+        """
+        Handles a down keypress
+        """
+        if self.focus:
+            index = self.focusables.index(self.focus)
+            if 0 <= index < (len(self.focusables) - 1):
+                self.set_focus(self.focusables[index + 1])
+            else:
+                self.focus_first_eligibile()
+        else:
+            self.focus_first_eligibile()
+
+
+    def handle_left_key(self):
+        """
+        Handles a left keypress
+        """
+
+    def handle_right_key(self):
+        """
+        Handles a right keypress
+        """
+
     # noinspection PyMethodMayBeStatic
     def handle_control_state_changed(self, widget):
         """
@@ -125,6 +178,15 @@ class MFDPage(object):
         :param widget: The widget whose state changed
         """
         pass
+
+    def register_focusable(self, focusable):
+        """
+        Registers a control as a focusable input element. This is necessary to hook up the keyboard navigational
+        system.
+        :param focusable: The control that can receive focus
+        """
+        if focusable is not None:
+            self.focusables.append(focusable)
 
 
 class SimpleMessagePage(MFDPage):
