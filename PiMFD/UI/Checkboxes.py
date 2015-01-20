@@ -5,7 +5,10 @@ Contains checkbox style controls for manipulating pages
 """
 from pygame.rect import Rect
 
+from PiMFD.UI import Keycodes
+
 from PiMFD.UI.Focus import FocusableWidget
+from PiMFD.UI.Keycodes import is_enter_key
 
 from PiMFD.UI.Panels import UIWidget, StackPanel
 from PiMFD.UI.Rendering import draw_rectangle
@@ -111,20 +114,26 @@ class CheckBox(FocusableWidget):
         self.glyph.render_focus = False
         super(CheckBox, self).lost_focus()
 
-    def handle_enter_key(self):
+    def handle_key(self, key):
         """
-        Handles when the enter / keypad enter key is pressed while the checkbox is pressed
+        Handles a keypress
+        :param key: The keycode
+        :returns: True if the event was handled; otherwise False
         """
-        # TODO: Support space for windows?
 
-        super(CheckBox, self).handle_enter_key()
+        if is_enter_key(key) or key == Keycodes.KEY_SPACE3:
 
-        if self.checked:
-            self.checked = False
+            if self.checked:
+                self.checked = False
+            else:
+                self.checked = True
+
+            self.page.handle_control_state_changed(self)
+
+            return True
+
         else:
-            self.checked = True
-
-        self.page.handle_control_state_changed(self)
+            return super(CheckBox, self).handle_key()
 
 
 

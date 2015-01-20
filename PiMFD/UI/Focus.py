@@ -39,8 +39,10 @@ class FocusableWidget(UIWidget):
         pass
 
     # noinspection PyMethodMayBeStatic
-    def handle_enter_key(self):
+    def handle_key(self, key):
         """
-        Handles an enter or keypad enter keypress
+        Handles a keypress
+        :param key: The keycode
+        :returns: True if the event was handled; otherwise False
         """
         pass
