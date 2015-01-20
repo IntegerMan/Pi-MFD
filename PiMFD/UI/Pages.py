@@ -4,13 +4,13 @@
 Contains logic on pages for rendering controls and handling input
 """
 
-from PiMFD.UI.Keycodes import is_enter_key
 from PiMFD.UI.Panels import StackPanel
+from PiMFD.UI.WidgetBase import UIObject
 
 __author__ = 'Matt Eland'
 
 
-class UIPage(object):
+class UIPage(UIObject):
     """
     Represents a user interface page.
     """
@@ -18,12 +18,10 @@ class UIPage(object):
     focusables = list()
 
     panel = None
-    display = None
     focus = None
 
     def __init__(self, display):
-        super(UIPage, self).__init__()
-        self.display = display
+        super(UIPage, self).__init__(display)
         self.panel = StackPanel(display, self)
         self.focusables = list()
 
@@ -109,9 +107,8 @@ class UIPage(object):
         :param key: The keycode
         :return: True if the code was handled, otherwise False
         """
-        if is_enter_key(key):
-            if self.focus:
-                return self.focus.handle_enter_key()
+        if self.focus:
+            return self.focus.handle_key(key)
 
         return False
 
