@@ -18,6 +18,7 @@ class WeatherPage(MFDPage):
     pnl_forecast = None
     lbl_today_header = None
     lbl_cond = None
+    lbl_cond_icon = None
     lbl_wind = None
     lbl_humidity = None
     lbl_visible = None
@@ -41,6 +42,10 @@ class WeatherPage(MFDPage):
         self.lbl_today_header = self.get_header_label("{} Weather")
         self.lbl_temp = self.get_label(u"      Temp: {} (Chill: {})")
         self.lbl_cond = self.get_label(u"Conditions: {}")
+        self.lbl_cond_icon = self.get_label(u"{}")
+        self.lbl_cond_icon.font = controller.display.font_weather
+        pnl_cond = StackPanel(controller.display, self, is_horizontal=True)
+        pnl_cond.children = (self.lbl_cond, self.lbl_cond_icon)
         self.lbl_wind = self.get_label(u"      Wind: {} {}")
         self.lbl_humidity = self.get_label(u"  Humidity: {}")
         self.lbl_visible = self.get_label(u"Visibility: {}")
@@ -52,7 +57,7 @@ class WeatherPage(MFDPage):
         self.pnl_today.children = (
             self.lbl_today_header,
             self.lbl_temp,
-            self.lbl_cond,
+            pnl_cond,
             self.lbl_wind,
             self.lbl_humidity,
             self.lbl_visible,
@@ -108,6 +113,7 @@ class WeatherPage(MFDPage):
         self.lbl_today_header.text_data = weather.city
         self.lbl_temp.text_data = (weather.temperature, weather.windchill)
         self.lbl_cond.text_data = weather.conditions
+        self.lbl_cond_icon.text_data = get_condition_icon(weather.code)
         self.lbl_wind.text_data = (weather.wind_speed, weather.wind_cardinal_direction)
         self.lbl_humidity.text_data = weather.humidity
         self.lbl_visible.text_data = weather.visibility
