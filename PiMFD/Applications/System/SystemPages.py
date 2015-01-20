@@ -136,7 +136,7 @@ class SettingsPage(MFDPage):
 
     chk_scanline = None
     ddl_color_scheme = None
-    num_zipcode = None
+    txt_zipcode = None
 
     def __init__(self, controller, application):
         super(SettingsPage, self).__init__(controller, application)
@@ -146,7 +146,9 @@ class SettingsPage(MFDPage):
         self.chk_scanline = CheckBox(controller.display, self, "Scanline:")
         self.chk_interlace = CheckBox(controller.display, self, "Interlace:")
         self.chk_fps = CheckBox(controller.display, self, "FPS:")
-        self.num_zipcode = TextBox(controller.display, self, label="Zip Code:")
+        self.txt_zipcode = TextBox(controller.display, self, label="Zip Code:")
+        self.txt_zipcode.allow_alpha = False
+        self.txt_zipcode.max_length = 5
         self.ddl_color_scheme = self.get_label("Color Scheme: {}")
 
         # Add Controls to the page's panel
@@ -154,7 +156,7 @@ class SettingsPage(MFDPage):
                                self.chk_scanline,
                                self.chk_interlace,
                                self.chk_fps,
-                               self.num_zipcode,
+                               self.txt_zipcode,
                                self.ddl_color_scheme]
 
         # We DO care about input on this page. Set up our input.
@@ -162,7 +164,7 @@ class SettingsPage(MFDPage):
 
     def handle_selected(self):
         super(SettingsPage, self).handle_selected()
-        self.num_zipcode.text = self.controller.options.location
+        self.txt_zipcode.text = self.controller.options.location
 
     def render(self):
         """
