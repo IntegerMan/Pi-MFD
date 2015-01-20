@@ -32,6 +32,7 @@ class DisplayManager(object):
     overlay_surface = None
 
     is_fullscreen = False
+    allow_resize = True
 
     frames_per_second = 60
 
@@ -143,8 +144,10 @@ class DisplayManager(object):
         # Prepare the Display
         if self.is_fullscreen:
             display = pygame.display.set_mode((self.res_x, self.res_y), pygame.FULLSCREEN)
-        else:
+        elif self.allow_resize:
             display = pygame.display.set_mode((self.res_x, self.res_y), pygame.RESIZABLE)
+        else:
+            display = pygame.display.set_mode((self.res_x, self.res_y))
 
         # Customize the Window
         pygame.display.set_caption(options.app_name)
