@@ -3,6 +3,7 @@
 """
 Contains logic on pages for rendering controls and handling input
 """
+from PiMFD.UI.Keycodes import is_up_key, is_down_key
 
 from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.WidgetBase import UIObject
@@ -72,34 +73,6 @@ class UIPage(UIObject):
         else:
             return None
 
-    def handle_up_key(self):
-        """
-        Handles an up keypress
-        """
-        if self.focus:
-            index = self.focusables.index(self.focus)
-            if index == 0:
-                self.set_focus(self.focusables[-1])
-            elif index < 0:
-                self.focus_first_eligibile()
-            else:
-                self.set_focus(self.focusables[index - 1])
-        else:
-            self.focus_first_eligibile()
-
-    def handle_down_key(self):
-        """
-        Handles a down keypress
-        """
-        if self.focus:
-            index = self.focusables.index(self.focus)
-            if 0 <= index < (len(self.focusables) - 1):
-                self.set_focus(self.focusables[index + 1])
-            else:
-                self.focus_first_eligibile()
-        else:
-            self.focus_first_eligibile()
-
     # noinspection PyMethodMayBeStatic
     def handle_key(self, key):
         """
@@ -107,8 +80,43 @@ class UIPage(UIObject):
         :param key: The keycode
         :return: True if the code was handled, otherwise False
         """
+
+        # Give the focused control first crack at the event
         if self.focus:
-            return self.focus.handle_key(key)
+            if self.focus.handle_key(key):
+                return True
+
+        # Okay, control didn't want anything, now let's process some specialized input handlers for navigation
+
+        if is_up_key(key):
+            if self.focus:
+                index = self.focusables.index(self.focus)
+                if index == 0:
+                    self.set_focus(self.focusables[-1])
+                elif index < 0:
+                    self.focus_first_eligibile()
+                else:
+                    self.set_focus(self.focusables[index - 1])
+            else:
+                self.focus_first_eligibile()
+
+            return True
+
+        if is_down_key(key):
+            if self.focus:
+
+                index = self.focusables.index(self.focus)
+                if 0 <= index < (len(self.focusables) - 1):
+                    self.set_focus(self.focusables[index + 1])
+                else:
+                    self.focus_first_eligibile()
+
+            else:
+                self.focus_first_eligibile()
+
+            return True
+
+        # I don't know what this key is, I'm not going to handle this.
 
         return False
 

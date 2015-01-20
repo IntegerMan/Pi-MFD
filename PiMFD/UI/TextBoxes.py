@@ -107,13 +107,15 @@ class TextBox(FocusableWidget):
         :param key: The keycode
         :returns: True if the event was handled; otherwise False
         """
+
         if key == Keycodes.KEY_BACKSPACE:
             if self.text and len(self.text) > 0:
-                self.text = self.text[:-1]
+                self.text = self.text[:-1]  # TODO: This is simplistic and needs to work with a cursor index
                 return True
+
         if key == Keycodes.KEY_DELETE:
             if self.text and len(self.text) > 0:
-                self.text = self.text[1:]
+                self.text = self.text[1:]  # TODO: This is simplistic and needs to work with a cursor index
                 return True
 
         return super(TextBox, self).handle_key(key)

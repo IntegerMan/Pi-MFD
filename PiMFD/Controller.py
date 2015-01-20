@@ -167,21 +167,8 @@ class MFDController(object):
             self.handle_button(3, False)
         elif key == Keycodes.KEY_F12:  # Simulate Hardware Lower Button 5
             self.handle_button(4, False)
-        elif key == Keycodes.KEY_KP8 or key == Keycodes.KEY_UP:
-            if active_page:
-                active_page.handle_up_key()
-        elif key == Keycodes.KEY_KP2 or key == Keycodes.KEY_DOWN:
-            if active_page:
-                active_page.handle_down_key()
-        elif key == Keycodes.KEY_KP6 or key == Keycodes.KEY_RIGHT:
-            if active_page:
-                active_page.handle_right_key()
-        elif key == Keycodes.KEY_KP4 or key == Keycodes.KEY_LEFT:
-            if active_page:
-                active_page.handle_left_key()
         elif active_page:
             active_page.handle_key(key)
-
 
     def render_button_row(self, headers, is_top):
         """

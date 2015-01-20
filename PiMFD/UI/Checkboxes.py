@@ -121,7 +121,7 @@ class CheckBox(FocusableWidget):
         :returns: True if the event was handled; otherwise False
         """
 
-        if is_enter_key(key) or key == Keycodes.KEY_SPACE3:
+        if is_enter_key(key) or key == Keycodes.KEY_SPACE:
 
             if self.checked:
                 self.checked = False
@@ -133,7 +133,4 @@ class CheckBox(FocusableWidget):
             return True
 
         else:
-            return super(CheckBox, self).handle_key()
-
-
-
+            return super(CheckBox, self).handle_key(key)

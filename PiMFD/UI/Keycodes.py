@@ -15,6 +15,22 @@ def is_enter_key(key):
     """
     return key in (KEY_RETURN, KEY_KP_ENTER)
 
+
+def is_up_key(key):
+    return key == KEY_KP8 or key == KEY_UP
+
+
+def is_down_key(key):
+    return key == KEY_KP2 or key == KEY_DOWN
+
+
+def is_left_key(key):
+    return key == KEY_KP4 or key == KEY_LEFT
+
+
+def is_right_key(key):
+    return key == KEY_KP6 or key == KEY_RIGHT
+
 KEY_0 = 48
 KEY_1 = 49
 KEY_2 = 50
