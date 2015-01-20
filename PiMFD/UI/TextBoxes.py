@@ -56,6 +56,9 @@ class TextBox(FocusableWidget):
     label_text = None
     text = None
     text_width = 100
+    max_length = None
+    allow_alpha = True
+    allow_numeric = True
 
     def __init__(self, display, page, label=None, text=None, text_width=100):
         super(TextBox, self).__init__(display, page)
@@ -101,6 +104,13 @@ class TextBox(FocusableWidget):
         self.glyph.render_focus = False
         super(TextBox, self).lost_focus()
 
+    def can_input_more(self):
+        """
+        Returns whether or not there is room to enter more characters (according to max_length)
+        :return: whether or not there is room to enter more characters (according to max_length)
+        """
+        return self.max_length is None or len(self.text) < self.max_length
+
     def handle_key(self, key):
         """
         Handles a keypress
@@ -117,6 +127,14 @@ class TextBox(FocusableWidget):
             if self.text and len(self.text) > 0:
                 self.text = self.text[1:]  # TODO: This is simplistic and needs to work with a cursor index
                 return True
+
+        if self.allow_numeric and Keycodes.KEY_0 <= key <= Keycodes.KEY_9 and self.can_input_more():
+            char = key - Keycodes.KEY_0
+            self.text += str(char)  # TODO: This will need to take cursor location into account
+
+        if self.allow_alpha and Keycodes.KEY_a <= key <= Keycodes.KEY_z and self.can_input_more():
+            char = chr(key)
+            self.text += str(char).upper()  # TODO: This will need to take cursor location into account
 
         return super(TextBox, self).handle_key(key)
 
