@@ -40,16 +40,16 @@ class WeatherPage(MFDPage):
         # Build out the Today Panel
         self.pnl_today = StackPanel(controller.display, self)
         self.lbl_today_header = self.get_header_label("{} Weather")
-        self.lbl_temp = self.get_label(u"      Temp: {} (Chill: {})")
+        self.lbl_temp = self.get_label(u"      Temp: {}{} (Chill: {}{})")
         self.lbl_cond = self.get_label(u"Conditions: {}")
         self.lbl_cond_icon = self.get_label(u"{}")
         self.lbl_cond_icon.font = controller.display.font_weather
         pnl_cond = StackPanel(controller.display, self, is_horizontal=True)
         pnl_cond.children = (self.lbl_cond, self.lbl_cond_icon)
-        self.lbl_wind = self.get_label(u"      Wind: {} {}")
-        self.lbl_humidity = self.get_label(u"  Humidity: {}")
-        self.lbl_visible = self.get_label(u"Visibility: {}")
-        self.lbl_pressure = self.get_label(u"  Pressure: {}")
+        self.lbl_wind = self.get_label(u"      Wind: {} {} {}")
+        self.lbl_humidity = self.get_label(u"  Humidity: {} %")
+        self.lbl_visible = self.get_label(u"Visibility: {} {}")
+        self.lbl_pressure = self.get_label(u"  Pressure: {} {}")
         self.lbl_daylight = self.get_label(u"  Daylight: {} - {}")
         self.lbl_gps = self.get_label(u"       GPS: {}, {}")
         self.lbl_updated = self.get_label(u"   Updated: {}")
@@ -75,8 +75,7 @@ class WeatherPage(MFDPage):
         self.lbl_forecast = dict()
         self.lbl_forecast_icon = dict()
         for i in range(0, self.max_forecasts):
-
-            label = self.get_label(u"{}: {}")
+            label = self.get_label(u"{}: {}-{}{}")
             self.lbl_forecast[i] = label
 
             icon = self.get_label(u"{}")
@@ -111,13 +110,13 @@ class WeatherPage(MFDPage):
         weather = self.application.weather_data
 
         self.lbl_today_header.text_data = weather.city
-        self.lbl_temp.text_data = (weather.temperature, weather.windchill)
+        self.lbl_temp.text_data = (weather.temperature, weather.temp_units, weather.windchill, weather.temp_units)
         self.lbl_cond.text_data = weather.conditions
         self.lbl_cond_icon.text_data = get_condition_icon(weather.code)
-        self.lbl_wind.text_data = (weather.wind_speed, weather.wind_cardinal_direction)
+        self.lbl_wind.text_data = (weather.wind_speed, weather.wind_units, weather.wind_cardinal_direction)
         self.lbl_humidity.text_data = weather.humidity
-        self.lbl_visible.text_data = weather.visibility
-        self.lbl_pressure.text_data = weather.pressure
+        self.lbl_visible.text_data = (weather.visibility, weather.visibility_units)
+        self.lbl_pressure.text_data = (weather.pressure, weather.pressure_units)
         self.lbl_daylight.text_data = (weather.sunrise, weather.sunset)
         self.lbl_gps.text_data = (weather.lat, weather.long)
         self.lbl_updated.text_data = weather.last_result
@@ -130,7 +129,7 @@ class WeatherPage(MFDPage):
 
             forecast = weather.forecasts[i]
 
-            label.text_data = (forecast.day, forecast.temp_range)
+            label.text_data = (forecast.day, forecast.low, forecast.high, weather.temp_units)
             icon.text_data = get_condition_icon(forecast.code)
 
         # y += render_text(display, display.font_weather, "abcdefghij", x, y, cs.foreground).height + display.padding_y

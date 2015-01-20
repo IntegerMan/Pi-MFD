@@ -23,8 +23,8 @@ class ForecastData(object):
     def parse_yahoo_data(self, data, temp_suffix):
         self.data = data
         self.conditions = data["text"]
-        self.high = data["high"] + temp_suffix
-        self.low = data["low"] + temp_suffix
+        self.high = data["high"]
+        self.low = data["low"]
         self.temp_range = data["low"] + '-' + data["high"] + temp_suffix
         self.date = data["date"]
         self.day = data["day"]
@@ -66,6 +66,7 @@ class WeatherData(object):
         self.last_result = 'No Data Available'
         self.windchill = 'UNK'
         self.wind_speed = 'Unknown'
+        self.wind_units = ''
         self.wind_direction = 'Unknown'
         self.wind_cardinal_direction = 'Unknown'
         self.sunrise = 'Unknown'
@@ -73,11 +74,14 @@ class WeatherData(object):
         self.humidity = 'Unknown'
         self.pressure = 'Unknown'
         self.visibility = 'Unknown'
+        self.visibility_units = ''
         self.city = 'Unknown'
         self.lat = 'UNK'
         self.long = 'UNK'
         self.code = -1
         self.forecasts = list()
+        self.pressure_units = ''
+        self.wind_units = ''
 
     def parse_yahoo_data(self, yahoo_data):
         """
@@ -108,17 +112,21 @@ class WeatherData(object):
 
         self.conditions = str(condition['text'])
         self.code = int(condition['code'])
-        self.temperature = str(condition['temp']) + degree_sign + degree_symbol
+        self.temperature = condition['temp']
+        self.temp_units = degree_sign + degree_symbol
         self.sunrise = str(astronomy['sunrise'])
         self.sunset = str(astronomy['sunset'])
-        self.wind_speed = str(wind['speed']) + ' ' + str(units['speed'])
+        self.wind_speed = wind['speed']
+        self.wind_units = str(units['speed'])
         self.wind_direction = str(wind['direction']) + degree_sign
         self.wind_cardinal_direction = WeatherData.get_cardinal_direction(wind['direction'])
-        self.windchill = str(wind['chill']) + degree_sign + degree_symbol
+        self.windchill = wind['chill']
         self.city = str(location['city'])
-        self.humidity = str(atmosphere['humidity']) + ' %'
-        self.pressure = str(atmosphere['pressure']) + ' ' + units['pressure']
-        self.visibility = str(atmosphere['visibility']) + ' ' + units['distance']
+        self.humidity = atmosphere['humidity']
+        self.pressure = atmosphere['pressure']
+        self.pressure_units = units['pressure']
+        self.visibility_units = units['distance']
+        self.visibility = atmosphere['visibility']
         self.last_result = str(condition['date'])
         self.lat = str(geo['lat']) + degree_sign
         self.long = str(geo['long']) + degree_sign
