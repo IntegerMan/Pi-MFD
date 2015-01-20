@@ -54,8 +54,7 @@ class WeatherPage(MFDPage):
             self.lbl_visible,
             self.lbl_pressure,
             self.lbl_daylight,
-            self.lbl_gps,
-            self.lbl_updated
+            self.lbl_gps
         )
 
         # Build out the Forecast Panel
@@ -70,9 +69,12 @@ class WeatherPage(MFDPage):
             self.lbl_forecast[i] = label
             self.pnl_forecast.children.append(label)
 
+        # Set up the main content panel
+        content_panel = StackPanel(controller.display, self, is_horizontal=True)
+        content_panel.children = (self.pnl_today, self.pnl_forecast)
+
         # Set up the master panel
-        self.panel.is_horizontal = True
-        self.panel.children = (self.pnl_today, self.pnl_forecast)
+        self.panel.children = (content_panel, self.lbl_updated)
 
 
     def get_button_text(self):
