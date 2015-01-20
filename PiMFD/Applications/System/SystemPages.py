@@ -7,7 +7,7 @@ import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
-from PiMFD.UI.Input import TextBox
+from PiMFD.UI.TextBoxes import TextBox
 from PiMFD.UI.Text import SpacerLine
 
 
