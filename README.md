@@ -15,11 +15,12 @@ with 5 hardware buttons mounted above and below the case.
 
 ### Compatible Platforms
 Pi MFD has been tested in its current state on the following platforms: 
-- Windows 7 x64
-- Windows 8 x64
-- Windows 10 x86 
-- Rasbian
-- Ubuntu
+
+* Windows 7 x64
+* Windows 8 x64
+* Windows 10 x86 
+* Rasbian
+* Ubuntu
 
 ## Development Disclaimer
 This code is still very early under development and is not intended for external use and does not represent working
@@ -33,9 +34,10 @@ This code is available under the GNU General Public License. See LICENSE for mor
 
 ## Requirements
 Pi-MFD requires:
-- Python 2.7 or higher
-- Pygame
-- Pywapi
+
+* Python 2.7 or higher
+* Pygame
+* Pywapi
 
 ## User Interface
 
