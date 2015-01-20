@@ -45,4 +45,11 @@ class FocusableWidget(UIWidget):
         :param key: The keycode
         :returns: True if the event was handled; otherwise False
         """
-        pass
+        return False
+
+    def state_changed(self):
+        """
+        Handles the control's state changed by passing along a message to the container
+        """
+        if self.page:
+            self.page.handle_control_state_changed(self)

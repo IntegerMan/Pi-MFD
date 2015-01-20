@@ -50,7 +50,7 @@ class ScheduleApp(MFDApplication):
         # noinspection PyBroadException
         try:
             # TODO: I might want to impose some frequency restrictions here
-            self.weather_data = self.weather_api.get_yahoo_weather(self.controller.location)
+            self.weather_data = self.weather_api.get_yahoo_weather(self.controller.options.location)
         except Exception as exception:
             self.weather_data.last_result = 'Could not get weather: ' + exception.message
 

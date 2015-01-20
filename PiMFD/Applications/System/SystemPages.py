@@ -205,6 +205,8 @@ class SettingsPage(MFDPage):
             opts.enable_fps = widget.checked
         elif widget is self.chk_interlace:
             opts.enable_interlacing = widget.checked
+        elif widget is self.txt_zipcode and len(widget.text) >= 5:  # Ensure zip code is valid
+            opts.location = widget.text
 
         # Persist to disk
         opts.save_to_settings()

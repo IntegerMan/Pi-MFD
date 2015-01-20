@@ -40,9 +40,6 @@ class MFDController(object):
     max_app_buttons = 5
     max_page_buttons = 5
 
-    # TODO: Grab location from GPS
-    location = '43035'
-
     time_format = '%m/%d/%Y - %H:%M:%S'
 
     sys_app = None

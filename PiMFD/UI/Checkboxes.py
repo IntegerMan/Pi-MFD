@@ -128,7 +128,7 @@ class CheckBox(FocusableWidget):
             else:
                 self.checked = True
 
-            self.page.handle_control_state_changed(self)
+            self.state_changed()
 
             return True
 

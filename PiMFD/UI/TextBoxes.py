@@ -131,10 +131,14 @@ class TextBox(FocusableWidget):
         if self.allow_numeric and Keycodes.KEY_0 <= key <= Keycodes.KEY_9 and self.can_input_more():
             char = key - Keycodes.KEY_0
             self.text += str(char)  # TODO: This will need to take cursor location into account
+            self.state_changed()
+            return True
 
         if self.allow_alpha and Keycodes.KEY_a <= key <= Keycodes.KEY_z and self.can_input_more():
             char = chr(key)
             self.text += str(char).upper()  # TODO: This will need to take cursor location into account
+            self.state_changed()
+            return True
 
         return super(TextBox, self).handle_key(key)
 
