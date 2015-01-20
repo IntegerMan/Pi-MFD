@@ -111,6 +111,10 @@ class TextBox(FocusableWidget):
             if self.text and len(self.text) > 0:
                 self.text = self.text[:-1]
                 return True
+        if key == Keycodes.KEY_DELETE:
+            if self.text and len(self.text) > 0:
+                self.text = self.text[1:]
+                return True
 
         return super(TextBox, self).handle_key(key)
 
