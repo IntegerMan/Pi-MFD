@@ -56,6 +56,7 @@ class WeatherPage(MFDPage):
                          cs.foreground).height + display.padding_y
         y += render_text(display, font, "       GPS: " + weather.lat + ', ' + weather.long, x, y,
                          cs.foreground).height + display.padding_y
+        # y += render_text(display, display.font_weather, "abcdefghij", x, y, cs.foreground).height + display.padding_y
         y += render_text(display, font, "   Updated: " + weather.last_result, x, y,
                          cs.foreground).height + display.padding_y
 
@@ -66,6 +67,4 @@ class WeatherPage(MFDPage):
         for forecast in weather.forecasts:
             y += render_text(display, font, forecast.day + ': ' + forecast.temp_range, x, y,
                              cs.foreground).height + display.padding_y
-            # TODO: Show this if we know we have enough horizontal or vertical space for it
-            # y += render_text(display, font, forecast.conditions, x, y, cs.foreground).height + display.padding_y
 
