@@ -20,13 +20,13 @@ class WeatherPage(MFDPage):
         """
         return "WTHR"
 
-    def render(self, display):
+    def render(self):
         """
         Renders the weather page
-        :type display: PiMFD.DisplayManager.DisplayManager The DisplayManager
         """
-        super(WeatherPage, self).render(display)
+        super(WeatherPage, self).render()
 
+        display = self.display
         start_x = display.get_content_start_x()
         start_y = display.get_content_start_y()
 

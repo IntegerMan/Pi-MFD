@@ -93,12 +93,14 @@ class SimpleMessagePage(MFDPage):
         """
         return self.button_text
 
-    def render(self, display):
+    def render(self):
         """
         Renders a simple message page.
         :type display: PiMFD.DisplayManager.DisplayManager The DisplayManager
         """
-        super(SimpleMessagePage, self).render(display)
+        super(SimpleMessagePage, self).render()
+
+        display = self.display
 
         render_text_centered(display,
                              display.font_normal,

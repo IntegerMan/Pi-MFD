@@ -252,10 +252,10 @@ class MFDController(object):
         # Render the current page
         if self.active_app is not None and self.active_app.active_page is not None:
             # let the page speak for itself
-            self.active_app.active_page.render(self.display)
+            self.active_app.active_page.render()
         else:
             # No content defined for the app. Render a not implemented message
-            SimpleMessagePage(self, self.active_app, 'N/A').render(self.display)
+            SimpleMessagePage(self, self.active_app, 'N/A').render()
 
         # Render the overlay layer
         self.display.render_overlays()

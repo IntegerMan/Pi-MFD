@@ -20,6 +20,12 @@ class UIObject(object):
         super(UIObject, self).__init__()
         self.display = display
 
+    def render(self):
+        """
+        Renders the UIObject
+        """
+        pass
+
 
 class UIWidget(UIObject):
     """

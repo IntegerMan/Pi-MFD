@@ -55,7 +55,7 @@ class UIPage(UIObject):
         """
         self.set_focus(None)
 
-    def render(self, display):
+    def render(self):
         """
         Handles rendering the page.
         :type display: PiMFD.DisplayManager.DisplayManager The display manager.

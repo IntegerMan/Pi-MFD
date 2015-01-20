@@ -52,10 +52,9 @@ class SysRootPage(MFDPage):
         """
         return "SYS"  # Though this shouldn't get invoked since it's not going to be available
 
-    def render(self, display):
+    def render(self):
         """
         Renders the page.
-        :type display: PiMFD.DisplayManager.DisplayManager The DisplayManager that manages the page we're rendering.
         """
 
         opts = self.controller.options
@@ -66,10 +65,10 @@ class SysRootPage(MFDPage):
         self.lbl_sys_name.text_data = platform.platform(), platform.release(), platform.machine()
         self.lbl_sys_processor.text_data = platform.processor()
         self.lbl_sys_net_id.text_data = platform.node()
-        self.lbl_sys_display.text_data = display.res_x, display.res_y
+        self.lbl_sys_display.text_data = self.display.res_x, self.display.res_y
         self.lbl_sys_python.text_data = platform.python_version(), platform.python_implementation(), platform.python_compiler()
 
-        return super(SysRootPage, self).render(display)
+        return super(SysRootPage, self).render()
 
 class SysExitPage(MFDPage):
     """
@@ -118,17 +117,16 @@ class SysClockPage(MFDPage):
         """
         return "TIME"
 
-    def render(self, display):
+    def render(self):
         """
         Renders the system clock page.
-        :param display: The DisplayManager.
         """
 
         # Grab the time and stick it in the labels
         self.lbl_sys_time.text_data = strftime(self.controller.time_format)
         self.lbl_gmt_time.text_data = strftime(self.controller.time_format, gmtime())
 
-        return super(SysClockPage, self).render(display)
+        return super(SysClockPage, self).render()
 
 
 class SettingsPage(MFDPage):
@@ -166,12 +164,12 @@ class SettingsPage(MFDPage):
         super(SettingsPage, self).handle_selected()
         self.num_zipcode.text = self.controller.options.location
 
-    def render(self, display):
+    def render(self):
         """
         Renders the page.
-        :param display: The DisplayManager.
         """
         opts = self.controller.options
+        display = self.display
 
         # Update properties on controls
         self.ddl_color_scheme.text_data = display.color_scheme.name
@@ -180,7 +178,7 @@ class SettingsPage(MFDPage):
         self.chk_fps.checked = opts.enable_fps
 
         # Render all controls
-        return super(SettingsPage, self).render(display)
+        return super(SettingsPage, self).render()
 
     def get_button_text(self):
         """
