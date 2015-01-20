@@ -3,6 +3,7 @@
 Holds the weather page
 """
 from PiMFD.Applications.MFDPage import MFDPage
+from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_icon
 from PiMFD.UI.Panels import StackPanel
 
 __author__ = 'Matt Eland'
@@ -24,7 +25,10 @@ class WeatherPage(MFDPage):
     lbl_daylight = None
     lbl_gps = None
     lbl_updated = None
+
+    # These two are really arrays
     lbl_forecast = None
+    lbl_forecast_icon = None
 
     max_forecasts = 5
 
@@ -64,10 +68,20 @@ class WeatherPage(MFDPage):
 
         # Add placeholders for the individual forecasts
         self.lbl_forecast = dict()
+        self.lbl_forecast_icon = dict()
         for i in range(0, self.max_forecasts):
+
             label = self.get_label(u"{}: {}")
             self.lbl_forecast[i] = label
-            self.pnl_forecast.children.append(label)
+
+            icon = self.get_label(u"{}")
+            icon.font = controller.display.font_weather
+            self.lbl_forecast_icon[i] = icon
+
+            pnl_day = StackPanel(controller.display, self, is_horizontal=True)
+            pnl_day.children = (label, icon)
+
+            self.pnl_forecast.children.append(pnl_day)
 
         # Set up the main content panel
         content_panel = StackPanel(controller.display, self, is_horizontal=True)
@@ -104,9 +118,14 @@ class WeatherPage(MFDPage):
 
         # Update Forecasts
         for i in range(0, self.max_forecasts):
+
             label = self.lbl_forecast[i]
+            icon = self.lbl_forecast_icon[i]
+
             forecast = weather.forecasts[i]
+
             label.text_data = (forecast.day, forecast.temp_range)
+            icon.text_data = get_condition_icon(forecast.code)
 
         # y += render_text(display, display.font_weather, "abcdefghij", x, y, cs.foreground).height + display.padding_y
 

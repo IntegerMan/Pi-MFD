@@ -18,6 +18,7 @@ class ForecastData(object):
     temp_range = 'Unknown'
     precipitation_chance = 'UKN'
     conditions = 'Unknown'
+    code = -1
 
     def parse_yahoo_data(self, data, temp_suffix):
         self.data = data
@@ -27,6 +28,7 @@ class ForecastData(object):
         self.temp_range = data["low"] + '-' + data["high"] + temp_suffix
         self.date = data["date"]
         self.day = data["day"]
+        self.code = int(data["code"])
 
 
 class WeatherData(object):
@@ -49,6 +51,7 @@ class WeatherData(object):
     city = 'Unknown'
     lat = 'UNK'
     long = 'UNK'
+    code = -1
     forecasts = list()
 
     data = None
@@ -73,6 +76,7 @@ class WeatherData(object):
         self.city = 'Unknown'
         self.lat = 'UNK'
         self.long = 'UNK'
+        self.code = -1
         self.forecasts = list()
 
     def parse_yahoo_data(self, yahoo_data):
@@ -102,8 +106,8 @@ class WeatherData(object):
         geo = yahoo_data['geo']
         degree_symbol = str(units['temperature'])
 
-        # TODO: This really needs to be safer with possibly excluded results
         self.conditions = str(condition['text'])
+        self.code = int(condition['code'])
         self.temperature = str(condition['temp']) + degree_sign + degree_symbol
         self.sunrise = str(astronomy['sunrise'])
         self.sunset = str(astronomy['sunset'])
@@ -169,3 +173,50 @@ class WeatherData(object):
             return 'NNW'
         else:
             return 'N'
+
+
+def get_condition_icon(code):
+    """
+    Returns the condition icon code from the condition
+    :param code: The condition code
+    :return: The condition icon code or a space
+    """
+
+    if code in (0, 1, 2):  # Tornado, tropical storm, hurricane
+        return 'L'
+    elif code in (3, 4, 37, 38, 39, 45,
+                  47):  # Severe Thunderstorm, Thunderstorm, iso t-storms, scattered t-storms, thundershowers, iso thundershowers
+        return 'I'
+    elif code in (5, 8, 10):  # Mixed Rain / Snow, Freezing Drizzle, Freezing Rain
+        return 'GH'  # Rain, Snow
+    elif code in (6, 35):  # Mixed Rain / Sleet, Mixed Rain / Hail
+        return 'GB'  # Rain, Sleet
+    elif code == 7:  # Mixed Snow / Sleet
+        return 'HB'  # Snow, Sleet
+    elif code in (9, 11, 12, 40):  # Drizzle, Showers, scattered showers
+        return 'G'
+    elif code in (13, 14, 15, 16, 41, 42, 43,
+                  46):  # Snow Flurries, light snow showers, blowing snow, snow, h. snow, sct. snow, snow showers
+        return 'H'
+    elif code in (17, 18):  # Hail, Sleet
+        return 'B'
+    elif code in (19, 20, 21, 22):  # Dust, Fog, Haze, Smoky
+        return 'C'
+    elif code in (23, 24):  # Blustery, Windy
+        return 'L'  # TODO: This is a tornado icon, which is a bit severe for this...
+    elif code == 25:  # Cold
+        return ' '  # TODO: I'd like to offer a cold icon, but think snow is misinformation here
+    elif code in (26, 27, 28):  # Cloudy, Mostly Cloudy (day / night)
+        return 'A'
+    elif code == 29:  # Partly Cloudy Night
+        return 'E'
+    elif code in (30, 44):  # Partly Cloudy Day, partly cloudy
+        return 'F'
+    elif code in (31, 33):  # Clear Night, Fair (night)
+        return 'D'
+    elif code in (32, 34):  # Sunny, Fair (day)
+        return 'J'
+    elif code == 56:  # Hot
+        return 'K'
+
+    return ' '
