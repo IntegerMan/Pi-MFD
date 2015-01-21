@@ -6,6 +6,8 @@ Contains application control logic for Pi-MFD.
 
 import pygame
 
+from PiMFD.Applications.Navigation.NavigationApplication import NavigationApp
+
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
 from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Options import MFDAppOptions
@@ -59,13 +61,8 @@ class MFDController(object):
         else:
             self.options = MFDAppOptions()
 
-        # Placeholders for navigation app
-        self.nav_app = PlaceholderApp(self, 'NAV')
-        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'MAP'))
-        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'GAS'))
-        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'FOOD'))
-        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'TRAF'))
-        self.nav_app.pages.append(SimpleMessagePage(self, self.nav_app, 'COND'))
+        # Navigation app
+        self.nav_app = NavigationApp(self)
 
         # Scheduling App
         self.sch_app = ScheduleApp(self)
