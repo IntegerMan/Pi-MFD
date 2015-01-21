@@ -5,6 +5,7 @@ The navigation application
 
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.MFDPage import SimpleMessagePage
+from PiMFD.Applications.Navigation.MapPages import MapPage
 
 __author__ = 'Matt Eland'
 
@@ -14,7 +15,6 @@ class NavigationApp(MFDApplication):
     The scheduling application. Contains pages related to scheduling and coordinates web-service communication.
     :type controller: PiMFD.Controller.MFDController The controller.
     """
-    root_page = None
     map_page = None
     gas_page = None
     food_page = None
@@ -24,9 +24,7 @@ class NavigationApp(MFDApplication):
     def __init__(self, controller):
         super(NavigationApp, self).__init__(controller)
 
-        self.root_page = SimpleMessagePage(controller, self, self.get_button_text())
-
-        self.map_page = SimpleMessagePage(controller, self, "MAP")
+        self.map_page = MapPage(controller, self)
         self.gas_page = SimpleMessagePage(controller, self, "GAS")
         self.food_page = SimpleMessagePage(controller, self, "FOOD")
         self.traffic_page = SimpleMessagePage(controller, self, "TRAF")
@@ -39,7 +37,7 @@ class NavigationApp(MFDApplication):
         Gets the default page within the application.
         :return: the default page within the application.
         """
-        return self.root_page
+        return self.map_page
 
     def get_button_text(self):
         """
