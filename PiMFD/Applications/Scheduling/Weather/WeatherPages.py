@@ -94,8 +94,13 @@ class WeatherPage(MFDPage):
             chart.width = 225
             chart.range_low = -20
             chart.range_high = 120
+            chart.ticks.append(0)  # We care about below zero
+            chart.ticks.append(32)  # Tell it that the freezing point of water is important
+            chart.ticks.append(100)  # We care about above 100
             self.chart_forecast[i] = chart
             self.pnl_forecast.children.append(chart)
+
+
 
         # Set up the main content panel
         content_panel = StackPanel(controller.display, self, is_horizontal=True)

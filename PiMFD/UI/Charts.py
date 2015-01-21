@@ -25,6 +25,13 @@ class BoxChart(UIWidget):
     width = 100
     height = 8
 
+    ticks = None
+
+    def __init__(self, display, page):
+        super(BoxChart, self).__init__(display, page)
+
+        self.ticks = list()
+
     def render(self):
         """
         Renders the widget to the screen
@@ -36,18 +43,26 @@ class BoxChart(UIWidget):
         self.set_dimensions_from_rect(self.rect)
 
         color = self.display.color_scheme.foreground
+        highlight = self.display.color_scheme.highlight
 
         # Draw the basic skeleton of the control
         draw_vertical_line(self.display, color, self.left, self.top, self.bottom)
         draw_vertical_line(self.display, color, self.right, self.top, self.bottom)
         draw_horizontal_line(self.display, color, self.left, self.right, self.top + 4)
 
-        # Draw the box of the control
+        # We need to do a bit of math to figure out how to position items
         range_increment = self.width / (self.range_high - self.range_low)
+
+        # Draw any tick marks present
+        for tick in self.ticks:
+            tick_offset = (tick - self.range_low)
+            draw_vertical_line(self.display, color, self.left + tick_offset, self.top, self.bottom)
+
+        # Draw the box of the control
         low_x = (self.value_low - self.range_low) * range_increment
         high_x = (self.value_high - self.range_low) * range_increment
-        chart_rect = Rect(self.left + low_x, self.top + 1, high_x - low_x, self.height - 2)
-        draw_rectangle(self.display, self.display.color_scheme.highlight, chart_rect, width=0)
+        chart_rect = Rect(self.left + low_x, self.top + 2, high_x - low_x, self.height - 3)
+        draw_rectangle(self.display, highlight, chart_rect, width=1)
 
         # Return our dimensions
         return self.rect
