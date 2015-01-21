@@ -61,6 +61,7 @@ class UIWidget(UIObject):
     def render(self):
         """
         Renders the widget to the screen
+        :return: The rect of the control as it was rendered
         """
         return self.rect
 

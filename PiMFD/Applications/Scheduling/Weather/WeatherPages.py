@@ -4,6 +4,7 @@ Holds the weather page
 """
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_icon
+from PiMFD.UI.Charts import BoxChart
 from PiMFD.UI.Panels import StackPanel
 
 __author__ = 'Matt Eland'
@@ -30,6 +31,7 @@ class WeatherPage(MFDPage):
     # These two are really arrays
     lbl_forecast = None
     lbl_forecast_icon = None
+    chart_forecast = None
 
     max_forecasts = 5
 
@@ -74,6 +76,7 @@ class WeatherPage(MFDPage):
         # Add placeholders for the individual forecasts
         self.lbl_forecast = dict()
         self.lbl_forecast_icon = dict()
+        self.chart_forecast = dict()
         for i in range(0, self.max_forecasts):
             label = self.get_label(u"{}: {}-{}{}")
             self.lbl_forecast[i] = label
@@ -86,6 +89,13 @@ class WeatherPage(MFDPage):
             pnl_day.children = (label, icon)
 
             self.pnl_forecast.children.append(pnl_day)
+
+            chart = BoxChart(controller.display, self)
+            chart.width = 225
+            chart.range_low = -20
+            chart.range_high = 120
+            self.chart_forecast[i] = chart
+            self.pnl_forecast.children.append(chart)
 
         # Set up the main content panel
         content_panel = StackPanel(controller.display, self, is_horizontal=True)
@@ -131,7 +141,5 @@ class WeatherPage(MFDPage):
 
             label.text_data = (forecast.day, forecast.low, forecast.high, weather.temp_units)
             icon.text_data = get_condition_icon(forecast.code)
-
-        # y += render_text(display, display.font_weather, "abcdefghij", x, y, cs.foreground).height + display.padding_y
 
         super(WeatherPage, self).render()
