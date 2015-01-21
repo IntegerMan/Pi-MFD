@@ -5,7 +5,7 @@ Contains chart-related widgets
 """
 from pygame.rect import Rect
 
-from PiMFD.UI.Rendering import draw_horizontal_line, draw_vertical_line
+from PiMFD.UI.Rendering import draw_horizontal_line, draw_vertical_line, draw_rectangle
 from PiMFD.UI.WidgetBase import UIWidget
 
 
@@ -42,7 +42,12 @@ class BoxChart(UIWidget):
         draw_vertical_line(self.display, color, self.right, self.top, self.bottom)
         draw_horizontal_line(self.display, color, self.left, self.right, self.top + 4)
 
-        # TODO: Draw the box of the control
+        # Draw the box of the control
+        range_increment = self.width / (self.range_high - self.range_low)
+        low_x = (self.value_low - self.range_low) * range_increment
+        high_x = (self.value_high - self.range_low) * range_increment
+        chart_rect = Rect(self.left + low_x, self.top + 1, high_x - low_x, self.height - 2)
+        draw_rectangle(self.display, self.display.color_scheme.highlight, chart_rect, width=0)
 
         # Return our dimensions
         return self.rect

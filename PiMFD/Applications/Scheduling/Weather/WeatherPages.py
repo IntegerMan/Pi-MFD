@@ -136,10 +136,13 @@ class WeatherPage(MFDPage):
 
             label = self.lbl_forecast[i]
             icon = self.lbl_forecast_icon[i]
+            chart = self.chart_forecast[i]
 
             forecast = weather.forecasts[i]
 
             label.text_data = (forecast.day, forecast.low, forecast.high, weather.temp_units)
             icon.text_data = get_condition_icon(forecast.code)
+            chart.value_low = forecast.low
+            chart.value_high = forecast.high
 
         super(WeatherPage, self).render()

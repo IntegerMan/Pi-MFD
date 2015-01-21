@@ -23,8 +23,8 @@ class ForecastData(object):
     def parse_yahoo_data(self, data, temp_suffix):
         self.data = data
         self.conditions = data["text"]
-        self.high = data["high"]
-        self.low = data["low"]
+        self.high = int(data["high"])
+        self.low = int(data["low"])
         self.temp_range = data["low"] + '-' + data["high"] + temp_suffix
         self.date = data["date"]
         self.day = data["day"]
@@ -112,7 +112,7 @@ class WeatherData(object):
 
         self.conditions = str(condition['text'])
         self.code = int(condition['code'])
-        self.temperature = condition['temp']
+        self.temperature = int(condition['temp'])
         self.temp_units = degree_sign + degree_symbol
         self.sunrise = str(astronomy['sunrise'])
         self.sunset = str(astronomy['sunset'])
