@@ -50,6 +50,8 @@ class BoxChart(UIWidget):
         draw_vertical_line(self.display, color, self.right, self.top, self.bottom)
         draw_horizontal_line(self.display, color, self.left, self.right, self.top + 4)
 
+        # TODO: a lot of this math should probably be hardened to protect against bad values
+
         # We need to do a bit of math to figure out how to position items
         range_increment = self.width / (self.range_high - self.range_low)
 
@@ -62,7 +64,7 @@ class BoxChart(UIWidget):
         low_x = (self.value_low - self.range_low) * range_increment
         high_x = (self.value_high - self.range_low) * range_increment
         chart_rect = Rect(self.left + low_x, self.top + 2, high_x - low_x, self.height - 3)
-        draw_rectangle(self.display, highlight, chart_rect, width=1)
+        draw_rectangle(self.display, highlight, chart_rect)
 
         # Return our dimensions
         return self.rect
