@@ -53,18 +53,18 @@ class BoxChart(UIWidget):
         # TODO: a lot of this math should probably be hardened to protect against bad values
 
         # We need to do a bit of math to figure out how to position items
-        range_increment = self.width / (self.range_high - self.range_low)
+        range_increment = self.width / float(self.range_high - self.range_low)
 
         # Draw any tick marks present
         for tick in self.ticks:
-            tick_offset = (tick - self.range_low)
+            tick_offset = (tick - self.range_low) * range_increment
             draw_vertical_line(self.display, color, self.left + tick_offset, self.top, self.bottom)
 
         # Draw the box of the control
         low_x = (self.value_low - self.range_low) * range_increment
         high_x = (self.value_high - self.range_low) * range_increment
         chart_rect = Rect(self.left + low_x, self.top + 2, high_x - low_x, self.height - 3)
-        draw_rectangle(self.display, highlight, chart_rect)
+        draw_rectangle(self.display, highlight, chart_rect, width=0)
 
         # Return our dimensions
         return self.rect
