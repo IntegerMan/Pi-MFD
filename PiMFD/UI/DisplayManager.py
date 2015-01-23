@@ -6,7 +6,7 @@ import pygame
 
 from PiMFD import start_mfd
 from PiMFD.UI.ColorScheme import ColorSchemes
-from PiMFD.UI.Overlays import ScanlineOverlay, InterlaceOverlay, FPSOverlay
+from PiMFD.UI.Overlays import ScanlineOverlay, InterlaceOverlay, FPSOverlay, ShadowEffectOverlay
 
 
 __author__ = 'Matt Eland'
@@ -182,6 +182,7 @@ class DisplayManager(object):
         Initializes the overlays layer
         :type options: PiMFD.Options.MFDAppOptions
         """
+        self.overlays.append(ShadowEffectOverlay(options))
         self.overlays.append(ScanlineOverlay(options))
         self.overlays.append(InterlaceOverlay(options))
         self.overlays.append(FPSOverlay(options))

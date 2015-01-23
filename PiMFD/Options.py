@@ -22,6 +22,7 @@ class MFDAppOptions(object):
     enable_scan_line = True
     enable_interlacing = True
     enable_fps = True
+    enable_shadow_effect = True
 
     def load_from_settings(self, filename='settings.ini'):
         """

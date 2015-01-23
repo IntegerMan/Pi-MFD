@@ -3,7 +3,10 @@
 """
 Contains classes capable of performing various graphical overlay functions on the transparency layer
 """
-from PiMFD.UI.Rendering import draw_horizontal_line, render_text, to_rgba
+from pygame.rect import Rect
+
+from PiMFD.UI.Rendering import draw_horizontal_line, render_text, to_rgba, draw_rectangle
+
 
 __author__ = 'Matt Eland'
 
@@ -87,6 +90,35 @@ class InterlaceOverlay(Overlay):
         while y < display.res_y - 1:
             draw_horizontal_line(display, color, 0, display.res_x - 1, y, surface=surface)
             y += 2  # Move two lines down
+
+
+class ShadowEffectOverlay(Overlay):
+    """
+    Renders an overlay simulating a shadow effect from the sides and top
+    """
+
+    alpha = 60
+    size = 5
+
+    def render(self, display, surface):
+        """
+        Renders an interlaced effect over everything
+        :param display: The DisplayManager
+        :param surface: The overlay graphical surface to render to
+        """
+
+        if not self.options.enable_shadow_effect:
+            return
+
+        color = (0, 0, 0, self.alpha)
+
+        rect_top = Rect(0, 0, display.res_x, self.size)
+        rect_left = Rect(0, self.size, self.size, display.res_y - self.size)
+        rect_right = Rect(display.res_x - self.size, self.size, self.size, display.res_y - self.size)
+
+        draw_rectangle(display, color, rect_top, width=0, surface=surface)
+        draw_rectangle(display, color, rect_left, width=0, surface=surface)
+        draw_rectangle(display, color, rect_right, width=0, surface=surface)
 
 
 class FPSOverlay(Overlay):
