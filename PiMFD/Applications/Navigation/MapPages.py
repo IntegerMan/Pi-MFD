@@ -24,6 +24,8 @@ class MapPage(MFDPage):
     def render(self):
         self.lbl_loading.text_data = self.application.map.status_text
 
+        self.center_text('NO DATA')
+
         return super(MapPage, self).render()
 
 

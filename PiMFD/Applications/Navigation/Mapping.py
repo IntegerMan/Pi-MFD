@@ -28,8 +28,8 @@ class Maps(object):
     SIG_PLACES = 3
     GRID_SIZE = 0.001
 
-    def __init__(self, *args, **kwargs):
-        super(Maps, self).__init__(*args, **kwargs)
+    def __init__(self):
+        super(Maps, self).__init__()
 
     def float_floor_to_precision(self, value, precision):
         for i in range(precision):

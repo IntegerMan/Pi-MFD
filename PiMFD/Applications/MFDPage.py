@@ -77,6 +77,16 @@ class MFDPage(UIPage):
 
         return super(MFDPage, self).set_focus(widget)
 
+    def center_text(self, text, color=None):
+        if not color:
+            color = self.display.color_scheme.highlight
+
+        render_text_centered(self.display,
+                             self.display.font_normal,
+                             text,
+                             self.display.res_x / 2.0,
+                             self.display.res_y / 2.0 - (self.display.font_size_normal / 2),
+                             color)
 
 class SimpleMessagePage(MFDPage):
     """
@@ -84,9 +94,9 @@ class SimpleMessagePage(MFDPage):
     """
 
     button_text = "NI"
-    message = "Not Implemented"
+    message = "NO DATA"
 
-    def __init__(self, controller, application, label, message='Not Implemented'):
+    def __init__(self, controller, application, label, message='NO DATA'):
         super(SimpleMessagePage, self).__init__(controller, application)
         self.button_text = label
         self.message = message
@@ -101,15 +111,9 @@ class SimpleMessagePage(MFDPage):
     def render(self):
         """
         Renders a simple message page.
-        :type display: PiMFD.DisplayManager.DisplayManager The DisplayManager
         """
-        super(SimpleMessagePage, self).render()
 
-        display = self.display
+        self.center_text(self.message)
 
-        render_text_centered(display,
-                             display.font_normal,
-                             self.message,
-                             display.res_x / 2,
-                             (display.res_y / 2) - (display.font_size_normal / 2),
-                             display.color_scheme.foreground)
+        return super(SimpleMessagePage, self).render()
+
