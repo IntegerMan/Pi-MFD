@@ -23,6 +23,7 @@ class Maps(object):
     width = 0
     height = 0
 
+    has_data = False
     status_text = "Loading Map Data..."
 
     SIG_PLACES = 3
@@ -66,6 +67,12 @@ class Maps(object):
             bounds[2],
             bounds[3]
         )
+
+        # Clear out old data
+        self.has_data = False
+        self.nodes = {}
+        self.ways = []
+        self.tags = []
 
         print("Fetching maps " + url)
 
@@ -115,6 +122,7 @@ class Maps(object):
         except Exception as e:
             print(e)
 
+        self.has_data = len(self.nodes) > 0
         self.status_text = "Loaded {} Nodes of Map Data".format(len(self.nodes))
 
     def fetch_by_coordinate(self, coords, range):

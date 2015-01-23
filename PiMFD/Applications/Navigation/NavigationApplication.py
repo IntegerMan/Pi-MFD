@@ -6,7 +6,7 @@ The navigation application
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Applications.Navigation.MapPages import MapPage
-from PiMFD.Applications.Navigation.Mapping import Maps
+from PiMFD.Applications.Navigation.MapLoading import Maps
 
 __author__ = 'Matt Eland'
 
@@ -28,6 +28,8 @@ class NavigationApp(MFDApplication):
     def __init__(self, controller):
         super(NavigationApp, self).__init__(controller)
 
+        self.map = Maps()
+
         self.map_page = MapPage(controller, self)
         self.gas_page = SimpleMessagePage(controller, self, "GAS")
         self.food_page = SimpleMessagePage(controller, self, "FOOD")
@@ -35,8 +37,6 @@ class NavigationApp(MFDApplication):
         self.conditions_page = SimpleMessagePage(controller, self, "COND")
 
         self.pages = list([self.map_page, self.gas_page, self.food_page, self.traffic_page, self.conditions_page])
-
-        self.map = Maps()
 
     def get_default_page(self):
         """
