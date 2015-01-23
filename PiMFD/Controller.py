@@ -42,6 +42,7 @@ class MFDController(object):
     max_page_buttons = 5
 
     button_sound = None
+    keypress_sound = None
 
     time_format = '%m/%d/%Y - %H:%M:%S'
 
@@ -71,6 +72,8 @@ class MFDController(object):
         # Set up the sound effect for button presses
         if self.options.button_sound:
             self.button_sound = pygame.mixer.Sound(self.options.button_sound)
+        if self.options.key_sound:
+            self.keypress_sound = pygame.mixer.Sound(self.options.key_sound)
 
         # Placeholders for media app
         self.med_app = PlaceholderApp(self, 'MED')
@@ -270,8 +273,7 @@ class MFDController(object):
             self.active_app.select_page_by_index(index)
 
         # Play a Sound Effect for pressing the button (even if it does nothing)
-        if self.button_sound:
-            self.button_sound.play()
+        self.play_button_sound(is_app_change=is_top_row)
 
     def select_app_by_index(self, index):
         """
@@ -339,6 +341,19 @@ class MFDController(object):
 
         # No takers
         return False
+
+    def play_button_sound(self, is_app_change=False):
+        """
+        Plays a sound effect for pressing a button
+        :param is_app_change: Whether the button press represents an app change
+        """
+
+        if is_app_change and self.button_sound:
+            self.button_sound.play()
+        elif self.keypress_sound:
+            self.keypress_sound.play()
+
+
 
 
 

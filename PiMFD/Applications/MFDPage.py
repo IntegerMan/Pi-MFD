@@ -72,6 +72,11 @@ class MFDPage(UIPage):
         """
         return 'UNKN'
 
+    def set_focus(self, widget):
+        self.controller.play_button_sound()
+
+        return super(MFDPage, self).set_focus(widget)
+
 
 class SimpleMessagePage(MFDPage):
     """
