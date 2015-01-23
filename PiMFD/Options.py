@@ -23,6 +23,7 @@ class MFDAppOptions(object):
     enable_interlacing = True
     enable_fps = True
     enable_shadow_effect = True
+    button_sound = 'sounds/button.ogg'
 
     def load_from_settings(self, filename='settings.ini'):
         """

@@ -7,7 +7,6 @@ Contains application control logic for Pi-MFD.
 import pygame
 
 from PiMFD.Applications.Navigation.NavigationApplication import NavigationApp
-
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
 from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Options import MFDAppOptions
@@ -42,6 +41,8 @@ class MFDController(object):
     max_app_buttons = 5
     max_page_buttons = 5
 
+    button_sound = None
+
     time_format = '%m/%d/%Y - %H:%M:%S'
 
     sys_app = None
@@ -66,6 +67,10 @@ class MFDController(object):
 
         # Scheduling App
         self.sch_app = ScheduleApp(self)
+
+        # Set up the sound effect for button presses
+        if self.options.button_sound:
+            self.button_sound = pygame.mixer.Sound(self.options.button_sound)
 
         # Placeholders for media app
         self.med_app = PlaceholderApp(self, 'MED')
@@ -263,6 +268,10 @@ class MFDController(object):
             self.select_app_by_index(index)
         elif self.active_app is not None:
             self.active_app.select_page_by_index(index)
+
+        # Play a Sound Effect for pressing the button (even if it does nothing)
+        if self.button_sound:
+            self.button_sound.play()
 
     def select_app_by_index(self, index):
         """
