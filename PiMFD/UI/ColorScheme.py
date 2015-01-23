@@ -61,9 +61,9 @@ class ColorSchemes(object):
         :return: A green-based color scheme resembling military avionics displays
         """
         return ColorScheme(name='Green',
-                           background=(0, 24, 0),
-                           foreground=(0, 170, 0),
-                           highlight=(170, 170, 170))
+                           background=(0, 42, 0),
+                           foreground=(0, 210, 0),
+                           highlight=(230, 230, 230))
 
     @staticmethod
     def get_cyan_color_scheme():
