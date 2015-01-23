@@ -105,7 +105,6 @@ class WeatherPage(MFDPage):
         # Set up the master panel
         self.panel.children = (content_panel, self.lbl_updated)
 
-
     def get_button_text(self):
         """
         Gets the text for the application's button
