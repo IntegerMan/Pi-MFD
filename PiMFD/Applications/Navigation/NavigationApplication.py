@@ -6,6 +6,7 @@ The navigation application
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Applications.Navigation.MapPages import MapPage
+from PiMFD.Applications.Navigation.Mapping import Maps
 
 __author__ = 'Matt Eland'
 
@@ -20,6 +21,9 @@ class NavigationApp(MFDApplication):
     food_page = None
     traffic_page = None
     conditions_page = None
+    initialized = False
+
+    map = None
 
     def __init__(self, controller):
         super(NavigationApp, self).__init__(controller)
@@ -31,6 +35,8 @@ class NavigationApp(MFDApplication):
         self.conditions_page = SimpleMessagePage(controller, self, "COND")
 
         self.pages = list([self.map_page, self.gas_page, self.food_page, self.traffic_page, self.conditions_page])
+
+        self.map = Maps()
 
     def get_default_page(self):
         """
@@ -57,7 +63,10 @@ class NavigationApp(MFDApplication):
         """
         Handles the selected event for this application.
         """
-        pass
+        if not self.initialized:
+            # TODO: This should be in another thread so the UI can keep rendering
+            self.map.fetch_by_coordinate(self.controller.options.gps_pos, 0.01)
+            self.initialized = True
 
 
 

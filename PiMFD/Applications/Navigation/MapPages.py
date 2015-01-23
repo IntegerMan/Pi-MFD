@@ -14,10 +14,17 @@ class MapPage(MFDPage):
     def __init__(self, controller, application):
         super(MapPage, self).__init__(controller, application)
 
-        self.lbl_loading = self.get_label("Loading Map Data...")
+        self.lbl_loading = self.get_label("{}")
 
         self.panel.children = (self.lbl_loading,)
 
     def get_button_text(self):
         return "MAP"
+
+    def render(self):
+        self.lbl_loading.text_data = self.application.map.status_text
+
+        return super(MapPage, self).render()
+
+
 
