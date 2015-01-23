@@ -13,10 +13,12 @@ class ColorScheme(object):
     :type highlight: tuple RGB values for highlighted text
     """
 
-    def __init__(self, name, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255)):
+    def __init__(self, name, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255),
+                 detail=(128, 128, 128)):
         self.background = background
         self.foreground = foreground
         self.highlight = highlight
+        self.detail = detail
         self.name = name
         pass
 
@@ -28,12 +30,14 @@ class ColorScheme(object):
         """
         target.background = self.background
         target.foreground = self.foreground
+        target.detail = self.detail
         target.highlight = self.highlight
         target.name = self.name
         return target
 
     background = (0, 0, 0)
     foreground = (0, 255, 0)
+    detail = (128, 128, 128),
     highlight = (255, 255, 255)
     name = None
 
@@ -63,6 +67,7 @@ class ColorSchemes(object):
         return ColorScheme(name='Green',
                            background=(0, 42, 0),
                            foreground=(0, 210, 0),
+                           detail=(85, 251, 167),
                            highlight=(230, 230, 230))
 
     @staticmethod
@@ -74,6 +79,7 @@ class ColorSchemes(object):
         return ColorScheme(name='Cyan',
                            background=(0, 0, 32),
                            foreground=(0, 170, 170),
+                           detail=(128, 128, 128),
                            highlight=(0, 0, 255))
 
     @staticmethod
@@ -85,6 +91,7 @@ class ColorSchemes(object):
         return ColorScheme(name='Blue',
                            background=(0, 0, 32),
                            foreground=(0, 128, 255),
+                           detail=(128, 128, 128),
                            highlight=(255, 255, 255))
 
     @staticmethod
@@ -96,6 +103,7 @@ class ColorSchemes(object):
         return ColorScheme(name='White',
                            background=(0, 0, 0),
                            foreground=(150, 150, 150),
+                           detail=(128, 128, 128),
                            highlight=(255, 255, 255))
 
     @staticmethod
@@ -107,6 +115,7 @@ class ColorSchemes(object):
         return ColorScheme(name='Red',
                            background=(32, 0, 0),
                            foreground=(170, 0, 0),
+                           detail=(128, 128, 128),
                            highlight=(255, 0, 0))
 
     @staticmethod
@@ -118,5 +127,6 @@ class ColorSchemes(object):
         return ColorScheme(name='Amber',
                            background=(63, 47, 20),
                            foreground=(231, 176, 75),
+                           detail=(128, 128, 128),
                            highlight=(255, 201, 14))
 
