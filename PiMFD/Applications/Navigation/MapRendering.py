@@ -33,28 +33,23 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
         # Translate the various curves, etc. into their appropraite screen positions
         ways = self.map.transpose_ways(size, center)
-        locations = self.map.transpose_locations(size, center)
+        symbols = self.map.transpose_locations(size, center)
 
         font_y_offset = (self.display.font_size_small / 2.0)
 
         # Render the Roads
         for way in ways:
             # TODO: Use the rendering helpers
-            # TODO: Render to a seperate surface so I can clip easily
             color = default_color
             pygame.draw.lines(self.display.surface, color, False, way, 1)
 
+        # We want to render ourselves on the map
         render_text_centered(self.display,
                              self.display.font_small,
                              'ME', center[0], center[1] - font_y_offset,
                              cs.highlight)
 
         # Render the other awesome things
-        for location in locations:
-            render_text_centered(self.display,
-                                 self.display.font_small,
-                                 location.name.upper(),
-                                 location.lat,
-                                 location.lng - font_y_offset,
-                                 cs.highlight)
+        for symbol in symbols:
+            symbol.render(self.display)
             # self.map.tags[tag[0]] = (tag[1] + self.map.position[0], tag[2] + self.map.position[1], tag[3])

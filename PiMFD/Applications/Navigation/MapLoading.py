@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 from PiMFD.Applications.Navigation.MapEntities import MapLocation
+from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
 """
 Contains code related to rendering maps to the screen
@@ -148,7 +149,7 @@ class Maps(object):
             location.tags.append((tag_name, tag_value))
 
             if tag_name == 'highway' and tag_value == 'traffic_signals' and location.name == None:
-                location.name = 'STP'
+                location.name = 'SIG'
 
         else:
             print('ignoring pair: ' + tag_name + '/' + tag_value)
@@ -193,24 +194,24 @@ class Maps(object):
         w_coef = width / self.width / 2
         h_coef = height / self.height / 2
 
-        transtags = []
+        symbols = []
 
         for location in self.locations:
 
-            adj_lat = self.origin[0] - location.lat
-            adj_lng = self.origin[1] - location.lng
+            # Determine relative lat / long to origin
+            rel_lat = self.origin[0] - location.lat
+            rel_lng = self.origin[1] - location.lng
 
-            lat = (adj_lat * w_coef) + offset[1]
-            lng = (adj_lng * h_coef) + offset[0]
+            # Scale the location accordingly
+            lat = (rel_lat * w_coef) + offset[1]
+            lng = (rel_lng * h_coef)
 
+            # We'll typically need to flip the longitude since 0, 0 is upper left corner on screens
             if flip_y:
                 lng *= -1
-                lng += offset[0] * 2
 
-            cloned = MapLocation(lng, lat)
-            cloned.name = location.name
-            cloned.tags = location.tags
+            lng += offset[0]
 
-            transtags.append(cloned)
+            symbols.append(MapSymbol(lng, lat, location))
 
-        return transtags
+        return symbols
