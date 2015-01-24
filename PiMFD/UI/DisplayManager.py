@@ -41,12 +41,6 @@ class DisplayManager(object):
 
     fonts = None
 
-    font_size_weather = 32
-    font_weather = None
-
-    font_size_small = 12
-    font_small = None
-
     options = None
 
     def __init__(self, x=800, y=480):
@@ -161,8 +155,6 @@ class DisplayManager(object):
         # Set up Fonts
         self.fonts = FontManager(options)
         self.fonts.load_fonts()
-        self.font_small = pygame.font.Font(options.font_name, self.font_size_small)
-        self.font_weather = pygame.font.Font('Fonts/WeatherIcons.ttf', self.font_size_weather)
 
         # Time to use our output
         self.surface = display

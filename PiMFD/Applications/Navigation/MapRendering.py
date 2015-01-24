@@ -34,7 +34,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         ways = self.map.transpose_ways(size, center)
         symbols = self.map.transpose_locations(size, center)
 
-        font_y_offset = (self.display.font_size_small / 2.0)
+        font_y_offset = (self.display.fonts.small.size / 2.0)
 
         # Render the Roads
         for way in ways:
@@ -44,7 +44,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
         # We want to render ourselves on the map
         render_text_centered(self.display,
-                             self.display.font_small,
+                             self.display.fonts.small,
                              'ME', center[0], center[1] - font_y_offset,
                              cs.highlight)
 

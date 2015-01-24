@@ -143,4 +143,4 @@ class FPSOverlay(Overlay):
         text = "{:.2f}".format(fps)
         color = display.color_scheme.highlight
 
-        render_text(display, display.font_small, text, self.x, self.y, color, surface=surface)
+        render_text(display, display.fonts.small, text, self.x, self.y, color, surface=surface)

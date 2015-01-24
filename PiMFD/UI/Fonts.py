@@ -60,5 +60,7 @@ class FontManager(object):
         """
 
         self.normal = FontInfo(self.options.font_name, 24)
+        self.weather = FontInfo('Fonts/WeatherIcons.ttf', 32)
+        self.small = FontInfo(self.options.font_name, 12)
 
 

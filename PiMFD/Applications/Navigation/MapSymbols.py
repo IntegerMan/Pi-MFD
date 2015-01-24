@@ -26,7 +26,7 @@ class MapSymbol(MapLocation):
         :param display: The DisplayManager
         :return: the font to use to display, the text to render, and the color to use
         """
-        return (display.font_small, self.name.upper(), display.color_scheme.highlight)
+        return (display.fonts.small, self.name.upper(), display.color_scheme.highlight)
 
     def render(self, display):
         """
@@ -40,7 +40,7 @@ class MapSymbol(MapLocation):
                              font,
                              text,
                              self.lat,
-                             self.lng - (display.font_size_small / 2.0),
+                             self.lng - (display.fonts.small.measure(text)[1] / 2.0),
                              color)
 
 

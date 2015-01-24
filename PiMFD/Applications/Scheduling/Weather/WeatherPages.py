@@ -45,7 +45,7 @@ class WeatherPage(MFDPage):
         self.lbl_temp = self.get_label(u"      Temp: {}{} (Chill: {}{})")
         self.lbl_cond = self.get_label(u"Conditions: {}")
         self.lbl_cond_icon = self.get_label(u"{}")
-        self.lbl_cond_icon.font = controller.display.font_weather
+        self.lbl_cond_icon.font = controller.display.fonts.weather
         pnl_cond = StackPanel(controller.display, self, is_horizontal=True)
         pnl_cond.children = (self.lbl_cond, self.lbl_cond_icon)
         self.lbl_wind = self.get_label(u"      Wind: {} {} {}")
@@ -82,7 +82,7 @@ class WeatherPage(MFDPage):
             self.lbl_forecast[i] = label
 
             icon = self.get_label(u"{}")
-            icon.font = controller.display.font_weather
+            icon.font = controller.display.fonts.weather
             self.lbl_forecast_icon[i] = icon
 
             pnl_day = StackPanel(controller.display, self, is_horizontal=True)

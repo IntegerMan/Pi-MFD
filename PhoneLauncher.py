@@ -2,8 +2,11 @@
 """
 A windowed-mode entry point for Pi-MFD
 """
+import traceback
+
 from PiMFD.Options import MFDAppOptions
 from PiMFD.UI.DisplayManager import DisplayManager
+
 
 __author__ = 'Matt Eland'
 
@@ -27,7 +30,7 @@ try:
 
 except Exception as e:
 
-    error_message = "Unhandled error {0}\n".format(str(e))
+    error_message = "Unhandled error {0}\n".format(str(traceback.format_exc()))
 
     print(error_message)
     log.write(error_message)
