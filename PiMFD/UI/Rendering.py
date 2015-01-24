@@ -39,7 +39,7 @@ def draw_vertical_line(display_manager, color, x, y1, y2, surface=None):
     pygame.draw.line(surface, color, (x, y1), (x, y2))
 
 
-def draw_rectangle(display_manager, color, rect, width=1, surface=None):
+def render_rectangle(display_manager, color, rect, width=1, surface=None):
     """
     Draws a rectangle
     :param display_manager: The DisplayManager
@@ -52,6 +52,19 @@ def draw_rectangle(display_manager, color, rect, width=1, surface=None):
         surface = display_manager.surface
 
     pygame.draw.rect(surface, color, rect, width)
+
+
+def render_circle(display_manager, color, center_pos, radius, width=1):
+    """
+    Renders a circle
+    :param display_manager: The display manager
+    :param color: The color to use for the circle
+    :param center_pos: A point indicating the center of the circle
+    :param radius: The radius of the circle
+    :param width: The thickness of the circle's edge or 0 for fill
+    :return: A Rect indicating the bounds of the drawn areas
+    """
+    return pygame.draw.circle(display_manager.surface, color, center_pos, radius, width)
 
 
 def render_text(display_manager, font, text, left, top, color, background=None, surface=None):

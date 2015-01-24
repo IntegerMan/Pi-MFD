@@ -215,3 +215,4 @@ class Maps(object):
             symbols.append(MapSymbol(lng, lat, location))
 
         return symbols
+

@@ -6,12 +6,10 @@ Contains checkbox style controls for manipulating pages
 from pygame.rect import Rect
 
 from PiMFD.UI import Keycodes
-
 from PiMFD.UI.Focus import FocusableWidget
 from PiMFD.UI.Keycodes import is_enter_key
-
 from PiMFD.UI.Panels import UIWidget, StackPanel
-from PiMFD.UI.Rendering import draw_rectangle
+from PiMFD.UI.Rendering import render_rectangle
 from PiMFD.UI.Text import TextBlock
 
 
@@ -46,7 +44,7 @@ class CheckBoxGlyph(UIWidget):
         focus_color = self.display.color_scheme.get_focus_color(self.render_focus)
 
         # Draw the border
-        draw_rectangle(self.display, focus_color, self.rect)
+        render_rectangle(self.display, focus_color, self.rect)
 
         # Draw checkmark (if checked)
         if self.checked:
@@ -55,7 +53,7 @@ class CheckBoxGlyph(UIWidget):
                                 rect_size - (check_pad * 2),
                                 rect_size - (check_pad * 2))
 
-            draw_rectangle(self.display, focus_color, checked_rect, width=0)
+            render_rectangle(self.display, focus_color, checked_rect, width=0)
 
         # Update and return our dimensions
         return self.set_dimensions_from_rect(self.rect)

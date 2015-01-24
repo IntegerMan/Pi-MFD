@@ -48,6 +48,7 @@ class FontManager(object):
     map2 = None
     map3 = None
     map4 = None
+    nato_equip = None
 
     def __init__(self, options):
         super(FontManager, self).__init__()
@@ -61,6 +62,11 @@ class FontManager(object):
 
         self.normal = FontInfo(self.options.font_name, 24)
         self.weather = FontInfo('Fonts/WeatherIcons.ttf', 32)
-        self.small = FontInfo(self.options.font_name, 12)
+        self.small = FontInfo(self.options.font_name, 10)
+        self.map1 = FontInfo('Fonts/mapz01.ttf', 24)
+        self.map2 = FontInfo('Fonts/mapz02.ttf', 24)
+        self.map3 = FontInfo('Fonts/mapz03.ttf', 24)
+        self.map4 = FontInfo('Fonts/mapz04.ttf', 24)
+        self.nato_equip = FontInfo('Fonts/app6a13.ttf', 24)
 
 

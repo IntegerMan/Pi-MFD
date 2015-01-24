@@ -5,7 +5,7 @@ Contains classes capable of performing various graphical overlay functions on th
 """
 from pygame.rect import Rect
 
-from PiMFD.UI.Rendering import draw_horizontal_line, render_text, to_rgba, draw_rectangle
+from PiMFD.UI.Rendering import draw_horizontal_line, render_text, to_rgba, render_rectangle
 
 
 __author__ = 'Matt Eland'
@@ -116,9 +116,9 @@ class ShadowEffectOverlay(Overlay):
         rect_left = Rect(0, self.size, self.size, display.res_y - self.size)
         rect_right = Rect(display.res_x - self.size, self.size, self.size, display.res_y - self.size)
 
-        draw_rectangle(display, color, rect_top, width=0, surface=surface)
-        draw_rectangle(display, color, rect_left, width=0, surface=surface)
-        draw_rectangle(display, color, rect_right, width=0, surface=surface)
+        render_rectangle(display, color, rect_top, width=0, surface=surface)
+        render_rectangle(display, color, rect_left, width=0, surface=surface)
+        render_rectangle(display, color, rect_right, width=0, surface=surface)
 
 
 class FPSOverlay(Overlay):

@@ -8,7 +8,7 @@ from pygame.rect import Rect
 from PiMFD.UI import Keycodes
 from PiMFD.UI.Focus import FocusableWidget
 from PiMFD.UI.Panels import UIWidget, StackPanel
-from PiMFD.UI.Rendering import draw_rectangle, render_text
+from PiMFD.UI.Rendering import render_rectangle, render_text
 from PiMFD.UI.Text import TextBlock
 
 
@@ -36,7 +36,7 @@ class TextGlyph(UIWidget):
 
         # Draw the border
         focus_color = self.display.color_scheme.get_focus_color(self.render_focus)
-        draw_rectangle(self.display, focus_color, self.rect)
+        render_rectangle(self.display, focus_color, self.rect)
 
         # Draw the text
         display = self.display
