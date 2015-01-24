@@ -147,6 +147,9 @@ class Maps(object):
 
             location.tags.append((tag_name, tag_value))
 
+            if tag_name == 'highway' and tag_value == 'traffic_signals' and location.name == None:
+                location.name = 'STP'
+
         else:
             print('ignoring pair: ' + tag_name + '/' + tag_value)
 
