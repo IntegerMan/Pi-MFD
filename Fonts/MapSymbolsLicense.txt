@@ -1,0 +1,17 @@
+Map Symbols taken from http://www.mapsymbs.com/app-6a.html
+
+Intellectual Ownership
+Tom Mouat hereby asserts and gives notice of his right under section 77 of the Copyright, Designs and Patents Act 1988 to be identified as the author of these fonts and sample files (except where stated). These fonts and sample files remain the intellectual property of Tom Mouat, but they can be used and copied freely.
+
+Freeware Distribution
+These fonts and sample files may be distributed by any means, provided that the following limitations are obeyed:
+
+No profit is made from the reproduction or distribution of these fonts and sample files. This includes using my fonts for advertising or commercial demonstration purposes - so if I turn up at a trade show like ITEC again and find someone demonstrating their product with my Map Symbols again, without giving me credit or paying me for them, I shall be very disappointed.
+Commercial Distribution
+Commercial Companies and Software Manufacturers are permitted to include MapSymbs, or references to MapSymbs with any of their sales products, provided that the following limitations are obeyed:
+
+The MapSymbs fonts and sample files are not required to be installed in order for the product to function.
+The MapSymbs fonts and sample files are identified as being separately developed by Tom Mouat.
+The MapSymbs fonts and sample files are physically or electronically separated from the Commercial product, either by being provided on a separate Floppy Disk, separate CD ROM, or by a clearly labeled separate Directory within the commercial product.
+If the MapSymbs fonts are made available online within the Commercial Company's own website, there must be no charge to download the fonts, they must be identified as being separately developed by Tom Mouat, and a link must be provided to this site on the same page as the download link (as close to the download link as makes sence given the overall website design).
+A fully working copy of the commercial product that is being associated with the MapSymbs fonts and sample files is provided at no cost to Tom Mouat. This provision of a copy of the software is intended to be used solely to ensure compatability with the fonts and sample files, and to allow Tom Mouat to answer any queries that users may have concerning the product and MapSymbs fonts and sample files. It is not intended as payment for the provision of MapSymbs fonts and sample files. Ownership of this copy of the software remains with the manufacturer who may request its return at any time.

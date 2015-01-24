@@ -35,6 +35,7 @@ class NavigationApp(MFDApplication):
         self.food_page = SimpleMessagePage(controller, self, "FOOD")
         self.traffic_page = SimpleMessagePage(controller, self, "TRAF")
         self.conditions_page = SimpleMessagePage(controller, self, "COND")
+        self.always_render_background = True
 
         self.pages = list([self.map_page, self.gas_page, self.food_page, self.traffic_page, self.conditions_page])
 

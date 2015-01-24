@@ -20,6 +20,7 @@ class MFDButton(object):
     text = None
     enabled = True
     selected = False
+    always_render_background = False
 
     def __init__(self, text, selected=False, enabled=True):
         self.bounds = Rect(-1, -1, -1, -1)
@@ -43,7 +44,11 @@ class MFDButton(object):
             y = display.res_y - display.padding_y - display.font_size_normal
 
         font_color = display.color_scheme.foreground
+
+        # Figure out background color - sometimes we'll want to render it on top of other content
         background = None
+        if self.always_render_background:
+            background = display.color_scheme.background
 
         label = self.text
 

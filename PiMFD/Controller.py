@@ -203,15 +203,21 @@ class MFDController(object):
         # TODO: This really should not be instantiating new button objects every render cycle. Those should live at the
         # app-level
 
+        always_render_background = self.active_app and self.active_app.always_render_background
+
         # Render our applications
         self.top_headers = list()
         for app in self.applications:
-            self.top_headers.append(MFDButton(app.get_button_text(), selected=(app is self.active_app and app is not None)))
+            button = MFDButton(app.get_button_text(), selected=(app is self.active_app and app is not None))
+            button.always_render_background = always_render_background
+            self.top_headers.append(button)
 
         # Ask the current application for available buttons
         if self.active_app is not None:
-
             self.bottom_headers = self.active_app.get_buttons()
+
+            for button in self.bottom_headers:
+                button.always_render_background = always_render_background
 
         else:
             # Perhaps this will need to ask the current page for options in this case, but for now, just go empty
@@ -236,7 +242,6 @@ class MFDController(object):
 
         # Update the headers
         self.update_application()
-        self.render_button_rows()
 
         # Render the current page
         if self.active_app is not None and self.active_app.active_page is not None:
@@ -245,6 +250,9 @@ class MFDController(object):
         else:
             # No content defined for the app. Render a not implemented message
             SimpleMessagePage(self, self.active_app, 'N/A').render()
+
+        # Render the headers on top of everything else
+        self.render_button_rows()
 
         # Render the overlay layer
         self.display.render_overlays()
