@@ -21,15 +21,14 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
         cs = self.display.color_scheme
         default_color = cs.detail
-        offset = self.display.get_content_start_pos()
 
         # Smart scale the size to accomodate for the greatest dimension. This lets us support many aspect ratios.
-        available_x = self.display.res_x - (offset[0] * 2)
-        available_y = self.display.res_y - (offset[1] * 2)
+        available_x = self.display.res_x
+        available_y = self.display.res_y
         max_available = max(available_y, available_x)
         size = (max_available, max_available)
 
-        center = ((self.display.res_x / 2.0) - 10, (self.display.res_y / 2.0) - 10)
+        center = ((self.display.res_x / 2.0), (self.display.res_y / 2.0))
 
         # Translate the various curves, etc. into their appropraite screen positions
         ways = self.map.transpose_ways(size, center)
