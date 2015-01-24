@@ -1,6 +1,9 @@
 # coding=utf-8
 import pygame
 
+from PiMFD.UI.Rendering import render_text_centered
+
+
 __author__ = 'Matt Eland'
 
 
@@ -15,7 +18,9 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         self.size = size
 
     def render(self):
-        color = self.display.color_scheme.detail
+
+        cs = self.display.color_scheme
+        default_color = cs.detail
         offset = self.display.get_content_start_pos()
 
         # Smart scale the size to accomodate for the greatest dimension. This lets us support many aspect ratios.
@@ -28,11 +33,24 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
         # Translate the various curves, etc. into their appropraite screen positions
         ways = self.map.transpose_ways(size, center)
+        tags = self.map.transpose_tags(size, center)
 
+        font_y_offset = (self.display.font_size_small / 2.0)
+
+        # Render the Roads
         for way in ways:
             # TODO: Use the rendering helpers
             # TODO: Render to a seperate surface so I can clip easily
+            color = default_color
             pygame.draw.lines(self.display.surface, color, False, way, 1)
 
-            # for tag in self.map.transpose_tags((self.size, self.size), (self.size / 2, self.size / 2)):
+        render_text_centered(self.display,
+                             self.display.font_small,
+                             'ME', center[0], center[1] - font_y_offset,
+                             cs.highlight)
+
+        # Render the other awesome things
+        for tag in tags:
+            render_text_centered(self.display, self.display.font_small, tag[0].upper(), tag[1], tag[2] - font_y_offset,
+                                 cs.highlight)
             # self.map.tags[tag[0]] = (tag[1] + self.map.position[0], tag[2] + self.map.position[1], tag[3])

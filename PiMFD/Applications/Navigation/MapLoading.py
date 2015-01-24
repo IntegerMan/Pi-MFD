@@ -89,8 +89,6 @@ class Maps(object):
 
         self.status_text = 'Parsing...'
 
-        print('Received data: ' + data)
-
         osm_dict = xmltodict.parse(data.encode('UTF-8'))
         try:
             for node in osm_dict['osm']['node']:
@@ -102,7 +100,7 @@ class Maps(object):
                             if tag["@k"] == "name":
                                 amenity = ''
                                 for tag2 in node['tag']:
-                                    if tag2["@k"] == "amenity":
+                                    if tag2["@k"] in ("amenity", "leisure"):
                                         amenity = tag2["@v"]
                                 self.tags.append((float(node['@lat']), float(node['@lon']), tag["@v"], amenity))
                                 # Personal Addresses - Removed
