@@ -20,7 +20,7 @@ class SpacerLine(UIWidget):
         """
         Renders a spacer line by taking up font-sized values and returning a modified bounding rect.
         """
-        self.rect = Rect(self.pos[0], self.pos[1], self.display.font_size_normal, self.display.font_size_normal)
+        self.rect = Rect(self.pos[0], self.pos[1], self.display.fonts.normal.size, self.display.fonts.normal.size)
         return self.set_dimensions_from_rect(self.rect)
 
 
@@ -36,7 +36,7 @@ class TextBlock(UIWidget):
 
     def __init__(self, display, page, text, is_highlighted=False):
         super(TextBlock, self).__init__(display, page)
-        self.font = display.font_normal
+        self.font = display.fonts.normal
         self.text = text
         self.is_highlighted = is_highlighted
 

@@ -16,7 +16,6 @@ class FocusableWidget(UIWidget):
         super(FocusableWidget, self).__init__(display, page)
         page.register_focusable(self)
 
-
     def is_focused(self):
         """
         Determines whether or not this widget is focused

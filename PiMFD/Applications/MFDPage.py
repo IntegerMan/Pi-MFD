@@ -82,10 +82,10 @@ class MFDPage(UIPage):
             color = self.display.color_scheme.highlight
 
         render_text_centered(self.display,
-                             self.display.font_normal,
+                             self.display.fonts.normal,
                              text,
                              self.display.res_x / 2.0,
-                             self.display.res_y / 2.0 - (self.display.font_size_normal / 2),
+                             self.display.res_y / 2.0 - (self.display.fonts.normal.size / 2),
                              color)
 
 class SimpleMessagePage(MFDPage):

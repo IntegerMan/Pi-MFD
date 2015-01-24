@@ -93,8 +93,8 @@ def render_text_centered(display_manager, font, text, left, top, color, backgrou
     :param surface: The surface to render to. Defaults to the primary surface.
     :return: A Rect representing the rendered area for the text
     """
-    text_surface = font.render(text, True, color)
-    rect = text_surface.get_rect(center=(left, top + (font.size(text)[1] / 2)))
+    text_surface = font.font.render(text, True, color)
+    rect = text_surface.get_rect(center=(left, top + (font.measure(text)[1] / 2)))
 
     if surface is None:
         surface = display_manager.surface

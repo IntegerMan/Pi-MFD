@@ -41,7 +41,7 @@ class MFDButton(object):
         # Figure out where we're starting vertically
         y = display.padding_y
         if not is_top:
-            y = display.res_y - display.padding_y - display.font_size_normal
+            y = display.res_y - display.padding_y - display.fonts.normal.size
 
         font_color = display.color_scheme.foreground
 
@@ -60,7 +60,7 @@ class MFDButton(object):
 
         midpoint = ((x_end - x_start) / 2) + x_start
 
-        pos = render_text_centered(display, display.font_normal, label, midpoint, y, font_color, background=background)
+        pos = render_text_centered(display, display.fonts.normal, label, midpoint, y, font_color, background=background)
 
         # Render tick marks
         line_length = 5

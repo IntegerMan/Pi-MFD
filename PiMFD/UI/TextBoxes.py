@@ -42,7 +42,7 @@ class TextGlyph(UIWidget):
         display = self.display
         pad_x = 6
         pad_y = 6
-        render_text(display, display.font_normal, self.text, self.pos[0] + pad_x, self.pos[1] + pad_y, focus_color)
+        render_text(display, display.fonts.normal, self.text, self.pos[0] + pad_x, self.pos[1] + pad_y, focus_color)
 
         # Update and return our dimensions
         return self.set_dimensions_from_rect(self.rect)

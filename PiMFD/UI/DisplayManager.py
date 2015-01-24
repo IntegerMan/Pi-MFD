@@ -6,6 +6,7 @@ import pygame
 
 from PiMFD import start_mfd
 from PiMFD.UI.ColorScheme import ColorSchemes
+from PiMFD.UI.Fonts import FontManager
 from PiMFD.UI.Overlays import ScanlineOverlay, InterlaceOverlay, FPSOverlay, ShadowEffectOverlay
 
 
@@ -38,14 +39,15 @@ class DisplayManager(object):
 
     color_scheme = ColorSchemes.get_green_color_scheme()
 
-    font_size_normal = 24
-    font_normal = None
+    fonts = None
 
     font_size_weather = 32
     font_weather = None
 
     font_size_small = 12
     font_small = None
+
+    options = None
 
     def __init__(self, x=800, y=480):
         self.res_x = x
@@ -57,6 +59,7 @@ class DisplayManager(object):
         Starts the MFD Application
         :type app_options: PiMFD.MFDAppOptions the app options
         """
+        self.options = app_options
         start_mfd(self, app_options)
 
     def update_graphics_mode(self):
@@ -109,7 +112,7 @@ class DisplayManager(object):
         Gets the Y indentation level for content
         :return: The Y location at which content rendering is acceptable
         """
-        return (self.padding_y * 4) + self.font_size_normal
+        return (self.padding_y * 4) + self.fonts.normal.size
 
     def get_content_start_pos(self):
         """
@@ -126,7 +129,7 @@ class DisplayManager(object):
         :return:
         """
         if font_size is None:
-            font_size = self.font_size_normal
+            font_size = self.fonts.normal.size
 
         return (self.padding_y * 2) + font_size
 
@@ -156,8 +159,9 @@ class DisplayManager(object):
         pygame.display.set_caption(options.app_name)
 
         # Set up Fonts
+        self.fonts = FontManager(options)
+        self.fonts.load_fonts()
         self.font_small = pygame.font.Font(options.font_name, self.font_size_small)
-        self.font_normal = pygame.font.Font(options.font_name, self.font_size_normal)
         self.font_weather = pygame.font.Font('Fonts/WeatherIcons.ttf', self.font_size_weather)
 
         # Time to use our output
