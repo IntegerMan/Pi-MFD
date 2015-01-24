@@ -66,7 +66,7 @@ class NavigationApp(MFDApplication):
         """
         if not self.initialized:
             # TODO: This should be in another thread so the UI can keep rendering
-            self.map.fetch_by_coordinate(self.controller.options.gps_pos, 0.01)
+            self.map.fetch_by_coordinate(self.controller.options.lat, self.controller.options.lng, 0.01)
             self.initialized = True
 
 

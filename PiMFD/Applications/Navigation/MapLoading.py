@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from __future__ import print_function
+from PiMFD.Applications.Navigation.MapEntities import MapLocation
 
 """
 Contains code related to rendering maps to the screen
@@ -18,7 +19,7 @@ class Maps(object):
     """
     nodes = {}
     ways = []
-    tags = []
+    locations = []
     origin = None
     width = 0
     height = 0
@@ -55,11 +56,11 @@ class Maps(object):
         ])
 
     def fetch_area(self, bounds):
-        self.width = (bounds[2] - bounds[0]) / 2
-        self.height = (bounds[3] - bounds[1]) / 2
+        self.height = (bounds[2] - bounds[0]) / 2
+        self.width = (bounds[3] - bounds[1]) / 2
         self.origin = (
-            bounds[0] + self.width,
-            bounds[1] + self.height
+            bounds[1] + self.height,
+            bounds[0] + self.width
         )
         url = "http://www.openstreetmap.org/api/0.6/map?bbox=%f,%f,%f,%f" % (
             bounds[0],
@@ -73,6 +74,7 @@ class Maps(object):
         self.nodes = {}
         self.ways = []
         self.tags = []
+        self.locations = []
 
         print("Fetching maps " + url)
 
@@ -91,26 +93,32 @@ class Maps(object):
 
         osm_dict = xmltodict.parse(data.encode('UTF-8'))
         try:
+
+            # Load Nodes
             for node in osm_dict['osm']['node']:
                 self.nodes[node['@id']] = node
-                if 'tag' in node:
-                    for tag in node['tag']:
-                        try:
-                            # Named Amenities
-                            if tag["@k"] == "name":
-                                amenity = ''
-                                for tag2 in node['tag']:
-                                    if tag2["@k"] in ("amenity", "leisure"):
-                                        amenity = tag2["@v"]
-                                self.tags.append((float(node['@lat']), float(node['@lon']), tag["@v"], amenity))
-                                # Personal Addresses - Removed
-                                #if tag["@k"] == "addr:housenumber":
-                                #	   for t2 in node['tag']:
-                                #			   if t2["@k"] == "addr:street":
-                                #					   self.tags.append((float(node['@lat']), float(node['@lon']),tag["@v"]+" "+t2["@v"]))
-                        except Exception as e:
-                            pass
 
+                # Skip Invisible items
+                if '@visible' in node and node['@visible'] == 'false':
+                    continue
+
+                # We don't care about it unless it has tags
+                if 'tag' not in node:
+                    continue
+
+                location = MapLocation(float(node['@lat']), float(node['@lon']))
+                location.name = None
+
+                if '@k' in node['tag']:
+                    self.process_tag(location, node['tag'])
+                else:
+                    for tag in node['tag']:
+                        self.process_tag(location, tag)
+
+                if location.name:
+                    self.locations.append(location)
+
+            # Load Waypoints
             for way in osm_dict['osm']['way']:
                 waypoints = []
                 for node_id in way['nd']:
@@ -123,13 +131,33 @@ class Maps(object):
         self.has_data = len(self.nodes) > 0
         self.status_text = "Loaded {} Nodes of Map Data".format(len(self.nodes))
 
-    def fetch_by_coordinate(self, coords, range):
-        # return self.fetch_area((-83.0036, 40.1488, -82.9973, 40.1531))
+    def process_tag(self, location, tag):
+
+        tag_name = tag["@k"]
+        tag_value = tag["@v"]
+
+        # Named Amenities
+        if tag_name == "name":
+
+            location.name = tag_value
+
+        elif tag_name in (
+        "amenity", "leisure", "man_made", "shop", "cuisine", "building", "power", "religion", "denomination", "website",
+        "railway", "highway", "edu"):
+
+            location.tags.append((tag_name, tag_value))
+
+        else:
+            print('ignoring pair: ' + tag_name + '/' + tag_value)
+
+
+    def fetch_by_coordinate(self, lat, lng, range):
+
         return self.fetch_area((
-            float(coords[0]) - range,
-            float(coords[1]) - range,
-            float(coords[0]) + range,
-            float(coords[1]) + range
+            float(lng) - range,
+            float(lat) - range,
+            float(lng) + range,
+            float(lat) + range
         ))
 
     def transpose_ways(self, dimensions, offset, flip_y=True):
@@ -141,8 +169,8 @@ class Maps(object):
         for way in self.ways:
             transway = []
             for waypoint in way:
-                lat = waypoint[1] - self.origin[0]
-                lng = waypoint[0] - self.origin[1]
+                lat = waypoint[1] - self.origin[1]
+                lng = waypoint[0] - self.origin[0]
                 wp = [
                     (lat * w_coef) + offset[0],
                     (lng * h_coef) + offset[1]
@@ -154,23 +182,32 @@ class Maps(object):
             transways.append(transway)
         return transways
 
-    def transpose_tags(self, dimensions, offset, flip_y=True):
+    def transpose_locations(self, dimensions, offset, flip_y=True):
+
         width = dimensions[0]
         height = dimensions[1]
+
         w_coef = width / self.width / 2
         h_coef = height / self.height / 2
+
         transtags = []
-        for tag in self.tags:
-            lat = tag[1] - self.origin[0]
-            lng = tag[0] - self.origin[1]
-            wp = [
-                tag[2],
-                (lat * w_coef) + offset[0],
-                (lng * h_coef) + offset[1],
-                tag[3]
-            ]
+
+        for location in self.locations:
+
+            adj_lat = self.origin[0] - location.lat
+            adj_lng = self.origin[1] - location.lng
+
+            lat = (adj_lat * w_coef) + offset[1]
+            lng = (adj_lng * h_coef) + offset[0]
+
             if flip_y:
-                wp[2] *= -1
-                wp[2] += offset[1] * 2
-            transtags.append(wp)
+                lng *= -1
+                lng += offset[0] * 2
+
+            cloned = MapLocation(lng, lat)
+            cloned.name = location.name
+            cloned.tags = location.tags
+
+            transtags.append(cloned)
+
         return transtags

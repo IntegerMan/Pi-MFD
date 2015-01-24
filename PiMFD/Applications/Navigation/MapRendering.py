@@ -33,7 +33,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
         # Translate the various curves, etc. into their appropraite screen positions
         ways = self.map.transpose_ways(size, center)
-        tags = self.map.transpose_tags(size, center)
+        locations = self.map.transpose_locations(size, center)
 
         font_y_offset = (self.display.font_size_small / 2.0)
 
@@ -50,7 +50,11 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
                              cs.highlight)
 
         # Render the other awesome things
-        for tag in tags:
-            render_text_centered(self.display, self.display.font_small, tag[0].upper(), tag[1], tag[2] - font_y_offset,
+        for location in locations:
+            render_text_centered(self.display,
+                                 self.display.font_small,
+                                 location.name.upper(),
+                                 location.lat,
+                                 location.lng - font_y_offset,
                                  cs.highlight)
             # self.map.tags[tag[0]] = (tag[1] + self.map.position[0], tag[2] + self.map.position[1], tag[3])

@@ -19,7 +19,8 @@ class MFDAppOptions(object):
     font_name = 'Fonts/VeraMono.ttf'
     display = None
     location = '43035'
-    gps_pos = (-80, 40)
+    lat = 40
+    lng = -80
     enable_scan_line = True
     enable_interlacing = True
     enable_fps = True
@@ -48,7 +49,8 @@ class MFDAppOptions(object):
 
         if 'location' in settings.sections():
             self.location = settings.get('location', 'zipcode')
-            self.gps_pos = (settings.get('location', 'gps_lat'), settings.get('location', 'gps_long'))
+            self.lat = float(settings.get('location', 'gps_lat'))
+            self.lng = float(settings.get('location', 'gps_long'))
 
     def save_to_settings(self, filename='settings.ini'):
         """
@@ -64,8 +66,8 @@ class MFDAppOptions(object):
 
         settings.add_section('location')
         settings.set('location', 'zipcode', self.location)
-        settings.set('location', 'gps_lat', self.gps_pos[0])
-        settings.set('location', 'gps_long', self.gps_pos[1])
+        settings.set('location', 'gps_lat', self.lat)
+        settings.set('location', 'gps_long', self.lng)
 
         settings.add_section('ui')
         settings.set('ui', 'enable_scan_line', bool(self.enable_scan_line))
