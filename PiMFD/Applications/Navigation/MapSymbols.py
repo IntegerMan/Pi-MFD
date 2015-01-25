@@ -78,8 +78,6 @@ class MapSymbol(MapLocation):
         #   Purple - Corporate
         #   Yellow - Utility
 
-        draw_square = False
-        draw_circle = True
         shape_width = 1
         shape_size = 20
 
@@ -104,8 +102,8 @@ class MapSymbol(MapLocation):
         text_color = color
 
         left_text = None
-        right_text = None
-        bottom_text = self.abbreviate(self.name)
+        right_text = self.abbreviate(self.name)
+        bottom_text = None
         inner_text = None
 
         # Modify our display parameters based on what our context is

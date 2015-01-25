@@ -33,6 +33,7 @@ class MapLine(MapPath):
 
         if self.has_tag('railway'):
             color = cs.gray
+
         elif self.has_tag('highway'):
 
             value = self.get_tag_value('highway')
@@ -53,7 +54,11 @@ class MapLine(MapPath):
                 width = 1
             elif value == 'service':
                 width = 1
-                color = cs.yellow
+                color = cs.map_private
+
+            # If it's got a bridge, we'll handle it a bit differently
+            if self.has_tag_value('bridge', 'yes'):
+                color = cs.white
 
         elif self.has_tag_value('boundary', 'administrative'):
             color = cs.purple  # Purple
