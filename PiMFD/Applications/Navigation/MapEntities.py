@@ -87,8 +87,19 @@ class MapEntity(object):
         if name is None:
             return None
 
+        # For / deliminated / multi-role establishments, just take the first chunk
+        if '/' in name:
+            return MapEntity.abbreviate(name[0:(name.index('/'))])
+        elif '\\' in name:
+            return MapEntity.abbreviate(name[0:(name.index('\\'))])
+
+        # If we're a long name and we have a 's in the name, chop everything else after that
+        if len(name) >= 10 and "'s" in name:
+            return name[0:(name.index("'s") + 2)]
+
         names = name.split()
 
+        # Just two words, don't abbreviate
         if len(names) <= 2:
             return name
 
