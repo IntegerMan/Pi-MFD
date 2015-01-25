@@ -87,7 +87,7 @@ class Maps(object):
             try:
                 response = requests.get(url)
             except:
-                error_message = "Unhandled error {0}\n".format(str(traceback.format_exc()))
+                error_message = "Unhandled error getting request {0}\n".format(str(traceback.format_exc()))
                 print(error_message)
             else:
                 break
@@ -138,8 +138,10 @@ class Maps(object):
                     node = self.nodes[node_id['@ref']]
                     waypoints.append((float(node['@lat']), float(node['@lon'])))
                 self.ways.append(waypoints)
-        except Exception as e:
-            print(e)
+
+        except:
+            error_message = "Unhandled error parsing map data {0}\n".format(str(traceback.format_exc()))
+            print(error_message)
 
         self.has_data = len(self.nodes) > 0
         self.status_text = "Loaded {} Nodes of Map Data".format(len(self.nodes))
