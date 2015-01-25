@@ -62,7 +62,7 @@ class FontManager(object):
 
         self.normal = FontInfo(self.options.font_name, 24)
         self.weather = FontInfo('Fonts/WeatherIcons.ttf', 32)
-        self.small = FontInfo(self.options.font_name, 10)
+        self.small = FontInfo(self.options.font_name, 8)
         self.map1 = FontInfo('Fonts/mapz01.ttf', 24)
         self.map2 = FontInfo('Fonts/mapz02.ttf', 24)
         self.map3 = FontInfo('Fonts/mapz03.ttf', 24)

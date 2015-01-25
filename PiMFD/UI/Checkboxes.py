@@ -37,7 +37,7 @@ class CheckBoxGlyph(UIWidget):
 
         # Size Constants
         check_pad = 4
-        rect_size = self.display.font_size_normal + check_pad
+        rect_size = self.display.fonts.normal.size + check_pad
 
         self.rect = Rect(self.pos[0], self.pos[1], rect_size, rect_size)
 

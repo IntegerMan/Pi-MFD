@@ -30,7 +30,7 @@ class TextGlyph(UIWidget):
         """
 
         # Size Constants
-        vert_size = self.display.font_size_normal + self.display.padding_y + self.display.padding_y
+        vert_size = self.display.fonts.normal.size + self.display.padding_y + self.display.padding_y
 
         self.rect = Rect(self.pos[0], self.pos[1], self.text_width, vert_size)
 

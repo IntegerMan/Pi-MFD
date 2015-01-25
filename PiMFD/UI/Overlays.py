@@ -72,7 +72,7 @@ class InterlaceOverlay(Overlay):
     Renders an alternating row interlace effect
     """
 
-    alpha = 100
+    alpha = 80
 
     def render(self, display, surface):
         """
