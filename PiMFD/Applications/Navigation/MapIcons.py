@@ -49,3 +49,39 @@ class ChairIcon(MapIcon):
         draw_vertical_line(display, color, x - x_offset, y + y_offset, y - y_offset)
         draw_vertical_line(display, color, x + x_offset, y + y_offset, y)
 
+
+class FoodIcon(MapIcon):
+    """
+    Renders a fork from a side perspective.
+    Used as an icon for restaraunts
+    """
+
+    def render(self, display, color, pos, half_size):
+        """
+        Renders the icon to the display
+        :param display: The display manager
+        :param color: The color
+        :param pos: The center point of the shape
+        :param half_size: Half the size of the shape
+        """
+
+        x = pos[0]
+        y = pos[1]
+
+        x_offset = 2
+        y_offset = 5
+
+        fork_x = x + 2
+        knife_x = x - 3
+        fork_y = y
+        knife_y = y
+
+        # Render the Fork
+        draw_vertical_line(display, color, fork_x, fork_y + y_offset, fork_y - y_offset)
+        draw_horizontal_line(display, color, fork_x - x_offset, fork_x + x_offset, fork_y - 2)
+        draw_vertical_line(display, color, fork_x - x_offset, fork_y - y_offset, fork_y - 2)
+        draw_vertical_line(display, color, fork_x + x_offset, fork_y - y_offset, fork_y - 2)
+
+        # Render the Knife
+        draw_vertical_line(display, color, knife_x, knife_y - y_offset, knife_y + y_offset)
+        draw_vertical_line(display, color, knife_x - 1, knife_y - y_offset + 1, knife_y)

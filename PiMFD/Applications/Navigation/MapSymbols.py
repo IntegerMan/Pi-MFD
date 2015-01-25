@@ -6,7 +6,7 @@ Code organized around rendering locations to the map
 from pygame.rect import Rect
 
 from PiMFD.Applications.Navigation.MapEntities import MapLocation
-from PiMFD.Applications.Navigation.MapIcons import ChairIcon
+from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon
 from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond
 
 
@@ -89,9 +89,8 @@ class MapSymbol(MapLocation):
         shape_shop = shape.diamond
         shape_service = shape.square
         shape_public = shape.circle
-        shape_food = shape.circle
 
-        icon_renderer = None
+        icons = list()
 
         font = display.fonts.small
 
@@ -105,8 +104,8 @@ class MapSymbol(MapLocation):
         text_color = color
 
         left_text = None
-        right_text = self.abbreviate(self.name)
-        bottom_text = None
+        right_text = None
+        bottom_text = self.abbreviate(self.name)
         inner_text = None
 
         # Modify our display parameters based on what our context is
@@ -114,45 +113,54 @@ class MapSymbol(MapLocation):
         if self.has_tag_value('highway', 'traffic_signals'):
             style = shape.traffic_stop
             right_text = None
+
         elif self.has_tag_value('amenity', 'pharmacy'):
             style = shape_shop
             color = cs.map_health
             inner_text = 'RX'
+
         elif self.has_tag_value('shop', 'beauty'):
             style = shape_service
             color = cs.map_commercial
             inner_text = 'SPA'
+
         elif self.has_tag_value('amenity', 'fuel'):
             style = shape_shop
             color = cs.map_commercial
             inner_text = 'GAS'
+
         elif self.has_tag_value('amenity', 'school'):
             style = shape_public  # Though this could be service if private school
             color = cs.map_public
             inner_text = 'EDU'
+
         elif self.has_tag_value('shop', 'furniture'):
             style = shape_shop
             color = cs.map_commercial
-            icon_renderer = ChairIcon()
+            icons.append(ChairIcon())
+
         elif self.has_tag_value('shop', 'sports'):
             style = shape_shop
             color = cs.map_public
             inner_text = 'ATH'
+
         elif self.has_tag_value('amenity', 'place_of_worship'):
             # TODO: Handle religion / denomination
             style = shape_service
             color = cs.map_private
             inner_text = 'REL'
+
         elif self.has_tag_value('amenity', 'restaurant'):
             # TODO: Handle cuisine
-            style = shape_food
+            style = shape_service
             color = cs.map_commercial
-            inner_text = 'EAT'
+            icons.append(FoodIcon())
+
         elif self.has_tag_value('amenity', 'fast_food'):
             # TODO: Handle cuisine
-            style = shape_food
+            style = shape_shop
             color = cs.map_commercial
-            inner_text = 'FF'
+            icons.append(FoodIcon())
 
         half_size = shape_size / 2
 
@@ -175,8 +183,8 @@ class MapSymbol(MapLocation):
             render_circle(display, cs.yellow, pos, 3, 0)
             render_circle(display, cs.green, pos, 1, 0)
 
-        if icon_renderer:
-            icon_renderer.render(display, color, pos, half_size)
+        for icon in icons:
+            icon.render(display, color, pos, half_size)
 
         if inner_text:
             render_text_centered(display,

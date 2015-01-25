@@ -73,7 +73,7 @@ def render_diamond(display_manager, color, center_pos, radius, width=1):
     :param display_manager: The display manager
     :param color: The color to use for the shape
     :param center_pos: A point indicating the center of the diamond
-    :param radius: The distance from the center of the diamond to each of the four colors
+    :param radius: The distance from the center of the diamond to each of the four corners
     :param width: The thickness of the diamond or 0 for fill
     :return: A Rect indicating the bounds of the drawn areas
     """
@@ -82,6 +82,82 @@ def render_diamond(display_manager, color, center_pos, radius, width=1):
     y = center_pos[1]
 
     points = ((x - radius, y), (x, y - radius), (x + radius, y), (x, y + radius))
+
+    return pygame.draw.polygon(display_manager.surface, color, points, width)
+
+
+def render_triangle_right(display_manager, color, center_pos, radius, width=1):
+    """
+    Renders a diamond
+    :param display_manager: The display manager
+    :param color: The color to use for the shape
+    :param center_pos: A point indicating the center of the triangle
+    :param radius: The distance from the center of the triangle to each of the points
+    :param width: The thickness of the shape or 0 for fill
+    :return: A Rect indicating the bounds of the drawn areas
+    """
+
+    x = center_pos[0]
+    y = center_pos[1]
+
+    points = ((x, y - radius), (x + radius, y), (x, y + radius))
+
+    return pygame.draw.polygon(display_manager.surface, color, points, width)
+
+
+def render_triangle_left(display_manager, color, center_pos, radius, width=1):
+    """
+    Renders a triangle facing left
+    :param display_manager: The display manager
+    :param color: The color to use for the shape
+    :param center_pos: A point indicating the center of the triangle
+    :param radius: The distance from the center of the triangle to each of the points
+    :param width: The thickness of the shape or 0 for fill
+    :return: A Rect indicating the bounds of the drawn areas
+    """
+
+    x = center_pos[0]
+    y = center_pos[1]
+
+    points = ((x, y - radius), (x - radius, y), (x, y + radius))
+
+    return pygame.draw.polygon(display_manager.surface, color, points, width)
+
+
+def render_triangle_up(display_manager, color, center_pos, radius, width=1):
+    """
+    Renders a triangle facing up
+    :param display_manager: The display manager
+    :param color: The color to use for the shape
+    :param center_pos: A point indicating the center of the triangle
+    :param radius: The distance from the center of the triangle to each of the points
+    :param width: The thickness of the shape or 0 for fill
+    :return: A Rect indicating the bounds of the drawn areas
+    """
+
+    x = center_pos[0]
+    y = center_pos[1]
+
+    points = ((x, y - radius), (x - radius, y), (x + radius, y))
+
+    return pygame.draw.polygon(display_manager.surface, color, points, width)
+
+
+def render_triangle_down(display_manager, color, center_pos, radius, width=1):
+    """
+    Renders a triangle facing up
+    :param display_manager: The display manager
+    :param color: The color to use for the shape
+    :param center_pos: A point indicating the center of the triangle
+    :param radius: The distance from the center of the triangle to each of the points
+    :param width: The thickness of the shape or 0 for fill
+    :return: A Rect indicating the bounds of the drawn areas
+    """
+
+    x = center_pos[0]
+    y = center_pos[1]
+
+    points = ((x, y + radius), (x - radius, y), (x + radius, y))
 
     return pygame.draw.polygon(display_manager.surface, color, points, width)
 
