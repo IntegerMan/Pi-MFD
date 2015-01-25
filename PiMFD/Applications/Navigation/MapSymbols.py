@@ -41,35 +41,6 @@ class MapSymbol(MapLocation):
         self.name = location.name
         self.id = location.id
 
-
-    def get_tags(self, name):
-        """
-        Gets all tags that have name as their key
-        :type name: str
-        :param name: The tag key
-        :return: All tags (yielded) that have the matching name
-        """
-
-        for tag in self.tags:
-            if tag[0] == name:
-                yield tag
-
-    def has_tag_value(self, name, value):
-        """
-        Determins if the specified tag / value pair exists in this set
-        :type name: str
-        :param name: The tag key
-        :type value: str
-        :param value: The tag value
-        :return: True if the key / value pair was present, otherwise False
-        """
-
-        for tag in self.get_tags(name):
-            if tag[1] == value:
-                return True
-
-        return False
-
     def get_font_text_and_color(self, display):
         """
         Returns the font to use to display, the text to render, and the color to use

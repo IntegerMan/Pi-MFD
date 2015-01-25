@@ -28,7 +28,13 @@ class MapLine(MapPath):
         cs = display.color_scheme
         default_color = cs.detail
 
-        color = default_color
+        if self.has_tag('railway'):
+            color = (128, 128, 128)
+        else:
+            color = default_color
 
         # TODO: Use the rendering helpers
         pygame.draw.lines(display.surface, color, False, self.points, 1)
+
+
+6
