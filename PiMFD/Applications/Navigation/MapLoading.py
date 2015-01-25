@@ -103,7 +103,8 @@ class Maps(object):
 
             # Load Nodes
             for node in osm_dict['osm']['node']:
-                self.nodes[node['@id']] = node
+                id = node['@id']
+                self.nodes[id] = node
 
                 # Skip Invisible items
                 if '@visible' in node and node['@visible'] == 'false':
@@ -116,7 +117,7 @@ class Maps(object):
                 is_valid = False
 
                 location = MapLocation(float(node['@lat']), float(node['@lon']))
-                location.id = node['@id']
+                location.id = id
                 location.name = None
 
                 if '@k' in node['tag']:
