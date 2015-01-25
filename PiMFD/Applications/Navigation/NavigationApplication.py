@@ -58,6 +58,7 @@ class NavigationApp(MFDApplication):
         Handles the page reselected event for this application.
         :param page: The page that was reselected.
         """
+        self.map.fetch_by_coordinate(self.controller.options.lat, self.controller.options.lng, 0.01)
         super(NavigationApp, self).page_reselected(page)
 
     def handle_selected(self):
