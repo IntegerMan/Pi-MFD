@@ -26,8 +26,16 @@ class MapEntity(object):
 
 
 class MapPath(MapEntity):
-    pass
+    """
+    Represents a lined area on the map
+    """
 
+    points = list()
+
+    def __init__(self, lat, lng):
+        super(MapPath, self).__init__(lat, lng)
+
+        self.points = list()
 
 class MapLocation(MapEntity):
     """

@@ -3,7 +3,7 @@
 from __future__ import print_function
 import traceback
 
-from PiMFD.Applications.Navigation.MapEntities import MapLocation
+from PiMFD.Applications.Navigation.MapEntities import MapLocation, MapPath
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
 
@@ -77,7 +77,8 @@ class Maps(object):
         self.has_data = False
         self.nodes = {}
         self.ways = []
-        self.tags = []
+
+        self.waypoints = []
         self.locations = []
 
         print("Fetching maps " + url)
@@ -103,6 +104,8 @@ class Maps(object):
 
             # Load Nodes
             for node in osm_dict['osm']['node']:
+
+                # Extract ID and map the node
                 id = node['@id']
                 self.nodes[id] = node
 
@@ -139,6 +142,29 @@ class Maps(object):
                     waypoints.append((float(node['@lat']), float(node['@lon'])))
                 self.ways.append(waypoints)
 
+            # Load Waypoints
+            for waypoint in osm_dict['osm']['way']:
+
+                # Skip Invisible items
+                if '@visible' in waypoint and waypoint['@visible'] == 'false':
+                    continue
+
+                path = MapPath(float(node['@lat']), float(node['@lon']))
+                path.id = waypoint['@id']
+                path.name = None
+
+                # Get points from existing nodes
+                for node_id in waypoint['nd']:
+                    node = self.nodes[node_id['@ref']]
+                    if node:
+                        path.points.append((float(node['@lat']), float(node['@lon'])))
+
+                # Get tags
+                for tag in waypoint['tag']:
+                    self.process_tag(waypoint, tag)
+
+                self.waypoints.append(path)
+
         except:
             error_message = "Unhandled error parsing map data {0}\n".format(str(traceback.format_exc()))
             print(error_message)
@@ -146,21 +172,23 @@ class Maps(object):
         self.has_data = len(self.nodes) > 0
         self.status_text = "Loaded {} Nodes of Map Data".format(len(self.nodes))
 
-    def process_tag(self, location, tag):
+    def process_tag(self, entity, tag):
 
         tag_name = tag["@k"]
         tag_value = tag["@v"]
 
-        # Named Amenities
+        # Name Field
         if tag_name == "name":
-            location.name = tag_value
+            entity.name = tag_value
             return True
 
+        # Special amenities
         elif tag_name in (
                 "amenity", "leisure", "man_made", "shop", "cuisine", "building", "power", "religion", "denomination",
-                "website", "railway", "highway", "edu", "power", "railway"):
+                "website", "railway", "highway", "edu", "power", "railway", "oneway", "maxspeed", "ref", "layer",
+                "natural", "area"):
 
-            location.tags.append((tag_name, tag_value))
+            entity.tags.append((tag_name, tag_value))
             return True
 
         elif not str.startswith(str(tag_name), 'addr:'):
