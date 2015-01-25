@@ -114,36 +114,43 @@ class MapSymbol(MapLocation):
             style = shape.traffic_stop
             right_text = None
         elif self.has_tag_value('amenity', 'pharmacy'):
-            color = cs.red
             style = shape_shop
+            color = cs.map_health
             inner_text = 'RX'
         elif self.has_tag_value('shop', 'beauty'):
             style = shape_service
+            color = cs.map_commercial
             inner_text = 'SPA'
         elif self.has_tag_value('amenity', 'fuel'):
             style = shape_shop
+            color = cs.map_commercial
             inner_text = 'GAS'
         elif self.has_tag_value('amenity', 'school'):
             style = shape_public  # Though this could be service if private school
+            color = cs.map_public
             inner_text = 'EDU'
         elif self.has_tag_value('shop', 'furniture'):
             style = shape_shop
+            color = cs.map_commercial
             inner_text = 'FRN'
         elif self.has_tag_value('shop', 'sports'):
             style = shape_shop
+            color = cs.map_public
             inner_text = 'ATH'
         elif self.has_tag_value('amenity', 'place_of_worship'):
             # TODO: Handle religion / denomination
             style = shape_service
-            color = cs.purple
+            color = cs.map_private
             inner_text = 'REL'
         elif self.has_tag_value('amenity', 'restaurant'):
             # TODO: Handle cuisine
             style = shape_food
+            color = cs.map_commercial
             inner_text = 'EAT'
         elif self.has_tag_value('amenity', 'fast_food'):
             # TODO: Handle cuisine
             style = shape_food
+            color = cs.map_commercial
             inner_text = 'FF'
 
         half_size = shape_size / 2
@@ -189,5 +196,5 @@ class MapSymbol(MapLocation):
                                  bottom_text,
                                  self.lat,
                                  self.lng + half_size + 3,  # + (font.measure(bottom_text)[1] / 2.0),
-                                 text_color)
+                                 color)
 

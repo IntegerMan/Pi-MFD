@@ -14,6 +14,7 @@ class ColorScheme(object):
     """
 
     # Color Constants - Shared values that aren't necessarily themed. Used for maps
+    white = (200, 200, 200)
     red = (200, 0, 0)
     yellow = (200, 200, 0)
     blue = (0, 0, 200)
@@ -22,7 +23,15 @@ class ColorScheme(object):
     gray = (128, 128, 128)
     brown = (150, 86, 64)
     greenish = (0, 150, 64)
-    blueish = (0, 64, 150)
+    blueish = (0, 100, 200)
+
+    # Local Constants
+    map_commercial = white
+    map_private = yellow
+    map_emergency = red
+    map_health = red
+    map_public = greenish
+    map_government = purple
 
     def __init__(self, name, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255),
                  detail=(128, 128, 128)):
