@@ -100,7 +100,13 @@ class Maps(object):
 
         self.status_text = 'Parsing...'
 
-        print(data)
+        # Interpret results. We may get a no data result if we were too greedy or too isolated.
+        if not data or len(data) <= 0:
+            print('No Data Returned')
+            self.has_data = False
+            return
+        else:
+            print(data)
 
         osm_dict = xmltodict.parse(data)
         try:

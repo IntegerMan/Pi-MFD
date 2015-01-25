@@ -11,6 +11,12 @@ from PiMFD.Applications.Navigation.MapLoading import Maps
 __author__ = 'Matt Eland'
 
 
+class MapZooms(object):
+    large = 0.02
+    medium = 0.0125
+    local = 0.0075
+    neighborhood = 0.0025
+
 class NavigationApp(MFDApplication):
     """
     The scheduling application. Contains pages related to scheduling and coordinates web-service communication.
@@ -24,6 +30,8 @@ class NavigationApp(MFDApplication):
     initialized = False
 
     map = None
+    zooms = MapZooms()
+    map_zoom = zooms.local
 
     def __init__(self, controller):
         super(NavigationApp, self).__init__(controller)
@@ -58,7 +66,7 @@ class NavigationApp(MFDApplication):
         Handles the page reselected event for this application.
         :param page: The page that was reselected.
         """
-        self.map.fetch_by_coordinate(self.controller.options.lat, self.controller.options.lng, 0.01)
+        self.get_map_data()
         super(NavigationApp, self).page_reselected(page)
 
     def handle_selected(self):
@@ -67,9 +75,35 @@ class NavigationApp(MFDApplication):
         """
         if not self.initialized:
             # TODO: This should be in another thread so the UI can keep rendering
-            self.map.fetch_by_coordinate(self.controller.options.lat, self.controller.options.lng, 0.01)
-            self.initialized = True
+            self.get_map_data()
 
+    def get_map_data(self):
 
+        self.map.fetch_by_coordinate(self.controller.options.lat, self.controller.options.lng, self.map_zoom)
+        self.initialized = True
 
+    def zoom_in(self):
 
+        if self.map_zoom == self.zooms.large:
+            self.map_zoom = self.zooms.medium
+        elif self.map_zoom == self.zooms.medium:
+            self.map_zoom = self.zooms.local
+        elif self.map_zoom == self.zooms.local:
+            self.map_zoom = self.zooms.neighborhood
+        else:
+            return
+
+        self.get_map_data()
+
+    def zoom_out(self):
+
+        if self.map_zoom == self.zooms.neighborhood:
+            self.map_zoom = self.zooms.local
+        if self.map_zoom == self.zooms.local:
+            self.map_zoom = self.zooms.medium
+        elif self.map_zoom == self.zooms.medium:
+            self.map_zoom = self.zooms.large
+        else:
+            return
+
+        self.get_map_data()

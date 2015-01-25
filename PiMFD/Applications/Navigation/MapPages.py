@@ -5,6 +5,7 @@ This file will hold map pages
 """
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.Applications.Navigation.MapRendering import MapRenderer
+from PiMFD.UI import Keycodes
 
 __author__ = 'Matt Eland'
 
@@ -30,6 +31,18 @@ class MapPage(MFDPage):
             self.center_text('NO DATA')
 
         return super(MapPage, self).render()
+
+    def handle_key(self, key):
+
+        if key == Keycodes.KEY_KP_PLUS or key == Keycodes.KEY_PLUS:
+            self.application.zoom_in()
+            return True
+
+        elif key == Keycodes.KEY_KP_MINUS or key == Keycodes.KEY_MINUS:
+            self.application.zoom_out()
+            return True
+
+        return super(MapPage, self).handle_key(key)
 
 
 
