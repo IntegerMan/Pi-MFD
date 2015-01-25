@@ -1,5 +1,4 @@
 # coding=utf-8
-import pygame
 
 from PiMFD.UI.Rendering import render_text_centered
 
@@ -19,8 +18,6 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
     def render(self):
 
-        cs = self.display.color_scheme
-        default_color = cs.detail
 
         # Smart scale the size to accomodate for the greatest dimension. This lets us support many aspect ratios.
         available_x = self.display.res_x
@@ -38,17 +35,15 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
         # Render the Roads
         for way in ways:
-            # TODO: Use the rendering helpers
-            color = default_color
-            pygame.draw.lines(self.display.surface, color, False, way, 1)
+            way.render(self.display)
 
         # We want to render ourselves on the map
+        # TODO: Treat this as a symbol
         render_text_centered(self.display,
                              self.display.fonts.small,
                              'ME', center[0], center[1] - font_y_offset,
-                             cs.highlight)
+                             self.display.color_scheme.highlight)
 
         # Render the other awesome things
         for symbol in symbols:
             symbol.render(self.display)
-            # self.map.tags[tag[0]] = (tag[1] + self.map.position[0], tag[2] + self.map.position[1], tag[3])

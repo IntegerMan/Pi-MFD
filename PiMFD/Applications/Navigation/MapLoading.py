@@ -4,6 +4,7 @@ from __future__ import print_function
 import traceback
 
 from PiMFD.Applications.Navigation.MapEntities import MapLocation, MapPath
+from PiMFD.Applications.Navigation.MapLines import MapLine
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
 
@@ -211,26 +212,38 @@ class Maps(object):
         ))
 
     def transpose_ways(self, dimensions, offset, flip_y=True):
+
         width = dimensions[0]
         height = dimensions[1]
+
         w_coef = width / self.width / 2
         h_coef = height / self.height / 2
-        transways = []
+
+        lines = []
+
         for way in self.waypoints:
-            transway = []
+
+            line = MapLine(way)
+
             for waypoint in way.points:
+
                 lat = waypoint[1] - self.origin[1]
                 lng = waypoint[0] - self.origin[0]
+
                 wp = [
                     (lat * w_coef) + offset[0],
                     (lng * h_coef) + offset[1]
                 ]
+
                 if flip_y:
                     wp[1] *= -1
                     wp[1] += offset[1] * 2
-                transway.append(wp)
-            transways.append(transway)
-        return transways
+
+                line.points.append(wp)
+
+            lines.append(line)
+
+        return lines
 
     def transpose_locations(self, dimensions, offset, flip_y=True):
 
