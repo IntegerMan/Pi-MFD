@@ -67,6 +67,25 @@ def render_circle(display_manager, color, center_pos, radius, width=1):
     return pygame.draw.circle(display_manager.surface, color, center_pos, radius, width)
 
 
+def render_diamond(display_manager, color, center_pos, radius, width=1):
+    """
+    Renders a diamond
+    :param display_manager: The display manager
+    :param color: The color to use for the shape
+    :param center_pos: A point indicating the center of the diamond
+    :param radius: The distance from the center of the diamond to each of the four colors
+    :param width: The thickness of the diamond or 0 for fill
+    :return: A Rect indicating the bounds of the drawn areas
+    """
+
+    x = center_pos[0]
+    y = center_pos[1]
+
+    points = ((x - radius, y), (x, y - radius), (x + radius, y), (x, y + radius))
+
+    return pygame.draw.polygon(display_manager.surface, color, points, width)
+
+
 def render_text(display_manager, font, text, left, top, color, background=None, surface=None):
     """
     Renders text to the screen at the specified coordinates with the specified display parameters

@@ -15,6 +15,7 @@ class MapEntity(object):
     tags = list()
     lat = 0.0
     lng = 0.0
+    id = 'UNK'
 
     def __init__(self, lat, lng):
         super(MapEntity, self).__init__()

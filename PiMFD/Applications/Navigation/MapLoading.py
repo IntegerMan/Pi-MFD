@@ -1,8 +1,11 @@
 # coding=utf-8
 
 from __future__ import print_function
+import traceback
+
 from PiMFD.Applications.Navigation.MapEntities import MapLocation
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
+
 
 """
 Contains code related to rendering maps to the screen
@@ -84,15 +87,18 @@ class Maps(object):
             try:
                 response = requests.get(url)
             except:
-                pass
+                error_message = "Unhandled error {0}\n".format(str(traceback.format_exc()))
+                print(error_message)
             else:
                 break
 
-        data = response.text
+        data = response.text.encode('UTF-8')
 
         self.status_text = 'Parsing...'
 
-        osm_dict = xmltodict.parse(data.encode('UTF-8'))
+        print(data)
+
+        osm_dict = xmltodict.parse(data)
         try:
 
             # Load Nodes
@@ -107,16 +113,21 @@ class Maps(object):
                 if 'tag' not in node:
                     continue
 
+                is_valid = False
+
                 location = MapLocation(float(node['@lat']), float(node['@lon']))
+                location.id = node['@id']
                 location.name = None
 
                 if '@k' in node['tag']:
-                    self.process_tag(location, node['tag'])
+                    if self.process_tag(location, node['tag']):
+                        is_valid = True
                 else:
                     for tag in node['tag']:
-                        self.process_tag(location, tag)
+                        if self.process_tag(location, tag):
+                            is_valid = True
 
-                if location.name:
+                if is_valid:
                     self.locations.append(location)
 
             # Load Waypoints
@@ -139,21 +150,20 @@ class Maps(object):
 
         # Named Amenities
         if tag_name == "name":
-
             location.name = tag_value
+            return True
 
         elif tag_name in (
-        "amenity", "leisure", "man_made", "shop", "cuisine", "building", "power", "religion", "denomination", "website",
-        "railway", "highway", "edu"):
+                "amenity", "leisure", "man_made", "shop", "cuisine", "building", "power", "religion", "denomination",
+                "website", "railway", "highway", "edu", "power", "railway"):
 
             location.tags.append((tag_name, tag_value))
+            return True
 
-            if tag_name == 'highway' and tag_value == 'traffic_signals' and location.name == None:
-                location.name = 'SIG'
-
-        else:
+        elif not str.startswith(str(tag_name), 'addr:'):
             print('ignoring pair: ' + tag_name + '/' + tag_value)
 
+        return False
 
     def fetch_by_coordinate(self, lat, lng, range):
 

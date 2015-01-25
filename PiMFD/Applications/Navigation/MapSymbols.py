@@ -6,10 +6,27 @@ Code organized around rendering locations to the map
 from pygame.rect import Rect
 
 from PiMFD.Applications.Navigation.MapEntities import MapLocation
-from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered
+from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond
 
 
 __author__ = 'Matt Eland'
+
+
+class SymbolBackShape(object):
+    """
+    The backing of a symbol
+    """
+
+    none = 0
+    square = 1
+    circle = 2
+    diamond = 3
+    triangle = 4
+    dot = 5
+    square_top_triangle = 6
+    bullseye = 7
+    traffic_stop = 8
+    double_circle = 9
 
 
 class MapSymbol(MapLocation):
@@ -22,14 +39,30 @@ class MapSymbol(MapLocation):
 
         self.tags = location.tags
         self.name = location.name
+        self.id = location.id
+
 
     def get_tags(self, name):
+        """
+        Gets all tags that have name as their key
+        :type name: str
+        :param name: The tag key
+        :return: All tags (yielded) that have the matching name
+        """
 
         for tag in self.tags:
             if tag[0] == name:
                 yield tag
 
     def has_tag_value(self, name, value):
+        """
+        Determins if the specified tag / value pair exists in this set
+        :type name: str
+        :param name: The tag key
+        :type value: str
+        :param value: The tag value
+        :return: True if the key / value pair was present, otherwise False
+        """
 
         for tag in self.get_tags(name):
             if tag[1] == value:
@@ -44,9 +77,6 @@ class MapSymbol(MapLocation):
         :return: the font to use to display, the text to render, and the color to use
         """
 
-        highlight = display.color_scheme.highlight
-        foreground = display.color_scheme.highlight
-
         return display.fonts.small, self.name.upper(), display.color_scheme.highlight
 
     def render(self, display):
@@ -59,7 +89,7 @@ class MapSymbol(MapLocation):
         #
         # Main Shape
         # Square - Amenities
-        #   Circle - Government / Services / Public
+        # Circle - Government / Services / Public
         #   Diamond - Shops
         #   Square w. Diamond Top - Residential
         #
@@ -82,84 +112,114 @@ class MapSymbol(MapLocation):
         shape_width = 1
         shape_size = 20
 
+        # Set shape. Python 2.7 doesn't have enum support so I'm using a placeholder class for that.
+        shape = SymbolBackShape()
+        style = shape.circle
+
+        shape_shop = shape.diamond
+        shape_service = shape.square
+        shape_public = shape.circle
+        shape_food = shape.circle
+
+        font = display.fonts.small
+
+        pos = (int(self.lat), int(self.lng))
+
+        # Colors
         red = (200, 0, 0)
+        yellow = (200, 200, 0)
+        green = (0, 200, 0)
         purple = (100, 0, 200)
-
-        font, text, color = self.get_font_text_and_color(display)
-
+        highlight = display.color_scheme.highlight
+        foreground = display.color_scheme.highlight
+        color = highlight
         text_color = color
 
         left_text = None
-        right_text = self.name  # TODO: Use an ID here
+        right_text = None
         bottom_text = self.name
         inner_text = None
 
         # Modify our display parameters based on what our context is
 
         if self.has_tag_value('highway', 'traffic_signals'):
-            shape_width = 0
-            shape_size = 10
-            color = red
+            style = shape.traffic_stop
             right_text = None
         elif self.has_tag_value('amenity', 'pharmacy'):
             color = red
-            draw_square = True  # TODO: Diamond?
-            draw_circle = False
+            style = shape_shop
             inner_text = 'RX'
         elif self.has_tag_value('shop', 'beauty'):
-            draw_square = True  # TODO: Diamond?
-            draw_circle = False
+            style = shape_service
             inner_text = 'SPA'
         elif self.has_tag_value('amenity', 'fuel'):
+            style = shape_shop
             inner_text = 'GAS'
         elif self.has_tag_value('amenity', 'school'):
+            style = shape_public  # Though this could be service if private school
             inner_text = 'EDU'
         elif self.has_tag_value('shop', 'furniture'):
-            draw_square = True
-            draw_circle = False
+            style = shape_shop
             inner_text = 'FRN'
         elif self.has_tag_value('shop', 'sports'):
-            draw_square = True
-            draw_circle = False
+            style = shape_shop
             inner_text = 'ATH'
         elif self.has_tag_value('amenity', 'place_of_worship'):
-            # TODO: Handle denomination / religion
+            # TODO: Handle religion / denomination
+            style = shape_service
             color = purple
             inner_text = 'REL'
         elif self.has_tag_value('amenity', 'restaurant'):
             # TODO: Handle cuisine
-            draw_square = True
-            draw_circle = False
+            style = shape_food
             inner_text = 'EAT'
         elif self.has_tag_value('amenity', 'fast_food'):
             # TODO: Handle cuisine
-            draw_square = True
-            draw_circle = False
-            inner_text = 'FFD'
+            style = shape_food
+            inner_text = 'FF'
 
         half_size = shape_size / 2
 
-        if draw_circle:
-            render_circle(display, color, (int(self.lat), int(self.lng)), half_size, shape_width)
+        if style == shape.circle:
+            render_circle(display, color, pos, half_size + 2, shape_width)
 
-        if draw_square:
+        elif style == shape.square:
             render_rectangle(display, color, Rect(self.lat - half_size, self.lng - half_size, shape_size, shape_size),
                              shape_width)
+
+        elif style == shape.diamond:
+            render_diamond(display, color, pos, half_size + 2, shape_width)
+
+        elif style == shape.double_circle:
+            render_circle(display, color, (int(self.lat), int(self.lng)), half_size + 2, shape_width)
+            render_circle(display, color, (int(self.lat), int(self.lng)), half_size, shape_width)
+
+        elif style == shape.traffic_stop:
+            render_circle(display, red, (int(self.lat), int(self.lng)), 4, 0)
+            render_circle(display, yellow, (int(self.lat), int(self.lng)), 3, 0)
+            render_circle(display, green, (int(self.lat), int(self.lng)), 1, 0)
 
         if inner_text:
             render_text_centered(display,
                                  font,
                                  inner_text,
                                  self.lat,
-                                 self.lng - (font.measure(text)[1] / 2.0),
+                                 self.lng - (font.measure(inner_text)[1] / 2.0),
                                  color)
 
         if right_text:
             render_text(display,
                         font,
                         right_text,
-                        self.lat + half_size + 2,
-                        self.lng - (font.measure(text)[1] / 2.0),
+                        self.lat + half_size + 3,
+                        self.lng - (font.measure(right_text)[1] / 2.0),
                         text_color)
 
+        if bottom_text:
+            render_text_centered(display,
+                                 font,
+                                 bottom_text,
+                                 self.lat,
+                                 self.lng + half_size + 3,  # + (font.measure(bottom_text)[1] / 2.0),
+                                 text_color)
 
