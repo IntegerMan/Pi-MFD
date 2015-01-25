@@ -27,10 +27,11 @@ class ColorScheme(object):
 
     # Local Constants
     map_commercial = white
+    map_automotive = greenish
     map_private = yellow
     map_emergency = red
     map_health = red
-    map_public = greenish
+    map_public = blueish
     map_government = purple
 
     def __init__(self, name, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255),

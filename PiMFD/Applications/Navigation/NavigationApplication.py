@@ -99,7 +99,7 @@ class NavigationApp(MFDApplication):
 
         if self.map_zoom == self.zooms.neighborhood:
             self.map_zoom = self.zooms.local
-        if self.map_zoom == self.zooms.local:
+        elif self.map_zoom == self.zooms.local:
             self.map_zoom = self.zooms.medium
         elif self.map_zoom == self.zooms.medium:
             self.map_zoom = self.zooms.large

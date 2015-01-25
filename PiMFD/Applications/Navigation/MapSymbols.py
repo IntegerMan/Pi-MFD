@@ -125,13 +125,23 @@ class MapSymbol(MapLocation):
 
         elif self.has_tag_value('amenity', 'fuel'):
             style = shape_shop
-            color = cs.map_commercial
+            color = cs.map_automotive
             inner_text = 'GAS'
 
         elif self.has_tag_value('amenity', 'school'):
             style = shape_public  # Though this could be service if private school
             color = cs.map_public
             inner_text = 'EDU'
+
+        elif self.has_tag_value('amenity', 'veterinary'):
+            style = shape_service
+            color = cs.map_health
+            inner_text = 'VET'
+
+        elif self.has_tag_value('shop', 'car_repair'):
+            style = shape_service
+            color = cs.map_automotive
+            inner_text = 'CAR'
 
         elif self.has_tag_value('shop', 'furniture'):
             style = shape_shop
@@ -140,8 +150,18 @@ class MapSymbol(MapLocation):
 
         elif self.has_tag_value('shop', 'sports'):
             style = shape_shop
-            color = cs.map_public
+            color = cs.map_commercial
             inner_text = 'ATH'
+
+        elif self.has_tag_value('shop', 'free_flying'):
+            style = shape_shop
+            color = cs.map_commercial
+            inner_text = 'FLY'
+
+        elif self.has_tag_value('shop', 'shoes'):
+            style = shape_shop
+            color = cs.map_commercial
+            inner_text = 'WLK'
 
         elif self.has_tag_value('amenity', 'place_of_worship'):
 
