@@ -97,12 +97,9 @@ class MapSymbol(MapLocation):
         pos = (int(self.lat), int(self.lng))
 
         # Colors
-        red = (200, 0, 0)
-        yellow = (200, 200, 0)
-        green = (0, 200, 0)
-        purple = (100, 0, 200)
-        highlight = display.color_scheme.highlight
-        foreground = display.color_scheme.highlight
+        cs = display.color_scheme
+        highlight = cs.highlight
+        foreground = cs.foreground
         color = highlight
         text_color = color
 
@@ -117,7 +114,7 @@ class MapSymbol(MapLocation):
             style = shape.traffic_stop
             right_text = None
         elif self.has_tag_value('amenity', 'pharmacy'):
-            color = red
+            color = cs.red
             style = shape_shop
             inner_text = 'RX'
         elif self.has_tag_value('shop', 'beauty'):
@@ -138,7 +135,7 @@ class MapSymbol(MapLocation):
         elif self.has_tag_value('amenity', 'place_of_worship'):
             # TODO: Handle religion / denomination
             style = shape_service
-            color = purple
+            color = cs.purple
             inner_text = 'REL'
         elif self.has_tag_value('amenity', 'restaurant'):
             # TODO: Handle cuisine
@@ -166,9 +163,9 @@ class MapSymbol(MapLocation):
             render_circle(display, color, (int(self.lat), int(self.lng)), half_size, shape_width)
 
         elif style == shape.traffic_stop:
-            render_circle(display, red, (int(self.lat), int(self.lng)), 4, 0)
-            render_circle(display, yellow, (int(self.lat), int(self.lng)), 3, 0)
-            render_circle(display, green, (int(self.lat), int(self.lng)), 1, 0)
+            render_circle(display, cs.red, (int(self.lat), int(self.lng)), 4, 0)
+            render_circle(display, cs.yellow, (int(self.lat), int(self.lng)), 3, 0)
+            render_circle(display, cs.green, (int(self.lat), int(self.lng)), 1, 0)
 
         if inner_text:
             render_text_centered(display,

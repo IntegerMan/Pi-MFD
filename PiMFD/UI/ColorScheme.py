@@ -13,6 +13,17 @@ class ColorScheme(object):
     :type highlight: tuple RGB values for highlighted text
     """
 
+    # Color Constants - Shared values that aren't necessarily themed. Used for maps
+    red = (200, 0, 0)
+    yellow = (200, 200, 0)
+    blue = (0, 0, 200)
+    green = (0, 200, 0)
+    purple = (100, 0, 200)
+    gray = (128, 128, 128)
+    brown = (150, 86, 64)
+    greenish = (0, 150, 64)
+    blueish = (0, 64, 150)
+
     def __init__(self, name, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255),
                  detail=(128, 128, 128)):
         self.background = background

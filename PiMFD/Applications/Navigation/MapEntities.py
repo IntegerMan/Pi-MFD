@@ -48,6 +48,19 @@ class MapEntity(object):
 
         return False
 
+    def get_tag_value(self, name):
+        """
+        Gets the value for the first tag that matches name or returns None
+        :type name: str
+        :param name: The tag key
+        :return: The value for the first tag that matches name or returns None
+        """
+
+        for tag in self.get_tags(name):
+            return tag[1]
+
+        return None
+
     def has_tag_value(self, name, value):
         """
         Determins if the specified tag / value pair exists in this set
