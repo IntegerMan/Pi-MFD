@@ -103,16 +103,15 @@ class MapSymbol(MapLocation):
         color = highlight
         text_color = color
 
-        left_text = None
-        right_text = None
-        bottom_text = self.abbreviate(self.name)
+        display_name = self.abbreviate(self.name)
+        extra_data = None
         inner_text = None
 
         # Modify our display parameters based on what our context is
 
         if self.has_tag_value('highway', 'traffic_signals'):
             style = shape.traffic_stop
-            right_text = None
+            display_name = None
 
         elif self.has_tag_value('amenity', 'pharmacy'):
             style = shape_shop
@@ -145,24 +144,39 @@ class MapSymbol(MapLocation):
             inner_text = 'ATH'
 
         elif self.has_tag_value('amenity', 'place_of_worship'):
-            # TODO: Handle religion / denomination
+
+            # Plug in the denomination or religion
+            extra_data = self.get_tag_value('denomination')
+            if extra_data is None:
+                extra_data = self.get_tag_value('religion')
+
             style = shape_service
             color = cs.map_private
             inner_text = 'REL'
 
         elif self.has_tag_value('amenity', 'restaurant'):
-            # TODO: Handle cuisine
-            style = shape_service
+
+            # Plug in the cuisine
+            extra_data = self.get_tag_value('cuisine')
+
+            style = shape_service  # Service since we eat in
             color = cs.map_commercial
-            icons.append(FoodIcon())
+
+            icons.append(FoodIcon())  # TODO: Render by cuisine
 
         elif self.has_tag_value('amenity', 'fast_food'):
-            # TODO: Handle cuisine
-            style = shape_shop
+
+            # Plug in the cuisine
+            extra_data = self.get_tag_value('cuisine')
+            style = shape_shop  # Shop since it's to go
             color = cs.map_commercial
-            icons.append(FoodIcon())
+
+            icons.append(FoodIcon())  # TODO: Render by cuisine
 
         half_size = shape_size / 2
+
+        right_text = extra_data
+        bottom_text = display_name
 
         if style == shape.circle:
             render_circle(display, color, pos, half_size + 2, shape_width)
