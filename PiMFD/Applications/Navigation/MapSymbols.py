@@ -6,6 +6,7 @@ Code organized around rendering locations to the map
 from pygame.rect import Rect
 
 from PiMFD.Applications.Navigation.MapEntities import MapLocation
+from PiMFD.Applications.Navigation.MapIcons import ChairIcon
 from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond
 
 
@@ -90,6 +91,8 @@ class MapSymbol(MapLocation):
         shape_public = shape.circle
         shape_food = shape.circle
 
+        icon_renderer = None
+
         font = display.fonts.small
 
         pos = (int(self.lat), int(self.lng))
@@ -130,7 +133,7 @@ class MapSymbol(MapLocation):
         elif self.has_tag_value('shop', 'furniture'):
             style = shape_shop
             color = cs.map_commercial
-            inner_text = 'FRN'
+            icon_renderer = ChairIcon()
         elif self.has_tag_value('shop', 'sports'):
             style = shape_shop
             color = cs.map_public
@@ -164,13 +167,16 @@ class MapSymbol(MapLocation):
             render_diamond(display, color, pos, half_size + 2, shape_width)
 
         elif style == shape.double_circle:
-            render_circle(display, color, (int(self.lat), int(self.lng)), half_size + 2, shape_width)
-            render_circle(display, color, (int(self.lat), int(self.lng)), half_size, shape_width)
+            render_circle(display, color, pos, half_size + 2, shape_width)
+            render_circle(display, color, pos, half_size, shape_width)
 
         elif style == shape.traffic_stop:
-            render_circle(display, cs.red, (int(self.lat), int(self.lng)), 4, 0)
-            render_circle(display, cs.yellow, (int(self.lat), int(self.lng)), 3, 0)
-            render_circle(display, cs.green, (int(self.lat), int(self.lng)), 1, 0)
+            render_circle(display, cs.red, pos, 4, 0)
+            render_circle(display, cs.yellow, pos, 3, 0)
+            render_circle(display, cs.green, pos, 1, 0)
+
+        if icon_renderer:
+            icon_renderer.render(display, color, pos, half_size)
 
         if inner_text:
             render_text_centered(display,

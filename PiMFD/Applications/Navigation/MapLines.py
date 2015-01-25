@@ -52,6 +52,9 @@ class MapLine(MapPath):
                 width = 1
             elif value == 'residential':
                 width = 1
+            elif value == 'path':
+                width = 1
+                color = cs.brown
             elif value == 'service':
                 width = 1
                 color = cs.map_private
