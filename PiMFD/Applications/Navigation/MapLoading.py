@@ -22,8 +22,8 @@ class Maps(object):
     A class used for requesting and managing Open Street Maps (OSM) map data
     """
     nodes = {}
-    ways = []
     locations = []
+    waypoints = []
     origin = None
     width = 0
     height = 0
@@ -36,6 +36,9 @@ class Maps(object):
 
     def __init__(self):
         super(Maps, self).__init__()
+
+        self.locations = []
+        self.waypoints = []
 
     def float_floor_to_precision(self, value, precision):
         for i in range(precision):
@@ -76,7 +79,6 @@ class Maps(object):
         # Clear out old data
         self.has_data = False
         self.nodes = {}
-        self.ways = []
 
         self.waypoints = []
         self.locations = []
@@ -135,14 +137,6 @@ class Maps(object):
                     self.locations.append(location)
 
             # Load Waypoints
-            for way in osm_dict['osm']['way']:
-                waypoints = []
-                for node_id in way['nd']:
-                    node = self.nodes[node_id['@ref']]
-                    waypoints.append((float(node['@lat']), float(node['@lon'])))
-                self.ways.append(waypoints)
-
-            # Load Waypoints
             for waypoint in osm_dict['osm']['way']:
 
                 # Skip Invisible items
@@ -161,7 +155,14 @@ class Maps(object):
 
                 # Get tags
                 for tag in waypoint['tag']:
-                    self.process_tag(waypoint, tag)
+                    if tag == '@k':
+                        self.process_tag(path, waypoint['tag'])
+                        break
+                    elif '@k' in tag:
+                        self.process_tag(path, tag)
+                    else:
+                        for tag2 in tag:
+                            self.process_tag(path, tag2)
 
                 self.waypoints.append(path)
 
@@ -186,12 +187,16 @@ class Maps(object):
         elif tag_name in (
                 "amenity", "leisure", "man_made", "shop", "cuisine", "building", "power", "religion", "denomination",
                 "website", "railway", "highway", "edu", "power", "railway", "oneway", "maxspeed", "ref", "layer",
-                "natural", "area"):
+                "natural", "area", "usage", "operator", "electrified", "gauge", "water", "sport", "access", "bridge",
+                "abbr_name", "boundary", "admin_level", "ele"):
 
             entity.tags.append((tag_name, tag_value))
             return True
 
-        elif not str.startswith(str(tag_name), 'addr:'):
+        elif not str.startswith(str(tag_name), 'addr:') and not str.startswith(str(tag_name),
+                                                                               'tiger:') and tag_name != 'source' and not str.startswith(
+                str(tag_name), 'gnis:'):
+
             print('ignoring pair: ' + tag_name + '/' + tag_value)
 
         return False
@@ -211,9 +216,9 @@ class Maps(object):
         w_coef = width / self.width / 2
         h_coef = height / self.height / 2
         transways = []
-        for way in self.ways:
+        for way in self.waypoints:
             transway = []
-            for waypoint in way:
+            for waypoint in way.points:
                 lat = waypoint[1] - self.origin[1]
                 lng = waypoint[0] - self.origin[0]
                 wp = [
