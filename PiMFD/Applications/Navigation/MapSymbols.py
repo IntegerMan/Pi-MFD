@@ -105,7 +105,7 @@ class MapSymbol(MapLocation):
 
         left_text = None
         right_text = None
-        bottom_text = self.name
+        bottom_text = self.abbreviate(self.name)
         inner_text = None
 
         # Modify our display parameters based on what our context is

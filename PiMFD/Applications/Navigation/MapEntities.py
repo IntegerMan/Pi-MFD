@@ -78,6 +78,44 @@ class MapEntity(object):
         return False
 
 
+    @staticmethod
+    def abbreviate(name, pretty=False):
+        """
+        Abbreviates a string by intelligently removing middle words and using the first initial
+        """
+
+        if name is None:
+            return None
+
+        names = name.split()
+
+        if len(names) <= 2:
+            return name
+
+        # Chop off silly opening words
+        if names[0].lower() == 'the' or names[0].lower() == 'le' or names[0].lower() == 'la' or names[
+            0].lower() == 'el':
+            names = names[1:]
+            return MapEntity.abbreviate(' '.join(names), pretty)
+
+        result = [names[0]]
+        tiny_name = False
+
+        for surname in names[1:-1]:
+            if len(surname) <= 3:
+                result.append(surname)
+                tiny_name = True
+            else:
+                if pretty and tiny_name:
+                    result.append(surname)
+                else:
+                    result.append(surname[0] + '.')
+                tiny_name = False
+
+        result.append(names[-1])
+
+        return ' '.join(result)
+
 class MapPath(MapEntity):
     """
     Represents a lined area on the map
