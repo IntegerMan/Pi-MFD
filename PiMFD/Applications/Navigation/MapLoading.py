@@ -224,7 +224,7 @@ class Maps(object):
                 "abbr_name", "boundary", "admin_level", "ele", 'landuse', 'short_name', 'opening_hours', 'phone',
                 "waterway", "clothes", "fee", "width", "border_type", "traffic_sign", "sidewalk", "barrier", "foot",
                 "horse", "lanes", "bicycle", "tourism", "exit_to", "shortest_name", "hgv", "place", "footway",
-                "cycleway"):
+                "cycleway", "name_1", "note"):
 
             entity.tags.append((tag_name, tag_value))
             return True

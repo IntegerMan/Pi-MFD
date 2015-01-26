@@ -85,7 +85,7 @@ class MapLine(MapSymbol, MapPath):
 
             # If it's got a bridge, we'll handle it a bit differently
             if self.has_tag_value('bridge', 'yes'):
-                color = cs.white
+                color = cs.map_structural
 
         elif self.has_tag_value('boundary', 'administrative'):
             show_name = True

@@ -122,6 +122,9 @@ class MapSymbol(MapLocation):
                 color = cs.map_automotive
             elif highway == 'street_lamp':
                 color = cs.map_infrastructure
+                style = shape.circle
+                shape_width = 0
+                shape_size = 1
             elif highway == 'motorway_junction':
                 color = cs.map_automotive
                 style = shape.diamond
@@ -220,10 +223,34 @@ class MapSymbol(MapLocation):
             color = cs.map_recreation
 
         elif self.has_tag('power'):
+
+            power = self.get_tag_value('power')
+
+            if power == 'tower':
+                style = shape.triangle
+                shape_size = 6
+
             color = cs.map_infrastructure
 
         elif self.has_tag('barrier'):
-            color = cs.map_private
+
+            shape_size = 3
+
+            barrier = self.get_tag_value('barrier')
+            if barrier in (
+            'city_wall', 'guard_rail', 'cable_barrier', 'block', 'border_control', 'debris', 'height_restrictor',
+            'jersey_barrier', 'sally_port'):
+                color = cs.map_structural
+            elif barrier in ('ditch', 'retaining_wall', 'hedge', 'horse_stile', 'log'):
+                color = cs.map_vegitation
+            elif barrier in ('wall', 'fence', 'entrance', 'gate', 'hampshire_gate', 'lift_gate', 'spikes'):
+                color = cs.map_private
+            elif barrier in (
+            'bollard', 'kerb', 'cycle_barrier', 'chain', 'full-height_turnstile', 'kissing_gate', 'kent_carriage_gap',
+            'rope', 'motorcycle_barrier'):
+                color = cs.map_pedestrian
+            else:
+                color = cs.map_unknown
 
         elif self.has_tag_value('footway', 'crossing'):
             style = shape.diamond

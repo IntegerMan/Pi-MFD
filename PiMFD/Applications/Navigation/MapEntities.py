@@ -113,6 +113,9 @@ class MapEntity(object):
         elif building in ('kindergarten', 'school'):
             return cs.map_public
 
+        elif building in ('retail', 'commercial'):
+            return cs.map_commercial  # TODO: It'd be good to narrow down if possible
+
         elif building == 'office':
             return cs.map_private
 
@@ -127,6 +130,9 @@ class MapEntity(object):
 
         elif building == 'hotel':
             return cs.map_public
+
+        elif building in ('yes', 'roof'):
+            return cs.map_structural
 
         return cs.map_unknown
 

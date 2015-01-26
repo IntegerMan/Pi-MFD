@@ -18,6 +18,7 @@ class ColorScheme(object):
     red = (200, 0, 0)
     yellow = (200, 200, 0)
     blue = (0, 0, 200)
+    slight_blue = (150, 200, 200)
     green = (0, 200, 0)
     purple = (100, 0, 200)
     gray = (128, 128, 128)
@@ -35,7 +36,7 @@ class ColorScheme(object):
     highlight = (255, 255, 255)
 
     # Map Colors
-    map_commercial = white
+    map_commercial = slight_blue
     map_automotive = blueish
     map_water = blueish
     map_private = yellow
@@ -51,6 +52,7 @@ class ColorScheme(object):
     map_major_road = detail
     map_government = purple
     map_pedestrian = brown
+    map_structural = gray
 
     def __init__(self, name, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255),
                  detail=(128, 128, 128)):
