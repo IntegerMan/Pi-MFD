@@ -176,10 +176,11 @@ class MapLine(MapSymbol, MapPath):
             show_name = True
 
         # TODO: Use the rendering helpers
-        if width <= 0:
-            pygame.draw.polygon(display.surface, color, self.points, width)
-        else:
-            pygame.draw.lines(display.surface, color, False, self.points, width)
+        if len(self.points) > 0:
+            if width <= 0:
+                pygame.draw.polygon(display.surface, color, self.points, width)
+            else:
+                pygame.draw.lines(display.surface, color, False, self.points, width)
 
         if show_name:
 

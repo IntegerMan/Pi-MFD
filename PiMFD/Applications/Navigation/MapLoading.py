@@ -174,21 +174,31 @@ class Maps(object):
                 path.name = None
 
                 # Get points from existing nodes
-                for node_id in waypoint['nd']:
-                    node = self.nodes[node_id['@ref']]
-                    if node:
-                        path.points.append((float(node['@lat']), float(node['@lon'])))
+                try:
+                    for node_id in waypoint['nd']:
+                        if '@ref' in node_id:
+                            node = self.nodes[node_id['@ref']]
+                            if node:
+                                path.points.append((float(node['@lat']), float(node['@lon'])))
+                except:
+                    error_message = "Unhandled error handling points {0}\n".format(str(traceback.format_exc()))
+                    print(error_message)
 
                 # Get tags
-                for tag in waypoint['tag']:
-                    if tag == '@k':
-                        self.process_tag(path, waypoint['tag'])
-                        break
-                    elif '@k' in tag:
-                        self.process_tag(path, tag)
-                    else:
-                        for tag2 in tag:
-                            self.process_tag(path, tag2)
+                try:
+                    if 'tag' in waypoint:
+                        for tag in waypoint['tag']:
+                            if tag == '@k':
+                                self.process_tag(path, waypoint['tag'])
+                                break
+                            elif '@k' in tag:
+                                self.process_tag(path, tag)
+                            else:
+                                for tag2 in tag:
+                                    self.process_tag(path, tag2)
+                except:
+                    error_message = "Unhandled error handling tags {0}\n".format(str(traceback.format_exc()))
+                    print(error_message)
 
                 self.waypoints.append(path)
 
@@ -276,8 +286,8 @@ class Maps(object):
                 line.points.append(wp)
 
             # Calculate the center of the shape by looking at the average center of the points
-            line.x = tot_x / float(len(line.points))
-            line.y = tot_y / float(len(line.points))
+            line.x = tot_x / max(1, float(len(line.points)))
+            line.y = tot_y / max(1, float(len(line.points)))
 
             lines.append(line)
 

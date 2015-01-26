@@ -2,7 +2,9 @@
 """
 Contains various helper methods for rendering
 """
+import traceback
 import pygame
+from pygame.rect import Rect
 
 __author__ = 'Matt Eland'
 
