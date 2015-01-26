@@ -36,6 +36,10 @@ class NavigationApp(MFDApplication):
     zooms = MapZooms()
     map_zoom = zooms.local
 
+    # These values are used for determining quantity of overlap while moving in a direction
+    x_page_multiplier = 0.8
+    y_page_multiplier = 0.5
+
     def __init__(self, controller):
         super(NavigationApp, self).__init__(controller)
 
@@ -112,3 +116,27 @@ class NavigationApp(MFDApplication):
             return
 
         self.get_map_data()
+
+    def move_up(self):
+        if self.map.has_data:
+            bounds = self.map.bounds
+            size = (bounds[3] - bounds[1]) * self.y_page_multiplier
+            self.map.fetch_area([bounds[0], bounds[1] + size, bounds[2], bounds[3] + size])
+
+    def move_right(self):
+        if self.map.has_data:
+            bounds = self.map.bounds
+            size = (bounds[2] - bounds[0]) * self.x_page_multiplier
+            self.map.fetch_area([bounds[0] + size, bounds[1], bounds[2] + size, bounds[3]])
+
+    def move_left(self):
+        if self.map.has_data:
+            bounds = self.map.bounds
+            size = (bounds[2] - bounds[0]) * self.x_page_multiplier
+            self.map.fetch_area([bounds[0] - size, bounds[1], bounds[2] - size, bounds[3]])
+
+    def move_down(self):
+        if self.map.has_data:
+            bounds = self.map.bounds
+            size = (bounds[3] - bounds[1]) * self.y_page_multiplier
+            self.map.fetch_area([bounds[0], bounds[1] - size, bounds[2], bounds[3] - size])

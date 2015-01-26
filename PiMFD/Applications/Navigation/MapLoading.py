@@ -68,6 +68,7 @@ class Maps(object):
     def fetch_area(self, bounds):
         self.height = (bounds[2] - bounds[0]) / 2
         self.width = (bounds[3] - bounds[1]) / 2
+        self.bounds = bounds
         self.origin = (
             bounds[1] + self.height,
             bounds[0] + self.width

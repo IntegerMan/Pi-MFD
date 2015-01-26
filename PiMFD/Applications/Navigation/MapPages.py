@@ -6,6 +6,7 @@ This file will hold map pages
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.Applications.Navigation.MapRendering import MapRenderer
 from PiMFD.UI import Keycodes
+from PiMFD.UI.Keycodes import is_up_key, is_right_key, is_left_key, is_down_key
 
 __author__ = 'Matt Eland'
 
@@ -41,6 +42,18 @@ class MapPage(MFDPage):
         elif key == Keycodes.KEY_KP_MINUS or key == Keycodes.KEY_MINUS:
             self.application.zoom_out()
             return True
+
+        elif is_up_key(key):
+            self.application.move_up()
+
+        elif is_right_key(key):
+            self.application.move_right()
+
+        elif is_down_key(key):
+            self.application.move_down()
+
+        elif is_left_key(key):
+            self.application.move_left()
 
         return super(MapPage, self).handle_key(key)
 

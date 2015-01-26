@@ -1,7 +1,5 @@
 # coding=utf-8
 
-from PiMFD.UI.Rendering import render_text_centered
-
 
 __author__ = 'Matt Eland'
 
@@ -37,12 +35,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         for way in ways:
             way.render(self.display)
 
-        # We want to render ourselves on the map
-        # TODO: Treat this as a symbol
-        render_text_centered(self.display,
-                             self.display.fonts.small,
-                             'ME', center[0], center[1] - font_y_offset,
-                             self.display.color_scheme.highlight)
+        # TODO: Render custom annotations to the map at GPS coordinates. This should include ourselves
 
         # Render the other awesome things
         for symbol in symbols:
