@@ -32,6 +32,8 @@ class Maps(object):
     has_data = False
     status_text = "Loading Map Data..."
 
+    output_file = None
+
     SIG_PLACES = 3
     GRID_SIZE = 0.001
 
@@ -102,11 +104,27 @@ class Maps(object):
 
         # Interpret results. We may get a no data result if we were too greedy or too isolated.
         if not data or len(data) <= 0:
+
+            # Ensure we don't do anything on no data
             print('No Data Returned')
             self.has_data = False
             return
+
         else:
+
+            # Display to console
             print(data)
+
+            # Dump to disk for diagnostics
+            if self.output_file:
+                try:
+                    f = open(self.output_file, "w")
+                    f.write(data)
+                    f.close()
+                except:
+                    error_message = "Unhandled error saving map data to file {0}\n".format(str(traceback.format_exc()))
+                    print(error_message)
+
 
         osm_dict = xmltodict.parse(data)
         try:
@@ -195,7 +213,7 @@ class Maps(object):
                 "amenity", "leisure", "man_made", "shop", "cuisine", "building", "power", "religion", "denomination",
                 "website", "railway", "highway", "edu", "power", "railway", "oneway", "maxspeed", "ref", "layer",
                 "natural", "area", "usage", "operator", "electrified", "gauge", "water", "sport", "access", "bridge",
-                "abbr_name", "boundary", "admin_level", "ele"):
+                "abbr_name", "boundary", "admin_level", "ele", 'landuse', 'short_name', 'opening_hours', 'phone'):
 
             entity.tags.append((tag_name, tag_value))
             return True

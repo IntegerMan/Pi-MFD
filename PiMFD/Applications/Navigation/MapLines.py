@@ -31,6 +31,10 @@ class MapLine(MapPath):
 
         width = 1
 
+        building = self.get_tag_value('building')
+        shop = self.get_tag_value('shop')
+        amenity = self.get_tag_value('amenity')
+
         if self.has_tag('railway'):
             color = cs.gray
 
@@ -40,7 +44,7 @@ class MapLine(MapPath):
 
             color = default_color
 
-            if value == 'motoray':
+            if value == 'motoway':
                 width = 5
             elif value == 'trunk':
                 width = 4
@@ -48,38 +52,71 @@ class MapLine(MapPath):
                 width = 3
             elif value == 'secondary':
                 width = 2
+            elif value == 'tertiary':
+                width = 1
             elif value == 'unclassified':
+                color = cs.map_unknown
                 width = 1
             elif value == 'residential':
+                color = cs.map_residential
                 width = 1
             elif value == 'path':
                 width = 1
-                color = cs.brown
+                color = cs.map_pedestrian
             elif value == 'service':
                 width = 1
                 color = cs.map_private
+            else:
+                color = cs.map_unknown  # For Debugging
 
             # If it's got a bridge, we'll handle it a bit differently
             if self.has_tag_value('bridge', 'yes'):
                 color = cs.white
 
         elif self.has_tag_value('boundary', 'administrative'):
-            color = cs.purple  # Purple
+            color = cs.map_government  # Purple
+
         elif self.has_tag_value('natural', 'water') or self.has_tag('water'):
             color = cs.blueish
             width = 0
-        elif self.has_tag_value('leisure', 'park'):
-            color = cs.greenish
-            width = 1  # I can't close this because that can hide things inside like playgrounds
-        elif self.has_tag_value('leisure', 'pitch'):
-            # TODO: Take sport into account?
-            color = cs.greenish
-            width = 0
-        elif self.has_tag_value('leisure', 'playground'):
-            color = cs.brown
-            width = 0
+
+        elif self.has_tag('leisure'):
+
+            if self.has_tag_value('leisure', 'park'):
+                color = cs.greenish
+                width = 1  # I can't close this because that can hide things inside like playgrounds
+
+            elif self.has_tag_value('leisure', 'pitch'):
+                # TODO: Take sport into account?
+                color = cs.greenish
+
+            elif self.has_tag_value('leisure', 'playground'):
+                color = cs.map_pedestrian
+
+        elif self.has_tag_value('landuse', 'cemetery'):
+            color = cs.gray
+
+        elif building:
+
+            color = cs.map_unknown
+
+            if shop:
+
+                color = cs.map_commercial
+
+            elif amenity:
+
+                color = cs.map_commercial
+
+            elif building in ('residential', 'terrace', 'apartment'):
+                color = cs.map_residential
+
+        elif amenity == 'parking':
+            color = cs.map_automotive
+
         else:
-            color = cs.red
+
+            color = cs.map_unknown
 
         # TODO: Use the rendering helpers
         if width <= 0:

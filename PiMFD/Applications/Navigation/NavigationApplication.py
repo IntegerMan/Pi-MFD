@@ -12,6 +12,9 @@ __author__ = 'Matt Eland'
 
 
 class MapZooms(object):
+    """
+    An enum-style collection of supported zoom levels
+    """
     large = 0.02
     medium = 0.0125
     local = 0.0075
@@ -37,6 +40,8 @@ class NavigationApp(MFDApplication):
         super(NavigationApp, self).__init__(controller)
 
         self.map = Maps()
+
+        self.map.output_file = controller.options.map_output_file
 
         self.map_page = MapPage(controller, self)
         self.gas_page = SimpleMessagePage(controller, self, "GAS")

@@ -27,6 +27,7 @@ class MFDAppOptions(object):
     enable_shadow_effect = True
     button_sound = 'sounds/button.ogg'
     key_sound = 'sounds/keypress.ogg'
+    map_output_file = 'map_data.xml'
 
     def load_from_settings(self, filename='settings.ini'):
         """

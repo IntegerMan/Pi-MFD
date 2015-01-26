@@ -22,17 +22,24 @@ class ColorScheme(object):
     purple = (100, 0, 200)
     gray = (128, 128, 128)
     brown = (150, 86, 64)
+    salmon = (200, 100, 100)
     greenish = (0, 150, 64)
     blueish = (0, 100, 200)
+    pink = (200, 0, 200)
+    khaki = (189, 183, 107)
 
     # Local Constants
     map_commercial = white
-    map_automotive = greenish
+    map_automotive = blueish
     map_private = yellow
+    map_industrial = khaki
+    map_residential = greenish
+    map_unknown = pink
     map_emergency = red
     map_health = red
-    map_public = blueish
+    map_public = salmon
     map_government = purple
+    map_pedestrian = brown
 
     def __init__(self, name, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255),
                  detail=(128, 128, 128)):
