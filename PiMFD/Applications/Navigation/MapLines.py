@@ -101,15 +101,14 @@ class MapLine(MapPath):
             color = cs.map_unknown
 
             if shop:
-
-                color = cs.map_commercial
+                color = self.get_shop_color(cs, shop)
 
             elif amenity:
-
                 color = cs.map_commercial
 
             elif building in ('residential', 'terrace', 'apartment'):
                 color = cs.map_residential
+                width = 0  # We're not going to render anything inside of these guy so just fill them
 
         elif amenity == 'parking':
             color = cs.map_automotive

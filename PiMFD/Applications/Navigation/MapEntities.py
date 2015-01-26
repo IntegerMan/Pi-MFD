@@ -77,6 +77,13 @@ class MapEntity(object):
 
         return False
 
+    def get_shop_color(self, cs, shop):
+
+        if shop == 'car_repair':
+            return cs.map_automotive
+
+        return cs.map_commercial
+
 
     @staticmethod
     def abbreviate(name, pretty=False):

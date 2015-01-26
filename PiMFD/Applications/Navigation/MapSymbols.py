@@ -107,6 +107,9 @@ class MapSymbol(MapLocation):
         extra_data = None
         inner_text = None
 
+        shop = self.get_tag_value('shop')
+        amenity = self.get_tag_value('amenity')
+
         # Modify our display parameters based on what our context is
 
         if self.has_tag_value('highway', 'traffic_signals'):
@@ -117,11 +120,6 @@ class MapSymbol(MapLocation):
             style = shape_shop
             color = cs.map_health
             inner_text = 'RX'
-
-        elif self.has_tag_value('shop', 'beauty'):
-            style = shape_service
-            color = cs.map_commercial
-            inner_text = 'SPA'
 
         elif self.has_tag_value('amenity', 'fuel'):
             style = shape_shop
@@ -138,30 +136,30 @@ class MapSymbol(MapLocation):
             color = cs.map_health
             inner_text = 'VET'
 
-        elif self.has_tag_value('shop', 'car_repair'):
-            style = shape_service
-            color = cs.map_automotive
-            inner_text = 'CAR'
+        elif shop:
 
-        elif self.has_tag_value('shop', 'furniture'):
             style = shape_shop
-            color = cs.map_commercial
-            icons.append(ChairIcon())
+            color = self.get_shop_color(cs, shop)
 
-        elif self.has_tag_value('shop', 'sports'):
-            style = shape_shop
-            color = cs.map_commercial
-            inner_text = 'ATH'
+            if shop == 'car_repair':
+                style = shape_service
+                inner_text = 'CAR'
 
-        elif self.has_tag_value('shop', 'free_flying'):
-            style = shape_shop
-            color = cs.map_commercial
-            inner_text = 'FLY'
+            elif shop == 'furniture':
+                icons.append(ChairIcon())
 
-        elif self.has_tag_value('shop', 'shoes'):
-            style = shape_shop
-            color = cs.map_commercial
-            inner_text = 'WLK'
+            elif shop == 'sports':
+                inner_text = 'ATH'
+
+            elif shop == 'free_flying':
+                inner_text = 'FLY'
+
+            elif shop == 'shoes':
+                inner_text = 'WLK'
+
+            elif shop == 'beauty':
+                style = shape_service
+                inner_text = 'SPA'
 
         elif self.has_tag_value('amenity', 'place_of_worship'):
 
