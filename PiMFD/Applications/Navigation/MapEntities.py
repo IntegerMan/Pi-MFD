@@ -86,18 +86,49 @@ class MapEntity(object):
 
     def get_amenity_color(self, cs, amenity):
 
-        if amenity in ('pharmacy', 'veterinary'):
+        if amenity in ('pharmacy', 'veterinary', 'hospital', 'clinic'):
             return cs.map_health
-        elif amenity == 'fuel':
+        elif amenity in ('fuel', 'parking'):
             return cs.map_automotive
-        elif amenity == 'school':
+        elif amenity in ('school', 'public_building'):
             return cs.map_public
         elif amenity == 'place_of_worship':
             return cs.map_private
         elif amenity in ('restaurant', 'fast_food'):
             return cs.map_commercial
+        elif amenity == 'fire_station':
+            return cs.map_emergency
+        elif amenity == 'grave_yard':
+            return cs.gray
+        elif amenity == 'post_office':
+            return cs.map_government
 
         return cs.map_service
+
+    def get_building_color(self, cs, building):
+
+        if building in ('residential', 'terrace', 'apartment'):
+            return cs.map_residential
+
+        elif building in ('kindergarten', 'school'):
+            return cs.map_public
+
+        elif building == 'office':
+            return cs.map_private
+
+        elif building == 'power':
+            return cs.map_infrastructure
+
+        elif building == 'warehouse':
+            return cs.map_private
+
+        elif building == 'shop':
+            return cs.map_commercial
+
+        elif building == 'hotel':
+            return cs.map_public
+
+        return cs.map_unknown
 
     def get_display_name(self):
 

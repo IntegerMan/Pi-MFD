@@ -34,6 +34,7 @@ class MapLine(MapSymbol, MapPath):
 
         cs = display.color_scheme
         default_color = cs.detail
+        color = cs.map_unknown
 
         width = 1
 
@@ -50,9 +51,9 @@ class MapLine(MapSymbol, MapPath):
 
             color = default_color
 
-            if value == 'motoway':
+            if value in ('motoway', 'motorway'):
                 width = 5
-            elif value == 'trunk':
+            elif value in ('trunk', 'motorway_link'):
                 width = 4
             elif value == 'primary':
                 width = 3
@@ -60,18 +61,24 @@ class MapLine(MapSymbol, MapPath):
                 width = 2
             elif value == 'tertiary':
                 width = 1
-            elif value == 'unclassified':
+            elif value == ('unclassified', 'road'):
                 color = cs.map_unknown
                 width = 1
-            elif value == 'residential':
+            elif value in ('residential', 'living_street'):
                 color = cs.map_residential
                 width = 1
-            elif value == 'path':
+            elif value in ('path', 'footway'):
                 width = 1
                 color = cs.map_pedestrian
+            elif value == 'cycleway':
+                width = 1
+                color = cs.map_automotive
             elif value == 'service':
                 width = 1
-                color = cs.map_private
+                color = cs.map_service
+            elif value == 'proposed':
+                width = 1
+                color = cs.map_emergency
             else:
                 show_name = True
                 color = cs.map_unknown  # For Debugging
@@ -86,34 +93,47 @@ class MapLine(MapSymbol, MapPath):
 
         elif self.has_tag_value('natural', 'water') or self.has_tag('water'):
             show_name = True
-            color = cs.blueish
+            color = cs.map_water
             width = 0
+
+        elif self.has_tag_value('natural', 'wood') or self.has_tag('wood'):
+            show_name = True
+            color = cs.map_vegitation
+            width = 0
+
+        elif self.has_tag('waterway'):
+            color = cs.map_water
+            width = 3
 
         elif self.has_tag('leisure'):
 
             show_name = True
 
-            if self.has_tag_value('leisure', 'park'):
-                color = cs.greenish
+            leisure = self.get_tag_value('leisure')
 
-            elif self.has_tag_value('leisure', 'pitch'):
-                # TODO: Take sport into account?
+            if leisure in ('pitch', 'park', 'golf_course'):
+                color = cs.map_recreation
+
+            elif leisure in ('playground', 'track'):
                 color = cs.map_pedestrian
 
-            elif self.has_tag_value('leisure', 'playground'):
-                color = cs.map_pedestrian
+            elif leisure == 'swimming_pool':
+                color = cs.map_water
 
-        elif self.has_tag_value('landuse', 'cemetery'):
+        elif self.has_tag('landuse'):
 
             show_name = True
+            landuse = self.get_tag_value('landuse')
 
-            color = cs.gray
+            if landuse in ('cemetery', 'cemetery'):
+                color = cs.gray
+
+            elif landuse == 'grass':
+                color = cs.map_recreation
 
         elif building:
 
             show_name = True
-
-            color = cs.map_unknown
 
             if shop:
                 color = self.get_shop_color(cs, shop)
@@ -121,20 +141,39 @@ class MapLine(MapSymbol, MapPath):
             elif amenity:
                 color = self.get_amenity_color(cs, amenity)
 
-            elif building in ('residential', 'terrace', 'apartment'):
-                color = cs.map_residential
+            else:
+                color = self.get_building_color(cs, building)
+
+            if building in ('residential', 'terrace', 'apartment'):
                 width = 0  # We're not going to render anything inside of these guy so just fill them
 
-            elif building in ('kindergarten', 'school'):
-                color = cs.map_public
+        elif amenity:
 
-        elif amenity == 'parking':
-            color = cs.map_automotive
+            show_name = True
+
+            color = self.get_amenity_color(cs, amenity)
+
+        elif self.has_tag('man_made'):
+
+            show_name = True
+
+            man_made = self.get_tag_value('man_made')
+
+            if man_made == 'water_tower':
+                color = cs.map_infrastructure
+
+        elif self.has_tag('power'):
+            color = cs.map_infrastructure
+
+        elif self.has_tag('barrier'):
+            color = cs.map_private
+
+        elif self.has_tag('traffic_sign'):
+            color = cs.map_government
 
         else:
 
             show_name = True
-            color = cs.map_unknown
 
         # TODO: Use the rendering helpers
         if width <= 0:

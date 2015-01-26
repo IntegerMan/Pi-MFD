@@ -7,7 +7,8 @@ from pygame.rect import Rect
 
 from PiMFD.Applications.Navigation.MapEntities import MapLocation
 from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon
-from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond
+from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond, \
+    render_triangle_up
 
 
 __author__ = 'Matt Eland'
@@ -111,9 +112,24 @@ class MapSymbol(MapLocation):
 
         # Modify our display parameters based on what our context is
 
-        if self.has_tag_value('highway', 'traffic_signals'):
-            style = shape.traffic_stop
-            display_name = None
+        if self.has_tag('highway'):
+
+            highway = self.get_tag_value('highway')
+
+            if highway == 'traffic_signals':
+                style = shape.traffic_stop
+            elif highway in ('turning_circle', 'mini_roundabout'):
+                color = cs.map_automotive
+            elif highway == 'street_lamp':
+                color = cs.map_infrastructure
+            elif highway == 'motorway_junction':
+                color = cs.map_automotive
+                style = shape.diamond
+            elif highway == 'crossing':
+                style = shape.diamond
+                color = cs.yellow
+                shape_width = 0
+                shape_size = 6
 
         elif amenity:
 
@@ -160,7 +176,6 @@ class MapSymbol(MapLocation):
 
                 icons.append(FoodIcon())  # TODO: Render by cuisine
 
-
         elif shop:
 
             style = shape_shop
@@ -186,6 +201,57 @@ class MapSymbol(MapLocation):
                 style = shape_service
                 inner_text = 'SPA'
 
+        elif self.has_tag('tourism'):
+
+            tourism = self.get_tag_value('tourism')
+
+            if tourism in (
+            'hotel', 'apartment', 'alpine_hut', 'camp_site', 'caravan_site', 'chalet', 'guest_house', 'hostel', 'motel',
+            'wilderness_hut'):
+                color = cs.map_public  # Travel instead? New thing? Residential?
+
+            elif tourism == 'theme_park':
+                color = cs.map_recreation
+
+        elif self.has_tag('building'):
+            color = self.get_building_color(cs, self.get_tag_value('building'))
+
+        elif self.has_tag('leisure'):
+            color = cs.map_recreation
+
+        elif self.has_tag('power'):
+            color = cs.map_infrastructure
+
+        elif self.has_tag('barrier'):
+            color = cs.map_private
+
+        elif self.has_tag_value('footway', 'crossing'):
+            style = shape.diamond
+            color = cs.yellow
+            shape_width = 0
+            shape_size = 6
+
+        elif self.has_tag('traffic_sign'):
+            color = cs.map_government
+
+        elif self.has_tag('place'):
+
+            place = self.get_tag_value('place')
+            if place in ('hamlet', 'town', 'village'):
+                color = cs.map_government
+            elif place == 'island':
+                color = cs.background
+
+        elif self.has_tag('man_made'):
+
+            man_made = self.get_tag_value('man_made')
+
+            if man_made == 'water_tower':
+                color = cs.map_infrastructure
+            elif man_made == 'tower':
+                color = cs.map_infrastructure
+                style = shape.triangle
+
         half_size = shape_size / 2
 
         right_text = extra_data
@@ -200,6 +266,9 @@ class MapSymbol(MapLocation):
 
         elif style == shape.diamond:
             render_diamond(display, color, pos, half_size + 2, shape_width)
+
+        elif style == shape.triangle:
+            render_triangle_up(display, color, pos, half_size + 2, shape_width)
 
         elif style == shape.double_circle:
             render_circle(display, color, pos, half_size + 2, shape_width)

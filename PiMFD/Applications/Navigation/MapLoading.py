@@ -214,7 +214,10 @@ class Maps(object):
                 "amenity", "leisure", "man_made", "shop", "cuisine", "building", "power", "religion", "denomination",
                 "website", "railway", "highway", "edu", "power", "railway", "oneway", "maxspeed", "ref", "layer",
                 "natural", "area", "usage", "operator", "electrified", "gauge", "water", "sport", "access", "bridge",
-                "abbr_name", "boundary", "admin_level", "ele", 'landuse', 'short_name', 'opening_hours', 'phone'):
+                "abbr_name", "boundary", "admin_level", "ele", 'landuse', 'short_name', 'opening_hours', 'phone',
+                "waterway", "clothes", "fee", "width", "border_type", "traffic_sign", "sidewalk", "barrier", "foot",
+                "horse", "lanes", "bicycle", "tourism", "exit_to", "shortest_name", "hgv", "place", "footway",
+                "cycleway"):
 
             entity.tags.append((tag_name, tag_value))
             return True

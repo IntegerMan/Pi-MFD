@@ -37,9 +37,13 @@ class ColorScheme(object):
     # Map Colors
     map_commercial = white
     map_automotive = blueish
+    map_water = blueish
     map_private = yellow
     map_service = khaki
+    map_infrastructure = khaki
     map_residential = greenish
+    map_recreation = greenish
+    map_vegitation = green
     map_unknown = pink
     map_emergency = red
     map_health = red
