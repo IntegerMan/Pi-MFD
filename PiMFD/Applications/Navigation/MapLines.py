@@ -7,6 +7,7 @@ import pygame
 
 from PiMFD.Applications.Navigation.MapEntities import MapPath
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
+from PiMFD.UI.Rendering import render_text_centered
 
 
 __author__ = 'Matt Eland'
@@ -23,10 +24,13 @@ class MapLine(MapSymbol, MapPath):
 
         self.id = path.id
         self.tags = path.tags
+        self.name = path.name
 
         # Points are manually copied during the transpose process
 
     def render(self, display):
+
+        show_name = False
 
         cs = display.color_scheme
         default_color = cs.detail
@@ -69,6 +73,7 @@ class MapLine(MapSymbol, MapPath):
                 width = 1
                 color = cs.map_private
             else:
+                show_name = True
                 color = cs.map_unknown  # For Debugging
 
             # If it's got a bridge, we'll handle it a bit differently
@@ -76,28 +81,37 @@ class MapLine(MapSymbol, MapPath):
                 color = cs.white
 
         elif self.has_tag_value('boundary', 'administrative'):
-            color = cs.map_government  # Purple
+            show_name = True
+            color = cs.map_government
 
         elif self.has_tag_value('natural', 'water') or self.has_tag('water'):
+            show_name = True
             color = cs.blueish
             width = 0
 
         elif self.has_tag('leisure'):
+
+            show_name = True
 
             if self.has_tag_value('leisure', 'park'):
                 color = cs.greenish
 
             elif self.has_tag_value('leisure', 'pitch'):
                 # TODO: Take sport into account?
-                color = cs.greenish
+                color = cs.map_pedestrian
 
             elif self.has_tag_value('leisure', 'playground'):
                 color = cs.map_pedestrian
 
         elif self.has_tag_value('landuse', 'cemetery'):
+
+            show_name = True
+
             color = cs.gray
 
         elif building:
+
+            show_name = True
 
             color = cs.map_unknown
 
@@ -111,11 +125,15 @@ class MapLine(MapSymbol, MapPath):
                 color = cs.map_residential
                 width = 0  # We're not going to render anything inside of these guy so just fill them
 
+            elif building in ('kindergarten', 'school'):
+                color = cs.map_public
+
         elif amenity == 'parking':
             color = cs.map_automotive
 
         else:
 
+            show_name = True
             color = cs.map_unknown
 
         # TODO: Use the rendering helpers
@@ -123,6 +141,17 @@ class MapLine(MapSymbol, MapPath):
             pygame.draw.polygon(display.surface, color, self.points, width)
         else:
             pygame.draw.lines(display.surface, color, False, self.points, width)
+
+        if show_name:
+
+            display_name = self.get_display_name()
+            if display_name:
+                render_text_centered(display,
+                                     display.fonts.small,
+                                     display_name,
+                                     self.x,
+                                     self.y + 13,  # May want to move this off below eventually
+                                     color)
 
 
 6

@@ -99,6 +99,14 @@ class MapEntity(object):
 
         return cs.map_service
 
+    def get_display_name(self):
+
+        display_name = self.get_tag_value('short_name')
+        if not display_name:
+            display_name = self.abbreviate(self.name)
+
+        return display_name
+
     @staticmethod
     def abbreviate(name, pretty=False):
         """
@@ -165,4 +173,4 @@ class MapLocation(MapEntity):
     Represents a named location on a map
     """
 
-    name = 'UNK'
+    name = None

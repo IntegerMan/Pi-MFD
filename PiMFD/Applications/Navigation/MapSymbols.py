@@ -100,7 +100,9 @@ class MapSymbol(MapLocation):
         cs = display.color_scheme
         color = cs.map_unknown
 
-        display_name = self.abbreviate(self.name)
+        # Grab name, preferring short_name if present, otherwise abbreviating
+        display_name = self.get_display_name()
+
         extra_data = None
         inner_text = None
 

@@ -249,6 +249,9 @@ class Maps(object):
 
             line = MapLine(way)
 
+            tot_x = 0
+            tot_y = 0
+
             for waypoint in way.points:
 
                 lat = waypoint[1] - self.origin[1]
@@ -263,7 +266,14 @@ class Maps(object):
                     wp[1] *= -1
                     wp[1] += offset[1] * 2
 
+                tot_x += wp[0]
+                tot_y += wp[1]
+
                 line.points.append(wp)
+
+            # Calculate the center of the shape by looking at the average center of the points
+            line.x = tot_x / float(len(line.points))
+            line.y = tot_y / float(len(line.points))
 
             lines.append(line)
 

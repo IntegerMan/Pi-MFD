@@ -28,7 +28,13 @@ class ColorScheme(object):
     pink = (200, 0, 200)
     khaki = (189, 183, 107)
 
-    # Local Constants
+    # Keyed Colors
+    background = (0, 0, 0)
+    foreground = (0, 255, 0)
+    detail = (128, 128, 128),
+    highlight = (255, 255, 255)
+
+    # Map Colors
     map_commercial = white
     map_automotive = blueish
     map_private = yellow
@@ -38,6 +44,7 @@ class ColorScheme(object):
     map_emergency = red
     map_health = red
     map_public = salmon
+    map_major_road = detail
     map_government = purple
     map_pedestrian = brown
 
@@ -63,10 +70,6 @@ class ColorScheme(object):
         target.name = self.name
         return target
 
-    background = (0, 0, 0)
-    foreground = (0, 255, 0)
-    detail = (128, 128, 128),
-    highlight = (255, 255, 255)
     name = None
 
     def get_focus_color(self, is_focused):
