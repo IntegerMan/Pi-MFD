@@ -3,6 +3,7 @@
 """
 A class for managing multiple fonts
 """
+import traceback
 import pygame
 
 __author__ = 'Matt Eland'
@@ -28,7 +29,11 @@ class FontInfo(object):
         """
         Passthrough to the font for rendering for convenience / readability
         """
-        return self.font.render(text, antialias, color, background)
+        # Explicitly specifying background when none caused issues on some machines
+        if background:
+            return self.font.render(text, antialias, color, background)
+        else:
+            return self.font.render(text, antialias, color)
 
     def measure(self, text):
         return self.font.size(text)
