@@ -113,9 +113,6 @@ class Maps(object):
 
         else:
 
-            # Display to console
-            print(data)
-
             # Dump to disk for diagnostics
             if self.output_file:
                 try:
