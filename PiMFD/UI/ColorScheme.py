@@ -32,7 +32,7 @@ class ColorScheme(object):
     map_commercial = white
     map_automotive = blueish
     map_private = yellow
-    map_industrial = khaki
+    map_service = khaki
     map_residential = greenish
     map_unknown = pink
     map_emergency = red

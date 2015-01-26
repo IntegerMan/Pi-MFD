@@ -98,10 +98,7 @@ class MapSymbol(MapLocation):
 
         # Colors
         cs = display.color_scheme
-        highlight = cs.highlight
-        foreground = cs.foreground
-        color = highlight
-        text_color = color
+        color = cs.map_unknown
 
         display_name = self.abbreviate(self.name)
         extra_data = None
@@ -116,25 +113,51 @@ class MapSymbol(MapLocation):
             style = shape.traffic_stop
             display_name = None
 
-        elif self.has_tag_value('amenity', 'pharmacy'):
+        elif amenity:
+
             style = shape_shop
-            color = cs.map_health
-            inner_text = 'RX'
+            color = self.get_amenity_color(cs, amenity)
 
-        elif self.has_tag_value('amenity', 'fuel'):
-            style = shape_shop
-            color = cs.map_automotive
-            inner_text = 'GAS'
+            if amenity == 'pharmacy':
+                inner_text = 'RX'
 
-        elif self.has_tag_value('amenity', 'school'):
-            style = shape_public  # Though this could be service if private school
-            color = cs.map_public
-            inner_text = 'EDU'
+            elif amenity == 'fuel':
+                inner_text = 'GAS'
 
-        elif self.has_tag_value('amenity', 'veterinary'):
-            style = shape_service
-            color = cs.map_health
-            inner_text = 'VET'
+            elif amenity == 'school':
+                style = shape_public  # Though this could be service if private school
+                inner_text = 'EDU'
+
+            elif amenity == 'veterinary':
+                style = shape_service
+                inner_text = 'VET'
+
+            elif amenity == 'place_of_worship':
+
+                # Plug in the denomination or religion
+                extra_data = self.get_tag_value('denomination')
+                if extra_data is None:
+                    extra_data = self.get_tag_value('religion')
+
+                style = shape_service
+                inner_text = 'REL'
+
+            elif amenity == 'restaurant':
+
+                # Plug in the cuisine
+                extra_data = self.get_tag_value('cuisine')
+
+                style = shape_service  # Service since we eat in
+
+                icons.append(FoodIcon())  # TODO: Render by cuisine
+
+            elif amenity == 'fast_food':
+
+                # Plug in the cuisine
+                extra_data = self.get_tag_value('cuisine')
+
+                icons.append(FoodIcon())  # TODO: Render by cuisine
+
 
         elif shop:
 
@@ -160,36 +183,6 @@ class MapSymbol(MapLocation):
             elif shop == 'beauty':
                 style = shape_service
                 inner_text = 'SPA'
-
-        elif self.has_tag_value('amenity', 'place_of_worship'):
-
-            # Plug in the denomination or religion
-            extra_data = self.get_tag_value('denomination')
-            if extra_data is None:
-                extra_data = self.get_tag_value('religion')
-
-            style = shape_service
-            color = cs.map_private
-            inner_text = 'REL'
-
-        elif self.has_tag_value('amenity', 'restaurant'):
-
-            # Plug in the cuisine
-            extra_data = self.get_tag_value('cuisine')
-
-            style = shape_service  # Service since we eat in
-            color = cs.map_commercial
-
-            icons.append(FoodIcon())  # TODO: Render by cuisine
-
-        elif self.has_tag_value('amenity', 'fast_food'):
-
-            # Plug in the cuisine
-            extra_data = self.get_tag_value('cuisine')
-            style = shape_shop  # Shop since it's to go
-            color = cs.map_commercial
-
-            icons.append(FoodIcon())  # TODO: Render by cuisine
 
         half_size = shape_size / 2
 
@@ -232,7 +225,7 @@ class MapSymbol(MapLocation):
                         right_text,
                         self.lat + half_size + 3,
                         self.lng - (font.measure(right_text)[1] / 2.0),
-                        text_color)
+                        color)
 
         if bottom_text:
             render_text_centered(display,

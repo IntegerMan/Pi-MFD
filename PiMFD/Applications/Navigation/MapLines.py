@@ -6,18 +6,20 @@ Contains code relevant to rendering map lines to the map
 import pygame
 
 from PiMFD.Applications.Navigation.MapEntities import MapPath
+from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
 
 __author__ = 'Matt Eland'
 
 
-class MapLine(MapPath):
+class MapLine(MapSymbol, MapPath):
     """
     Renders map paths to the screen with added contextual styling support
     """
 
     def __init__(self, path):
-        super(MapLine, self).__init__(path.lat, path.lng)
+        super(MapSymbol, self).__init__(path.lat, path.lng)
+        super(MapPath, self).__init__(path.lat, path.lng)
 
         self.id = path.id
         self.tags = path.tags
@@ -84,7 +86,6 @@ class MapLine(MapPath):
 
             if self.has_tag_value('leisure', 'park'):
                 color = cs.greenish
-                width = 1  # I can't close this because that can hide things inside like playgrounds
 
             elif self.has_tag_value('leisure', 'pitch'):
                 # TODO: Take sport into account?
@@ -104,7 +105,7 @@ class MapLine(MapPath):
                 color = self.get_shop_color(cs, shop)
 
             elif amenity:
-                color = cs.map_commercial
+                color = self.get_amenity_color(cs, amenity)
 
             elif building in ('residential', 'terrace', 'apartment'):
                 color = cs.map_residential

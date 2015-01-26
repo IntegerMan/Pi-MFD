@@ -84,6 +84,20 @@ class MapEntity(object):
 
         return cs.map_commercial
 
+    def get_amenity_color(self, cs, amenity):
+
+        if amenity in ('pharmacy', 'veterinary'):
+            return cs.map_health
+        elif amenity == 'fuel':
+            return cs.map_automotive
+        elif amenity == 'school':
+            return cs.map_public
+        elif amenity == 'place_of_worship':
+            return cs.map_private
+        elif amenity in ('restaurant', 'fast_food'):
+            return cs.map_commercial
+
+        return cs.map_service
 
     @staticmethod
     def abbreviate(name, pretty=False):
