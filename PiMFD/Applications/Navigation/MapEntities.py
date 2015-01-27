@@ -12,6 +12,8 @@ class MapEntity(object):
     An abstract component present for maps
     """
 
+    has_lines = False
+
     tags = list()
     lat = 0.0
     lng = 0.0
@@ -198,7 +200,6 @@ class MapPath(MapEntity):
     Represents a lined area on the map
     """
 
-    points = list()
 
     def __init__(self, lat, lng):
         super(MapPath, self).__init__(lat, lng)

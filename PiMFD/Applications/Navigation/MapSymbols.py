@@ -36,12 +36,14 @@ class MapSymbol(MapLocation):
     Renders a map symbol to the screen
     """
 
-    def __init__(self, lat, lng, location):
-        super(MapSymbol, self).__init__(lat, lng)
+    def __init__(self, x, y, location):
+        super(MapSymbol, self).__init__(location.lat, location.lng)
 
         self.tags = location.tags
         self.name = location.name
         self.id = location.id
+        self.x = x
+        self.y = y
 
     def get_font_text_and_color(self, display):
         """
@@ -67,18 +69,10 @@ class MapSymbol(MapLocation):
         #   Square w. Diamond Top - Residential
         #
         # Text
-        #   Right Text - Name
-        #   Bottom Text - Augmented Data for current map mode
+        # Right Text - Specialization
+        #   Bottom Text - Name
         #   Inner Text - Symbol Code
         #   Left Text - Augmented Data for current map mode
-        #
-        # Color
-        #   Most items will retain default
-        #   Red - Health
-        #   Blue - Leisure
-        #   Green - Government
-        #   Purple - Corporate
-        #   Yellow - Utility
 
         shape_width = 1
         shape_size = 20
@@ -95,7 +89,7 @@ class MapSymbol(MapLocation):
 
         font = display.fonts.small
 
-        pos = (int(self.lat), int(self.lng))
+        pos = (int(self.x), int(self.y))
 
         # Colors
         cs = display.color_scheme
@@ -110,14 +104,19 @@ class MapSymbol(MapLocation):
         shop = self.get_tag_value('shop')
         amenity = self.get_tag_value('amenity')
 
+        hide_shape_if_has_building = True
+
         # Modify our display parameters based on what our context is
 
         if self.has_tag('highway'):
 
-            highway = self.get_tag_value('highway')
+            # Don't display names for roads at the moment
+            display_name = None
 
+            highway = self.get_tag_value('highway')
             if highway == 'traffic_signals':
                 style = shape.traffic_stop
+                hide_shape_if_has_building = False
             elif highway in ('turning_circle', 'mini_roundabout'):
                 color = cs.map_automotive
             elif highway == 'street_lamp':
@@ -125,12 +124,15 @@ class MapSymbol(MapLocation):
                 style = shape.circle
                 shape_width = 0
                 shape_size = 1
+                hide_shape_if_has_building = False
             elif highway == 'motorway_junction':
                 color = cs.map_automotive
                 style = shape.diamond
+                hide_shape_if_has_building = False
             elif highway == 'crossing':
                 style = shape.diamond
                 color = cs.yellow
+                hide_shape_if_has_building = False
                 shape_width = 0
                 shape_size = 6
 
@@ -284,52 +286,57 @@ class MapSymbol(MapLocation):
         right_text = extra_data
         bottom_text = display_name
 
-        if style == shape.circle:
-            render_circle(display, color, pos, half_size + 2, shape_width)
+        # Render the shape of the item
+        if not hide_shape_if_has_building or not self.has_lines:
+            if style == shape.circle:
+                render_circle(display, color, pos, half_size + 2, shape_width)
 
-        elif style == shape.square:
-            render_rectangle(display, color, Rect(self.lat - half_size, self.lng - half_size, shape_size, shape_size),
-                             shape_width)
+            elif style == shape.square:
+                render_rectangle(display, color, Rect(self.x - half_size, self.y - half_size, shape_size, shape_size),
+                                 shape_width)
 
-        elif style == shape.diamond:
-            render_diamond(display, color, pos, half_size + 2, shape_width)
+            elif style == shape.diamond:
+                render_diamond(display, color, pos, half_size + 2, shape_width)
 
-        elif style == shape.triangle:
-            render_triangle_up(display, color, pos, half_size + 2, shape_width)
+            elif style == shape.triangle:
+                render_triangle_up(display, color, pos, half_size + 2, shape_width)
 
-        elif style == shape.double_circle:
-            render_circle(display, color, pos, half_size + 2, shape_width)
-            render_circle(display, color, pos, half_size, shape_width)
+            elif style == shape.double_circle:
+                render_circle(display, color, pos, half_size + 2, shape_width)
+                render_circle(display, color, pos, half_size, shape_width)
 
-        elif style == shape.traffic_stop:
-            render_circle(display, cs.red, pos, 4, 0)
-            render_circle(display, cs.yellow, pos, 3, 0)
-            render_circle(display, cs.green, pos, 1, 0)
+            elif style == shape.traffic_stop:
+                render_circle(display, cs.red, pos, 4, 0)
+                render_circle(display, cs.yellow, pos, 3, 0)
+                render_circle(display, cs.green, pos, 1, 0)
 
+        # Render adornment icons
         for icon in icons:
             icon.render(display, color, pos, half_size)
+
+        # Render text labels
 
         if inner_text:
             render_text_centered(display,
                                  font,
                                  inner_text,
-                                 self.lat,
-                                 self.lng - (font.measure(inner_text)[1] / 2.0),
+                                 self.x,
+                                 self.y - (font.measure(inner_text)[1] / 2.0),
                                  color)
 
         if right_text:
             render_text(display,
                         font,
                         right_text,
-                        self.lat + half_size + 3,
-                        self.lng - (font.measure(right_text)[1] / 2.0),
+                        self.x + half_size + 3,
+                        self.y - (font.measure(right_text)[1] / 2.0),
                         color)
 
         if bottom_text:
             render_text_centered(display,
                                  font,
                                  bottom_text,
-                                 self.lat,
-                                 self.lng + half_size + 3,  # + (font.measure(bottom_text)[1] / 2.0),
+                                 self.x,
+                                 self.y + half_size + 3,  # + (font.measure(bottom_text)[1] / 2.0),
                                  color)
 

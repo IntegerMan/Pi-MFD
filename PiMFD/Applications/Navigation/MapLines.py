@@ -5,26 +5,27 @@ Contains code relevant to rendering map lines to the map
 """
 import pygame
 
-from PiMFD.Applications.Navigation.MapEntities import MapPath
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
-from PiMFD.UI.Rendering import render_text_centered
 
 
 __author__ = 'Matt Eland'
 
 
-class MapLine(MapSymbol, MapPath):
+class MapLine(MapSymbol):
     """
     Renders map paths to the screen with added contextual styling support
     """
 
+    points = list()
+
+
     def __init__(self, path):
-        super(MapSymbol, self).__init__(path.lat, path.lng)
-        super(MapPath, self).__init__(path.lat, path.lng)
+        super(MapLine, self).__init__(path.lat, path.lng, path)
 
         self.id = path.id
         self.tags = path.tags
         self.name = path.name
+        self.points = list()
 
         # Points are manually copied during the transpose process
 
@@ -172,26 +173,16 @@ class MapLine(MapSymbol, MapPath):
             color = cs.map_government
 
         else:
-
             show_name = True
 
-        # TODO: Use the rendering helpers
+        # Render out the lines
         if len(self.points) > 1:
+
             if width <= 0:
                 pygame.draw.polygon(display.surface, color, self.points, width)
             else:
                 pygame.draw.lines(display.surface, color, False, self.points, width)
 
-        if show_name:
+            self.has_lines = True
 
-            display_name = self.get_display_name()
-            if display_name:
-                render_text_centered(display,
-                                     display.fonts.small,
-                                     display_name,
-                                     self.x,
-                                     self.y + 13,  # May want to move this off below eventually
-                                     color)
-
-
-6
+        super(MapLine, self).render(display)

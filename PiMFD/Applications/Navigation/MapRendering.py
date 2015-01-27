@@ -16,7 +16,6 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
     def render(self):
 
-
         # Smart scale the size to accomodate for the greatest dimension. This lets us support many aspect ratios.
         available_x = self.display.res_x
         available_y = self.display.res_y

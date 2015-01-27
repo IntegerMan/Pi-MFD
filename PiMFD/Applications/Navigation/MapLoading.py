@@ -310,16 +310,16 @@ class Maps(object):
             rel_lng = self.origin[1] - location.lng
 
             # Scale the location accordingly
-            lat = (rel_lat * w_coef) + offset[1]
-            lng = (rel_lng * h_coef)
+            x = (rel_lat * w_coef) + offset[1]
+            y = (rel_lng * h_coef)
 
             # We'll typically need to flip the longitude since 0, 0 is upper left corner on screens
             if flip_y:
-                lng *= -1
+                y *= -1
 
-            lng += offset[0]
+            y += offset[0]
 
-            symbols.append(MapSymbol(lng, lat, location))
+            symbols.append(MapSymbol(y, x, location))
 
         return symbols
 
