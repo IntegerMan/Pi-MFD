@@ -31,8 +31,6 @@ class MapLine(MapSymbol):
 
     def render(self, display):
 
-        show_name = False
-
         cs = display.color_scheme
         default_color = cs.detail
         color = cs.map_unknown
@@ -81,7 +79,6 @@ class MapLine(MapSymbol):
                 width = 1
                 color = cs.map_emergency
             else:
-                show_name = True
                 color = cs.map_unknown  # For Debugging
 
             # If it's got a bridge, we'll handle it a bit differently
@@ -89,16 +86,15 @@ class MapLine(MapSymbol):
                 color = cs.map_structural
 
         elif self.has_tag_value('boundary', 'administrative'):
-            show_name = True
             color = cs.map_government
 
         elif self.has_tag_value('natural', 'water') or self.has_tag('water'):
-            show_name = True
+
             color = cs.map_water
             width = 3
 
         elif self.has_tag_value('natural', 'wood') or self.has_tag('wood'):
-            show_name = True
+
             color = cs.map_vegitation
             width = 3
 
@@ -107,8 +103,6 @@ class MapLine(MapSymbol):
             width = 3
 
         elif self.has_tag('leisure'):
-
-            show_name = True
 
             leisure = self.get_tag_value('leisure')
 
@@ -123,7 +117,6 @@ class MapLine(MapSymbol):
 
         elif self.has_tag('landuse'):
 
-            show_name = True
             landuse = self.get_tag_value('landuse')
 
             if landuse in ('cemetery', 'cemetery'):
@@ -133,8 +126,6 @@ class MapLine(MapSymbol):
                 color = cs.map_recreation
 
         elif building:
-
-            show_name = True
 
             if shop:
                 color = self.get_shop_color(cs, shop)
@@ -150,13 +141,9 @@ class MapLine(MapSymbol):
 
         elif amenity:
 
-            show_name = True
-
             color = self.get_amenity_color(cs, amenity)
 
         elif self.has_tag('man_made'):
-
-            show_name = True
 
             man_made = self.get_tag_value('man_made')
 
@@ -171,9 +158,6 @@ class MapLine(MapSymbol):
 
         elif self.has_tag('traffic_sign'):
             color = cs.map_government
-
-        else:
-            show_name = True
 
         # Render out the lines
         if len(self.points) > 1:
