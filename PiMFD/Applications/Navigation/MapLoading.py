@@ -173,10 +173,12 @@ class Maps(object):
                 # Get points from existing nodes
                 try:
                     for node_id in waypoint['nd']:
-                        if '@ref' in node_id:
+                        if node_id == '@ref':
+                            node = self.nodes[waypoint['nd']['@ref']]
+                        elif '@ref' in node_id:
                             node = self.nodes[node_id['@ref']]
-                            if node:
-                                path.points.append((float(node['@lat']), float(node['@lon'])))
+                        if node:
+                            path.points.append((float(node['@lat']), float(node['@lon'])))
                 except:
                     error_message = "Unhandled error handling points {0}\n".format(str(traceback.format_exc()))
                     print(error_message)
@@ -224,7 +226,8 @@ class Maps(object):
                 "abbr_name", "boundary", "admin_level", "ele", 'landuse', 'short_name', 'opening_hours', 'phone',
                 "waterway", "clothes", "fee", "width", "border_type", "traffic_sign", "sidewalk", "barrier", "foot",
                 "horse", "lanes", "bicycle", "tourism", "exit_to", "shortest_name", "hgv", "place", "footway",
-                "cycleway", "name_1", "note"):
+                "cycleway", "name_1", "note", "aeroway", "proposed", "description", "brand", "expressway", "surface",
+                "motorroad", "atm", "tower:type"):
 
             entity.tags.append((tag_name, tag_value))
             return True

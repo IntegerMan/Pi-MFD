@@ -94,12 +94,12 @@ class MapLine(MapSymbol, MapPath):
         elif self.has_tag_value('natural', 'water') or self.has_tag('water'):
             show_name = True
             color = cs.map_water
-            width = 0
+            width = 3
 
         elif self.has_tag_value('natural', 'wood') or self.has_tag('wood'):
             show_name = True
             color = cs.map_vegitation
-            width = 0
+            width = 3
 
         elif self.has_tag('waterway'):
             color = cs.map_water
@@ -111,7 +111,7 @@ class MapLine(MapSymbol, MapPath):
 
             leisure = self.get_tag_value('leisure')
 
-            if leisure in ('pitch', 'park', 'golf_course'):
+            if leisure in ('pitch', 'park', 'golf_course', 'sports_centre'):
                 color = cs.map_recreation
 
             elif leisure in ('playground', 'track'):
@@ -144,7 +144,7 @@ class MapLine(MapSymbol, MapPath):
             else:
                 color = self.get_building_color(cs, building)
 
-            if building in ('residential', 'terrace', 'apartment'):
+            if building in ('residential', 'terrace', 'apartment', 'apartments'):
                 width = 0  # We're not going to render anything inside of these guy so just fill them
 
         elif amenity:
@@ -176,7 +176,7 @@ class MapLine(MapSymbol, MapPath):
             show_name = True
 
         # TODO: Use the rendering helpers
-        if len(self.points) > 0:
+        if len(self.points) > 1:
             if width <= 0:
                 pygame.draw.polygon(display.surface, color, self.points, width)
             else:

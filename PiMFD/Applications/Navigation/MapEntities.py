@@ -107,7 +107,7 @@ class MapEntity(object):
 
     def get_building_color(self, cs, building):
 
-        if building in ('residential', 'terrace', 'apartment'):
+        if building in ('residential', 'terrace', 'apartment', 'apartments', 'garage', 'garages'):
             return cs.map_residential
 
         elif building in ('kindergarten', 'school'):
