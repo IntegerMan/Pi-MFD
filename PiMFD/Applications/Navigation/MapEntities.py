@@ -79,6 +79,119 @@ class MapEntity(object):
 
         return False
 
+    def get_color(self, cs):
+
+        building = self.get_tag_value('building')
+        shop = self.get_tag_value('shop')
+        amenity = self.get_tag_value('amenity')
+
+        if self.has_tag('railway'):
+
+            # TODO: There's likely a lot more nuance to be had here
+
+            return cs.gray
+
+        elif self.has_tag('highway'):
+
+            # If it's got a bridge, we'll handle it a bit differently
+            if self.has_tag('bridge'):
+                return cs.map_structural
+
+            value = self.get_tag_value('highway')
+
+            if value in ('motoway', 'motorway'):
+                return cs.map_major_road
+            elif value in ('trunk', 'motorway_link'):
+                return cs.map_major_road
+            elif value == 'primary':
+                return cs.map_major_road
+            elif value == 'secondary':
+                return cs.map_major_road
+            elif value == 'tertiary':
+                return cs.map_major_road
+            elif value == ('unclassified', 'road'):
+                return cs.map_unknown
+            elif value in ('residential', 'living_street'):
+                return cs.map_residential
+            elif value in ('path', 'footway'):
+                return cs.map_pedestrian
+            elif value == 'cycleway':
+                return cs.map_pedestrian
+            elif value == 'service':
+                return cs.map_service
+            elif value == 'proposed':
+                return cs.map_emergency
+            else:
+                return cs.map_unknown  # For Debugging
+
+        elif self.has_tag_value('boundary', 'administrative'):
+            return cs.map_government
+
+        elif self.has_tag_value('natural', 'water') or self.has_tag('water'):
+            return cs.map_water
+
+        elif self.has_tag_value('natural', 'wood') or self.has_tag('wood'):
+            return cs.map_vegitation
+
+        elif self.has_tag('waterway'):
+            return cs.map_water
+
+        elif self.has_tag('leisure'):
+
+            leisure = self.get_tag_value('leisure')
+
+            if leisure in ('pitch', 'park', 'golf_course', 'sports_centre'):
+                return cs.map_recreation
+
+            elif leisure in ('playground', 'track'):
+                return cs.map_pedestrian
+
+            elif leisure == 'swimming_pool':
+                return cs.map_water
+
+        elif self.has_tag('landuse'):
+
+            landuse = self.get_tag_value('landuse')
+
+            if landuse in ('cemetery', 'cemetery'):
+                return cs.gray
+
+            elif landuse == 'grass':
+                return cs.map_recreation
+
+        elif building:
+
+            if shop:
+                return self.get_shop_color(cs, shop)
+
+            elif amenity:
+                return self.get_amenity_color(cs, amenity)
+
+            else:
+                return self.get_building_color(cs, building)
+
+        elif amenity:
+
+            return self.get_amenity_color(cs, amenity)
+
+        elif self.has_tag('man_made'):
+
+            man_made = self.get_tag_value('man_made')
+
+            if man_made == 'water_tower':
+                return cs.map_infrastructure
+
+        elif self.has_tag('power'):
+            return cs.map_infrastructure
+
+        elif self.has_tag('barrier'):
+            return cs.map_private
+
+        elif self.has_tag('traffic_sign'):
+            return cs.map_government
+
+        return cs.map_unknown
+
     def get_shop_color(self, cs, shop):
 
         if shop == 'car_repair':
