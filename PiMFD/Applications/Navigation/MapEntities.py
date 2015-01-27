@@ -254,7 +254,7 @@ class MapEntity(object):
             return cs.map_public
         elif amenity == 'place_of_worship':
             return cs.map_private
-        elif amenity in ('restaurant', 'fast_food'):
+        elif amenity in ('restaurant', 'fast_food', 'supermarket'):
             return cs.map_commercial
         elif amenity == 'fire_station':
             return cs.map_emergency
@@ -273,20 +273,14 @@ class MapEntity(object):
         elif building in ('kindergarten', 'school'):
             return cs.map_public
 
-        elif building in ('retail', 'commercial'):
-            return cs.map_commercial  # TODO: It'd be good to narrow down if possible
-
-        elif building == 'office':
-            return cs.map_private
+        elif building in ('retail', 'commercial', 'shop'):
+            return cs.map_commercial
 
         elif building == 'power':
             return cs.map_infrastructure
 
-        elif building == 'warehouse':
+        elif building in ('warehouse', 'industrial', 'office'):
             return cs.map_private
-
-        elif building == 'shop':
-            return cs.map_commercial
 
         elif building == 'hotel':
             return cs.map_public

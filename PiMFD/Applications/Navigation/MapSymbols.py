@@ -194,6 +194,9 @@ class MapSymbol(MapLocation):
             elif shop == 'shoes':
                 inner_text = 'WLK'
 
+            elif shop == 'supermarket':
+                icons.append(FoodIcon())
+
             elif shop == 'beauty':
                 style = shape_service
                 inner_text = 'SPA'
