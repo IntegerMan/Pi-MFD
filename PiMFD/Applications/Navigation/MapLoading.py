@@ -199,7 +199,9 @@ class Maps(object):
                     error_message = "Unhandled error handling tags {0}\n".format(str(traceback.format_exc()))
                     print(error_message)
 
-                self.waypoints.append(path)
+                # Don't perpetuate invalid objects
+                if len(path.points) > 1:
+                    self.waypoints.append(path)
 
         except:
             error_message = "Unhandled error parsing map data {0}\n".format(str(traceback.format_exc()))
