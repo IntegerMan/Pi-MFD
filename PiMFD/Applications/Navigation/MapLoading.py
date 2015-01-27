@@ -227,7 +227,7 @@ class Maps(object):
                 "waterway", "clothes", "fee", "width", "border_type", "traffic_sign", "sidewalk", "barrier", "foot",
                 "horse", "lanes", "bicycle", "tourism", "exit_to", "shortest_name", "hgv", "place", "footway",
                 "cycleway", "name_1", "note", "aeroway", "proposed", "description", "brand", "expressway", "surface",
-                "motorroad", "atm", "tower:type"):
+                "motorroad", "atm", "tower:type", "office", "park_ride", "internet_access"):
 
             entity.tags.append((tag_name, tag_value))
             return True

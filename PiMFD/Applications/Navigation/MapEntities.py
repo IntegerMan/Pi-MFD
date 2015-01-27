@@ -88,8 +88,7 @@ class MapEntity(object):
         if self.has_tag('railway'):
 
             # TODO: There's likely a lot more nuance to be had here
-
-            return cs.gray
+            return cs.map_structural
 
         elif self.has_tag('highway'):
 
@@ -113,10 +112,14 @@ class MapEntity(object):
                 return cs.map_unknown
             elif value in ('residential', 'living_street'):
                 return cs.map_residential
-            elif value in ('path', 'footway'):
+            elif value in ('turning_circle', 'mini_roundabout', 'motorway_junction'):
+                return cs.map_automotive
+            elif value == 'street_lamp':
+                return cs.map_infrastructure
+            elif value in ('path', 'footway', 'cycleway'):
                 return cs.map_pedestrian
-            elif value == 'cycleway':
-                return cs.map_pedestrian
+            elif value == 'crossing':
+                return cs.yellow
             elif value == 'service':
                 return cs.map_service
             elif value == 'proposed':
@@ -159,6 +162,50 @@ class MapEntity(object):
             elif landuse == 'grass':
                 return cs.map_recreation
 
+        elif self.has_tag('tourism'):
+
+            tourism = self.get_tag_value('tourism')
+            if tourism in (
+                    'hotel', 'apartment', 'alpine_hut', 'camp_site', 'caravan_site', 'chalet', 'guest_house', 'hostel',
+                    'motel',
+                    'wilderness_hut'):
+                return cs.map_public  # Travel instead? New thing? Residential?
+
+            elif tourism == 'theme_park':
+                return cs.map_recreation
+
+        elif self.has_tag('power'):
+            return cs.map_infrastructure
+
+        elif self.has_tag('barrier'):
+
+            barrier = self.get_tag_value('barrier')
+            if barrier in (
+                    'city_wall', 'guard_rail', 'cable_barrier', 'block', 'border_control', 'debris',
+                    'height_restrictor',
+                    'jersey_barrier', 'sally_port'):
+                return cs.map_structural
+            elif barrier in ('ditch', 'retaining_wall', 'hedge', 'horse_stile', 'log'):
+                return cs.map_vegitation
+            elif barrier in ('wall', 'fence', 'entrance', 'gate', 'hampshire_gate', 'lift_gate', 'spikes'):
+                return cs.map_private
+            elif barrier in (
+                    'bollard', 'kerb', 'cycle_barrier', 'chain', 'full-height_turnstile', 'kissing_gate',
+                    'kent_carriage_gap',
+                    'rope', 'motorcycle_barrier'):
+                return cs.map_pedestrian
+            else:
+                return cs.map_unknown
+
+        elif self.has_tag('traffic_sign'):
+            return cs.map_government
+
+        elif amenity:
+            return self.get_amenity_color(cs, amenity)
+
+        elif shop:
+            return self.get_shop_color(cs, shop)
+
         elif building:
 
             if shop:
@@ -170,9 +217,16 @@ class MapEntity(object):
             else:
                 return self.get_building_color(cs, building)
 
-        elif amenity:
+        elif self.has_tag('place'):
 
-            return self.get_amenity_color(cs, amenity)
+            place = self.get_tag_value('place')
+            if place in ('hamlet', 'town', 'village'):
+                return cs.map_government
+            elif place == 'island':
+                return cs.background
+
+        elif self.has_tag_value('footway', 'crossing'):
+            return cs.yellow
 
         elif self.has_tag('man_made'):
 
@@ -180,15 +234,6 @@ class MapEntity(object):
 
             if man_made == 'water_tower':
                 return cs.map_infrastructure
-
-        elif self.has_tag('power'):
-            return cs.map_infrastructure
-
-        elif self.has_tag('barrier'):
-            return cs.map_private
-
-        elif self.has_tag('traffic_sign'):
-            return cs.map_government
 
         return cs.map_unknown
 
@@ -203,7 +248,7 @@ class MapEntity(object):
 
         if amenity in ('pharmacy', 'veterinary', 'hospital', 'clinic'):
             return cs.map_health
-        elif amenity in ('fuel', 'parking'):
+        elif amenity in ('fuel', 'parking', 'car_wash'):
             return cs.map_automotive
         elif amenity in ('school', 'public_building'):
             return cs.map_public
@@ -312,7 +357,6 @@ class MapPath(MapEntity):
     """
     Represents a lined area on the map
     """
-
 
     def __init__(self, lat, lng):
         super(MapPath, self).__init__(lat, lng)

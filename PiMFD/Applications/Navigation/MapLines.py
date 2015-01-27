@@ -18,7 +18,6 @@ class MapLine(MapSymbol):
 
     points = list()
 
-
     def __init__(self, path):
         super(MapLine, self).__init__(path.lat, path.lng, path)
 
@@ -47,13 +46,13 @@ class MapLine(MapSymbol):
                 return 2
 
         elif self.has_tag_value('natural', 'water') or self.has_tag('water'):
-            return 3
-
-        elif self.has_tag_value('natural', 'wood') or self.has_tag('wood'):
-            return 3
+            return 2
 
         elif self.has_tag('waterway'):
             return 3
+
+        elif self.has_tag_value('natural', 'wood') or self.has_tag('wood'):
+            return 2
 
         elif building:
 

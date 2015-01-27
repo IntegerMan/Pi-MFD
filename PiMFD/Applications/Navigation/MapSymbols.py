@@ -91,10 +91,6 @@ class MapSymbol(MapLocation):
 
         pos = (int(self.x), int(self.y))
 
-        # Colors
-        cs = display.color_scheme
-        color = cs.map_unknown
-
         # Grab name, preferring short_name if present, otherwise abbreviating
         display_name = self.get_display_name()
 
@@ -117,21 +113,19 @@ class MapSymbol(MapLocation):
             if highway == 'traffic_signals':
                 style = shape.traffic_stop
                 hide_shape_if_has_building = False
-            elif highway in ('turning_circle', 'mini_roundabout'):
-                color = cs.map_automotive
+
             elif highway == 'street_lamp':
-                color = cs.map_infrastructure
                 style = shape.circle
                 shape_width = 0
                 shape_size = 1
                 hide_shape_if_has_building = False
+
             elif highway == 'motorway_junction':
-                color = cs.map_automotive
                 style = shape.diamond
                 hide_shape_if_has_building = False
+
             elif highway == 'crossing':
                 style = shape.diamond
-                color = cs.yellow
                 hide_shape_if_has_building = False
                 shape_width = 0
                 shape_size = 6
@@ -139,7 +133,6 @@ class MapSymbol(MapLocation):
         elif amenity:
 
             style = shape_shop
-            color = self.get_amenity_color(cs, amenity)
 
             if amenity == 'pharmacy':
                 inner_text = 'RX'
@@ -184,7 +177,6 @@ class MapSymbol(MapLocation):
         elif shop:
 
             style = shape_shop
-            color = self.get_shop_color(cs, shop)
 
             if shop == 'car_repair':
                 style = shape_service
@@ -208,21 +200,18 @@ class MapSymbol(MapLocation):
 
         elif self.has_tag('tourism'):
 
-            tourism = self.get_tag_value('tourism')
-
-            if tourism in (
-            'hotel', 'apartment', 'alpine_hut', 'camp_site', 'caravan_site', 'chalet', 'guest_house', 'hostel', 'motel',
-            'wilderness_hut'):
-                color = cs.map_public  # Travel instead? New thing? Residential?
-
-            elif tourism == 'theme_park':
-                color = cs.map_recreation
+            # No added styling needed so far
+            pass
 
         elif self.has_tag('building'):
-            color = self.get_building_color(cs, self.get_tag_value('building'))
+
+            # No added styling needed so far
+            pass
 
         elif self.has_tag('leisure'):
-            color = cs.map_recreation
+
+            # No added styling needed so far
+            pass
 
         elif self.has_tag('power'):
 
@@ -232,53 +221,20 @@ class MapSymbol(MapLocation):
                 style = shape.triangle
                 shape_size = 6
 
-            color = cs.map_infrastructure
-
         elif self.has_tag('barrier'):
 
             shape_size = 3
 
-            barrier = self.get_tag_value('barrier')
-            if barrier in (
-            'city_wall', 'guard_rail', 'cable_barrier', 'block', 'border_control', 'debris', 'height_restrictor',
-            'jersey_barrier', 'sally_port'):
-                color = cs.map_structural
-            elif barrier in ('ditch', 'retaining_wall', 'hedge', 'horse_stile', 'log'):
-                color = cs.map_vegitation
-            elif barrier in ('wall', 'fence', 'entrance', 'gate', 'hampshire_gate', 'lift_gate', 'spikes'):
-                color = cs.map_private
-            elif barrier in (
-            'bollard', 'kerb', 'cycle_barrier', 'chain', 'full-height_turnstile', 'kissing_gate', 'kent_carriage_gap',
-            'rope', 'motorcycle_barrier'):
-                color = cs.map_pedestrian
-            else:
-                color = cs.map_unknown
-
         elif self.has_tag_value('footway', 'crossing'):
             style = shape.diamond
-            color = cs.yellow
             shape_width = 0
             shape_size = 6
-
-        elif self.has_tag('traffic_sign'):
-            color = cs.map_government
-
-        elif self.has_tag('place'):
-
-            place = self.get_tag_value('place')
-            if place in ('hamlet', 'town', 'village'):
-                color = cs.map_government
-            elif place == 'island':
-                color = cs.background
 
         elif self.has_tag('man_made'):
 
             man_made = self.get_tag_value('man_made')
 
-            if man_made == 'water_tower':
-                color = cs.map_infrastructure
-            elif man_made == 'tower':
-                color = cs.map_infrastructure
+            if man_made == 'tower':
                 style = shape.triangle
 
         half_size = shape_size / 2
@@ -286,8 +242,11 @@ class MapSymbol(MapLocation):
         right_text = extra_data
         bottom_text = display_name
 
+        color = self.get_color(display.color_scheme)
+
         # Render the shape of the item
         if not hide_shape_if_has_building or not self.has_lines:
+
             if style == shape.circle:
                 render_circle(display, color, pos, half_size + 2, shape_width)
 
@@ -306,9 +265,9 @@ class MapSymbol(MapLocation):
                 render_circle(display, color, pos, half_size, shape_width)
 
             elif style == shape.traffic_stop:
-                render_circle(display, cs.red, pos, 4, 0)
-                render_circle(display, cs.yellow, pos, 3, 0)
-                render_circle(display, cs.green, pos, 1, 0)
+                render_circle(display, display.color_scheme.red, pos, 4, 0)
+                render_circle(display, display.color_scheme.yellow, pos, 3, 0)
+                render_circle(display, display.color_scheme.green, pos, 1, 0)
 
         # Render adornment icons
         for icon in icons:

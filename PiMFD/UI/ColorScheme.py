@@ -49,7 +49,7 @@ class ColorScheme(object):
     map_emergency = red
     map_health = red
     map_public = salmon
-    map_major_road = detail
+    map_major_road = (85, 251, 167)
     map_government = purple
     map_pedestrian = brown
     map_structural = gray
