@@ -34,24 +34,27 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         for way in ways:
             way.render(self.display)
 
-        # Add ourself to the map
-        sym = self.build_symbol(self.display.options.lat, self.display.options.lng)
-        sym.name = 'ME'
-        sym.add_tag('actor', 'self')
+        # Render the other awesome things
+        for symbol in symbols:
+            symbol.render(self.display)
 
+        # Render custom annotations over everything
         if self.map.annotations:
             for annotation in self.map.annotations:
                 pos = self.map.set_screen_position(annotation, self.size, self.center)
                 sym = MapSymbol(pos[0], pos[1], annotation)
-                sym.name = annotation.description
+                # sym.name = annotation.description
                 sym.add_tag('incident', annotation.incident_type)
                 sym.render(self.display)
 
+        # Add ourself to the map - TODO: Add this to the annotation layer
+        sym = self.build_symbol(self.display.options.lat, self.display.options.lng)
+        sym.name = 'ME'
+        sym.add_tag('actor', 'self')
+
         sym.render(self.display)
 
-        # Render the other awesome things
-        for symbol in symbols:
-            symbol.render(self.display)
+
 
     def build_symbol(self, lat, lng):
         x, y = self.map.gps_to_screen(lat, lng, self.size, self.center)

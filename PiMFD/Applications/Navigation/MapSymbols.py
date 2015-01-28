@@ -233,7 +233,6 @@ class MapSymbol(MapLocation):
                 shape_size = 6
 
         elif self.has_tag('barrier'):
-
             shape_size = 3
 
         elif self.has_tag_value('footway', 'crossing'):
@@ -249,8 +248,11 @@ class MapSymbol(MapLocation):
                 style = shape.triangle
 
         elif self.has_tag('actor'):
-
             style = shape.double_circle
+
+        elif self.has_tag('incident'):
+            style = shape.diamond
+            shape_width = 2
 
         half_size = shape_size / 2
 

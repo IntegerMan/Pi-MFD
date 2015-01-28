@@ -93,6 +93,31 @@ class MapTraffic(object):
                         incident.end = self.get_safe_value(res, 'end')
                         incident.start = self.get_safe_value(res, 'start')
 
+                        if incident.incident_type:
+                            incident.incident_type = int(incident.incident_type)
+                            if incident.incident_type == 1:
+                                incident.name = 'Accident'
+                            elif incident.incident_type == 2:
+                                incident.name = 'Congestion'
+                            elif incident.incident_type == 3:
+                                incident.name = 'Disabled Vehicle'
+                            elif incident.incident_type == 4:
+                                incident.name = 'Mass Transit'  # Whaaaaaat?
+                            elif incident.incident_type == 5:
+                                incident.name = 'Misc. Traffic'
+                            elif incident.incident_type == 6:
+                                incident.name = 'News Alert'
+                            elif incident.incident_type == 7:
+                                incident.name = 'Event'
+                            elif incident.incident_type == 8:
+                                incident.name = 'Hazard'
+                            elif incident.incident_type == 9:
+                                incident.name = 'Construction'
+                            elif incident.incident_type == 10:
+                                incident.name = 'Alert'
+                            elif incident.incident_type == 11:
+                                incident.name = 'Weather'
+
                         incidents.append(incident)
 
         return incidents

@@ -238,6 +238,10 @@ class MapEntity(object):
             if man_made == 'water_tower':
                 return cs.map_infrastructure
 
+        elif self.has_tag('incident'):
+
+            return cs.map_emergency
+
         elif self.has_tag('actor'):
 
             actor = self.get_tag_value('actor')
