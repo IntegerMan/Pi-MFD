@@ -252,6 +252,10 @@ class MapSymbol(MapLocation):
 
         elif self.has_tag('incident'):
             style = shape.diamond
+
+            end = self.get_tag_value('end_date')
+            extra_data = end
+
             shape_width = 2
 
         half_size = shape_size / 2

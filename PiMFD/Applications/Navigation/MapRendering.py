@@ -1,4 +1,6 @@
 # coding=utf-8
+from time import strftime
+
 from PiMFD.Applications.Navigation.MapEntities import MapEntity
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
@@ -43,8 +45,13 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
             for annotation in self.map.annotations:
                 pos = self.map.set_screen_position(annotation, self.size, self.center)
                 sym = MapSymbol(pos[0], pos[1], annotation)
-                # sym.name = annotation.description
                 sym.add_tag('incident', annotation.incident_type)
+                if annotation.end:
+                    sym.add_tag('end_date', strftime('%m/%d/%Y', annotation.end))
+                if annotation.start:
+                    sym.add_tag('start_date', strftime('%m/%d/%Y', annotation.start))
+                sym.add_tag('note', annotation.description)
+                sym.add_tag('severity', annotation.severity)
                 sym.render(self.display)
 
         # Add ourself to the map - TODO: Add this to the annotation layer

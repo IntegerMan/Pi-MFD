@@ -1,4 +1,5 @@
 import json
+from time import gmtime
 import traceback
 
 import requests
@@ -125,7 +126,14 @@ class MapTraffic(object):
     @staticmethod
     def get_safe_value(res, key):
 
-        if key in res:
-            return res[key]
+        value = None
 
-        return None
+        if key in res:
+            value = res[key]
+
+            if value and '/date' in str.lower(str(value)):
+                substr = str(value[6:-5])
+                seconds = int(substr)
+                value = gmtime(seconds)
+
+        return value
