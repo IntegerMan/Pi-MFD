@@ -157,10 +157,13 @@ class MapEntity(object):
             landuse = self.get_tag_value('landuse')
 
             if landuse in ('cemetery', 'cemetery'):
-                return cs.gray
+                return cs.map_structural
 
             elif landuse == 'grass':
                 return cs.map_recreation
+
+            elif landuse == 'construction':
+                return cs.map_infrastructure
 
         elif self.has_tag('tourism'):
 
