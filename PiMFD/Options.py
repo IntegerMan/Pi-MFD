@@ -28,6 +28,7 @@ class MFDAppOptions(object):
     button_sound = 'sounds/button.ogg'
     key_sound = 'sounds/keypress.ogg'
     map_output_file = 'map_data.xml'
+    bing_maps_key = None
 
     def load_from_settings(self, filename='settings.ini'):
         """
@@ -41,7 +42,7 @@ class MFDAppOptions(object):
         if 'config' in settings.sections():
             version = float(settings.get('config', 'version'))
         else:
-            version = 0.01
+            version = 0.05
 
         if 'ui' in settings.sections():
             self.enable_scan_line = settings.getboolean('ui', 'enable_scan_line')
@@ -52,6 +53,9 @@ class MFDAppOptions(object):
             self.location = settings.get('location', 'zipcode')
             self.lat = float(settings.get('location', 'gps_lat'))
             self.lng = float(settings.get('location', 'gps_long'))
+
+        if 'auth' in settings.sections():
+            self.bing_maps_key = settings.get('auth', 'bing_maps_key')
 
     def save_to_settings(self, filename='settings.ini'):
         """
@@ -74,6 +78,9 @@ class MFDAppOptions(object):
         settings.set('ui', 'enable_scan_line', bool(self.enable_scan_line))
         settings.set('ui', 'enable_interlacing', bool(self.enable_interlacing))
         settings.set('ui', 'enable_fps', bool(self.enable_fps))
+
+        settings.add_section('auth')
+        settings.set('auth', 'bing_maps_key', self.bing_maps_key)
 
         # Output to the file
         config_file = open(filename, 'w')

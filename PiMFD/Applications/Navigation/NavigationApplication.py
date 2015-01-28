@@ -7,6 +7,7 @@ from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Applications.Navigation.MapPages import MapPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
+from PiMFD.Applications.Navigation.TrafficLoading import MapTraffic
 
 __author__ = 'Matt Eland'
 
@@ -33,6 +34,7 @@ class NavigationApp(MFDApplication):
     initialized = False
 
     map = None
+    traffic = None
     zooms = MapZooms()
     map_zoom = zooms.local
 
@@ -44,6 +46,7 @@ class NavigationApp(MFDApplication):
         super(NavigationApp, self).__init__(controller)
 
         self.map = Maps()
+        self.traffic = MapTraffic(controller.options)
 
         self.map.output_file = controller.options.map_output_file
 
@@ -86,9 +89,15 @@ class NavigationApp(MFDApplication):
             # TODO: This should be in another thread so the UI can keep rendering
             self.get_map_data()
 
-    def get_map_data(self):
+    def get_map_data(self, bounds=None):
 
-        self.map.fetch_by_coordinate(self.controller.options.lat, self.controller.options.lng, self.map_zoom)
+        if bounds:
+            self.map.fetch_area([bounds[0], bounds[1], bounds[2], bounds[3]])
+        else:
+            self.map.fetch_by_coordinate(self.controller.options.lat, self.controller.options.lng, self.map_zoom)
+            bounds = self.map.bounds
+
+        self.map.annotations = self.traffic.get_traffic(bounds)
         self.initialized = True
 
     def zoom_in(self):
@@ -121,22 +130,22 @@ class NavigationApp(MFDApplication):
         if self.map.has_data:
             bounds = self.map.bounds
             size = (bounds[3] - bounds[1]) * self.y_page_multiplier
-            self.map.fetch_area([bounds[0], bounds[1] + size, bounds[2], bounds[3] + size])
+            self.get_map_data([bounds[0], bounds[1] + size, bounds[2], bounds[3] + size])
 
     def move_right(self):
         if self.map.has_data:
             bounds = self.map.bounds
             size = (bounds[2] - bounds[0]) * self.x_page_multiplier
-            self.map.fetch_area([bounds[0] + size, bounds[1], bounds[2] + size, bounds[3]])
+            self.get_map_data([bounds[0] + size, bounds[1], bounds[2] + size, bounds[3]])
 
     def move_left(self):
         if self.map.has_data:
             bounds = self.map.bounds
             size = (bounds[2] - bounds[0]) * self.x_page_multiplier
-            self.map.fetch_area([bounds[0] - size, bounds[1], bounds[2] - size, bounds[3]])
+            self.get_map_data([bounds[0] - size, bounds[1], bounds[2] - size, bounds[3]])
 
     def move_down(self):
         if self.map.has_data:
             bounds = self.map.bounds
             size = (bounds[3] - bounds[1]) * self.y_page_multiplier
-            self.map.fetch_area([bounds[0], bounds[1] - size, bounds[2], bounds[3] - size])
+            self.get_map_data([bounds[0], bounds[1] - size, bounds[2], bounds[3] - size])

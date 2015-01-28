@@ -39,6 +39,14 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         sym.name = 'ME'
         sym.add_tag('actor', 'self')
 
+        if self.map.annotations:
+            for annotation in self.map.annotations:
+                pos = self.map.set_screen_position(annotation, self.size, self.center)
+                sym = MapSymbol(pos[0], pos[1], annotation)
+                sym.name = annotation.description
+                sym.add_tag('incident', annotation.incident_type)
+                sym.render(self.display)
+
         sym.render(self.display)
 
         # Render the other awesome things

@@ -25,6 +25,7 @@ class Maps(object):
     nodes = {}
     locations = []
     waypoints = []
+    annotations = None
     origin = None
     width = 0
     height = 0
@@ -42,6 +43,8 @@ class Maps(object):
 
         self.locations = []
         self.waypoints = []
+        self.annotations = []
+        self.nodes = []
 
     def float_floor_to_precision(self, value, precision):
         for i in range(precision):
@@ -308,6 +311,10 @@ class Maps(object):
         x = (rel_lng * h_coef * -1) + offset[0]
 
         return x, y
+
+    def set_screen_position(self, entity, dimensions, offset):
+        entity.x, entity.y = self.gps_to_screen(entity.lat, entity.lng, dimensions, offset)
+        return entity.x, entity.y
 
     def transpose_locations(self, dimensions, offset):
 
