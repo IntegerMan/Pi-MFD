@@ -238,6 +238,13 @@ class MapEntity(object):
             if man_made == 'water_tower':
                 return cs.map_infrastructure
 
+        elif self.has_tag('actor'):
+
+            actor = self.get_tag_value('actor')
+
+            if actor == 'self':
+                return cs.highlight
+
         return cs.map_unknown
 
     def get_shop_color(self, cs, shop):

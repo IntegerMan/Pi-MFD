@@ -40,10 +40,18 @@ class MapSymbol(MapLocation):
         super(MapSymbol, self).__init__(location.lat, location.lng)
 
         self.tags = location.tags
-        self.name = location.name
-        self.id = location.id
+
+        if hasattr(location, 'name'):
+            self.name = location.name
+
+        if hasattr(location, 'id'):
+            self.id = location.id
+
         self.x = x
         self.y = y
+
+    def add_tag(self, key, value='yes'):
+        self.tags.append((key, value))
 
     def get_font_text_and_color(self, display):
         """
@@ -239,6 +247,10 @@ class MapSymbol(MapLocation):
 
             if man_made == 'tower':
                 style = shape.triangle
+
+        elif self.has_tag('actor'):
+
+            style = shape.double_circle
 
         half_size = shape_size / 2
 

@@ -251,7 +251,7 @@ class Maps(object):
             float(lat) + range
         ))
 
-    def transpose_ways(self, dimensions, offset, flip_y=True):
+    def transpose_ways(self, dimensions, offset):
 
         width = dimensions[0]
         height = dimensions[1]
@@ -275,12 +275,8 @@ class Maps(object):
 
                 wp = [
                     (lat * w_coef) + offset[0],
-                    (lng * h_coef) + offset[1]
+                    (lng * h_coef * -1) + offset[1]
                 ]
-
-                if flip_y:
-                    wp[1] *= -1
-                    wp[1] += offset[1] * 2
 
                 tot_x += wp[0]
                 tot_y += wp[1]
@@ -295,7 +291,25 @@ class Maps(object):
 
         return lines
 
-    def transpose_locations(self, dimensions, offset, flip_y=True):
+    def gps_to_screen(self, lat, lng, dimensions, offset):
+
+        width = dimensions[0]
+        height = dimensions[1]
+
+        w_coef = width / self.width / 2
+        h_coef = height / self.height / 2
+
+        # Determine relative lat / long to origin
+        rel_lat = self.origin[0] - lat
+        rel_lng = self.origin[1] - lng
+
+        # Scale the location accordingly
+        y = (rel_lat * w_coef) + offset[1]
+        x = (rel_lng * h_coef * -1) + offset[0]
+
+        return x, y
+
+    def transpose_locations(self, dimensions, offset):
 
         width = dimensions[0]
         height = dimensions[1]
@@ -312,16 +326,10 @@ class Maps(object):
             rel_lng = self.origin[1] - location.lng
 
             # Scale the location accordingly
-            x = (rel_lat * w_coef) + offset[1]
-            y = (rel_lng * h_coef)
+            y = (rel_lat * w_coef) + offset[1]
+            x = (rel_lng * h_coef * -1) + offset[0]
 
-            # We'll typically need to flip the longitude since 0, 0 is upper left corner on screens
-            if flip_y:
-                y *= -1
-
-            y += offset[0]
-
-            symbols.append(MapSymbol(y, x, location))
+            symbols.append(MapSymbol(x, y, location))
 
         return symbols
 
