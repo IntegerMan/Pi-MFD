@@ -220,7 +220,7 @@ class MapColorizer(object):
         elif building in ('kindergarten', 'school'):
             return cs.map_public
 
-        elif building in ('retail', 'commercial', 'shop'):
+        elif building in ('retail', 'commercial', 'shop', 'restaurant', 'fast_food', 'supermarket'):
             return cs.map_commercial
 
         elif building == 'power':

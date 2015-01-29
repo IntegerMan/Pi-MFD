@@ -7,7 +7,7 @@ from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Applications.Navigation.MapPages import MapPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
-from PiMFD.Applications.Navigation.TrafficLoading import MapTraffic
+from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 
 __author__ = 'Matt Eland'
 

@@ -166,7 +166,7 @@ class MapSymbol(MapLocation):
                 style = shape_service
                 inner_text = 'REL'
 
-            elif amenity == 'restaurant':
+            elif amenity in ('restaurant', 'pub'):
 
                 # Plug in the cuisine
                 extra_data = self.get_tag_value('cuisine')
@@ -175,12 +175,51 @@ class MapSymbol(MapLocation):
 
                 icons.append(FoodIcon())  # TODO: Render by cuisine
 
-            elif amenity == 'fast_food':
+            elif amenity in ('fast_food', 'food_court'):
 
                 # Plug in the cuisine
                 extra_data = self.get_tag_value('cuisine')
 
                 icons.append(FoodIcon())  # TODO: Render by cuisine
+
+            elif amenity == 'cafe':
+                inner_text = 'caf'
+
+            elif amenity == 'bbq':
+                inner_text = 'bbq'
+
+            elif amenity in ('biergarten', 'bar'):
+                inner_text = 'bar'
+
+            elif amenity == 'drinking_water':
+                inner_text = 'H2O'
+
+            elif amenity == 'ice_cream':
+                inner_text = 'ice'  # Icon should come here - this one isn't intuitive on abbrv.
+
+            elif amenity in ('college', 'university'):
+                inner_text = 'EDU'
+
+            elif amenity == 'kindergarten':
+                inner_text = 'pre'
+
+            elif amenity == 'library':
+                inner_text = 'lib'
+
+            elif amenity == 'school':
+                inner_text = 'sch'
+
+            elif amenity == 'public_bookcase':
+                inner_text = 'cas'
+
+            elif amenity in ('bicycle_parking', 'bicycle_repair_station', 'bicycle_rental'):
+                inner_text = 'bik'
+
+            elif amenity == 'boat_sharing':
+                inner_text = 'boa'
+
+            elif amenity == 'bus_station':
+                inner_text = 'bus'
 
         elif shop:
 
