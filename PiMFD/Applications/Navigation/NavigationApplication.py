@@ -94,7 +94,15 @@ class NavigationApp(MFDApplication):
         if bounds:
             self.map.fetch_area([bounds[0], bounds[1], bounds[2], bounds[3]])
         else:
-            self.map.fetch_by_coordinate(self.controller.options.lat, self.controller.options.lng, self.map_zoom)
+
+            if self.map.bounds:
+                lat = ((self.map.bounds[3] - self.map.bounds[1]) / 2.0) + self.map.bounds[1]
+                lng = ((self.map.bounds[2] - self.map.bounds[0]) / 2.0) + self.map.bounds[0]
+            else:
+                lat = self.controller.options.lat
+                lng = self.controller.options.lng
+
+            self.map.fetch_by_coordinate(lat, lng, self.map_zoom)
             bounds = self.map.bounds
 
         self.map.annotations = self.traffic.get_traffic(bounds)

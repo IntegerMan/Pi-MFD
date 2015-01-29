@@ -29,6 +29,7 @@ class Maps(object):
     origin = None
     width = 0
     height = 0
+    bounds = None
 
     has_data = False
     status_text = "Loading Map Data..."
