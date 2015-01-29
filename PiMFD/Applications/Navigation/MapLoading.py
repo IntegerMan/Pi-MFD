@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from __future__ import print_function
+from datetime import datetime
 import traceback
 
 from PiMFD.Applications.Navigation.MapEntities import MapLocation, MapPath
@@ -30,6 +31,7 @@ class Maps(object):
     width = 0
     height = 0
     bounds = None
+    last_data_received = None
 
     has_data = False
     status_text = "Loading Map Data..."
@@ -116,6 +118,8 @@ class Maps(object):
             return
 
         else:
+
+            self.last_data_received = datetime.now()
 
             # Dump to disk for diagnostics
             if self.output_file:

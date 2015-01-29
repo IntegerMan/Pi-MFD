@@ -1,4 +1,5 @@
 # coding=utf-8
+from datetime import datetime
 from time import strftime
 
 from PiMFD.Applications.Navigation.MapEntities import MapEntity
@@ -16,31 +17,36 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
     def __init__(self, map, display, size=(200, 200)):
         self.map = map
         self.display = display
+        self.center = ((display.res_x / 2.0), (display.res_y / 2.0))
         self.size = size
 
     def render(self):
 
         # Smart scale the size to accomodate for the greatest dimension. This lets us support many aspect ratios.
-        available_x = self.display.res_x
-        available_y = self.display.res_y
-        max_available = max(available_y, available_x)
+        max_available = max(self.display.res_x, self.display.res_y)
 
-        self.size = (max_available, max_available)
-        self.center = ((self.display.res_x / 2.0), (self.display.res_y / 2.0))
+        # Only recompute the expensive stuff if the resolution has changed or the data fetch time has changed
+        if max_available != self.size[
+            0] or not self.last_translate or self.map.last_data_received > self.last_translate:
+            # Recompute our dimensions
+            self.size = (max_available, max_available)
+            self.center = ((self.display.res_x / 2.0), (self.display.res_y / 2.0))
 
-        # Translate the various curves, etc. into their appropraite screen positions
-        ways = self.map.transpose_ways(self.size, self.center)
-        symbols = self.map.transpose_locations(self.size, self.center)
+            # Translate the various curves, etc. into their appropraite screen positions
+            self.ways = self.map.transpose_ways(self.size, self.center)
+            self.symbols = self.map.transpose_locations(self.size, self.center)
+
+            self.last_translate = datetime.now()
 
         # Render the Roads
-        for way in ways:
+        for way in self.ways:
             way.render(self.display)
 
         # Render the other awesome things
-        for symbol in symbols:
+        for symbol in self.symbols:
             symbol.render(self.display)
 
-        # Render custom annotations over everything
+        # Render custom annotations over everything - these should always be recomputed
         if self.map.annotations:
             for annotation in self.map.annotations:
                 pos = self.map.set_screen_position(annotation, self.size, self.center)
@@ -60,8 +66,6 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         sym.add_tag('actor', 'self')
 
         sym.render(self.display)
-
-
 
     def build_symbol(self, lat, lng):
         x, y = self.map.gps_to_screen(lat, lng, self.size, self.center)
