@@ -13,15 +13,6 @@ from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 __author__ = 'Matt Eland'
 
 
-class MapZooms(object):
-    """
-    An enum-style collection of supported zoom levels
-    """
-    large = 0.02
-    medium = 0.0125
-    local = 0.0075
-    neighborhood = 0.0025
-
 class NavigationApp(MFDApplication):
     """
     The scheduling application. Contains pages related to scheduling and coordinates web-service communication.
@@ -37,8 +28,6 @@ class NavigationApp(MFDApplication):
     map = None
     map_context = None
     traffic = None
-    zooms = MapZooms()
-    map_zoom = zooms.local
 
     # These values are used for determining quantity of overlap while moving in a direction
     x_page_multiplier = 0.8
@@ -105,7 +94,7 @@ class NavigationApp(MFDApplication):
                 lat = self.controller.options.lat
                 lng = self.controller.options.lng
 
-            self.map.fetch_by_coordinate(lat, lng, self.map_zoom)
+            self.map.fetch_by_coordinate(lat, lng, self.map_context.map_zoom)
             bounds = self.map.bounds
 
         self.map.annotations = self.traffic.get_traffic(bounds)
@@ -113,29 +102,13 @@ class NavigationApp(MFDApplication):
 
     def zoom_in(self):
 
-        if self.map_zoom == self.zooms.large:
-            self.map_zoom = self.zooms.medium
-        elif self.map_zoom == self.zooms.medium:
-            self.map_zoom = self.zooms.local
-        elif self.map_zoom == self.zooms.local:
-            self.map_zoom = self.zooms.neighborhood
-        else:
-            return
-
-        self.get_map_data()
+        if self.map_context.zoom_in():
+            self.get_map_data()
 
     def zoom_out(self):
 
-        if self.map_zoom == self.zooms.neighborhood:
-            self.map_zoom = self.zooms.local
-        elif self.map_zoom == self.zooms.local:
-            self.map_zoom = self.zooms.medium
-        elif self.map_zoom == self.zooms.medium:
-            self.map_zoom = self.zooms.large
-        else:
-            return
-
-        self.get_map_data()
+        if self.map_context.zoom_out():
+            self.get_map_data()
 
     def move_up(self):
         if self.map.has_data:

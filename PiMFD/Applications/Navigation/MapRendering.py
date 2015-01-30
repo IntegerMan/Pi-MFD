@@ -20,6 +20,9 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         self.center = ((display.res_x / 2.0), (display.res_y / 2.0))
         self.size = size
         self.map_context = map_context
+        self.symbols = None
+        self.ways = None
+        self.last_translate = None
 
     def render(self):
 
