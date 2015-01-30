@@ -338,7 +338,7 @@ class MapSymbol(MapLocation):
         if inner_text and map_context.should_show_shapes(self):
             render_text_centered(display,
                                  font,
-                                 inner_text,
+                                 inner_text.upper(),
                                  self.x,
                                  self.y - (font.measure(inner_text)[1] / 2.0),
                                  color)
@@ -346,7 +346,7 @@ class MapSymbol(MapLocation):
         if right_text and map_context.should_show_right_text(self):
             render_text(display,
                         font,
-                        right_text,
+                        right_text.upper(),
                         self.x + half_size + 3,
                         self.y - (font.measure(right_text)[1] / 2.0),
                         color)
@@ -354,7 +354,7 @@ class MapSymbol(MapLocation):
         if bottom_text and map_context.should_show_bottom_text(self):
             render_text_centered(display,
                                  font,
-                                 bottom_text,
+                                 bottom_text.upper(),
                                  self.x,
                                  self.y + half_size + 3,  # + (font.measure(bottom_text)[1] / 2.0),
                                  color)
