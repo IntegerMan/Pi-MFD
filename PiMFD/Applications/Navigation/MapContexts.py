@@ -59,7 +59,11 @@ class MapContext(object):
         return True
 
     def should_show_right_text(self, entity):
-        return True
+
+        if self.map_zoom <= MapZooms.local:
+            return True
+        else:
+            return False
 
     def should_show_left_text(self, entity):
         return True
