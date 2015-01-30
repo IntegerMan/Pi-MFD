@@ -15,11 +15,13 @@ class MapPage(MFDPage):
 
     lbl_loading = None
     map_renderer = None
+    context = None
 
     def __init__(self, controller, application):
         super(MapPage, self).__init__(controller, application)
 
         self.map_renderer = MapRenderer(application.map, controller.display, application.map_context)
+        self.context = application.map_context
 
     def get_button_text(self):
         return self.application.map_context.active_filter.get_button_text()
@@ -48,16 +50,20 @@ class MapPage(MFDPage):
             return True
 
         elif is_up_key(key):
-            self.application.move_up()
+            self.context.move_up()
+            return True
 
         elif is_right_key(key):
-            self.application.move_right()
+            self.context.move_right()
+            return True
 
         elif is_down_key(key):
-            self.application.move_down()
+            self.context.move_down()
+            return True
 
         elif is_left_key(key):
-            self.application.move_left()
+            self.context.move_left()
+            return True
 
         return super(MapPage, self).handle_key(key)
 
