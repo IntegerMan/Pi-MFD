@@ -4,7 +4,6 @@ The navigation application
 """
 
 from PiMFD.Applications.Application import MFDApplication
-from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapPages import MapPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
@@ -43,13 +42,9 @@ class NavigationApp(MFDApplication):
         self.map.output_file = controller.options.map_output_file
 
         self.map_page = MapPage(controller, self)
-        self.gas_page = SimpleMessagePage(controller, self, "GAS")
-        self.food_page = SimpleMessagePage(controller, self, "FOOD")
-        self.traffic_page = SimpleMessagePage(controller, self, "TRAF")
-        self.conditions_page = SimpleMessagePage(controller, self, "COND")
         self.always_render_background = True
 
-        self.pages = list([self.map_page, self.gas_page, self.food_page, self.traffic_page, self.conditions_page])
+        self.pages = list([self.map_page])
 
     def get_default_page(self):
         """
@@ -70,8 +65,11 @@ class NavigationApp(MFDApplication):
         Handles the page reselected event for this application.
         :param page: The page that was reselected.
         """
-        self.get_map_data()
         super(NavigationApp, self).page_reselected(page)
+
+    def handle_reselected(self):
+        self.get_map_data()
+        super(NavigationApp, self).handle_reselected()
 
     def handle_selected(self):
         """
@@ -133,3 +131,6 @@ class NavigationApp(MFDApplication):
             bounds = self.map.bounds
             size = (bounds[3] - bounds[1]) * self.y_page_multiplier
             self.get_map_data([bounds[0], bounds[1] - size, bounds[2], bounds[3] - size])
+
+    def next_map_mode(self):
+        self.map_context.next_map_mode()

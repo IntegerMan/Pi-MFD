@@ -330,11 +330,11 @@ class MapSymbol(MapLocation):
                 render_circle(display, display.color_scheme.green, pos, 1, 0)
 
         # Render adornment icons
-        for icon in icons:
-            icon.render(display, color, pos, half_size)
+        if map_context.should_show_icons(self):
+            for icon in icons:
+                icon.render(display, color, pos, half_size)
 
         # Render text labels
-
         if inner_text and map_context.should_show_shapes(self):
             render_text_centered(display,
                                  font,

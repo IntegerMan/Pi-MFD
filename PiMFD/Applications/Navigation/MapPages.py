@@ -22,7 +22,7 @@ class MapPage(MFDPage):
         self.map_renderer = MapRenderer(application.map, controller.display, application.map_context)
 
     def get_button_text(self):
-        return "MAP"
+        return self.application.map_context.active_filter.get_button_text()
 
     def render(self):
 
@@ -32,6 +32,10 @@ class MapPage(MFDPage):
             self.center_text('NO DATA')
 
         return super(MapPage, self).render()
+
+    def handle_reselected(self):
+        self.application.next_map_mode()
+        super(MapPage, self).handle_reselected()
 
     def handle_key(self, key):
 
