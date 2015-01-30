@@ -61,10 +61,10 @@ class MapLine(MapSymbol):
 
         return 1
 
-    def render(self, display):
+    def render(self, display, map_context):
 
         # Render out the lines
-        if len(self.points) > 1:
+        if len(self.points) > 1 and map_context.should_show_lines(self):
 
             self.has_lines = True
             color = self.get_color(display.color_scheme)
@@ -75,4 +75,4 @@ class MapLine(MapSymbol):
             else:
                 pygame.draw.lines(display.surface, color, False, self.points, width)
 
-        super(MapLine, self).render(display)
+        super(MapLine, self).render(display, map_context)

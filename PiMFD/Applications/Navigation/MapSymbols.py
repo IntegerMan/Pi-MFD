@@ -62,7 +62,7 @@ class MapSymbol(MapLocation):
 
         return display.fonts.small, self.name.upper(), display.color_scheme.highlight
 
-    def render(self, display):
+    def render(self, display, map_context):
         """
         Renders the symbol to the screen.
         :param display: The display manager
@@ -305,7 +305,7 @@ class MapSymbol(MapLocation):
         color = self.get_color(display.color_scheme)
 
         # Render the shape of the item
-        if not hide_shape_if_has_building or not self.has_lines:
+        if (not hide_shape_if_has_building or not self.has_lines) and map_context.should_show_shapes(self):
 
             if style == shape.circle:
                 render_circle(display, color, pos, half_size + 2, shape_width)
@@ -335,7 +335,7 @@ class MapSymbol(MapLocation):
 
         # Render text labels
 
-        if inner_text:
+        if inner_text and map_context.should_show_shapes(self):
             render_text_centered(display,
                                  font,
                                  inner_text,
@@ -343,7 +343,7 @@ class MapSymbol(MapLocation):
                                  self.y - (font.measure(inner_text)[1] / 2.0),
                                  color)
 
-        if right_text:
+        if right_text and map_context.should_show_right_text(self):
             render_text(display,
                         font,
                         right_text,
@@ -351,7 +351,7 @@ class MapSymbol(MapLocation):
                         self.y - (font.measure(right_text)[1] / 2.0),
                         color)
 
-        if bottom_text:
+        if bottom_text and map_context.should_show_bottom_text(self):
             render_text_centered(display,
                                  font,
                                  bottom_text,

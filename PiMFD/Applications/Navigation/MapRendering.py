@@ -14,11 +14,12 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
     A class used to render a Map object
     """
 
-    def __init__(self, map, display, size=(200, 200)):
+    def __init__(self, map, display, map_context, size=(200, 200)):
         self.map = map
         self.display = display
         self.center = ((display.res_x / 2.0), (display.res_y / 2.0))
         self.size = size
+        self.map_context = map_context
 
     def render(self):
 
@@ -38,13 +39,15 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
             self.last_translate = datetime.now()
 
+        map_context = self.map_context
+
         # Render the Roads
         for way in self.ways:
-            way.render(self.display)
+            way.render(self.display, map_context)
 
         # Render the other awesome things
         for symbol in self.symbols:
-            symbol.render(self.display)
+            symbol.render(self.display, map_context)
 
         # Render custom annotations over everything - these should always be recomputed
         if self.map.annotations:
@@ -58,14 +61,14 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
                     sym.add_tag('start_date', strftime('%m/%d/%Y', annotation.start))
                 sym.add_tag('note', annotation.description)
                 sym.add_tag('severity', annotation.severity)
-                sym.render(self.display)
+                sym.render(self.display, map_context)
 
         # Add ourself to the map - TODO: Add this to the annotation layer
         sym = self.build_symbol(self.display.options.lat, self.display.options.lng)
         sym.name = 'ME'
         sym.add_tag('actor', 'self')
 
-        sym.render(self.display)
+        sym.render(self.display, map_context)
 
     def build_symbol(self, lat, lng):
         x, y = self.map.gps_to_screen(lat, lng, self.size, self.center)

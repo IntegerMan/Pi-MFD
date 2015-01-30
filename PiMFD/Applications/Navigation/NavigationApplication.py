@@ -5,6 +5,7 @@ The navigation application
 
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.MFDPage import SimpleMessagePage
+from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapPages import MapPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
@@ -34,6 +35,7 @@ class NavigationApp(MFDApplication):
     initialized = False
 
     map = None
+    map_context = None
     traffic = None
     zooms = MapZooms()
     map_zoom = zooms.local
@@ -46,6 +48,7 @@ class NavigationApp(MFDApplication):
         super(NavigationApp, self).__init__(controller)
 
         self.map = Maps()
+        self.map_context = MapContext(self)
         self.traffic = MapTraffic(controller.options)
 
         self.map.output_file = controller.options.map_output_file

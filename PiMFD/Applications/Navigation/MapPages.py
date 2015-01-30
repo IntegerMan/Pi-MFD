@@ -19,7 +19,7 @@ class MapPage(MFDPage):
     def __init__(self, controller, application):
         super(MapPage, self).__init__(controller, application)
 
-        self.map_renderer = MapRenderer(application.map, controller.display)
+        self.map_renderer = MapRenderer(application.map, controller.display, application.map_context)
 
     def get_button_text(self):
         return "MAP"
