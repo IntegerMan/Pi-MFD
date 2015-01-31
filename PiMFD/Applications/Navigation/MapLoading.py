@@ -173,17 +173,19 @@ class Maps(object):
                 if '@visible' in waypoint and waypoint['@visible'] == 'false':
                     continue
 
-                path = MapPath(float(node['@lat']), float(node['@lon']))
+                path = MapPath()
                 path.id = waypoint['@id']
                 path.name = None
 
                 # Get points from existing nodes
                 try:
                     for node_id in waypoint['nd']:
+                        node = None
                         if node_id == '@ref':
                             node = self.nodes[waypoint['nd']['@ref']]
                         elif '@ref' in node_id:
                             node = self.nodes[node_id['@ref']]
+
                         if node:
                             path.points.append((float(node['@lat']), float(node['@lon'])))
                 except:
@@ -208,6 +210,7 @@ class Maps(object):
 
                 # Don't perpetuate invalid objects
                 if len(path.points) > 1:
+                    path.calculate_lat_lng_from_points()
                     self.waypoints.append(path)
 
         except:
@@ -246,6 +249,36 @@ class Maps(object):
             float(lat) + range
         ))
 
+    def transpose_locations(self, dimensions, offset):
+
+        width = dimensions[0]
+        height = dimensions[1]
+
+        w_coef = width / self.width / 2
+        h_coef = height / self.height / 2
+
+        results = []
+
+        for item in self.locations:
+            # Determine relative lat / long to origin
+            rel_lat = self.origin[0] - item.lat
+            rel_lng = self.origin[1] - item.lng
+
+            x, y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, w_coef, h_coef, offset)
+
+            results.append(MapSymbol(x, y, item))
+
+        return results
+
+    def translate_lat_lng_to_x_y(self, rel_lat, rel_lng, w_coef, h_coef, offset, multiplier=-1):
+
+        # Scale the location accordingly
+        y = (rel_lat * w_coef) + offset[1]
+        x = (rel_lng * h_coef * multiplier) + offset[0]
+
+        return x, y
+
+
     def transpose_ways(self, dimensions, offset):
 
         width = dimensions[0]
@@ -254,16 +287,18 @@ class Maps(object):
         w_coef = width / self.width / 2
         h_coef = height / self.height / 2
 
-        lines = []
+        results = []
 
-        for way in self.waypoints:
+        for item in self.waypoints:
 
-            line = MapLine(way)
+            # Determine relative lat / long to origin
+            rel_lat = self.origin[0] - item.lat
+            rel_lng = self.origin[1] - item.lng
 
-            tot_x = 0
-            tot_y = 0
+            line = MapLine(item)
+            line.x, line.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, w_coef, h_coef, offset)
 
-            for waypoint in way.points:
+            for waypoint in item.points:
                 lat = waypoint[1] - self.origin[1]
                 lng = waypoint[0] - self.origin[0]
 
@@ -272,18 +307,11 @@ class Maps(object):
                     (lng * h_coef * -1) + offset[1]
                 ]
 
-                tot_x += wp[0]
-                tot_y += wp[1]
-
                 line.points.append(wp)
 
-            # Calculate the center of the shape by looking at the average center of the points
-            line.x = tot_x / max(1, float(len(line.points)))
-            line.y = tot_y / max(1, float(len(line.points)))
+            results.append(line)
 
-            lines.append(line)
-
-        return lines
+        return results
 
     def gps_to_screen(self, lat, lng, dimensions, offset):
 
@@ -306,27 +334,4 @@ class Maps(object):
     def set_screen_position(self, entity, dimensions, offset):
         entity.x, entity.y = self.gps_to_screen(entity.lat, entity.lng, dimensions, offset)
         return entity.x, entity.y
-
-    def transpose_locations(self, dimensions, offset):
-
-        width = dimensions[0]
-        height = dimensions[1]
-
-        w_coef = width / self.width / 2
-        h_coef = height / self.height / 2
-
-        symbols = []
-
-        for location in self.locations:
-            # Determine relative lat / long to origin
-            rel_lat = self.origin[0] - location.lat
-            rel_lng = self.origin[1] - location.lng
-
-            # Scale the location accordingly
-            y = (rel_lat * w_coef) + offset[1]
-            x = (rel_lng * h_coef * -1) + offset[0]
-
-            symbols.append(MapSymbol(x, y, location))
-
-        return symbols
 

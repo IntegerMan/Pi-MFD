@@ -19,6 +19,7 @@ class MapEntity(object):
     lat = 0.0
     lng = 0.0
     id = 'UNK'
+    points = None
 
     def __init__(self, lat, lng):
         super(MapEntity, self).__init__()
@@ -63,6 +64,25 @@ class MapEntity(object):
             return tag[1]
 
         return None
+
+    def calculate_lat_lng_from_points(self):
+
+        if not self.points or len(self.points) < 1:
+            return
+
+        max_lat = self.points[0][0]
+        min_lat = self.points[0][0]
+        min_lng = self.points[0][1]
+        max_lng = self.points[0][1]
+
+        for point in self.points:
+            min_lat = min(point[0], min_lat)
+            max_lat = max(point[0], max_lat)
+            min_lng = min(point[1], min_lng)
+            max_lng = max(point[1], max_lng)
+
+        self.lat = min_lat + ((max_lat - min_lat) / 2.0)
+        self.lng = min_lng + ((max_lng - min_lng) / 2.0)
 
     def has_tag_value(self, name, value):
         """
@@ -145,8 +165,8 @@ class MapPath(MapEntity):
     Represents a lined area on the map
     """
 
-    def __init__(self, lat, lng):
-        super(MapPath, self).__init__(lat, lng)
+    def __init__(self):
+        super(MapPath, self).__init__(0, 0)
 
         self.points = list()
 
