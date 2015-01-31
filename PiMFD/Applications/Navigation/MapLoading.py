@@ -43,8 +43,7 @@ class Maps(object):
     def __init__(self):
         super(Maps, self).__init__()
 
-        self.locations = []
-        self.waypoints = []
+        self.shapes = []
         self.annotations = []
         self.nodes = []
 
@@ -89,8 +88,7 @@ class Maps(object):
         self.has_data = False
         self.nodes = {}
 
-        self.waypoints = []
-        self.locations = []
+        self.shapes = []
 
         print("Fetching maps " + url)
 
@@ -163,7 +161,7 @@ class Maps(object):
                             is_valid = True
 
                 if is_valid:
-                    self.locations.append(location)
+                    self.shapes.append(location)
 
             # Load Waypoints
             for waypoint in osm_dict['osm']['way']:
@@ -210,7 +208,7 @@ class Maps(object):
                 # Don't perpetuate invalid objects
                 if len(path.points) > 1:
                     path.calculate_lat_lng_from_points()
-                    self.waypoints.append(path)
+                    self.shapes.append(path)
 
         except:
             error_message = "Unhandled error parsing map data {0}\n".format(str(traceback.format_exc()))
@@ -258,44 +256,20 @@ class Maps(object):
 
         return w_coef, h_coef
 
-    def transpose(self, dimensions, offset):
+    def translate_shapes(self, dimensions, offset):
 
         dim_coef = self.get_dimension_coefficients(dimensions)
 
         results = []
-        results += self.transpose_ways(dim_coef, offset)
-        results += self.transpose_locations(dim_coef, offset)
 
-        return results
+        for item in self.shapes:
 
-    def transpose_locations(self, dim_coef, offset):
-
-        results = []
-
-        for item in self.locations:
-
-            # Determine relative lat / long to origin
-            rel_lat = self.origin[0] - item.lat
-            rel_lng = self.origin[1] - item.lng
-
-            # Update the item's screen position
-            item.x, item.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
-
-            results.append(item)
-
-        return results
-
-    def transpose_ways(self, dim_coef, offset):
-
-        results = []
-
-        for item in self.waypoints:
-
-            # Determine relative lat / long to origin
+            # Determine screen position based on relative GPS offset from our map origin
             rel_lat, rel_lng = self.get_rel_lat_lng(item.lat, item.lng)
-
             item.x, item.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
 
+            # For lines, we'll need to translate our GPS lines to screen-relative lines - keeping the old GPS values
+            # for future iterations
             if item.points and len(item.points) > 1:
                 screen_points = []
                 for waypoint in item.points:
@@ -306,6 +280,7 @@ class Maps(object):
 
                 item.screen_points = screen_points
 
+            # The item is good, so return it to whatever is rendering things
             results.append(item)
 
         return results

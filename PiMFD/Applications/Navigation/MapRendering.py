@@ -36,7 +36,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
             self.center = ((self.display.res_x / 2.0), (self.display.res_y / 2.0))
 
             # Translate the various curves, etc. into their appropraite screen positions
-            self.osm_shapes = self.map.transpose(self.size, self.center)
+            self.osm_shapes = self.map.translate_shapes(self.size, self.center)
 
             self.last_translate = datetime.now()
 
