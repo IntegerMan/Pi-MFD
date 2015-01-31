@@ -251,11 +251,7 @@ class Maps(object):
 
     def transpose_locations(self, dimensions, offset):
 
-        width = dimensions[0]
-        height = dimensions[1]
-
-        w_coef = width / self.width / 2
-        h_coef = height / self.height / 2
+        dim_coef = self.get_dimension_coefficients(dimensions)
 
         results = []
 
@@ -264,22 +260,13 @@ class Maps(object):
             rel_lat = self.origin[0] - item.lat
             rel_lng = self.origin[1] - item.lng
 
-            x, y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, w_coef, h_coef, offset)
+            x, y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
 
             results.append(MapSymbol(x, y, item))
 
         return results
 
-    def translate_lat_lng_to_x_y(self, rel_lat, rel_lng, w_coef, h_coef, offset, multiplier=-1):
-
-        # Scale the location accordingly
-        y = (rel_lat * w_coef) + offset[1]
-        x = (rel_lng * h_coef * multiplier) + offset[0]
-
-        return x, y
-
-
-    def transpose_ways(self, dimensions, offset):
+    def get_dimension_coefficients(self, dimensions):
 
         width = dimensions[0]
         height = dimensions[1]
@@ -287,24 +274,28 @@ class Maps(object):
         w_coef = width / self.width / 2
         h_coef = height / self.height / 2
 
+        return w_coef, h_coef
+
+    def transpose_ways(self, dimensions, offset):
+
+        dim_coef = self.get_dimension_coefficients(dimensions)
+
         results = []
 
         for item in self.waypoints:
 
             # Determine relative lat / long to origin
-            rel_lat = self.origin[0] - item.lat
-            rel_lng = self.origin[1] - item.lng
+            rel_lat, rel_lng = self.get_rel_lat_lng(item.lat, item.lng)
 
             line = MapLine(item)
-            line.x, line.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, w_coef, h_coef, offset)
+            line.x, line.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
 
             for waypoint in item.points:
-                lat = waypoint[1] - self.origin[1]
-                lng = waypoint[0] - self.origin[0]
+                lng, lat = self.get_rel_lat_lng(waypoint[0], waypoint[1], subtractFromOrigin=False)
 
                 wp = [
-                    (lat * w_coef) + offset[0],
-                    (lng * h_coef * -1) + offset[1]
+                    (lat * dim_coef[0]) + offset[0],
+                    (lng * dim_coef[1] * -1) + offset[1]
                 ]
 
                 line.points.append(wp)
@@ -313,23 +304,34 @@ class Maps(object):
 
         return results
 
-    def gps_to_screen(self, lat, lng, dimensions, offset):
-
-        width = dimensions[0]
-        height = dimensions[1]
-
-        w_coef = width / self.width / 2
-        h_coef = height / self.height / 2
+    def get_rel_lat_lng(self, lat, lng, subtractFromOrigin=True):
 
         # Determine relative lat / long to origin
-        rel_lat = self.origin[0] - lat
-        rel_lng = self.origin[1] - lng
+        if subtractFromOrigin:
+            rel_lat = self.origin[0] - lat
+            rel_lng = self.origin[1] - lng
+        else:
+            rel_lat = lat - self.origin[0]
+            rel_lng = lng - self.origin[1]
+
+        return rel_lat, rel_lng
+
+
+    def translate_lat_lng_to_x_y(self, rel_lat, rel_lng, dim_coef, offset, multiplier=-1):
 
         # Scale the location accordingly
-        y = (rel_lat * w_coef) + offset[1]
-        x = (rel_lng * h_coef * -1) + offset[0]
+        y = (rel_lat * dim_coef[1]) + offset[1]
+        x = (rel_lng * dim_coef[0] * multiplier) + offset[0]
 
         return x, y
+
+    def gps_to_screen(self, lat, lng, dimensions, offset):
+
+        # Determine relative lat / long to origin
+        rel_lat, rel_lng = self.get_rel_lat_lng(lat, lng)
+
+        dim_coef = self.get_dimension_coefficients(dimensions)
+        return self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
 
     def set_screen_position(self, entity, dimensions, offset):
         entity.x, entity.y = self.gps_to_screen(entity.lat, entity.lng, dimensions, offset)
