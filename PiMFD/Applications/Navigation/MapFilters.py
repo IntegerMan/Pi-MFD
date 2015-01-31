@@ -110,3 +110,23 @@ class GasMapFilter(StandardMapFilter):
                entity.has_tag('traffic_signals') or \
                entity.get_tag_value("amenity") in ('parking', 'fuel') or \
                entity.has_tag_value('actor', 'self')
+
+
+class InfrastructureMapFilter(StandardMapFilter):
+    def get_button_text(self):
+        return "INFR"
+
+    def should_show_right_text(self, entity):
+        return self.should_show_entity(entity)
+
+    def should_show_bottom_text(self, entity):
+        return self.should_show_entity(entity)
+
+    def should_show_entity(self, entity):
+        return entity.has_tag("highway") or \
+               entity.has_tag("power") or \
+               entity.has_tag("railway") or \
+               entity.get_tag_value("amenity") in ('police', 'fire_station') or \
+               entity.has_tag('traffic_signals') or \
+               entity.has_tag("man_made") or \
+               entity.has_tag_value('actor', 'self')
