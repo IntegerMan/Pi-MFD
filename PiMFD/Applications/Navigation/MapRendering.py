@@ -78,11 +78,9 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
             cur.add_tag('actor', 'cursor')
             cur.add_tag('owner', me.name)
             cur.add_tag('iff', 'self')
-            rel_lat, rel_lng = self.map.translate_x_y_to_lat_lng(cur.x, cur.y,
+            cur.lat, cur.lng = self.map.translate_x_y_to_lat_lng(cur.x, cur.y,
                                                                  self.map.get_dimension_coefficients(self.size),
                                                                  self.center)
-            cur.name = '{} , {}'.format(rel_lat, rel_lng)
-
             cur.render(self.display, map_context)
 
     def build_symbol(self, lat, lng):

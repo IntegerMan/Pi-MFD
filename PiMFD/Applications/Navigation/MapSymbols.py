@@ -294,6 +294,7 @@ class MapSymbol(MapEntity):
                 style = shape.cursor
                 shape_width = 3
                 extra_data = self.get_tag_value('owner')
+                display_name = '{}, {}'.format(self.lat, self.lng)
             else:
                 style = shape.double_circle
 
