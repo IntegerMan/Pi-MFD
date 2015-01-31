@@ -5,7 +5,7 @@ Code organized around rendering locations to the map
 """
 from pygame.rect import Rect
 
-from PiMFD.Applications.Navigation.MapEntities import MapLocation
+from PiMFD.Applications.Navigation.MapEntities import MapEntity
 from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon
 from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond, \
     render_triangle_up
@@ -31,7 +31,7 @@ class SymbolBackShape(object):
     double_circle = 9
 
 
-class MapSymbol(MapLocation):
+class MapSymbol(MapEntity):
     """
     Renders a map symbol to the screen
     """

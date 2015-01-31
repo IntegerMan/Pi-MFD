@@ -159,20 +159,3 @@ class MapEntity(object):
         result.append(names[-1])
 
         return ' '.join(result)
-
-class MapPath(MapEntity):
-    """
-    Represents a lined area on the map
-    """
-
-    def __init__(self):
-        super(MapPath, self).__init__(0, 0)
-
-        self.points = list()
-
-class MapLocation(MapEntity):
-    """
-    Represents a named location on a map
-    """
-
-    name = None
