@@ -27,6 +27,7 @@ class MapContext(object):
     filters = None
     cursor_length = 3
     cursor_speed = 3
+    allow_move = True
 
     def __init__(self, app, map):
         super(MapContext, self).__init__()
