@@ -249,9 +249,7 @@ class Maps(object):
             float(lat) + range
         ))
 
-    def transpose_locations(self, dimensions, offset):
-
-        dim_coef = self.get_dimension_coefficients(dimensions)
+    def transpose_locations(self, dim_coef, offset):
 
         results = []
 
@@ -276,9 +274,17 @@ class Maps(object):
 
         return w_coef, h_coef
 
-    def transpose_ways(self, dimensions, offset):
+    def transpose(self, dimensions, offset):
 
         dim_coef = self.get_dimension_coefficients(dimensions)
+
+        results = []
+        results += self.transpose_ways(dim_coef, offset)
+        results += self.transpose_locations(dim_coef, offset)
+
+        return results
+
+    def transpose_ways(self, dim_coef, offset):
 
         results = []
 
@@ -301,15 +307,11 @@ class Maps(object):
 
         return results
 
-    def get_rel_lat_lng(self, lat, lng, subtractFromOrigin=True):
+    def get_rel_lat_lng(self, lat, lng):
 
         # Determine relative lat / long to origin
-        if subtractFromOrigin:
-            rel_lat = self.origin[0] - lat
-            rel_lng = self.origin[1] - lng
-        else:
-            rel_lat = lat - self.origin[0]
-            rel_lng = lng - self.origin[1]
+        rel_lat = self.origin[0] - lat
+        rel_lng = self.origin[1] - lng
 
         return rel_lat, rel_lng
 

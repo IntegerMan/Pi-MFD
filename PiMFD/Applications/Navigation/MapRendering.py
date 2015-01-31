@@ -8,7 +8,6 @@ from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
 __author__ = 'Matt Eland'
 
-
 class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
     """
     A class used to render a Map object
@@ -20,8 +19,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         self.center = ((display.res_x / 2.0), (display.res_y / 2.0))
         self.size = size
         self.map_context = map_context
-        self.symbols = None
-        self.ways = None
+        self.osm_shapes = None
         self.last_translate = None
 
     def render(self):
@@ -30,27 +28,25 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         max_available = max(self.display.res_x, self.display.res_y)
 
         # Only recompute the expensive stuff if the resolution has changed or the data fetch time has changed
-        if max_available != self.size[
-            0] or not self.last_translate or self.map.last_data_received > self.last_translate:
+        if max_available != self.size[0] or \
+                not self.last_translate or \
+                        self.map.last_data_received > self.last_translate:
+
             # Recompute our dimensions
             self.size = (max_available, max_available)
             self.center = ((self.display.res_x / 2.0), (self.display.res_y / 2.0))
 
             # Translate the various curves, etc. into their appropraite screen positions
-            self.ways = self.map.transpose_ways(self.size, self.center)
-            self.symbols = self.map.transpose_locations(self.size, self.center)
+            self.osm_shapes = self.map.transpose(self.size, self.center)
 
             self.last_translate = datetime.now()
 
         map_context = self.map_context
 
-        # Render the Roads
-        for way in self.ways:
-            way.render(self.display, map_context)
-
-        # Render the other awesome things
-        for symbol in self.symbols:
-            symbol.render(self.display, map_context)
+        # Render the open street map data
+        if self.osm_shapes:
+            for shape in self.osm_shapes:
+                shape.render(self.display, map_context)
 
         # Render custom annotations over everything - these should always be recomputed
         if self.map.annotations:
@@ -70,9 +66,9 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         sym = self.build_symbol(self.display.options.lat, self.display.options.lng)
         sym.name = 'ME'
         sym.add_tag('actor', 'self')
-
         sym.render(self.display, map_context)
 
+        # Draw the cursor as needed
         if self.map_context.should_show_cursor():
             self.map_context.render_cursor(self.display)
 
