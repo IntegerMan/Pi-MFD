@@ -187,7 +187,7 @@ class Maps(object):
                             node = self.nodes[node_id['@ref']]
 
                         if node:
-                            path.points.append((float(node['@lon']), float(node['@lat'])))
+                            path.points.append((float(node['@lat']), float(node['@lon'])))
                 except:
                     error_message = "Unhandled error handling points {0}\n".format(str(traceback.format_exc()))
                     print(error_message)
@@ -291,7 +291,7 @@ class Maps(object):
             line.x, line.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
 
             for waypoint in item.points:
-                lat, lng = self.get_rel_lat_lng(waypoint[1], waypoint[0])
+                lat, lng = self.get_rel_lat_lng(waypoint[0], waypoint[1])
 
                 screen = self.translate_lat_lng_to_x_y(lat, lng, dim_coef, offset)
 
