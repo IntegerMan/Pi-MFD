@@ -131,7 +131,6 @@ class Maps(object):
                     error_message = "Unhandled error saving map data to file {0}\n".format(str(traceback.format_exc()))
                     print(error_message)
 
-
         osm_dict = xmltodict.parse(data)
         try:
 
@@ -228,27 +227,15 @@ class Maps(object):
             entity.name = tag_value
             return True
 
-        # Special amenities
-        elif tag_name in (
-                "amenity", "leisure", "man_made", "shop", "cuisine", "building", "power", "religion", "denomination",
-                "website", "railway", "highway", "edu", "power", "railway", "oneway", "maxspeed", "ref", "layer",
-                "natural", "area", "usage", "operator", "electrified", "gauge", "water", "sport", "access", "bridge",
-                "abbr_name", "boundary", "admin_level", "ele", 'landuse', 'short_name', 'opening_hours', 'phone',
-                "waterway", "clothes", "fee", "width", "border_type", "traffic_sign", "sidewalk", "barrier", "foot",
-                "horse", "lanes", "bicycle", "tourism", "exit_to", "shortest_name", "hgv", "place", "footway",
-                "cycleway", "name_1", "note", "aeroway", "proposed", "description", "brand", "expressway", "surface",
-                "motorroad", "atm", "tower:type", "office", "park_ride", "internet_access"):
+        elif str.startswith(str(tag_name), 'tiger:') or \
+                        tag_name == 'source' or \
+                str.startswith(str(tag_name), 'gnis:'):
 
+            return False
+
+        else:
             entity.tags.append((tag_name, tag_value))
             return True
-
-        elif not str.startswith(str(tag_name), 'addr:') and not str.startswith(str(tag_name),
-                                                                               'tiger:') and tag_name != 'source' and not str.startswith(
-                str(tag_name), 'gnis:'):
-
-            print('ignoring pair: ' + tag_name + '/' + tag_value)
-
-        return False
 
     def fetch_by_coordinate(self, lat, lng, range):
 
@@ -277,7 +264,6 @@ class Maps(object):
             tot_y = 0
 
             for waypoint in way.points:
-
                 lat = waypoint[1] - self.origin[1]
                 lng = waypoint[0] - self.origin[0]
 
@@ -332,7 +318,6 @@ class Maps(object):
         symbols = []
 
         for location in self.locations:
-
             # Determine relative lat / long to origin
             rel_lat = self.origin[0] - location.lat
             rel_lng = self.origin[1] - location.lng
