@@ -249,21 +249,6 @@ class Maps(object):
             float(lat) + range
         ))
 
-    def transpose_locations(self, dim_coef, offset):
-
-        results = []
-
-        for item in self.locations:
-            # Determine relative lat / long to origin
-            rel_lat = self.origin[0] - item.lat
-            rel_lng = self.origin[1] - item.lng
-
-            x, y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
-
-            results.append(MapSymbol(x, y, item))
-
-        return results
-
     def get_dimension_coefficients(self, dimensions):
 
         width = dimensions[0]
@@ -281,6 +266,21 @@ class Maps(object):
         results = []
         results += self.transpose_ways(dim_coef, offset)
         results += self.transpose_locations(dim_coef, offset)
+
+        return results
+
+    def transpose_locations(self, dim_coef, offset):
+
+        results = []
+
+        for item in self.locations:
+            # Determine relative lat / long to origin
+            rel_lat = self.origin[0] - item.lat
+            rel_lng = self.origin[1] - item.lng
+
+            x, y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
+
+            results.append(MapSymbol(x, y, item))
 
         return results
 
