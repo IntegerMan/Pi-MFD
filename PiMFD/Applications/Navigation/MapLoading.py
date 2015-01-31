@@ -293,12 +293,9 @@ class Maps(object):
             for waypoint in item.points:
                 lng, lat = self.get_rel_lat_lng(waypoint[0], waypoint[1], subtractFromOrigin=False)
 
-                wp = [
-                    (lat * dim_coef[0]) + offset[0],
-                    (lng * dim_coef[1] * -1) + offset[1]
-                ]
+                screen = self.translate_lat_lng_to_x_y(lat, lng, dim_coef, (offset[1], offset[0]))
 
-                line.points.append(wp)
+                line.points.append([screen[1], screen[0]])
 
             results.append(line)
 
