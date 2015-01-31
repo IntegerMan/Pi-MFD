@@ -4,6 +4,7 @@
 Map Contexts are used to provide contextual rendering and filtering information to the map as it is rendered
 """
 from PiMFD.Applications.Navigation.MapFilters import StandardMapFilter, FoodMapFilter, GasMapFilter
+from PiMFD.UI.Rendering import draw_vertical_line, draw_horizontal_line
 
 __author__ = 'Matt Eland'
 
@@ -24,6 +25,8 @@ class MapContext(object):
     map_zoom = zooms.local
     active_filter = None
     filters = None
+    cursor_length = 3
+    cursor_speed = 3
 
     def __init__(self, app, map):
         super(MapContext, self).__init__()
@@ -32,6 +35,7 @@ class MapContext(object):
         self.map = map
         self.filters = (StandardMapFilter(self), GasMapFilter(self), FoodMapFilter(self))
         self.active_filter = self.filters[0]
+        self.cursor_pos = app.display.res_x / 2.0, app.display.res_y / 2.0
 
     def zoom_in(self):
         if self.map_zoom == self.zooms.large:
@@ -115,21 +119,46 @@ class MapContext(object):
             bounds = self.map.bounds
             size = (bounds[3] - bounds[1]) * self.y_page_multiplier * self.move_multiplier
             self.app.get_map_data([bounds[0], bounds[1] + size, bounds[2], bounds[3] + size])
+        elif self.should_show_cursor():
+            self.cursor_pos = self.cursor_pos[0], self.cursor_pos[1] - self.cursor_speed
 
     def move_right(self):
         if self.map.has_data and self.allow_move:
             bounds = self.map.bounds
             size = (bounds[2] - bounds[0]) * self.x_page_multiplier * self.move_multiplier
             self.app.get_map_data([bounds[0] + size, bounds[1], bounds[2] + size, bounds[3]])
+        elif self.should_show_cursor():
+            self.cursor_pos = self.cursor_pos[0] + self.cursor_speed, self.cursor_pos[1]
 
     def move_left(self):
         if self.map.has_data and self.allow_move:
             bounds = self.map.bounds
             size = (bounds[2] - bounds[0]) * self.x_page_multiplier * self.move_multiplier
             self.app.get_map_data([bounds[0] - size, bounds[1], bounds[2] - size, bounds[3]])
+        elif self.should_show_cursor():
+            self.cursor_pos = self.cursor_pos[0] - self.cursor_speed, self.cursor_pos[1]
 
     def move_down(self):
         if self.map.has_data and self.allow_move:
             bounds = self.map.bounds
             size = (bounds[3] - bounds[1]) * self.y_page_multiplier * self.move_multiplier
             self.app.get_map_data([bounds[0], bounds[1] - size, bounds[2], bounds[3] - size])
+        elif self.should_show_cursor():
+            self.cursor_pos = self.cursor_pos[0], self.cursor_pos[1] + self.cursor_speed
+
+    def should_show_cursor(self):
+        return self.page_mode == "CUR"
+
+    def render_cursor(self, display):
+        cur_x, cur_y = self.maintain_cursor_position()
+        draw_vertical_line(display, display.color_scheme.highlight, cur_x, cur_y - self.cursor_length,
+                           cur_y + self.cursor_length)
+        draw_horizontal_line(display, display.color_scheme.highlight, cur_x - self.cursor_length,
+                             cur_x + self.cursor_length, cur_y)
+
+    def maintain_cursor_position(self):
+        x, y = self.cursor_pos
+        x = max(0, min(x, self.app.display.res_x - 1))
+        y = max(0, min(y, self.app.display.res_y - 1))
+        self.cursor_pos = x, y
+        return self.cursor_pos

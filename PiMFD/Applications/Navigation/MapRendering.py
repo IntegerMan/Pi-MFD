@@ -73,6 +73,9 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
         sym.render(self.display, map_context)
 
+        if self.map_context.should_show_cursor():
+            self.map_context.render_cursor(self.display)
+
     def build_symbol(self, lat, lng):
         x, y = self.map.gps_to_screen(lat, lng, self.size, self.center)
         me = MapEntity(lat, lng)
