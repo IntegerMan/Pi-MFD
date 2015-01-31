@@ -20,7 +20,6 @@ class MapEntity(object):
     lng = 0.0
     id = None
     points = None
-    should_translate = True
     x = 0
     y = 0
 

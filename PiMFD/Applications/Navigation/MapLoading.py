@@ -264,10 +264,6 @@ class Maps(object):
 
         for item in self.shapes:
 
-            # Some items such as the cursor are driven by X / Y instead of GPS. These should not be translated
-            if not item.should_translate:
-                continue
-
             # Determine screen position based on relative GPS offset from our map origin
             rel_lat, rel_lng = self.get_rel_lat_lng(item.lat, item.lng)
             item.x, item.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
@@ -305,6 +301,29 @@ class Maps(object):
         x = (rel_lng * dim_coef[0] * multiplier) + offset[0]
 
         return x, y
+
+    def translate_x_y_to_rel_lat_lng(self, x, y, dim_coef, offset, multiplier=-1):
+
+        if dim_coef[0] == 0 or dim_coef[1] == 0:
+            return 0, 0
+
+        rel_lat = (y - offset[1]) / dim_coef[1]
+        rel_lng = (x - offset[0]) / multiplier / dim_coef[0]
+
+        return rel_lat, rel_lng
+
+    def translate_rel_to_absolute_gps(self, rel_lat, rel_lng):
+        # Determine relative lat / long to origin
+        lat = self.origin[0] - rel_lat
+        lng = self.origin[1] - rel_lng
+
+        return lat, lng
+
+    def translate_x_y_to_lat_lng(self, x, y, dim_coef, offset, multiplier=-1):
+
+        rel_lat, rel_lng = self.translate_x_y_to_rel_lat_lng(x, y, dim_coef, offset, multiplier)
+
+        return self.translate_rel_to_absolute_gps(rel_lat, rel_lng)
 
     def gps_to_screen(self, lat, lng, dimensions, offset):
 
