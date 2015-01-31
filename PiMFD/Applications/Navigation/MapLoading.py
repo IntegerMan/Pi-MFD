@@ -4,7 +4,7 @@ from __future__ import print_function
 from datetime import datetime
 import traceback
 
-from PiMFD.Applications.Navigation.MapEntities import MapLocation, MapPath
+from PiMFD.Applications.Navigation.MapEntities import MapPath
 from PiMFD.Applications.Navigation.MapLines import MapLine
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
@@ -151,7 +151,7 @@ class Maps(object):
 
                 is_valid = False
 
-                location = MapLocation(float(node['@lat']), float(node['@lon']))
+                location = MapSymbol(float(node['@lat']), float(node['@lon']))
                 location.id = id
                 location.name = None
 
@@ -274,13 +274,15 @@ class Maps(object):
         results = []
 
         for item in self.locations:
+
             # Determine relative lat / long to origin
             rel_lat = self.origin[0] - item.lat
             rel_lng = self.origin[1] - item.lng
 
-            x, y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
+            # Update the item's screen position
+            item.x, item.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
 
-            results.append(MapSymbol(x, y, item))
+            results.append(item)
 
         return results
 

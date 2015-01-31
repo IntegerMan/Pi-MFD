@@ -36,8 +36,10 @@ class MapSymbol(MapLocation):
     Renders a map symbol to the screen
     """
 
-    def __init__(self, x, y, location):
-        super(MapSymbol, self).__init__(location.lat, location.lng)
+    def __init__(self, lat, lng):
+        super(MapSymbol, self).__init__(lat, lng)
+
+    def copy_values_from(self, location):
 
         self.tags = location.tags
 
@@ -46,9 +48,6 @@ class MapSymbol(MapLocation):
 
         if hasattr(location, 'id'):
             self.id = location.id
-
-        self.x = x
-        self.y = y
 
     def add_tag(self, key, value='yes'):
         self.tags.append((key, value))

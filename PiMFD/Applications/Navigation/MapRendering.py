@@ -2,7 +2,6 @@
 from datetime import datetime
 from time import strftime
 
-from PiMFD.Applications.Navigation.MapEntities import MapEntity
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
 
@@ -73,6 +72,6 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
             self.map_context.render_cursor(self.display)
 
     def build_symbol(self, lat, lng):
-        x, y = self.map.gps_to_screen(lat, lng, self.size, self.center)
-        me = MapEntity(lat, lng)
-        return MapSymbol(x, y, me)
+        sym = MapSymbol(lat, lng)
+        sym.x, sym.y = self.map.gps_to_screen(lat, lng, self.size, self.center)
+        return sym

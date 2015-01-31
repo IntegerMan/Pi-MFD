@@ -19,7 +19,8 @@ class MapLine(MapSymbol):
     points = list()
 
     def __init__(self, path):
-        super(MapLine, self).__init__(path.lat, path.lng, path)
+        super(MapLine, self).__init__(path.lat, path.lng)
+        super(MapLine, self).copy_values_from(path)
 
         self.id = path.id
         self.tags = path.tags
