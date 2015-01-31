@@ -86,7 +86,7 @@ class MapContext(object):
             self.active_filter = self.filters[current_index + 1]
 
     page_mode = "PAGE"
-    page_modes = ["PAGE", "PAN", "TRCK", "CUR"]
+    page_modes = ["PAGE", "PAN", "CUR"]
 
     def get_page_mode_text(self):
         return self.page_mode
