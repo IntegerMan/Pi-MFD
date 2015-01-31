@@ -4,7 +4,6 @@ from __future__ import print_function
 from datetime import datetime
 import traceback
 
-from PiMFD.Applications.Navigation.MapEntities import MapPath
 from PiMFD.Applications.Navigation.MapLines import MapLine
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
@@ -173,7 +172,7 @@ class Maps(object):
                 if '@visible' in waypoint and waypoint['@visible'] == 'false':
                     continue
 
-                path = MapPath()
+                path = MapLine()
                 path.id = waypoint['@id']
                 path.name = None
 
@@ -295,17 +294,19 @@ class Maps(object):
             # Determine relative lat / long to origin
             rel_lat, rel_lng = self.get_rel_lat_lng(item.lat, item.lng)
 
-            line = MapLine(item)
-            line.x, line.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
+            item.x, item.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)
 
-            for waypoint in item.points:
-                lat, lng = self.get_rel_lat_lng(waypoint[0], waypoint[1])
+            if item.points and len(item.points) > 1:
+                screen_points = []
+                for waypoint in item.points:
+                    lat, lng = self.get_rel_lat_lng(waypoint[0], waypoint[1])
+                    screen = self.translate_lat_lng_to_x_y(lat, lng, dim_coef, offset)
 
-                screen = self.translate_lat_lng_to_x_y(lat, lng, dim_coef, offset)
+                    screen_points.append(screen)
 
-                line.points.append(screen)
+                item.screen_points = screen_points
 
-            results.append(line)
+            results.append(item)
 
         return results
 

@@ -18,14 +18,11 @@ class MapLine(MapSymbol):
 
     points = list()
 
-    def __init__(self, path):
-        super(MapLine, self).__init__(path.lat, path.lng)
-        super(MapLine, self).copy_values_from(path)
+    def __init__(self, lat=0, lng=0):  # We don't typically know lat / lng until we have points
+        super(MapLine, self).__init__(lat, lng)
 
-        self.id = path.id
-        self.tags = path.tags
-        self.name = path.name
         self.points = list()
+        self.screen_points = None
 
         # Points are manually copied during the transpose process
 
@@ -65,15 +62,15 @@ class MapLine(MapSymbol):
     def render(self, display, map_context):
 
         # Render out the lines
-        if len(self.points) > 1 and map_context.should_show_lines(self):
+        if self.screen_points and len(self.screen_points) > 1 and map_context.should_show_lines(self):
 
             self.has_lines = True
             color = self.get_color(display.color_scheme)
             width = self.get_line_width()
 
             if width <= 0:
-                pygame.draw.polygon(display.surface, color, self.points, width)
+                pygame.draw.polygon(display.surface, color, self.screen_points, width)
             else:
-                pygame.draw.lines(display.surface, color, False, self.points, width)
+                pygame.draw.lines(display.surface, color, False, self.screen_points, width)
 
         super(MapLine, self).render(display, map_context)
