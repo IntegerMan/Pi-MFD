@@ -14,12 +14,15 @@ class MapEntity(object):
     """
 
     has_lines = False
-
+    name = None
     tags = list()
     lat = 0.0
     lng = 0.0
-    id = 'UNK'
+    id = None
     points = None
+    should_translate = True
+    x = 0
+    y = 0
 
     def __init__(self, lat, lng):
         super(MapEntity, self).__init__()
@@ -106,7 +109,7 @@ class MapEntity(object):
     def get_display_name(self):
 
         display_name = self.get_tag_value('short_name')
-        if not display_name:
+        if not display_name and self.name:
             display_name = self.abbreviate(self.name)
 
         return display_name
@@ -159,3 +162,6 @@ class MapEntity(object):
         result.append(names[-1])
 
         return ' '.join(result)
+
+    def set_pos(self, pos):
+        self.x, self.y = pos

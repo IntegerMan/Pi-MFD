@@ -8,7 +8,7 @@ from pygame.rect import Rect
 from PiMFD.Applications.Navigation.MapEntities import MapEntity
 from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon
 from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond, \
-    render_triangle_up
+    render_triangle_up, draw_vertical_line, draw_horizontal_line
 
 
 __author__ = 'Matt Eland'
@@ -29,6 +29,7 @@ class SymbolBackShape(object):
     bullseye = 7
     traffic_stop = 8
     double_circle = 9
+    cursor = 10
 
 
 class MapSymbol(MapEntity):
@@ -286,7 +287,15 @@ class MapSymbol(MapEntity):
                 style = shape.triangle
 
         elif self.has_tag('actor'):
-            style = shape.double_circle
+
+            actor = self.get_tag_value('actor')
+
+            if actor == 'cursor':
+                style = shape.cursor
+                shape_width = 3
+                extra_data = self.get_tag_value('owner')
+            else:
+                style = shape.double_circle
 
         elif self.has_tag('incident'):
             style = shape.diamond
@@ -327,6 +336,13 @@ class MapSymbol(MapEntity):
                 render_circle(display, display.color_scheme.red, pos, 4, 0)
                 render_circle(display, display.color_scheme.yellow, pos, 3, 0)
                 render_circle(display, display.color_scheme.green, pos, 1, 0)
+
+            elif style == shape.cursor:
+                draw_vertical_line(display, display.color_scheme.highlight, pos[0], pos[1] - shape_width,
+                                   pos[1] + shape_width)
+                draw_horizontal_line(display, display.color_scheme.highlight, pos[0] - shape_width,
+                                     pos[0] + shape_width, pos[1])
+
 
         # Render adornment icons
         if map_context.should_show_icons(self):

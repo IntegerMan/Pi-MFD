@@ -264,6 +264,10 @@ class Maps(object):
 
         for item in self.shapes:
 
+            # Some items such as the cursor are driven by X / Y instead of GPS. These should not be translated
+            if not item.should_translate:
+                continue
+
             # Determine screen position based on relative GPS offset from our map origin
             rel_lat, rel_lng = self.get_rel_lat_lng(item.lat, item.lng)
             item.x, item.y = self.translate_lat_lng_to_x_y(rel_lat, rel_lng, dim_coef, offset)

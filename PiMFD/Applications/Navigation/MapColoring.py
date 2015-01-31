@@ -176,7 +176,7 @@ class MapColorizer(object):
 
             actor = entity.get_tag_value('actor')
 
-            if actor == 'self':
+            if actor in ('self', 'cursor'):
                 return cs.highlight
 
         return cs.map_unknown

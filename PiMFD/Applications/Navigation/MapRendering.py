@@ -64,14 +64,21 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
                 sym.render(self.display, map_context)
 
         # Add ourself to the map - TODO: Add this to the annotation layer
-        sym = self.build_symbol(self.display.options.lat, self.display.options.lng)
-        sym.name = 'ME'
-        sym.add_tag('actor', 'self')
-        sym.render(self.display, map_context)
+        me = self.build_symbol(self.display.options.lat, self.display.options.lng)
+        me.name = 'ME'
+        me.add_tag('actor', 'self')
+        me.add_tag('iff', 'self')
+        me.render(self.display, map_context)
 
         # Draw the cursor as needed
         if self.map_context.should_show_cursor():
-            self.map_context.render_cursor(self.display)
+            cur = self.build_symbol(0, 0)
+            cur.should_translate = False
+            cur.set_pos(self.map_context.maintain_cursor_position())
+            cur.add_tag('actor', 'cursor')
+            cur.add_tag('owner', me.name)
+            cur.add_tag('iff', 'self')
+            cur.render(self.display, map_context)
 
     def build_symbol(self, lat, lng):
         sym = MapSymbol(lat, lng)

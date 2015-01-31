@@ -5,7 +5,6 @@ Map Contexts are used to provide contextual rendering and filtering information 
 """
 from PiMFD.Applications.Navigation.MapFilters import StandardMapFilter, FoodMapFilter, GasMapFilter, \
     InfrastructureMapFilter
-from PiMFD.UI.Rendering import draw_vertical_line, draw_horizontal_line
 
 __author__ = 'Matt Eland'
 
@@ -26,7 +25,6 @@ class MapContext(object):
     map_zoom = zooms.local
     active_filter = None
     filters = None
-    cursor_length = 3
     cursor_speed = 3
     allow_move = True
 
@@ -150,13 +148,6 @@ class MapContext(object):
 
     def should_show_cursor(self):
         return self.page_mode == "CUR"
-
-    def render_cursor(self, display):
-        cur_x, cur_y = self.maintain_cursor_position()
-        draw_vertical_line(display, display.color_scheme.highlight, cur_x, cur_y - self.cursor_length,
-                           cur_y + self.cursor_length)
-        draw_horizontal_line(display, display.color_scheme.highlight, cur_x - self.cursor_length,
-                             cur_x + self.cursor_length, cur_y)
 
     def maintain_cursor_position(self):
         x, y = self.cursor_pos
