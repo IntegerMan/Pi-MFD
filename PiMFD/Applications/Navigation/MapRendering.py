@@ -50,8 +50,10 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         # Render custom annotations over everything - these should always be recomputed
         if self.map.annotations:
             for annotation in self.map.annotations:
+                sym = MapSymbol(annotation.lat, annotation.lng)
+                sym.copy_values_from(annotation)
                 pos = self.map.set_screen_position(annotation, self.size, self.center)
-                sym = MapSymbol(pos[0], pos[1], annotation)
+                sym.x, sym.y = pos
                 sym.add_tag('incident', annotation.incident_type)
                 if annotation.end:
                     sym.add_tag('end_date', strftime('%m/%d/%Y', annotation.end))
