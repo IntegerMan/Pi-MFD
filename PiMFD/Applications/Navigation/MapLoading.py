@@ -84,6 +84,10 @@ class Maps(object):
             bounds[3]
         )
 
+        # Store Lat / Lng so invokers can have context of what center point is
+        self.lat = bounds[0] + (bounds[2] - bounds[0]) / 2.0
+        self.lng = bounds[1] + (bounds[3] - bounds[1]) / 2.0
+
         # Clear out old data
         self.has_data = False
         self.nodes = {}

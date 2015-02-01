@@ -134,7 +134,6 @@ class MFDController(object):
         else:
             return None
 
-
     def handle_keyboard_event(self, key):
         """
         Processes keyboard input
@@ -362,6 +361,8 @@ class MFDController(object):
         elif self.keypress_sound:
             self.keypress_sound.play()
 
+    def get_weather_data(self, zip):
+        return self.sch_app.get_weather_for_zip(zip)
 
 
 

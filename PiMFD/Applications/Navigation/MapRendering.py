@@ -40,6 +40,9 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         if self.map.annotations:
             candidates += self.map.annotations
 
+        if self.weather:
+            candidates.append(self.weather)
+
         for shape in candidates:
 
             if not shape or not self.map_context.should_show_entity(shape):
@@ -73,6 +76,15 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
             self.last_translate = datetime.now()
 
         map_context = self.map_context
+
+        # Draw Weather Data if Present
+        weather_data = self.map.weather_data
+        if weather_data:
+            self.weather = self.build_symbol(weather_data.gps[0], weather_data.gps[1])
+            self.weather.set_pos((self.display.res_x - 30, 50))
+            self.weather.name = str(weather_data.temperature)
+            self.weather.add_tag('weather', 'yes')
+            self.weather.add_tag('temp', str(weather_data.temperature))
 
         # Update the cursor and figure out what we're targeting - if cursor is active
         if self.map_context.should_show_cursor():
@@ -108,10 +120,12 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         me.add_tag('iff', 'self')
         me.render(self.display, map_context)
 
+        if self.weather:
+            self.weather.render(self.display, map_context)
+
         # Draw the cursor as needed
         if self.map_context.should_show_cursor():
             cur = self.build_symbol(0, 0)
-            cur.should_translate = False
             cur.set_pos(self.map_context.cursor_pos)
             cur.add_tag('actor', 'cursor')
             cur.add_tag('owner', me.name)

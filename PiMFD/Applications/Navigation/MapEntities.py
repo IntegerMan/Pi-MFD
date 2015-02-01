@@ -145,6 +145,8 @@ class MapEntity(object):
         if name is None:
             return None
 
+        name = name
+
         # For / deliminated / multi-role establishments, just take the first chunk
         if '/' in name:
             return MapEntity.abbreviate(name[0:(name.index('/'))])

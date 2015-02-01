@@ -128,6 +128,16 @@ class NavigationApp(MFDApplication):
             bounds = self.map.bounds
 
         self.map.annotations = self.traffic.get_traffic(bounds)
+
+        # Find the first zip code
+        for shape in self.map.shapes:
+            zip = shape.get_tag_value('addr:postcode')
+            if zip:
+                break
+
+        # Get Weather Data for our current location
+        self.map.weather_data = self.controller.get_weather_data(zip)
+
         self.initialized = True
 
     def zoom_in(self):

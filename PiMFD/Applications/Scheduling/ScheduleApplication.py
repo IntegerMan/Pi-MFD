@@ -48,12 +48,23 @@ class ScheduleApp(MFDApplication):
         Gets weather data from the weather API (Yahoo Weather) and stores it for the weather page.
         """
 
-        # noinspection PyBroadException
+        if self.controller.options.location:
+            weather = self.get_weather_for_zip(self.controller.options.location, updateError=True)
+            if weather:
+                self.weather_data = weather
+
+    def get_weather_for_zip(self, zip, updateError=False):
+
         try:
             # TODO: I might want to impose some frequency restrictions here
-            self.weather_data = self.weather_api.get_yahoo_weather(self.controller.options.location)
+            return self.weather_api.get_yahoo_weather(zip)
         except Exception as exception:
-            self.weather_data.last_result = 'Could not get weather: ' + exception.message
+
+            if updateError:
+                self.weather_data.last_result = 'Could not get weather: ' + exception.message
+
+            return None
+
 
     def get_default_page(self):
         """

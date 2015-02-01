@@ -53,6 +53,7 @@ class WeatherData(object):
     long = 'UNK'
     code = -1
     forecasts = list()
+    gps = 0, 0
 
     data = None
 
@@ -82,6 +83,7 @@ class WeatherData(object):
         self.forecasts = list()
         self.pressure_units = ''
         self.wind_units = ''
+        self.gps = 0, 0
 
     def parse_yahoo_data(self, yahoo_data):
         """
@@ -128,6 +130,7 @@ class WeatherData(object):
         self.visibility_units = units['distance']
         self.visibility = atmosphere['visibility']
         self.last_result = str(condition['date'])
+        self.gps = float(geo['lat']), float(geo['long'])
         self.lat = str(geo['lat']) + degree_sign
         self.long = str(geo['long']) + degree_sign
 
