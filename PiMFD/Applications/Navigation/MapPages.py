@@ -71,6 +71,9 @@ class MapPage(MFDPage):
                 self.application.select_page_by_index(2)
                 return True
 
+        elif key in (Keycodes.KEY_KP0, Keycodes.KEY_KP_MULTIPLY, Keycodes.KEY_KP_DIVIDE):
+            self.application.select_page_by_index(1)
+
         return super(MapPage, self).handle_key(key)
 
 class MapInfoPage(MFDPage):

@@ -112,9 +112,16 @@ class MapEntity(object):
 
     def get_display_name(self):
 
-        display_name = self.get_tag_value('short_name')
+        display_name = self.get_tag_value('shortest_name')
+
+        if not display_name:
+            display_name = self.get_tag_value('short_name')
+
         if not display_name and self.name:
             display_name = self.abbreviate(self.name)
+
+        if not display_name:
+            display_name = self.get_tag_value('ref')
 
         return display_name
 
