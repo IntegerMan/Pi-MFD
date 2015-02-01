@@ -4,9 +4,8 @@ The navigation application
 """
 
 from PiMFD.Applications.Application import MFDApplication
-from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Applications.Navigation.MapContexts import MapContext
-from PiMFD.Applications.Navigation.MapPages import MapPage
+from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 from PiMFD.UI.Button import MFDButton
@@ -39,7 +38,7 @@ class NavigationApp(MFDApplication):
         self.map.output_file = controller.options.map_output_file
 
         self.map_page = MapPage(controller, self)
-        self.info_page = SimpleMessagePage(controller, self, "INFO")
+        self.info_page = MapInfoPage(controller, self)
         self.always_render_background = True
 
         self.pages = list([self.map_page])
@@ -71,13 +70,13 @@ class NavigationApp(MFDApplication):
                 self.map_context.next_page_mode()
             elif index == 4:
                 self.always_render_background = False
-                self.active_page = self.info_page
+                self.select_page(self.info_page)
 
         elif self.active_page is self.info_page:
 
             if index == 0:
                 self.always_render_background = True
-                self.active_page = self.map_page
+                self.select_page(self.map_page)
 
     def get_default_page(self):
         """
