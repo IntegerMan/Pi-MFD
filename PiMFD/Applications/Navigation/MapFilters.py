@@ -90,7 +90,7 @@ class FoodMapFilter(StandardMapFilter):
                entity.has_tag("fast_food") or \
                entity.has_tag("cuisine") or \
                entity.get_tag_value("amenity") in ('cafe', 'fast_food', 'restaurant') or \
-               entity.has_tag_value('actor', 'self')
+               entity.has_tag_value('iff', 'self')
 
 
 class GasMapFilter(StandardMapFilter):
@@ -109,7 +109,7 @@ class GasMapFilter(StandardMapFilter):
                entity.has_tag("railway") or \
                entity.has_tag('traffic_signals') or \
                entity.get_tag_value("amenity") in ('parking', 'fuel') or \
-               entity.has_tag_value('actor', 'self')
+               entity.has_tag_value('iff', 'self')
 
 
 class InfrastructureMapFilter(StandardMapFilter):
@@ -129,4 +129,26 @@ class InfrastructureMapFilter(StandardMapFilter):
                entity.get_tag_value("amenity") in ('police', 'fire_station') or \
                entity.has_tag('traffic_signals') or \
                entity.has_tag("man_made") or \
-               entity.has_tag_value('actor', 'self')
+               entity.has_tag_value('iff', 'self')
+
+
+class WifiMapFilter(StandardMapFilter):
+    def get_button_text(self):
+        return "WIFI"
+
+    def should_show_right_text(self, entity):
+        return self.should_show_entity(entity)
+
+    def should_show_bottom_text(self, entity):
+        return self.should_show_entity(entity)
+
+    def should_show_entity(self, entity):
+        wifi = entity.get_tag_value("internet_access")
+
+        if not wifi:
+            wifi = entity.get_tag_value("wifi")
+
+        return entity.has_tag("highway") or \
+               (wifi and wifi != 'no') or \
+               entity.has_tag_value('amenity', 'internet') or \
+               entity.has_tag_value('iff', 'self')

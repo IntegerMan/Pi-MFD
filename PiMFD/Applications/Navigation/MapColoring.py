@@ -46,7 +46,7 @@ class MapColorizer(object):
                 return cs.map_automotive
             elif value in ('street_lamp', 'construction'):
                 return cs.map_infrastructure
-            elif value in ('path', 'footway', 'cycleway'):
+            elif value in ('path', 'footway', 'cycleway', 'pedestrian'):
                 return cs.map_pedestrian
             elif value == 'crossing':
                 return cs.yellow

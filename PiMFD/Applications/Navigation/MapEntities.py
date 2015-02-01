@@ -113,7 +113,7 @@ class MapEntity(object):
 
         return MapColorizer.get_color(self, cs)
 
-    def get_display_name(self):
+    def get_display_name(self, abbreviate=True):
 
         display_name = self.get_tag_value('shortest_name')
 
@@ -121,7 +121,10 @@ class MapEntity(object):
             display_name = self.get_tag_value('short_name')
 
         if not display_name and self.name:
-            display_name = self.abbreviate(self.name)
+            if abbreviate:
+                display_name = self.abbreviate(self.name)
+            else:
+                display_name = self.name
 
         if not display_name:
             display_name = self.get_tag_value('ref')

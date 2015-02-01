@@ -85,7 +85,7 @@ class MapInfoPage(MFDPage):
         super(MapInfoPage, self).__init__(controller, application)
 
         self.map_context = application.map_context
-        self.lbl_header = self.get_header_label('{} Info')
+        self.lbl_header = self.get_header_label('{}')
         self.lbl_pos = self.get_label("GPS: {}, {}")
         self.pnl_tags = StackPanel(controller.display, self)
         self.panel.children = [self.lbl_header, self.lbl_pos, self.pnl_tags]
@@ -100,11 +100,11 @@ class MapInfoPage(MFDPage):
 
         context = self.map_context.cursor_context
 
-        name = context.get_display_name()
+        name = context.get_display_name(abbreviate=False)
         if name:
             self.lbl_header.text_data = name
         else:
-            self.lbl_header.text_data = 'Node'
+            self.lbl_header.text_data = 'Node Info'
 
         self.lbl_pos.text_data = context.lat, context.lng
 
