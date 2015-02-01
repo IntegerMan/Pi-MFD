@@ -54,8 +54,6 @@ class MapColorizer(object):
                 return cs.map_service
             elif value == 'proposed':
                 return cs.map_emergency
-            else:
-                return cs.map_unknown  # For Debugging
 
         elif entity.has_tag_value('boundary', 'administrative'):
             return cs.map_government
@@ -127,8 +125,6 @@ class MapColorizer(object):
                     'kent_carriage_gap',
                     'rope', 'motorcycle_barrier'):
                 return cs.map_pedestrian
-            else:
-                return cs.map_unknown
 
         elif entity.has_tag('traffic_sign'):
             return cs.map_government
@@ -185,7 +181,7 @@ class MapColorizer(object):
             if actor in ('self', 'cursor'):
                 return cs.highlight
 
-        return cs.map_unknown
+        return None
 
     @staticmethod
     def get_shop_color(cs, shop):
@@ -241,5 +237,5 @@ class MapColorizer(object):
         elif building in ('yes', 'roof'):
             return cs.map_structural
 
-        return cs.map_unknown
+        return None
 
