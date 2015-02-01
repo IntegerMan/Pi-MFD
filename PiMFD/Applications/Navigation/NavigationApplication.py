@@ -4,6 +4,7 @@ The navigation application
 """
 
 from PiMFD.Applications.Application import MFDApplication
+from PiMFD.Applications.MFDPage import SimpleMessagePage
 from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapPages import MapPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
@@ -19,10 +20,7 @@ class NavigationApp(MFDApplication):
     :type controller: PiMFD.Controller.MFDController The controller.
     """
     map_page = None
-    gas_page = None
-    food_page = None
-    traffic_page = None
-    conditions_page = None
+    info_page = None
     initialized = False
 
     map = None
@@ -41,27 +39,45 @@ class NavigationApp(MFDApplication):
         self.map.output_file = controller.options.map_output_file
 
         self.map_page = MapPage(controller, self)
+        self.info_page = SimpleMessagePage(controller, self, "INFO")
         self.always_render_background = True
 
         self.pages = list([self.map_page])
         self.btn_map = MFDButton(None, selected=True)
         self.btn_page = MFDButton(self.map_context.get_page_mode_text())
         self.btn_info = MFDButton("INFO", enabled=False)
+        self.btn_back = MFDButton("BACK")
 
     def get_buttons(self):
 
-        self.btn_map.text = self.map_page.get_button_text()
-        self.btn_page.text = self.map_context.get_page_mode_text()
-        self.btn_info.enabled = self.map_context.target
+        if self.active_page is self.map_page:
 
-        return [self.btn_map, self.btn_page, None, None, self.btn_info]
+            self.btn_map.text = self.map_page.get_button_text()
+            self.btn_page.text = self.map_context.get_page_mode_text()
+            self.btn_info.enabled = self.map_context.target
+
+            return [self.btn_map, self.btn_page, None, None, self.btn_info]
+
+        else:
+            return [self.btn_back]
 
     def select_page_by_index(self, index):
 
-        if (index == 0):
-            self.map_context.next_map_mode()
-        elif (index == 1):
-            self.map_context.next_page_mode()
+        if self.active_page is self.map_page:
+
+            if index == 0:
+                self.map_context.next_map_mode()
+            elif index == 1:
+                self.map_context.next_page_mode()
+            elif index == 4:
+                self.always_render_background = False
+                self.active_page = self.info_page
+
+        elif self.active_page is self.info_page:
+
+            if index == 0:
+                self.always_render_background = True
+                self.active_page = self.map_page
 
     def get_default_page(self):
         """
