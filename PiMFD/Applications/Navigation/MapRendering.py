@@ -77,8 +77,8 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         # Update the cursor and figure out what we're targeting - if cursor is active
         if self.map_context.should_show_cursor():
             pos = self.map_context.maintain_cursor_position()
-            target = self.find_nearest_targetable_object(pos)
-            map_context.target = target
+            context = self.find_nearest_targetable_object(pos)
+            map_context.cursor_context = context
 
         # Render the open street map data
         if self.osm_shapes:

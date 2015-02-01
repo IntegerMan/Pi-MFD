@@ -108,6 +108,9 @@ class MapEntity(object):
         if map_context.target is self:
             return cs.highlight
 
+        if map_context.cursor_context is self:
+            return cs.highlight
+
         return MapColorizer.get_color(self, cs)
 
     def get_display_name(self):

@@ -77,6 +77,7 @@ class MapPage(MFDPage):
         return super(MapPage, self).handle_key(key)
 
 class MapInfoPage(MFDPage):
+
     lbl_header = None
     map_context = None
 
@@ -97,19 +98,19 @@ class MapInfoPage(MFDPage):
 
     def handle_selected(self):
 
-        self.target = self.map_context.target
+        context = self.map_context.cursor_context
 
-        name = self.target.get_display_name()
+        name = context.get_display_name()
         if name:
             self.lbl_header.text_data = name
         else:
             self.lbl_header.text_data = 'Node'
 
-        self.lbl_pos.text_data = self.target.lat, self.target.lng
+        self.lbl_pos.text_data = context.lat, context.lng
 
         # Build a list of labels for all tags in this shape
         tags = []
-        for tag in self.target.tags:
+        for tag in context.tags:
             tag_label = self.get_label("{}: {}")
             tag_label.text_data = tag
             tags.append(tag_label)

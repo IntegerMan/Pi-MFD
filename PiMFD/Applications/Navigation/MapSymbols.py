@@ -106,6 +106,9 @@ class MapSymbol(MapEntity):
         extra_data = None
         inner_text = None
 
+        if map_context.cursor_context is self:
+            app_data = 'CUR'
+
         if map_context.target is self:
             app_data = 'TGT'
 
@@ -307,8 +310,8 @@ class MapSymbol(MapEntity):
                 shape_width = 3
                 extra_data = self.get_tag_value('owner')
                 display_name = '{}, {}'.format(self.lat, self.lng)
-                if map_context.target:
-                    app_data = map_context.target.name
+                if map_context.cursor_context:
+                    app_data = map_context.cursor_context.name
             else:
                 style = shape.double_circle
 
