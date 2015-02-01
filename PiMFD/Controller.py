@@ -13,7 +13,6 @@ from PiMFD.Options import MFDAppOptions
 from PiMFD.UI import Keycodes
 from PiMFD.UI.Button import MFDButton
 from PiMFD.Applications.System.SystemApplication import SysApplication
-from PiMFD.Applications.Application import PlaceholderApp
 
 
 __author__ = 'Matt Eland'
@@ -76,24 +75,24 @@ class MFDController(object):
             self.keypress_sound = pygame.mixer.Sound(self.options.key_sound)
 
         # Placeholders for media app
-        self.med_app = PlaceholderApp(self, 'MED')
-        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'IMG'))
-        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'PAND'))
-        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'TUBE'))
-        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'FLIX'))
-        self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'AZIW'))
+        # self.med_app = PlaceholderApp(self, 'MED')
+        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'IMG'))
+        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'PAND'))
+        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'TUBE'))
+        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'FLIX'))
+        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'AZIW'))
 
         # Placeholders for social app
-        self.soc_app = PlaceholderApp(self, 'SOCL')
-        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'NEWS'))
-        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'FACE'))
-        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'TWTR'))
-        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'RSS'))
-        self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'WEB'))
+        # self.soc_app = PlaceholderApp(self, 'SOCL')
+        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'NEWS'))
+        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'FACE'))
+        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'TWTR'))
+        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'RSS'))
+        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'WEB'))
 
         self.sys_app = SysApplication(self)
 
-        self.applications = list([self.sys_app, self.nav_app, self.sch_app, self.med_app, self.soc_app])
+        self.applications = list([self.sys_app, self.nav_app, self.sch_app])  #, self.med_app, self.soc_app])
         
         self.active_app = self.sys_app
 

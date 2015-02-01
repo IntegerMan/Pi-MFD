@@ -18,6 +18,7 @@ def start_mfd(display, app_options):
 
     # Start up the graphics engine
     display.init_graphics(app_options)
+    pygame.key.set_repeat(200, 50)  # Enable repeated keyboard events
 
     # Initialize the controller
     controller = MFDController(display, app_options)
