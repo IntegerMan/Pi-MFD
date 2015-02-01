@@ -55,7 +55,7 @@ class NavigationApp(MFDApplication):
             self.btn_page.text = self.map_context.get_page_mode_text()
             self.btn_info.enabled = self.map_context.target
 
-            return [self.btn_map, self.btn_page, None, None, self.btn_info]
+            return [self.btn_map, self.btn_page, self.btn_info]
 
         else:
             return [self.btn_back]
@@ -68,7 +68,7 @@ class NavigationApp(MFDApplication):
                 self.map_context.next_map_mode()
             elif index == 1:
                 self.map_context.next_page_mode()
-            elif index == 4:
+            elif index == 2:
                 self.always_render_background = False
                 self.select_page(self.info_page)
 

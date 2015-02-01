@@ -6,7 +6,7 @@ This file will hold map pages
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.Applications.Navigation.MapRendering import MapRenderer
 from PiMFD.UI import Keycodes
-from PiMFD.UI.Keycodes import is_up_key, is_right_key, is_left_key, is_down_key
+from PiMFD.UI.Keycodes import is_up_key, is_right_key, is_left_key, is_down_key, is_enter_key
 from PiMFD.UI.Panels import StackPanel
 
 __author__ = 'Matt Eland'
@@ -66,8 +66,12 @@ class MapPage(MFDPage):
             self.context.move_left()
             return True
 
-        return super(MapPage, self).handle_key(key)
+        elif is_enter_key(key):
+            if self.application.btn_info.enabled:
+                self.application.select_page_by_index(2)
+                return True
 
+        return super(MapPage, self).handle_key(key)
 
 class MapInfoPage(MFDPage):
     lbl_header = None
@@ -111,6 +115,14 @@ class MapInfoPage(MFDPage):
         self.pnl_tags.children = tags
 
         super(MapInfoPage, self).handle_selected()
+
+    def handle_key(self, key):
+
+        if is_enter_key(key):
+            self.application.select_page_by_index(0)
+            return True
+
+        return super(MapInfoPage, self).handle_key(key)
 
 
 
