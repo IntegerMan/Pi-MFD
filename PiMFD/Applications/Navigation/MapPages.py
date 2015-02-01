@@ -7,6 +7,7 @@ from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.Applications.Navigation.MapRendering import MapRenderer
 from PiMFD.UI import Keycodes
 from PiMFD.UI.Keycodes import is_up_key, is_right_key, is_left_key, is_down_key
+from PiMFD.UI.Panels import StackPanel
 
 __author__ = 'Matt Eland'
 
@@ -76,8 +77,10 @@ class MapInfoPage(MFDPage):
         super(MapInfoPage, self).__init__(controller, application)
 
         self.map_context = application.map_context
-        self.lbl_header = self.get_header_label('Node Info')
-        self.panel.children = [self.lbl_header]
+        self.lbl_header = self.get_header_label('{} Info')
+        self.lbl_pos = self.get_label("GPS: {}, {}")
+        self.pnl_tags = StackPanel(controller.display, self)
+        self.panel.children = [self.lbl_header, self.lbl_pos, self.pnl_tags]
 
     def render(self):
         return super(MapInfoPage, self).render()
@@ -87,11 +90,25 @@ class MapInfoPage(MFDPage):
 
     def handle_selected(self):
 
-        name = self.map_context.target.get_display_name()
+        self.target = self.map_context.target
+
+        name = self.target.get_display_name()
         if name:
-            self.lbl_header.text = name + " Info"
+            self.lbl_header.text_data = name
         else:
-            self.lbl_header.text = "Node Info"
+            self.lbl_header.text_data = 'Node'
+
+        self.lbl_pos.text_data = self.target.lat, self.target.lng
+
+        # Build a list of labels for all tags in this shape
+        tags = []
+        for tag in self.target.tags:
+            tag_label = self.get_label("{}: {}")
+            tag_label.text_data = tag
+            tags.append(tag_label)
+
+        # Set the labels into the children collection
+        self.pnl_tags.children = tags
 
         super(MapInfoPage, self).handle_selected()
 
