@@ -380,6 +380,6 @@ class MapSymbol(MapEntity):
                                  font,
                                  bottom_text.upper(),
                                  self.x,
-                                 self.y + half_size + 3,  # + (font.measure(bottom_text)[1] / 2.0),
+                                 self.y + half_size + 3,
                                  color)
 

@@ -32,6 +32,7 @@ class ColorScheme(object):
     # Keyed Colors
     background = (0, 0, 0)
     foreground = (0, 255, 0)
+    disabled = (0, 120, 0)
     detail = (128, 128, 128),
     highlight = (255, 255, 255)
 
@@ -55,9 +56,10 @@ class ColorScheme(object):
     map_structural = gray
 
     def __init__(self, name, background=(0, 0, 0), foreground=(0, 255, 0), highlight=(255, 255, 255),
-                 detail=(128, 128, 128)):
+                 detail=(128, 128, 128), disabled=(0, 120, 0)):
         self.background = background
         self.foreground = foreground
+        self.disabled = disabled
         self.highlight = highlight
         self.detail = detail
         self.name = name
@@ -73,6 +75,7 @@ class ColorScheme(object):
         target.foreground = self.foreground
         target.detail = self.detail
         target.highlight = self.highlight
+        target.disabled = self.disabled
         target.name = self.name
         return target
 
@@ -104,6 +107,7 @@ class ColorSchemes(object):
         return ColorScheme(name='Green',
                            background=(0, 42, 0),
                            foreground=(0, 210, 0),
+                           disabled=(0, 100, 0),
                            detail=(85, 251, 167),
                            highlight=(230, 230, 230))
 
@@ -116,6 +120,7 @@ class ColorSchemes(object):
         return ColorScheme(name='Cyan',
                            background=(0, 0, 32),
                            foreground=(0, 170, 170),
+                           disabled=(0, 80, 80),
                            detail=(128, 128, 128),
                            highlight=(0, 0, 255))
 
@@ -128,6 +133,7 @@ class ColorSchemes(object):
         return ColorScheme(name='Blue',
                            background=(0, 0, 32),
                            foreground=(0, 128, 255),
+                           disabled=(0, 60, 120),
                            detail=(128, 128, 128),
                            highlight=(255, 255, 255))
 
@@ -140,6 +146,7 @@ class ColorSchemes(object):
         return ColorScheme(name='White',
                            background=(0, 0, 0),
                            foreground=(150, 150, 150),
+                           disabled=(70, 70, 70),
                            detail=(128, 128, 128),
                            highlight=(255, 255, 255))
 
@@ -152,6 +159,7 @@ class ColorSchemes(object):
         return ColorScheme(name='Red',
                            background=(32, 0, 0),
                            foreground=(170, 0, 0),
+                           disabled=(80, 0, 0),
                            detail=(128, 128, 128),
                            highlight=(255, 0, 0))
 
@@ -164,6 +172,7 @@ class ColorSchemes(object):
         return ColorScheme(name='Amber',
                            background=(63, 47, 20),
                            foreground=(231, 176, 75),
+                           disabled=(110, 90, 35),
                            detail=(128, 128, 128),
                            highlight=(255, 201, 14))
 

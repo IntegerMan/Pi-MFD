@@ -185,7 +185,8 @@ class MFDController(object):
         x_offset = 0
         for header in headers[0:self.max_app_buttons]:  # TODO: Support > max_app_buttons apps by allowing paging
             x = x_offset
-            header.render(self.display, x, x + header_offset, is_top)
+            if header:
+                header.render(self.display, x, x + header_offset, is_top)
             x_offset += header_offset
 
     def render_button_rows(self):
@@ -217,7 +218,8 @@ class MFDController(object):
             self.bottom_headers = self.active_app.get_buttons()
 
             for button in self.bottom_headers:
-                button.always_render_background = always_render_background
+                if button:
+                    button.always_render_background = always_render_background
 
         else:
             # Perhaps this will need to ask the current page for options in this case, but for now, just go empty
@@ -332,7 +334,7 @@ class MFDController(object):
         # Check Top Buttons and respond to the first match
         index = 0
         for button in self.top_headers:
-            if button.enabled and button.contains_point(pos):
+            if button and button.enabled and button.contains_point(pos):
                 self.handle_button(index, True)
                 return True
 
@@ -341,7 +343,7 @@ class MFDController(object):
         # Check Bottom Buttons and respond to the first match
         index = 0
         for button in self.bottom_headers:
-            if button.enabled and button.contains_point(pos):
+            if button and button.enabled and button.contains_point(pos):
                 self.handle_button(index, False)
                 return True
 

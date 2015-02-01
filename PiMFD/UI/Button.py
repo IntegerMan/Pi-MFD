@@ -43,7 +43,10 @@ class MFDButton(object):
         if not is_top:
             y = display.res_y - display.padding_y - display.fonts.normal.size
 
-        font_color = display.color_scheme.foreground
+        if self.enabled:
+            font_color = display.color_scheme.foreground
+        else:
+            font_color = display.color_scheme.disabled
 
         # Figure out background color - sometimes we'll want to render it on top of other content
         background = None
@@ -54,34 +57,38 @@ class MFDButton(object):
 
         # If it's selected, use inverted colors
         if self.selected:
+            background = font_color
             font_color = display.color_scheme.background
-            background = display.color_scheme.foreground
             label = ' ' + label + ' '  # Pad out the display so it appears wider with a background
 
         midpoint = ((x_end - x_start) / 2) + x_start
 
         pos = render_text_centered(display, display.fonts.normal, label, midpoint, y, font_color, background=background)
 
-        # Render tick marks
-        line_length = 5
-        if is_top:
-            draw_vertical_line(display,
-                               display.color_scheme.foreground,
-                               midpoint,
-                               y - 2,
-                               y - 2 - line_length)
+        if self.enabled:
+            # Render tick marks
+            line_length = 5
+            if is_top:
+                draw_vertical_line(display,
+                                   display.color_scheme.foreground,
+                                   midpoint,
+                                   y - 2,
+                                   y - 2 - line_length)
 
-            top = y - 2 - line_length
-            bottom = pos.bottom
+                top = y - 2 - line_length
+                bottom = pos.bottom
+            else:
+                draw_vertical_line(display,
+                                   display.color_scheme.foreground,
+                                   midpoint,
+                                   y + pos.height - 2,
+                                   y + pos.height + line_length - 2)
+
+                top = pos.top
+                bottom = y + pos.height + line_length - 2
         else:
-            draw_vertical_line(display,
-                               display.color_scheme.foreground,
-                               midpoint,
-                               y + pos.height - 2,
-                               y + pos.height + line_length - 2)
-
             top = pos.top
-            bottom = y + pos.height + line_length - 2
+            bottom = pos.bottom
 
         # Update the bounds of the button for collision detection later
         self.bounds = Rect(x_start, top, x_end - x_start, bottom - top)
