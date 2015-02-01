@@ -27,6 +27,7 @@ class MapContext(object):
     filters = None
     cursor_speed = 3
     allow_move = True
+    target = None
 
     def __init__(self, app, map):
         super(MapContext, self).__init__()
@@ -81,6 +82,9 @@ class MapContext(object):
 
     def should_show_top_text(self, entity):
         return self.active_filter.should_show_right_text(entity)
+
+    def should_show_entity(self, entity):
+        return self.active_filter.should_show_entity(entity)
 
     def next_map_mode(self):
         current_index = self.filters.index(self.active_filter)

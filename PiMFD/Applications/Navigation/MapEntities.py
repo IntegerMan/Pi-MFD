@@ -102,7 +102,12 @@ class MapEntity(object):
 
         return False
 
-    def get_color(self, cs):
+    def get_color(self, cs, map_context):
+
+        # Smart highlight using context when this shape is the target
+        if map_context.target is self:
+            return cs.highlight
+
         return MapColorizer.get_color(self, cs)
 
     def get_display_name(self):

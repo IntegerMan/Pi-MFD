@@ -52,6 +52,7 @@ class NavigationApp(MFDApplication):
 
         self.btn_map.text = self.map_page.get_button_text()
         self.btn_page.text = self.map_context.get_page_mode_text()
+        self.btn_info.enabled = self.map_context.target
 
         return [self.btn_map, self.btn_page, None, None, self.btn_info]
 

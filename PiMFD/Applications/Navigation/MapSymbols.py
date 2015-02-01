@@ -102,8 +102,12 @@ class MapSymbol(MapEntity):
         # Grab name, preferring short_name if present, otherwise abbreviating
         display_name = self.get_display_name()
 
+        app_data = None
         extra_data = None
         inner_text = None
+
+        if map_context.target is self:
+            app_data = 'TGT'
 
         shop = self.get_tag_value('shop')
         amenity = self.get_tag_value('amenity')
@@ -303,6 +307,8 @@ class MapSymbol(MapEntity):
                 shape_width = 3
                 extra_data = self.get_tag_value('owner')
                 display_name = '{}, {}'.format(self.lat, self.lng)
+                if map_context.target:
+                    app_data = map_context.target.name
             else:
                 style = shape.double_circle
 
@@ -317,9 +323,10 @@ class MapSymbol(MapEntity):
         half_size = shape_size / 2
 
         right_text = extra_data
+        left_text = app_data
         bottom_text = display_name
 
-        color = self.get_color(display.color_scheme)
+        color = self.get_color(display.color_scheme, map_context)
 
         # Render the shape of the item
         if (not hide_shape_if_has_building or not self.has_lines) and map_context.should_show_shapes(self):
@@ -352,7 +359,6 @@ class MapSymbol(MapEntity):
                 draw_horizontal_line(display, display.color_scheme.highlight, pos[0] - shape_width,
                                      pos[0] + shape_width, pos[1])
 
-
         # Render adornment icons
         if map_context.should_show_icons(self):
             for icon in icons:
@@ -374,6 +380,14 @@ class MapSymbol(MapEntity):
                         self.x + half_size + 3,
                         self.y - (font.measure(right_text)[1] / 2.0),
                         color)
+
+        if left_text and map_context.should_show_left_text(self):
+            render_text(display,
+                        font,
+                        left_text.upper(),
+                        self.x - font.measure(left_text)[0] - 12,
+                        self.y - (font.measure(left_text)[1] / 2.0),
+                        display.color_scheme.highlight)
 
         if bottom_text and map_context.should_show_bottom_text(self):
             render_text_centered(display,

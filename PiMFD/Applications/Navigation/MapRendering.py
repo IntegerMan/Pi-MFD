@@ -1,6 +1,7 @@
 # coding=utf-8
 from datetime import datetime
 from time import strftime
+import math
 
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
@@ -20,6 +21,37 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         self.map_context = map_context
         self.osm_shapes = None
         self.last_translate = None
+
+    def calculate_distance(self, pos_1, pos_2):
+        x_squared = math.pow(pos_1[0] - pos_2[0], 2)
+        y_squared = math.pow(pos_1[1] - pos_2[1], 2)
+        return math.sqrt(x_squared + y_squared)
+
+    def find_nearest_targetable_object(self, pos):
+
+        best_distance = None
+        target = None
+
+        candidates = []
+
+        if self.osm_shapes:
+            candidates += self.osm_shapes
+
+        if self.map.annotations:
+            candidates += self.map.annotations
+
+        for shape in candidates:
+
+            if not shape or not self.map_context.should_show_entity(shape):
+                continue
+
+            distance = self.calculate_distance(pos, (shape.x, shape.y))
+
+            if best_distance is None or best_distance > distance:
+                best_distance = distance
+                target = shape
+
+        return target
 
     def render(self):
 
@@ -41,6 +73,12 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
             self.last_translate = datetime.now()
 
         map_context = self.map_context
+
+        # Update the cursor and figure out what we're targeting - if cursor is active
+        if self.map_context.should_show_cursor():
+            pos = self.map_context.maintain_cursor_position()
+            target = self.find_nearest_targetable_object(pos)
+            map_context.target = target
 
         # Render the open street map data
         if self.osm_shapes:
@@ -74,7 +112,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         if self.map_context.should_show_cursor():
             cur = self.build_symbol(0, 0)
             cur.should_translate = False
-            cur.set_pos(self.map_context.maintain_cursor_position())
+            cur.set_pos(self.map_context.cursor_pos)
             cur.add_tag('actor', 'cursor')
             cur.add_tag('owner', me.name)
             cur.add_tag('iff', 'self')

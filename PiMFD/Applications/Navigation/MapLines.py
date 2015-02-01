@@ -65,7 +65,7 @@ class MapLine(MapSymbol):
         if self.screen_points and len(self.screen_points) > 1 and map_context.should_show_lines(self):
 
             self.has_lines = True
-            color = self.get_color(display.color_scheme)
+            color = self.get_color(display.color_scheme, map_context)
             width = self.get_line_width()
 
             if width <= 0:
