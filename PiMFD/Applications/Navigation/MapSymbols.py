@@ -279,12 +279,20 @@ class MapSymbol(MapEntity):
             shape_width = 0
             shape_size = 6
 
+        elif self.has_tag('surveillance'):
+            style = shape.triangle
+            extra_data = 'cam'
+
         elif self.has_tag('man_made'):
 
             man_made = self.get_tag_value('man_made')
 
             if man_made == 'tower':
                 style = shape.triangle
+
+            elif man_made == 'surveillance':
+                style = shape.triangle
+                extra_data = 'cam'
 
         elif self.has_tag('actor'):
 

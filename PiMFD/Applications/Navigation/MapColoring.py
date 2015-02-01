@@ -161,12 +161,18 @@ class MapColorizer(object):
         elif entity.has_tag_value('footway', 'crossing'):
             return cs.yellow
 
+        elif entity.has_tag('surveillance'):
+            return cs.map_emergency
+
         elif entity.has_tag('man_made'):
 
             man_made = entity.get_tag_value('man_made')
 
             if man_made == 'water_tower':
                 return cs.map_infrastructure
+
+            elif man_made == 'surveillance':
+                return cs.map_emergency
 
         elif entity.has_tag('incident'):
 
