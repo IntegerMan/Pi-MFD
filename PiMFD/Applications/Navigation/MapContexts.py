@@ -4,7 +4,7 @@
 Map Contexts are used to provide contextual rendering and filtering information to the map as it is rendered
 """
 from PiMFD.Applications.Navigation.MapFilters import StandardMapFilter, FoodMapFilter, GasMapFilter, \
-    InfrastructureMapFilter, WifiMapFilter
+    InfrastructureMapFilter, WifiMapFilter, WikipediaMapFilter
 
 __author__ = 'Matt Eland'
 
@@ -35,8 +35,12 @@ class MapContext(object):
 
         self.app = app
         self.map = map
-        self.filters = (StandardMapFilter(self), GasMapFilter(self), FoodMapFilter(self), InfrastructureMapFilter(self),
-                        WifiMapFilter(self))
+        self.filters = (StandardMapFilter(self),
+                        GasMapFilter(self),
+                        FoodMapFilter(self),
+                        InfrastructureMapFilter(self),
+                        WifiMapFilter(self),
+                        WikipediaMapFilter(self))
         self.active_filter = self.filters[0]
         self.cursor_pos = app.display.res_x / 2.0, app.display.res_y / 2.0
 

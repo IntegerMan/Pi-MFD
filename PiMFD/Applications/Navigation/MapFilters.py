@@ -152,3 +152,20 @@ class WifiMapFilter(StandardMapFilter):
                (wifi and wifi != 'no') or \
                entity.has_tag_value('amenity', 'internet') or \
                entity.has_tag_value('iff', 'self')
+
+
+class WikipediaMapFilter(StandardMapFilter):
+    def get_button_text(self):
+        return "WIKI"
+
+    def should_show_right_text(self, entity):
+        return self.should_show_entity(entity)
+
+    def should_show_bottom_text(self, entity):
+        return self.should_show_entity(entity)
+
+    def should_show_entity(self, entity):
+        return entity.has_tag("highway") or \
+               entity.has_tag("wikipedia") or \
+               entity.has_tag("wikipedia:en") or \
+               entity.has_tag_value('iff', 'self')
