@@ -85,6 +85,25 @@ class WeatherData(object):
         self.wind_units = ''
         self.gps = 0, 0
 
+    def get_tags(self):
+
+        tags = list()
+
+        # tags.append(('city', self.city))
+        tags.append(('temperature', str(self.temperature)))
+        tags.append(('conditions', str(self.conditions)))
+        tags.append(('windchill', str(self.windchill)))
+        tags.append(('wind:speed', str(self.wind_speed)))
+        tags.append(('wind:direction', str(self.wind_numeric_direction)))
+        tags.append(('wind:direction_cardinal', str(self.wind_cardinal_direction)))
+        tags.append(('humidity', str(self.humidity)))
+        tags.append(('pressure', str(self.pressure)))
+        tags.append(('visibility', str(self.pressure)))
+        tags.append(('sunlight', str(self.sunrise) + "-" + str(self.sunset)))
+        tags.append(('weather', self.code))
+
+        return tags
+
     def parse_yahoo_data(self, yahoo_data):
         """
         Takes data from Yahoo Weather services, in the form of a dictionary, and parses it into an object that can be
@@ -121,6 +140,7 @@ class WeatherData(object):
         self.wind_speed = wind['speed']
         self.wind_units = str(units['speed'])
         self.wind_direction = str(wind['direction']) + degree_sign
+        self.wind_numeric_direction = str(wind['direction'])
         self.wind_cardinal_direction = WeatherData.get_cardinal_direction(wind['direction'])
         self.windchill = wind['chill']
         self.city = str(location['city'])

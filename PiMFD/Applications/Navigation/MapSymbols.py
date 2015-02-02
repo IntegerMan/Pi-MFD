@@ -6,7 +6,7 @@ Code organized around rendering locations to the map
 from pygame.rect import Rect
 
 from PiMFD.Applications.Navigation.MapEntities import MapEntity
-from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon
+from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon, WeatherIcon
 from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond, \
     render_triangle_up, draw_vertical_line, draw_horizontal_line
 
@@ -289,6 +289,12 @@ class MapSymbol(MapEntity):
         elif self.has_tag('surveillance'):
             style = shape.triangle
             extra_data = 'cam'
+
+        elif self.has_tag('weather'):
+            style = shape.none
+            icons.append(WeatherIcon(self.get_tag_value('weather')))
+            extra_data = self.get_tag_value('wind:speed') + ' ' + self.get_tag_value('wind:direction_cardinal')
+            display_name = self.get_tag_value('temperature') + "'F"
 
         elif self.has_tag('man_made'):
 

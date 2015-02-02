@@ -21,6 +21,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         self.map_context = map_context
         self.osm_shapes = None
         self.last_translate = None
+        self.weather = None
 
     def calculate_distance(self, pos_1, pos_2):
         x_squared = math.pow(pos_1[0] - pos_2[0], 2)
@@ -64,7 +65,8 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         # Only recompute the expensive stuff if the resolution has changed or the data fetch time has changed
         if max_available != self.size[0] or \
                 not self.last_translate or \
-                        self.map.last_data_received > self.last_translate:
+                not self.map.last_data_received or \
+                self.map.last_data_received > self.last_translate:
 
             # Recompute our dimensions
             self.size = (max_available, max_available)
@@ -81,10 +83,9 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         weather_data = self.map.weather_data
         if weather_data:
             self.weather = self.build_symbol(weather_data.gps[0], weather_data.gps[1])
-            self.weather.set_pos((self.display.res_x - 30, 50))
-            self.weather.name = str(weather_data.temperature)
-            self.weather.add_tag('weather', 'yes')
-            self.weather.add_tag('temp', str(weather_data.temperature))
+            self.weather.set_pos((self.display.res_x - 45, 50))
+            self.weather.name = "{} Weather".format(weather_data.city)
+            self.weather.tags = weather_data.get_tags()
 
         # Update the cursor and figure out what we're targeting - if cursor is active
         if self.map_context.should_show_cursor():

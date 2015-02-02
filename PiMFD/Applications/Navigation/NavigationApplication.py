@@ -130,13 +130,15 @@ class NavigationApp(MFDApplication):
         self.map.annotations = self.traffic.get_traffic(bounds)
 
         # Find the first zip code
+        zip = None
         for shape in self.map.shapes:
             zip = shape.get_tag_value('addr:postcode')
             if zip:
                 break
 
-        # Get Weather Data for our current location
-        self.map.weather_data = self.controller.get_weather_data(zip)
+                # Get Weather Data for our current location
+        if zip:
+            self.map.weather_data = self.controller.get_weather_data(zip)
 
         self.initialized = True
 

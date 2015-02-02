@@ -181,6 +181,9 @@ class MapColorizer(object):
             if actor in ('self', 'cursor'):
                 return cs.highlight
 
+        elif entity.has_tag('weather'):
+            return cs.foreground
+
         return None
 
     @staticmethod

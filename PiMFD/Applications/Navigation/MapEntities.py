@@ -38,9 +38,13 @@ class MapEntity(object):
         :return: All tags (yielded) that have the matching name
         """
 
+        tags = []
+
         for tag in self.tags:
             if tag[0] == name:
-                yield tag
+                tags.append(tag)
+
+        return tags
 
     def has_tag(self, name):
         """

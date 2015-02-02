@@ -36,6 +36,7 @@ class Maps(object):
     status_text = "Loading Map Data..."
 
     output_file = None
+    weather_data = None
 
     SIG_PLACES = 3
     GRID_SIZE = 0.001
@@ -132,8 +133,14 @@ class Maps(object):
                     error_message = "Unhandled error saving map data to file {0}\n".format(str(traceback.format_exc()))
                     print(error_message)
 
-        osm_dict = xmltodict.parse(data)
         try:
+            if 'service unavailable' in data.lower():
+                print(data)
+                self.has_data = False
+                self.status_text = 'Map Server Offline'
+                return
+
+            osm_dict = xmltodict.parse(data)
 
             # Load Nodes
             for node in osm_dict['osm']['node']:
@@ -218,7 +225,7 @@ class Maps(object):
             error_message = "Unhandled error parsing map data {0}\n".format(str(traceback.format_exc()))
             print(error_message)
 
-        self.has_data = len(self.nodes) > 0
+        self.has_data = self.nodes and len(self.nodes) > 0
         self.status_text = "Loaded {} Nodes of Map Data".format(len(self.nodes))
 
     def process_tag(self, entity, tag):

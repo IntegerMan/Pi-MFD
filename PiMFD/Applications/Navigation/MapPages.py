@@ -32,7 +32,7 @@ class MapPage(MFDPage):
         if self.application.map.has_data:
             self.map_renderer.render()
         else:
-            self.center_text('NO DATA')
+            self.center_text(self.context.map.status_text.upper())
 
         return super(MapPage, self).render()
 
@@ -111,7 +111,7 @@ class MapInfoPage(MFDPage):
         # Build a list of labels for all tags in this shape
         tags = []
         for tag in context.tags:
-            tag_label = self.get_label("{}: {}")
+            tag_label = self.get_label(u"{}: {}")
             tag_label.text_data = tag
             tags.append(tag_label)
 

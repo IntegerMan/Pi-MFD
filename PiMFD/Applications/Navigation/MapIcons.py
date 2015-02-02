@@ -3,7 +3,8 @@
 """
 A file containing multiple unique procedural iconographic representations of locations
 """
-from PiMFD.UI.Rendering import draw_horizontal_line, draw_vertical_line
+from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_icon
+from PiMFD.UI.Rendering import draw_horizontal_line, draw_vertical_line, render_text_centered
 
 __author__ = 'Matt Eland'
 
@@ -49,6 +50,26 @@ class ChairIcon(MapIcon):
         draw_vertical_line(display, color, x - x_offset, y + y_offset, y - y_offset)
         draw_vertical_line(display, color, x + x_offset, y + y_offset, y)
 
+
+class WeatherIcon(MapIcon):
+    code = -1
+
+    def __init__(self, code):
+        super(WeatherIcon, self).__init__()
+        self.code = code
+
+    def render(self, display, color, pos, half_size):
+        """
+        Renders the icon to the display
+        :param display: The display manager
+        :param color: The color
+        :param pos: The center point of the shape
+        :param half_size: Half the size of the shape
+        """
+
+        icon = get_condition_icon(self.code)
+        size = display.fonts.weather.measure(icon)
+        render_text_centered(display, display.fonts.weather, icon, pos[0], pos[1] - (size[1] / 2.0), color)
 
 class FoodIcon(MapIcon):
     """
