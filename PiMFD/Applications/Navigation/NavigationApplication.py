@@ -8,6 +8,7 @@ from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
+from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
 from PiMFD.UI.Button import MFDButton
 
 __author__ = 'Matt Eland'
@@ -20,6 +21,8 @@ class NavigationApp(MFDApplication):
     """
     map_page = None
     info_page = None
+    weather_page = None
+
     initialized = False
 
     map = None
@@ -39,6 +42,7 @@ class NavigationApp(MFDApplication):
 
         self.map_page = MapPage(controller, self)
         self.info_page = MapInfoPage(controller, self)
+        self.weather_page = WeatherPage(controller, self, self.map_context)
         self.always_render_background = True
 
         self.pages = list([self.map_page])
@@ -70,9 +74,12 @@ class NavigationApp(MFDApplication):
                 self.map_context.next_page_mode()
             elif index == 2:
                 self.always_render_background = False
-                self.select_page(self.info_page)
+                if not self.map_context.cursor_context or not self.map_context.cursor_context.has_tag('weather'):
+                    self.select_page(self.info_page)
+                else:
+                    self.select_page(self.weather_page)
 
-        elif self.active_page is self.info_page:
+        elif self.active_page in (self.info_page, self.weather_page):
 
             if index == 0:
                 self.always_render_background = True

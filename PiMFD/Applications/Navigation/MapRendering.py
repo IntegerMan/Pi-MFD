@@ -86,6 +86,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
             self.weather.set_pos((self.display.res_x - 45, 50))
             self.weather.name = "{} Weather".format(weather_data.city)
             self.weather.tags = weather_data.get_tags()
+            self.map_context.weather_data = weather_data
 
         # Update the cursor and figure out what we're targeting - if cursor is active
         if self.map_context.should_show_cursor():

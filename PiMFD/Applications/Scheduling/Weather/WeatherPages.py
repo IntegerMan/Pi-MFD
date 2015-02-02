@@ -33,11 +33,15 @@ class WeatherPage(MFDPage):
     lbl_forecast_icon = None
     chart_forecast = None
 
+    weather_provider = None
+
     max_forecasts = 5
 
     # noinspection PyCompatibility
-    def __init__(self, controller, application):
+    def __init__(self, controller, application, weather_provider):
         super(WeatherPage, self).__init__(controller, application)
+
+        self.weather_provider = weather_provider
 
         # Build out the Today Panel
         self.pnl_today = StackPanel(controller.display, self)
@@ -117,7 +121,7 @@ class WeatherPage(MFDPage):
         Renders the weather page
         """
 
-        weather = self.application.weather_data
+        weather = self.weather_provider.weather_data
 
         self.lbl_today_header.text_data = weather.city
         self.lbl_temp.text_data = (weather.temperature, weather.temp_units, weather.windchill, weather.temp_units)
