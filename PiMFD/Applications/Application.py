@@ -116,6 +116,13 @@ class MFDApplication(object):
             self.active_page = page
             page.handle_selected()
 
+    def handle_mouse_left_click(self, pos):
+
+        if self.active_page and self.active_page.handle_mouse_left_click(pos):
+            return True
+
+        return False
+
 
 class PlaceholderApp(MFDApplication):
 

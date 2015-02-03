@@ -88,6 +88,10 @@ class MFDPage(UIPage):
                              self.display.res_y / 2.0 - (self.display.fonts.normal.size / 2),
                              color)
 
+
+    def handle_mouse_left_click(self, pos):
+        return False
+
 class SimpleMessagePage(MFDPage):
     """
     Represents a simple single-message page, defaulting to 'not implemented'.

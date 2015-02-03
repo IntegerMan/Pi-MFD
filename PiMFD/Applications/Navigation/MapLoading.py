@@ -97,15 +97,16 @@ class Maps(object):
 
         print("Fetching maps " + url)
 
-        # TODO: What the heck? This looks to be infinitely calling the URL with no failover. That bad.
-        while True:
-            try:
-                response = requests.get(url)
-            except:
-                error_message = "Unhandled error getting request {0}\n".format(str(traceback.format_exc()))
-                print(error_message)
-            else:
-                break
+        # Get the data from the web. Handle gr
+        try:
+            response = requests.get(url)
+
+        except:
+            error_message = "Error Getting Map Data: {0}\n".format(str(traceback.format_exc()))
+            print(error_message)
+            self.status_text = error_message
+            self.has_data = False
+            return
 
         data = response.text.encode('UTF-8')
 
@@ -239,8 +240,7 @@ class Maps(object):
             return True
 
         elif str.startswith(str(tag_name), 'tiger:') or \
-                        tag_name == 'source' or \
-                str.startswith(str(tag_name), 'gnis:'):
+                        tag_name in ('source', 'created_by'):
 
             return False
 

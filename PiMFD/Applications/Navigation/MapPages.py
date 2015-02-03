@@ -40,6 +40,15 @@ class MapPage(MFDPage):
         self.application.next_map_mode()
         super(MapPage, self).handle_reselected()
 
+    def handle_mouse_left_click(self, pos):
+
+        if self.context.page_mode == 'CUR':
+            self.context.cursor_pos = pos
+            self.controller.play_button_sound()
+            return True
+
+        return super(MapPage, self).handle_mouse_left_click(pos)
+
     def handle_key(self, key):
 
         if key == Keycodes.KEY_KP_PLUS or key == Keycodes.KEY_PLUS:

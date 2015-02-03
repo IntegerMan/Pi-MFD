@@ -347,6 +347,9 @@ class MFDController(object):
 
             index += 1
 
+        if self.active_app and self.active_app.handle_mouse_left_click(pos):
+            return True
+
         # No takers
         return False
 

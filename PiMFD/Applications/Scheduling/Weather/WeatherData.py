@@ -69,6 +69,7 @@ class WeatherData(object):
         self.wind_speed = 'Unknown'
         self.wind_units = ''
         self.wind_direction = 'Unknown'
+        self.wind_numeric_direction = 0
         self.wind_cardinal_direction = 'Unknown'
         self.sunrise = 'Unknown'
         self.sunset = 'Unknown'
