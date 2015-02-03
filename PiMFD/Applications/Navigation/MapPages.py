@@ -120,14 +120,208 @@ class MapInfoPage(MFDPage):
         # Build a list of labels for all tags in this shape
         tags = []
         for tag in context.tags:
-            tag_label = self.get_label(u"{}: {}")
-            tag_label.text_data = tag
-            tags.append(tag_label)
+            if self.should_show_tag(tag, context):
+                tag_string = self.get_tag_string(tag, context)
+                tag_label = self.get_label(tag_string)
+                tags.append(tag_label)
 
         # Set the labels into the children collection
         self.pnl_tags.children = tags
 
         super(MapInfoPage, self).handle_selected()
+
+    def get_tag_string(self, tag, entity):
+
+        if tag[0] == 'ele':
+            return 'Elevation: {}'.format(tag[1])
+
+        if tag[0] == 'building':
+            if tag[1] == 'terrace':
+                return 'Residential Townhouse'
+            elif tag[1] == 'kindergarten':
+                return 'Preschool / Kindergarten'
+            elif tag[1] == 'roof':
+                return 'Shelter / Awning'
+            elif tag[1] == 'commercial':
+                return 'Commercial Building'
+            elif tag[1] == 'retail':
+                return 'Strip Mall'
+            elif tag[1] == 'mall':
+                return 'Shopping Mall'
+            elif tag[1] == 'yes':
+                return 'Unclassified Building'
+
+        if tag[0] == 'highway':
+            if tag[1] in ('residential', 'living_street'):
+                return 'Residential Street'
+            elif tag[1] == 'service':
+                return 'Access Road'
+            elif tag[1] == 'street_lamp':
+                return 'Street Light'
+            elif tag[1] == 'track':
+                return 'Trail'
+            elif tag[1] == 'pedestrian':
+                return 'Pedestrian Road'
+            elif tag[1] in ('path', 'footway'):
+                return 'Path'
+            elif tag[1] == 'steps':
+                return 'Steps'
+            elif tag[1] == 'bridleway':
+                return 'Horse Trail'
+            elif tag[1] == 'cycleway':
+                return 'Bike Trail'
+            elif tag[1] == 'raceway':
+                return 'Raceway'
+            elif tag[1] == 'proposed':
+                return 'Proposed Road'
+            elif tag[1] == 'construction':
+                return 'Road Under Construction'
+            elif tag[1] == 'crossing':
+                return 'Crossing'
+            elif tag[1] == 'bus_stop':
+                return 'Bus Stop'
+            elif tag[1] == 'traffic_signals':
+                return 'Stoplight'
+            elif tag[1] == 'stop':
+                return 'Stop Sign'
+            elif tag[1] in ('mini_roundabout', 'turning_circle'):
+                return 'Roundabout / Cul du Sac'
+            elif tag[1] in ('motorway', 'trunk'):
+                return 'Highway'
+            elif tag[1] == 'motorway_link':
+                return 'On-Ramp / Off-Ramp'
+            elif tag[1] in ('primary', 'secondary'):
+                return 'Major Road'
+            elif tag[1] == 'tertiary':
+                return 'Side Road'
+            elif tag[1] in ('unclassified', 'road', 'yes'):
+                return 'Unclassified Road'
+
+        if tag[0] == 'shop':
+            if tag[1] == 'car_repair':
+                return 'Car Repair Shop'
+            elif tag[1] == 'convenience':
+                return 'Convenience Store'
+            elif tag[1] == 'furniture':
+                return 'Furniture Store'
+            elif tag[1] == 'carpet':
+                return 'Carpet Store'
+            elif tag[1] == 'free_flying':
+                return 'RC Airplane / Hobby Store'
+            elif tag[1] == 'supermarket':
+                return 'Supermarket'
+
+        if tag[0] == 'natural':
+            if tag[1] == 'water':
+                return 'Body of Water'
+
+        if tag[0] == 'traffic_sign':
+            if tag[1] == 'yes':
+                return 'Traffic Sign'
+            else:
+                return 'Traffic Sign: {}'.format(tag[1])
+
+        if tag[0] == 'water':
+            if tag[1] == 'pond':
+                return 'Pond'
+
+        if tag[0] == 'amenity':
+            if tag[1] == 'fuel':
+                return 'Gas Station'
+            elif tag[1] == 'veterinary':
+                return 'Vetrinarian'
+            elif tag[1] == 'school':
+                return 'School'
+            elif tag[1] == 'car_wash':
+                return 'Car Wash'
+            elif tag[1] == 'pharmacy':
+                return 'Drug Store'
+            elif tag[1] == 'parking':
+                return 'Parking Lot / Garage'
+            elif tag[1] == 'fire_station':
+                return 'Fire Station'
+
+        if tag[0] == 'bridge':
+            if tag[1] == 'yes':
+                return 'Bridge'
+
+        if tag[0] == 'barrier':
+            if tag[1] == 'wall':
+                return 'Wall'
+
+        if tag[0] == 'access':
+            if tag[1] == 'public':
+                return 'Public Access'
+            elif tag[1] == 'permissive':
+                return 'Open to Public'
+            elif tag[1] == 'private':
+                return 'Private Access'
+            elif tag[1] == 'no':
+                return 'No Access'
+            elif tag[1] == 'destination':
+                return 'Local Access Only'
+            elif tag[1] == 'discouraged':
+                return 'Access Discouraged'
+            elif tag[1] == 'designated':
+                return 'Designated Route'
+            elif tag[1] == 'customers':
+                return 'Customer Access Only'
+            elif tag[1] == 'delivery':
+                return 'Delivery Access'
+
+        if tag[0] == 'landuse':
+            if tag[1] == 'construction':
+                return 'Construction Site'
+
+        if tag[0] == 'leisure':
+            if tag[1] == 'pitch':
+
+                sport = entity.get_tag_value('sport')
+                if sport:
+                    if sport == 'tennis':
+                        return 'Tennis Court'
+
+                return 'Sports Area'
+
+            elif tag[1] == 'swimming_pool':
+                return 'Swimming Pool'
+
+        return u"{}: {}".format(tag[0], tag[1])
+
+    def should_show_tag(self, tag, entity):
+
+        if not tag:
+            return False
+
+        if tag[0].startswith('gnis:'):
+            return False
+
+        if tag[0] in ('iff', 'layer'):
+            return False
+
+        if tag[0] == 'park_ride' and tag[1] == 'no':
+            return False
+
+        if tag[0] == 'area' and entity.has_tag('building'):
+            return False
+
+        if tag[0] == 'natural' and tag[1] == 'water' and entity.has_tag('water'):
+            return False
+
+        if tag[0] == 'sport' and entity.has_tag_value('leisure', 'pitch'):
+            return False
+
+        if tag[0] == 'building' and tag[1] == 'yes':
+            if entity.has_tag('shop'):
+                return False
+            if entity.has_tag('amenity'):
+                return False
+            if entity.has_tag('leisure'):
+                return False
+            if entity.has_tag('sport'):
+                return False
+
+        return True
 
     def handle_key(self, key):
 

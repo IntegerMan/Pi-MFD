@@ -170,6 +170,10 @@ class MapColorizer(object):
             elif man_made == 'surveillance':
                 return cs.map_emergency
 
+            elif man_made == 'tower':
+                if entity.has_tag_value('tower:type', 'communication'):
+                    return cs.map_infrastructure
+
         elif entity.has_tag('incident'):
 
             return cs.map_emergency
