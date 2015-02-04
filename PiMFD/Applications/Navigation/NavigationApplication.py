@@ -161,6 +161,7 @@ class NavigationApp(MFDApplication):
 
         if self.map_context.zoom_in():
             self.get_map_data_on_current_cursor_pos()
+            self.map_context.cursor_pos = (self.display.res_x / 2.0, self.display.res_y / 2.0)
 
     def zoom_out(self):
 
