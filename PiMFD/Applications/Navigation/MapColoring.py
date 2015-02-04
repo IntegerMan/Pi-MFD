@@ -23,12 +23,9 @@ class MapColorizer(object):
 
         elif entity.has_tag('highway'):
 
-            handler = context.tag_handlers.get_handler('highway')
-
-            if handler is not None:
-                color = handler.get_color(entity, entity.get_tag_value('highway'), cs)
-                if color:
-                    return color
+            color = context.tag_handlers.get_color('highway', entity, cs)
+            if color:
+                return color
 
         elif entity.has_tag_value('boundary', 'administrative'):
             return cs.map_government
@@ -119,7 +116,9 @@ class MapColorizer(object):
                 return MapColorizer.get_amenity_color(cs, amenity)
 
             else:
-                return MapColorizer.get_building_color(cs, building)
+                color = context.tag_handlers.get_color('building', entity, cs)
+                if color:
+                    return color
 
         elif entity.has_tag('place'):
 
@@ -195,29 +194,4 @@ class MapColorizer(object):
 
         return cs.map_service
 
-    @staticmethod
-    def get_building_color(cs, building):
-
-        if building in ('residential', 'terrace', 'apartment', 'apartments', 'garage', 'garages'):
-            return cs.map_residential
-
-        elif building in ('kindergarten', 'school'):
-            return cs.map_public
-
-        elif building in ('retail', 'commercial', 'shop', 'restaurant', 'fast_food', 'supermarket'):
-            return cs.map_commercial
-
-        elif building == 'power':
-            return cs.map_infrastructure
-
-        elif building in ('warehouse', 'industrial', 'office'):
-            return cs.map_private
-
-        elif building == 'hotel':
-            return cs.map_public
-
-        elif building in ('yes', 'roof'):
-            return cs.map_structural
-
-        return None
 

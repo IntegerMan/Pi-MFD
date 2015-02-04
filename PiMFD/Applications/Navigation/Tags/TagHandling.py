@@ -40,3 +40,14 @@ class TagHandlerManager(object):
 
     def add_handler(self, key, handler):
         self.handlers[key] = handler
+
+    def get_color(self, key, entity, cs):
+
+        handler = self.get_handler(key)
+
+        if handler:
+            color = handler.get_color(entity, entity.get_tag_value(key), cs)
+            if color:
+                return color
+
+        return None

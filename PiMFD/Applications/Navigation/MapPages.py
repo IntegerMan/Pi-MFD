@@ -139,22 +139,6 @@ class MapInfoPage(MFDPage):
         if tag[0] == 'ele':
             return 'Elevation: {}'.format(tag[1])
 
-        if tag[0] == 'building':
-            if tag[1] == 'terrace':
-                return 'Residential Townhouse'
-            elif tag[1] == 'kindergarten':
-                return 'Preschool / Kindergarten'
-            elif tag[1] == 'roof':
-                return 'Shelter / Awning'
-            elif tag[1] == 'commercial':
-                return 'Commercial Building'
-            elif tag[1] == 'retail':
-                return 'Strip Mall'
-            elif tag[1] == 'mall':
-                return 'Shopping Mall'
-            elif tag[1] == 'yes':
-                return 'Unclassified Building'
-
         if tag[0] == 'shop':
             if tag[1] == 'car_repair':
                 return 'Car Repair Shop'
