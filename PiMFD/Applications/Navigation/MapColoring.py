@@ -41,16 +41,9 @@ class MapColorizer(object):
 
         elif entity.has_tag('leisure'):
 
-            leisure = entity.get_tag_value('leisure')
-
-            if leisure in ('pitch', 'park', 'golf_course', 'sports_centre'):
-                return cs.map_recreation
-
-            elif leisure in ('playground', 'track'):
-                return cs.map_pedestrian
-
-            elif leisure == 'swimming_pool':
-                return cs.map_water
+            color = context.tag_handlers.get_color('leisure', entity, cs)
+            if color:
+                return color
 
         elif entity.has_tag('landuse'):
 
@@ -84,7 +77,6 @@ class MapColorizer(object):
             color = context.tag_handlers.get_color('barrier', entity, cs)
             if color:
                 return color
-
 
         elif entity.has_tag('traffic_sign'):
             return cs.map_government

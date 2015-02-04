@@ -8,6 +8,7 @@ from PiMFD.Applications.Navigation.MapFilters import StandardMapFilter, FoodMapF
 from PiMFD.Applications.Navigation.Tags.BarrierTagHandling import BarrierTagHandler
 from PiMFD.Applications.Navigation.Tags.BuildingTagHandling import BuildingTagHandler
 from PiMFD.Applications.Navigation.Tags.HighwayTagHandling import HighwayTagHandler
+from PiMFD.Applications.Navigation.Tags.LeisureTagHandling import LeisureTagHandler
 from PiMFD.Applications.Navigation.Tags.TagHandling import TagHandlerManager
 
 __author__ = 'Matt Eland'
@@ -54,6 +55,7 @@ class MapContext(object):
         self.tag_handlers.add_handler('highway', HighwayTagHandler(self))
         self.tag_handlers.add_handler('building', BuildingTagHandler(self))
         self.tag_handlers.add_handler('barrier', BarrierTagHandler(self))
+        self.tag_handlers.add_handler('leisure', LeisureTagHandler(self))
 
     def zoom_in(self):
         if self.map_zoom == self.zooms.large:

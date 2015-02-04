@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """
-Handles the "building" tag
+Handles the "barrier" tag
 """
 from PiMFD.Applications.Navigation.Tags.TagHandling import TagHandler
 
