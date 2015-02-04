@@ -118,18 +118,19 @@ class NavigationApp(MFDApplication):
             # TODO: This should be in another thread so the UI can keep rendering
             self.get_map_data()
 
-    def get_map_data(self, bounds=None):
+    def get_map_data(self, bounds=None, lat=None, lng=None):
 
         if bounds:
             self.map.fetch_area([bounds[0], bounds[1], bounds[2], bounds[3]])
         else:
 
-            if self.map.bounds:
-                lat = ((self.map.bounds[3] - self.map.bounds[1]) / 2.0) + self.map.bounds[1]
-                lng = ((self.map.bounds[2] - self.map.bounds[0]) / 2.0) + self.map.bounds[0]
-            else:
-                lat = self.controller.options.lat
-                lng = self.controller.options.lng
+            if not lat or not lng:
+                if self.map.bounds:
+                    lat = ((self.map.bounds[3] - self.map.bounds[1]) / 2.0) + self.map.bounds[1]
+                    lng = ((self.map.bounds[2] - self.map.bounds[0]) / 2.0) + self.map.bounds[0]
+                else:
+                    lat = self.controller.options.lat
+                    lng = self.controller.options.lng
 
             self.map.fetch_by_coordinate(lat, lng, self.map_context.map_zoom)
             bounds = self.map.bounds
@@ -149,10 +150,17 @@ class NavigationApp(MFDApplication):
 
         self.initialized = True
 
+    def get_map_data_on_current_cursor_pos(self):
+        pos = self.map_context.cursor_pos
+        dim_coef = self.map.get_dimension_coefficients((self.display.res_x, self.display.res_y))
+        offset = ((self.display.res_x / 2.0), (self.display.res_y / 2.0))
+        lat, lng = self.map.translate_x_y_to_lat_lng(pos[0], pos[1], dim_coef=dim_coef, offset=offset)
+        self.get_map_data(lat=lat, lng=lng)
+
     def zoom_in(self):
 
         if self.map_context.zoom_in():
-            self.get_map_data()
+            self.get_map_data_on_current_cursor_pos()
 
     def zoom_out(self):
 
