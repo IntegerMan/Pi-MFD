@@ -5,6 +5,7 @@ Map Contexts are used to provide contextual rendering and filtering information 
 """
 from PiMFD.Applications.Navigation.MapFilters import StandardMapFilter, FoodMapFilter, GasMapFilter, \
     InfrastructureMapFilter, WifiMapFilter, WikipediaMapFilter
+from PiMFD.Applications.Navigation.Tags.AmenityTagHandling import AmenityTagHandler
 from PiMFD.Applications.Navigation.Tags.BarrierTagHandling import BarrierTagHandler
 from PiMFD.Applications.Navigation.Tags.BuildingTagHandling import BuildingTagHandler
 from PiMFD.Applications.Navigation.Tags.HighwayTagHandling import HighwayTagHandler
@@ -56,6 +57,7 @@ class MapContext(object):
         self.tag_handlers.add_handler('building', BuildingTagHandler(self))
         self.tag_handlers.add_handler('barrier', BarrierTagHandler(self))
         self.tag_handlers.add_handler('leisure', LeisureTagHandler(self))
+        self.tag_handlers.add_handler('amenity', AmenityTagHandler(self))
 
     def zoom_in(self):
         if self.map_zoom == self.zooms.large:

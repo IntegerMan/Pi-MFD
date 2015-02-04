@@ -82,7 +82,9 @@ class MapColorizer(object):
             return cs.map_government
 
         elif amenity:
-            return MapColorizer.get_amenity_color(cs, amenity)
+            color = context.tag_handlers.get_color('amenity', entity, cs)
+            if color:
+                return color
 
         elif shop:
             return MapColorizer.get_shop_color(cs, shop)
@@ -93,7 +95,9 @@ class MapColorizer(object):
                 return MapColorizer.get_shop_color(cs, shop)
 
             elif amenity:
-                return MapColorizer.get_amenity_color(cs, amenity)
+                color = context.tag_handlers.get_color('amenity', entity, cs)
+                if color:
+                    return color
 
             else:
                 color = context.tag_handlers.get_color('building', entity, cs)
@@ -151,27 +155,5 @@ class MapColorizer(object):
             return cs.map_automotive
 
         return cs.map_commercial
-
-    @staticmethod
-    def get_amenity_color(cs, amenity):
-
-        if amenity in ('pharmacy', 'veterinary', 'hospital', 'clinic'):
-            return cs.map_health
-        elif amenity in ('fuel', 'parking', 'car_wash'):
-            return cs.map_automotive
-        elif amenity in ('school', 'public_building'):
-            return cs.map_public
-        elif amenity == 'place_of_worship':
-            return cs.map_private
-        elif amenity in ('restaurant', 'fast_food', 'supermarket'):
-            return cs.map_commercial
-        elif amenity == 'fire_station':
-            return cs.map_emergency
-        elif amenity == 'grave_yard':
-            return cs.gray
-        elif amenity == 'post_office':
-            return cs.map_government
-
-        return cs.map_service
 
 
