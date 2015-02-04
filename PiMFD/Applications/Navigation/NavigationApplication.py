@@ -151,17 +151,26 @@ class NavigationApp(MFDApplication):
         self.initialized = True
 
     def get_map_data_on_current_cursor_pos(self):
-        pos = self.map_context.cursor_pos
+
+        # Build precursors that are needed for the map
         dim_coef = self.map.get_dimension_coefficients((self.display.res_x, self.display.res_y))
         offset = ((self.display.res_x / 2.0), (self.display.res_y / 2.0))
+
+        # Figure out the Lat / Lng
+        pos = self.map_context.cursor_pos
         lat, lng = self.map.translate_x_y_to_lat_lng(pos[0], pos[1], dim_coef=dim_coef, offset=offset)
+
+        # Get the map data
         self.get_map_data(lat=lat, lng=lng)
+
+        # Recenter the Cursor
+        self.map_context.cursor_pos = (self.display.res_x / 2.0, self.display.res_y / 2.0)
 
     def zoom_in(self):
 
         if self.map_context.zoom_in():
             self.get_map_data_on_current_cursor_pos()
-            self.map_context.cursor_pos = (self.display.res_x / 2.0, self.display.res_y / 2.0)
+
 
     def zoom_out(self):
 

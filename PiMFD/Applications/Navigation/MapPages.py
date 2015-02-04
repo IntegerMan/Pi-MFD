@@ -83,6 +83,9 @@ class MapPage(MFDPage):
         elif key in (Keycodes.KEY_KP0, Keycodes.KEY_KP_MULTIPLY, Keycodes.KEY_KP_DIVIDE):
             self.application.select_page_by_index(1)
 
+        elif key == Keycodes.KEY_KP5:
+            self.application.get_map_data_on_current_cursor_pos()
+
         return super(MapPage, self).handle_key(key)
 
 class MapInfoPage(MFDPage):
