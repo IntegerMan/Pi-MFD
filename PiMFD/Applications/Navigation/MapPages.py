@@ -132,6 +132,10 @@ class MapInfoPage(MFDPage):
 
     def get_tag_string(self, tag, entity):
 
+        handler = self.map_context.tag_handlers.get_handler(tag[0])
+        if handler:
+            return handler.get_description_text(entity, tag[1])
+
         if tag[0] == 'ele':
             return 'Elevation: {}'.format(tag[1])
 
@@ -150,52 +154,6 @@ class MapInfoPage(MFDPage):
                 return 'Shopping Mall'
             elif tag[1] == 'yes':
                 return 'Unclassified Building'
-
-        if tag[0] == 'highway':
-            if tag[1] in ('residential', 'living_street'):
-                return 'Residential Street'
-            elif tag[1] == 'service':
-                return 'Access Road'
-            elif tag[1] == 'street_lamp':
-                return 'Street Light'
-            elif tag[1] == 'track':
-                return 'Trail'
-            elif tag[1] == 'pedestrian':
-                return 'Pedestrian Road'
-            elif tag[1] in ('path', 'footway'):
-                return 'Path'
-            elif tag[1] == 'steps':
-                return 'Steps'
-            elif tag[1] == 'bridleway':
-                return 'Horse Trail'
-            elif tag[1] == 'cycleway':
-                return 'Bike Trail'
-            elif tag[1] == 'raceway':
-                return 'Raceway'
-            elif tag[1] == 'proposed':
-                return 'Proposed Road'
-            elif tag[1] == 'construction':
-                return 'Road Under Construction'
-            elif tag[1] == 'crossing':
-                return 'Crossing'
-            elif tag[1] == 'bus_stop':
-                return 'Bus Stop'
-            elif tag[1] == 'traffic_signals':
-                return 'Stoplight'
-            elif tag[1] == 'stop':
-                return 'Stop Sign'
-            elif tag[1] in ('mini_roundabout', 'turning_circle'):
-                return 'Roundabout / Cul du Sac'
-            elif tag[1] in ('motorway', 'trunk'):
-                return 'Highway'
-            elif tag[1] == 'motorway_link':
-                return 'On-Ramp / Off-Ramp'
-            elif tag[1] in ('primary', 'secondary'):
-                return 'Major Road'
-            elif tag[1] == 'tertiary':
-                return 'Side Road'
-            elif tag[1] in ('unclassified', 'road', 'yes'):
-                return 'Unclassified Road'
 
         if tag[0] == 'shop':
             if tag[1] == 'car_repair':

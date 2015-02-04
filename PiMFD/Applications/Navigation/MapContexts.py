@@ -5,6 +5,8 @@ Map Contexts are used to provide contextual rendering and filtering information 
 """
 from PiMFD.Applications.Navigation.MapFilters import StandardMapFilter, FoodMapFilter, GasMapFilter, \
     InfrastructureMapFilter, WifiMapFilter, WikipediaMapFilter
+from PiMFD.Applications.Navigation.Tags.HighwayTagHandling import HighwayTagHandler
+from PiMFD.Applications.Navigation.Tags.TagHandling import TagHandlerManager
 
 __author__ = 'Matt Eland'
 
@@ -30,6 +32,8 @@ class MapContext(object):
     target = None
     cursor_context = None
 
+    tag_handlers = None
+
     def __init__(self, app, map):
         super(MapContext, self).__init__()
 
@@ -43,6 +47,9 @@ class MapContext(object):
                         WikipediaMapFilter(self))
         self.active_filter = self.filters[0]
         self.cursor_pos = app.display.res_x / 2.0, app.display.res_y / 2.0
+
+        self.tag_handlers = TagHandlerManager(self)
+        self.tag_handlers.add_handler('highway', HighwayTagHandler(self))
 
     def zoom_in(self):
         if self.map_zoom == self.zooms.large:

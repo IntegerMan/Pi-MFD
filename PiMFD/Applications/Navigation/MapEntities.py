@@ -115,7 +115,7 @@ class MapEntity(object):
         if map_context.cursor_context is self:
             return cs.highlight
 
-        color = MapColorizer.get_color(self, cs)
+        color = MapColorizer.get_color(self, map_context, cs)
 
         if color:
             return color
