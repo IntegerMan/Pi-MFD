@@ -81,22 +81,10 @@ class MapColorizer(object):
             return cs.map_infrastructure
 
         elif entity.has_tag('barrier'):
+            color = context.tag_handlers.get_color('barrier', entity, cs)
+            if color:
+                return color
 
-            barrier = entity.get_tag_value('barrier')
-            if barrier in (
-                    'city_wall', 'guard_rail', 'cable_barrier', 'block', 'border_control', 'debris',
-                    'height_restrictor',
-                    'jersey_barrier', 'sally_port'):
-                return cs.map_structural
-            elif barrier in ('ditch', 'retaining_wall', 'hedge', 'horse_stile', 'log'):
-                return cs.map_vegitation
-            elif barrier in ('wall', 'fence', 'entrance', 'gate', 'hampshire_gate', 'lift_gate', 'spikes'):
-                return cs.map_private
-            elif barrier in (
-                    'bollard', 'kerb', 'cycle_barrier', 'chain', 'full-height_turnstile', 'kissing_gate',
-                    'kent_carriage_gap',
-                    'rope', 'motorcycle_barrier'):
-                return cs.map_pedestrian
 
         elif entity.has_tag('traffic_sign'):
             return cs.map_government

@@ -134,7 +134,9 @@ class MapInfoPage(MFDPage):
 
         handler = self.map_context.tag_handlers.get_handler(tag[0])
         if handler:
-            return handler.get_description_text(entity, tag[1])
+            text = handler.get_description_text(entity, tag[1])
+            if text:
+                return text
 
         if tag[0] == 'ele':
             return 'Elevation: {}'.format(tag[1])
