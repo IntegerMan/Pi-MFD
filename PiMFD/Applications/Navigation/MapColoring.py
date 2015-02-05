@@ -12,6 +12,12 @@ class MapColorizer(object):
     @staticmethod
     def get_color(entity, context, cs):
 
+        """
+        :type entity: MapEntity
+        :type context: MapContext
+        :type cs: ColorScheme
+        :rtype: tuple
+        """
         building = entity.get_tag_value('building')
         shop = entity.get_tag_value('shop')
         amenity = entity.get_tag_value('amenity')
@@ -36,6 +42,9 @@ class MapColorizer(object):
         elif entity.has_tag_value('natural', 'wood') or entity.has_tag('wood'):
             return cs.map_vegitation
 
+        elif entity.has_tag_value('natural', 'wetland'):
+            return cs.map_vegitation
+
         elif entity.has_tag('waterway'):
             return cs.map_water
 
@@ -57,6 +66,9 @@ class MapColorizer(object):
 
             elif landuse == 'construction':
                 return cs.map_infrastructure
+
+            elif landuse == 'wetlands':
+                return cs.map_vegitation
 
         elif entity.has_tag('tourism'):
 
@@ -145,6 +157,9 @@ class MapColorizer(object):
 
         elif entity.has_tag('weather'):
             return cs.foreground
+
+        elif entity.has_tag('boundary'):
+            return cs.map_government
 
         return None
 
