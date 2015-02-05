@@ -50,9 +50,6 @@ class MapSymbol(MapEntity):
         if hasattr(location, 'id'):
             self.id = location.id
 
-    def add_tag(self, key, value='yes'):
-        self.tags.append((key, value))
-
     def get_font_text_and_color(self, display):
         """
         Returns the font to use to display, the text to render, and the color to use

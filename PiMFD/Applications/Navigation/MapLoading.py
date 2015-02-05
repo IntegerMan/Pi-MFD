@@ -239,13 +239,12 @@ class Maps(object):
             entity.name = tag_value
             return True
 
-        elif str.startswith(str(tag_name), 'tiger:') or \
-                        tag_name in ('source', 'created_by'):
+        elif str.startswith(str(tag_name), 'tiger:') or tag_name in ('source', 'created_by'):
 
             return False
 
         else:
-            entity.tags.append((tag_name, tag_value))
+            entity.add_tag(tag_name, tag_value)
             return True
 
     def fetch_by_coordinate(self, lat, lng, range):

@@ -16,6 +16,7 @@ class MapEntity(object):
     has_lines = False
     name = None
     tags = list()
+    tag_keys = {}
     lat = 0.0
     lng = 0.0
     id = None
@@ -27,6 +28,7 @@ class MapEntity(object):
         super(MapEntity, self).__init__()
 
         self.tags = list()
+        self.keys = set([])
         self.lat = lat
         self.lng = lng
 
@@ -46,6 +48,11 @@ class MapEntity(object):
 
         return tags
 
+
+    def add_tag(self, key, value='yes'):
+        self.tags.append((key, value))
+        self.keys.add(key)
+
     def has_tag(self, name):
         """
         Returns True if a tag with a key of name was found, regardless of value
@@ -53,10 +60,7 @@ class MapEntity(object):
         :return: True if a tag with a key of name was found, otherwise False
         """
 
-        for tag in self.get_tags(name):
-            return True
-
-        return False
+        return name in self.keys
 
     def get_tag_value(self, name):
         """
@@ -109,6 +113,10 @@ class MapEntity(object):
     def get_color(self, cs, map_context):
 
         # Smart highlight using context when this shape is the target
+        """
+        :type map_context: MapContext
+        :type cs: ColorScheme
+        """
         if map_context.target is self:
             return cs.highlight
 
