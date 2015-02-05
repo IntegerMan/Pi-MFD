@@ -104,6 +104,10 @@ class MapEntity(object):
         :return: True if the key / value pair was present, otherwise False
         """
 
+        # Short circuit for performance reasons if we don't have the tag to begin with
+        if not self.has_tag(value):
+            return False
+
         for tag in self.get_tags(name):
             if tag[1] == value:
                 return True
