@@ -36,14 +36,17 @@ class MapColorizer(object):
         elif entity.has_tag_value('boundary', 'administrative'):
             return cs.map_government
 
-        elif entity.has_tag_value('natural', 'water') or entity.has_tag('water'):
+        elif entity.has_tag('water'):
             return cs.map_water
 
-        elif entity.has_tag_value('natural', 'wood') or entity.has_tag('wood'):
+        elif entity.has_tag('wood'):
             return cs.map_vegitation
 
-        elif entity.has_tag_value('natural', 'wetland'):
-            return cs.map_vegitation
+        elif entity.has_tag('natural'):
+
+            color = context.tag_handlers.get_color('natural', entity, cs)
+            if color:
+                return color
 
         elif entity.has_tag('waterway'):
             return cs.map_water
