@@ -27,6 +27,8 @@ class NaturalTagHandler(TagHandler):
             return cs.gray
         elif value == 'volcano':
             return cs.map_emergency
+        elif value == 'wetland':
+            return cs.map_vegetation  # TODO: Green / Blue
         elif value in ('sand', 'beach', 'coastline'):
             return cs.map_vegetation  # TODO: Maybe something more sand-like?
         elif value in ('water', 'bay', 'glacier', 'spring'):
