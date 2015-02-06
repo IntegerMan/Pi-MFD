@@ -15,8 +15,7 @@ class MapEntity(object):
 
     has_lines = False
     name = None
-    tags = list()
-    tag_keys = {}
+    tags = {}
     lat = 0.0
     lng = 0.0
     id = None
@@ -27,7 +26,7 @@ class MapEntity(object):
     def __init__(self, lat, lng):
         super(MapEntity, self).__init__()
 
-        self.tags = list()
+        self.tags = {}
         self.keys = set([])
         self.lat = lat
         self.lng = lng
@@ -40,18 +39,16 @@ class MapEntity(object):
         :return: All tags (yielded) that have the matching name
         """
 
-        tags = []
-
         for tag in self.tags:
             if tag[0] == name:
-                tags.append(tag)
-
-        return tags
-
+                yield tag
 
     def add_tag(self, key, value='yes'):
-        self.tags.append((key, value))
-        self.keys.add(key)
+        """
+        :type key: basestring
+        :type value: basestring
+        """
+        self.tags[key] = value
 
     def has_tag(self, name):
         """
@@ -60,20 +57,18 @@ class MapEntity(object):
         :return: True if a tag with a key of name was found, otherwise False
         """
 
-        return name in self.keys
+        return name in self.tags.keys()
 
     def get_tag_value(self, name):
         """
         Gets the value for the first tag that matches name or returns None
-        :type name: str
+        :type name: basestring
         :param name: The tag key
         :return: The value for the first tag that matches name or returns None
         """
 
-        for tag in self.get_tags(name):
-            return tag[1]
-
-        return None
+        # Short circuit if we don't even have the tag
+        return self.tags.get(name)
 
     def calculate_lat_lng_from_points(self):
 
@@ -104,15 +99,9 @@ class MapEntity(object):
         :return: True if the key / value pair was present, otherwise False
         """
 
-        # Short circuit for performance reasons if we don't have the tag to begin with
-        if not self.has_tag(value):
-            return False
+        actual = self.get_tag_value(name)
 
-        for tag in self.get_tags(name):
-            if tag[1] == value:
-                return True
-
-        return False
+        return actual == value
 
     def get_color(self, cs, map_context):
 
