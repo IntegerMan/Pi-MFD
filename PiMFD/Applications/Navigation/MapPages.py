@@ -122,7 +122,8 @@ class MapInfoPage(MFDPage):
 
         # Build a list of labels for all tags in this shape
         tags = []
-        for tag in context.tags:
+        for key in context.tags:
+            tag = (key, context.tags[key])
             if self.should_show_tag(tag, context):
                 tag_string = self.get_tag_string(tag, context)
                 tag_label = self.get_label(tag_string)
@@ -158,10 +159,6 @@ class MapInfoPage(MFDPage):
             elif tag[1] == 'supermarket':
                 return 'Supermarket'
 
-        if tag[0] == 'natural':
-            if tag[1] == 'water':
-                return 'Body of Water'
-
         if tag[0] == 'traffic_sign':
             if tag[1] == 'yes':
                 return 'Traffic Sign'
@@ -171,22 +168,6 @@ class MapInfoPage(MFDPage):
         if tag[0] == 'water':
             if tag[1] == 'pond':
                 return 'Pond'
-
-        if tag[0] == 'amenity':
-            if tag[1] == 'fuel':
-                return 'Gas Station'
-            elif tag[1] == 'veterinary':
-                return 'Vetrinarian'
-            elif tag[1] == 'school':
-                return 'School'
-            elif tag[1] == 'car_wash':
-                return 'Car Wash'
-            elif tag[1] == 'pharmacy':
-                return 'Drug Store'
-            elif tag[1] == 'parking':
-                return 'Parking Lot / Garage'
-            elif tag[1] == 'fire_station':
-                return 'Fire Station'
 
         if tag[0] == 'bridge':
             if tag[1] == 'yes':

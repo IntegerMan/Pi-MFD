@@ -32,11 +32,7 @@ class TagHandlerManager(object):
         self.context = context
 
     def get_handler(self, key):
-
-        if key in self.handlers:
-            return self.handlers[key]
-        else:
-            return None
+        return self.handlers.get(key)
 
     def add_handler(self, key, handler):
         self.handlers[key] = handler
