@@ -25,6 +25,8 @@ class HighwayTagHandler(TagHandler):
             return cs.map_major_road
         elif value == 'tertiary':
             return cs.map_major_road
+        elif value == 'abandoned':
+            return cs.map_structural
         elif value == ('unclassified', 'road'):
             return cs.map_unknown
         elif value in ('residential', 'living_street'):
@@ -90,5 +92,7 @@ class HighwayTagHandler(TagHandler):
             return 'Side Road'
         elif value in ('unclassified', 'road', 'yes'):
             return 'Unclassified Road'
+        elif value == 'abandoned':
+            return 'Abandoned Road'
 
         return super(HighwayTagHandler, self).get_description_text(entity, value)

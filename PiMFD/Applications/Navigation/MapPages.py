@@ -201,6 +201,10 @@ class MapInfoPage(MFDPage):
             if tag[1] == 'construction':
                 return 'Construction Site'
 
+        if tag[0] == 'office':
+            if tag[1] in ('nonprofit', 'non-profit', 'non_profit'):
+                return 'Non Profit Organization Office'
+
         if tag[0] == 'leisure':
             if tag[1] == 'pitch':
 

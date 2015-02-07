@@ -151,6 +151,9 @@ class MapColorizer(object):
 
             return cs.map_emergency
 
+        elif entity.has_tag('office'):
+            return cs.map_private
+
         elif entity.has_tag('actor'):
 
             actor = entity.get_tag_value('actor')

@@ -275,6 +275,10 @@ class MapSymbol(MapEntity):
                 style = shape.triangle
                 shape_size = 6
 
+            elif power == 'pole':
+                style = shape.circle
+                shape_size = 3
+
         elif self.has_tag('barrier'):
             shape_size = 3
 
