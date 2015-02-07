@@ -67,7 +67,7 @@ class TextBlock(UIWidget):
         effective_text = self.text
         if self.text is not None:
 
-            if isinstance(self.text, str):
+            if isinstance(self.text, str) or isinstance(self.text, unicode):
                 if isinstance(self.text_data, tuple):
                     effective_text = self.text.format(*self.text_data)
                 else:
