@@ -12,8 +12,9 @@ class MFDAppOptions(object):
     Contains misc. application options
     """
 
+    version = 0.06
     app_name = 'Pi-MFD'
-    app_version = '0.05 Development Version'
+    app_version = '0.06 Development Version'
     app_author = 'Matt Eland'
     copyright_year = 2015
     font_name = 'Fonts/VeraMono.ttf'
@@ -29,6 +30,7 @@ class MFDAppOptions(object):
     key_sound = 'sounds/keypress.ogg'
     map_output_file = 'map_data.xml'
     bing_maps_key = None
+    color_scheme = 'Green'
 
     def load_from_settings(self, filename='settings.ini'):
         """
@@ -42,12 +44,15 @@ class MFDAppOptions(object):
         if 'config' in settings.sections():
             version = float(settings.get('config', 'version'))
         else:
-            version = 0.05
+            version = self.version
 
         if 'ui' in settings.sections():
             self.enable_scan_line = settings.getboolean('ui', 'enable_scan_line')
             self.enable_interlacing = settings.getboolean('ui', 'enable_interlacing')
             self.enable_fps = settings.getboolean('ui', 'enable_fps')
+
+            if version >= 0.06:
+                self.color_scheme = settings.get('ui', 'color_scheme')
 
         if 'location' in settings.sections():
             self.location = settings.get('location', 'zipcode')
@@ -67,7 +72,7 @@ class MFDAppOptions(object):
         settings = ConfigParser()
 
         settings.add_section('config')
-        settings.set('config', 'version', 0.02)
+        settings.set('config', 'version', self.version)
 
         settings.add_section('location')
         settings.set('location', 'zipcode', self.location)
@@ -78,6 +83,7 @@ class MFDAppOptions(object):
         settings.set('ui', 'enable_scan_line', bool(self.enable_scan_line))
         settings.set('ui', 'enable_interlacing', bool(self.enable_interlacing))
         settings.set('ui', 'enable_fps', bool(self.enable_fps))
+        settings.set('ui', 'color_scheme', self.color_scheme)
 
         settings.add_section('auth')
         settings.set('auth', 'bing_maps_key', self.bing_maps_key)

@@ -214,6 +214,7 @@ class SettingsPage(MFDPage):
         elif widget is self.txt_zipcode and len(widget.text) >= 5:  # Ensure zip code is valid
             opts.location = widget.text
         elif widget is self.ddl_color_scheme:
+            opts.color_scheme = str(widget.value)
             self.display.color_scheme = widget.value
 
         # Persist to disk

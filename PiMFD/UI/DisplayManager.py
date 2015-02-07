@@ -135,6 +135,13 @@ class DisplayManager(object):
         :param options: The application options
         """
 
+        # Grab color scheme if we can and use that
+        if options.color_scheme and options.color_scheme != self.color_scheme.name:
+            for cs in self.color_schemes:
+                if cs.name == options.color_scheme:
+                    self.color_scheme = cs
+                    break
+
         # Initialize the pygame engine
         pygame.init()
         self.clock = pygame.time.Clock()
