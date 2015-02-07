@@ -191,5 +191,3 @@ class DisplayManager(object):
         self.overlays.append(ScanlineOverlay(options))
         self.overlays.append(InterlaceOverlay(options))
         self.overlays.append(FPSOverlay(options))
-
-

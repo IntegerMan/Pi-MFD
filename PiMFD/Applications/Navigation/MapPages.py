@@ -92,6 +92,7 @@ class MapInfoPage(MFDPage):
 
     lbl_header = None
     map_context = None
+    has_image = False
 
     def __init__(self, controller, application):
         super(MapInfoPage, self).__init__(controller, application)
@@ -100,7 +101,8 @@ class MapInfoPage(MFDPage):
         self.lbl_header = self.get_header_label('{}')
         self.lbl_pos = self.get_label("GPS: {}, {}")
         self.pnl_tags = StackPanel(controller.display, self)
-        self.panel.children = [self.lbl_header, self.lbl_pos, self.pnl_tags]
+        self.pnl_image = StackPanel(controller.display, self)
+        self.panel.children = [self.lbl_header, self.pnl_image, self.lbl_pos, self.pnl_tags]
 
     def render(self):
         return super(MapInfoPage, self).render()
@@ -120,10 +122,29 @@ class MapInfoPage(MFDPage):
 
         self.lbl_pos.text_data = context.lat, context.lng
 
+        # If we support images, show an image
+        if 'image' in context.tags:
+            image_url = context.tags['image']
+            if image_url:
+
+                # Determine Refresh Interval
+                if 'interval' in context.tags:
+                    interval = context.tags['interval']
+                else:
+                    interval = 0
+
+                # Build an image control
+                image = self.get_image(image_url, interval=interval)
+                if image:
+                    # Tell the page it has image content (will be used for selective rendering)
+                    self.pnl_image.children = [image]
+                    self.has_image = True
+
         # Build a list of labels for all tags in this shape
         tags = []
         for key in context.tags:
             tag = (key, context.tags[key])
+
             if self.should_show_tag(tag, context):
                 tag_string = self.get_tag_string(tag, context)
                 tag_label = self.get_label(tag_string)
@@ -145,20 +166,6 @@ class MapInfoPage(MFDPage):
         if tag[0] == 'ele':
             return 'Elevation: {}'.format(tag[1])
 
-        if tag[0] == 'shop':
-            if tag[1] == 'car_repair':
-                return 'Car Repair Shop'
-            elif tag[1] == 'convenience':
-                return 'Convenience Store'
-            elif tag[1] == 'furniture':
-                return 'Furniture Store'
-            elif tag[1] == 'carpet':
-                return 'Carpet Store'
-            elif tag[1] == 'free_flying':
-                return 'RC Airplane / Hobby Store'
-            elif tag[1] == 'supermarket':
-                return 'Supermarket'
-
         if tag[0] == 'traffic_sign':
             if tag[1] == 'yes':
                 return 'Traffic Sign'
@@ -172,10 +179,6 @@ class MapInfoPage(MFDPage):
         if tag[0] == 'bridge':
             if tag[1] == 'yes':
                 return 'Bridge'
-
-        if tag[0] == 'barrier':
-            if tag[1] == 'wall':
-                return 'Wall'
 
         if tag[0] == 'access':
             if tag[1] == 'public':
@@ -218,6 +221,12 @@ class MapInfoPage(MFDPage):
 
         if tag[0].startswith('gnis:'):
             return False
+
+        if tag[0] == 'image':
+            return False  # Images are rendered - not displayed via paths
+
+        if tag[0] == 'interval' and self.has_image:
+            return False  # This is just used to auto-refresh the image
 
         if tag[0] in ('iff', 'layer'):
             return False

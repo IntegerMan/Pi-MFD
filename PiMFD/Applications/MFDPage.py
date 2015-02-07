@@ -2,9 +2,15 @@
 """
 Defines the MFDPage used as a root for other pages in the application.
 """
+import traceback
+
+import pygame
+
+from PiMFD.UI.ImageRendering import ImageRenderer, WebImageRenderer
 from PiMFD.UI.Pages import UIPage
 from PiMFD.UI.Rendering import render_text_centered
 from PiMFD.UI.Text import TextBlock
+
 
 __author__ = 'Matt Eland'
 
@@ -44,6 +50,25 @@ class MFDPage(UIPage):
         :return: The TextBlock
         """
         return TextBlock(self.display, self, text, is_highlighted=True)
+
+    def get_image(self, image_path, interval=0):
+
+        """
+        Builds an Image Renderer Component
+        :rtype : ImageRenderer
+        :type image_path: basestring 
+        """
+        try:
+            if image_path.startswith('http'):
+                return WebImageRenderer(self.display, self, image_path, interval=interval)
+            else:
+                surface = pygame.image.load(image_path)
+                return ImageRenderer(self.display, self, surface)
+
+        except:
+            error_message = "Problem loading image {0}: {1}\n".format(image_path, str(traceback.format_exc()))
+            print(error_message)
+            return None
 
     # noinspection PyMethodMayBeStatic
     def handle_unselected(self):
