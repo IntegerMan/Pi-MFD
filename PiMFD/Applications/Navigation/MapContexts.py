@@ -12,6 +12,7 @@ from PiMFD.Applications.Navigation.Tags.HighwayTagHandling import HighwayTagHand
 from PiMFD.Applications.Navigation.Tags.LeisureTagHandling import LeisureTagHandler
 from PiMFD.Applications.Navigation.Tags.NaturalTagHandling import NaturalTagHandler
 from PiMFD.Applications.Navigation.Tags.TagHandling import TagHandlerManager
+from PiMFD.Applications.Navigation.Tags.TourismTagHandling import TourismTagHandler
 
 __author__ = 'Matt Eland'
 
@@ -60,6 +61,7 @@ class MapContext(object):
         self.tag_handlers.add_handler('leisure', LeisureTagHandler(self))
         self.tag_handlers.add_handler('amenity', AmenityTagHandler(self))
         self.tag_handlers.add_handler('natural', NaturalTagHandler(self))
+        self.tag_handlers.add_handler('tourism', TourismTagHandler(self))
 
     def zoom_in(self):
         if self.map_zoom == self.zooms.large:
