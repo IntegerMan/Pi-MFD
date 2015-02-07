@@ -11,6 +11,7 @@ from PiMFD.Applications.Navigation.Tags.BuildingTagHandling import BuildingTagHa
 from PiMFD.Applications.Navigation.Tags.HighwayTagHandling import HighwayTagHandler
 from PiMFD.Applications.Navigation.Tags.LeisureTagHandling import LeisureTagHandler
 from PiMFD.Applications.Navigation.Tags.NaturalTagHandling import NaturalTagHandler
+from PiMFD.Applications.Navigation.Tags.ShopTagHandling import ShopTagHandler
 from PiMFD.Applications.Navigation.Tags.TagHandling import TagHandlerManager
 from PiMFD.Applications.Navigation.Tags.TourismTagHandling import TourismTagHandler
 
@@ -62,6 +63,7 @@ class MapContext(object):
         self.tag_handlers.add_handler('amenity', AmenityTagHandler(self))
         self.tag_handlers.add_handler('natural', NaturalTagHandler(self))
         self.tag_handlers.add_handler('tourism', TourismTagHandler(self))
+        self.tag_handlers.add_handler('shop', ShopTagHandler(self))
 
     def zoom_in(self):
         if self.map_zoom == self.zooms.large:

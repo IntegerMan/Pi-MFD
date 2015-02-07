@@ -19,7 +19,6 @@ class MapColorizer(object):
         :rtype: tuple
         """
         building = entity.get_tag_value('building')
-        shop = entity.get_tag_value('shop')
         amenity = entity.get_tag_value('amenity')
 
         if entity.has_tag('railway'):
@@ -75,15 +74,9 @@ class MapColorizer(object):
 
         elif entity.has_tag('tourism'):
 
-            tourism = entity.get_tag_value('tourism')
-            if tourism in (
-                    'hotel', 'apartment', 'alpine_hut', 'camp_site', 'caravan_site', 'chalet', 'guest_house', 'hostel',
-                    'motel',
-                    'wilderness_hut'):
-                return cs.map_public  # Travel instead? New thing? Residential?
-
-            elif tourism == 'theme_park':
-                return cs.map_recreation
+            color = context.tag_handlers.get_color('tourism', entity, cs)
+            if color:
+                return color
 
         elif entity.has_tag('power'):
             return cs.map_infrastructure
@@ -101,15 +94,14 @@ class MapColorizer(object):
             if color:
                 return color
 
-        elif shop:
-            return MapColorizer.get_shop_color(cs, shop)
+        elif entity.has_tag('shop'):
+            color = context.tag_handlers.get_color('shop', entity, cs)
+            if color:
+                return color
 
         elif building:
 
-            if shop:
-                return MapColorizer.get_shop_color(cs, shop)
-
-            elif amenity:
+            if amenity:
                 color = context.tag_handlers.get_color('amenity', entity, cs)
                 if color:
                     return color
@@ -171,13 +163,5 @@ class MapColorizer(object):
             return cs.map_automotive
 
         return None
-
-    @staticmethod
-    def get_shop_color(cs, shop):
-
-        if shop == 'car_repair':
-            return cs.map_automotive
-
-        return cs.map_commercial
 
 
