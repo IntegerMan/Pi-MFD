@@ -167,6 +167,9 @@ class MapColorizer(object):
         elif entity.has_tag('boundary'):
             return cs.map_government
 
+        elif entity.has_tag('noexit'):
+            return cs.map_automotive
+
         return None
 
     @staticmethod

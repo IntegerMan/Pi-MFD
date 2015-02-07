@@ -201,22 +201,13 @@ class MapInfoPage(MFDPage):
             if tag[1] == 'construction':
                 return 'Construction Site'
 
+        if tag[0] == 'noexit':
+            if tag[1] == 'yes':
+                return 'No Exit'
+
         if tag[0] == 'office':
             if tag[1] in ('nonprofit', 'non-profit', 'non_profit'):
                 return 'Non Profit Organization Office'
-
-        if tag[0] == 'leisure':
-            if tag[1] == 'pitch':
-
-                sport = entity.get_tag_value('sport')
-                if sport:
-                    if sport == 'tennis':
-                        return 'Tennis Court'
-
-                return 'Sports Area'
-
-            elif tag[1] == 'swimming_pool':
-                return 'Swimming Pool'
 
         return u"{}: {}".format(tag[0], tag[1])
 
