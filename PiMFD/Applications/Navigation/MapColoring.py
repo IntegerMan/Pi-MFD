@@ -18,16 +18,10 @@ class MapColorizer(object):
         :type cs: ColorScheme
         :rtype: tuple
         """
-        building = entity.get_tag_value('building')
-        amenity = entity.get_tag_value('amenity')
-
         if entity.has_tag('railway'):
-
-            # TODO: There's likely a lot more nuance to be had here
-            return cs.map_structural
+            return cs.map_structural # TODO: There's likely a lot more nuance to be had here
 
         elif entity.has_tag('highway'):
-
             color = context.tag_handlers.get_color('highway', entity, cs)
             if color:
                 return color
@@ -42,7 +36,6 @@ class MapColorizer(object):
             return cs.map_vegitation
 
         elif entity.has_tag('natural'):
-
             color = context.tag_handlers.get_color('natural', entity, cs)
             if color:
                 return color
@@ -51,12 +44,13 @@ class MapColorizer(object):
             return cs.map_water
 
         elif entity.has_tag('leisure'):
-
             color = context.tag_handlers.get_color('leisure', entity, cs)
             if color:
                 return color
 
         elif entity.has_tag('landuse'):
+
+            # TODO: Probably need a tag handler for this eventually
 
             landuse = entity.get_tag_value('landuse')
 
@@ -73,7 +67,6 @@ class MapColorizer(object):
                 return cs.map_vegitation
 
         elif entity.has_tag('tourism'):
-
             color = context.tag_handlers.get_color('tourism', entity, cs)
             if color:
                 return color
@@ -89,7 +82,7 @@ class MapColorizer(object):
         elif entity.has_tag('traffic_sign'):
             return cs.map_government
 
-        elif amenity:
+        elif entity.has_tag('amenity'):
             color = context.tag_handlers.get_color('amenity', entity, cs)
             if color:
                 return color
@@ -99,17 +92,10 @@ class MapColorizer(object):
             if color:
                 return color
 
-        elif building:
-
-            if amenity:
-                color = context.tag_handlers.get_color('amenity', entity, cs)
-                if color:
-                    return color
-
-            else:
-                color = context.tag_handlers.get_color('building', entity, cs)
-                if color:
-                    return color
+        elif entity.has_tag('building'):
+            color = context.tag_handlers.get_color('building', entity, cs)
+            if color:
+                return color
 
         elif entity.has_tag('place'):
 
@@ -117,7 +103,7 @@ class MapColorizer(object):
             if place in ('hamlet', 'town', 'village'):
                 return cs.map_government
             elif place == 'island':
-                return cs.background
+                return cs.map_vegitation
 
         elif entity.has_tag_value('footway', 'crossing'):
             return cs.yellow
@@ -126,6 +112,8 @@ class MapColorizer(object):
             return cs.map_emergency
 
         elif entity.has_tag('man_made'):
+
+            # TODO: Probably need a tag handler for this eventually
 
             man_made = entity.get_tag_value('man_made')
 
