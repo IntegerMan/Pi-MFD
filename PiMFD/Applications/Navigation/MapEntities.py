@@ -22,10 +22,16 @@ class MapEntity(object):
     points = None
     x = 0
     y = 0
+    color = None
 
     def __init__(self, lat, lng):
+        """
+        :type lng: float or int
+        :type lat: float or int
+        """
         super(MapEntity, self).__init__()
 
+        self.color = None
         self.tags = {}
         self.keys = set([])
         self.lat = lat
@@ -109,21 +115,28 @@ class MapEntity(object):
         :type map_context: MapContext
         :type cs: ColorScheme
         """
+
         if map_context.target is self:
             return cs.highlight
 
         if map_context.cursor_context is self:
             return cs.highlight
 
-        color = MapColorizer.get_color(self, map_context, cs)
+        if self.color:
+            return self.color
 
-        if color:
-            return color
+        self.color = MapColorizer.get_color(self, map_context, cs)
+
+        if self.color:
+            return self.color
 
         return cs.map_unknown
 
     def get_display_name(self, abbreviate=True):
 
+        """
+        :type abbreviate: bool
+        """
         display_name = self.get_tag_value('shortest_name')
 
         if not display_name:
@@ -136,14 +149,18 @@ class MapEntity(object):
                 display_name = self.name
 
         if not display_name:
+            display_name = self.get_tag_value('operator')
+
+        if not display_name:
             display_name = self.get_tag_value('ref')
 
         return display_name
 
     @staticmethod
-    def abbreviate(name, pretty=False):
+    def abbreviate(name):
         """
         Abbreviates a string by intelligently removing middle words and using the first initial
+        :type name: str
         """
 
         if name is None:
@@ -171,25 +188,22 @@ class MapEntity(object):
         if names[0].lower() == 'the' or names[0].lower() == 'le' or names[0].lower() == 'la' or names[
             0].lower() == 'el':
             names = names[1:]
-            return MapEntity.abbreviate(' '.join(names), pretty)
+            return MapEntity.abbreviate(' '.join(names))
 
         result = [names[0]]
-        tiny_name = False
 
         for surname in names[1:-1]:
             if len(surname) <= 3:
                 result.append(surname)
-                tiny_name = True
             else:
-                if pretty and tiny_name:
-                    result.append(surname)
-                else:
-                    result.append(surname[0] + '.')
-                tiny_name = False
+                result.append(surname[0] + '.')
 
         result.append(names[-1])
 
         return ' '.join(result)
 
     def set_pos(self, pos):
+        """
+        :type pos: tuple
+        """
         self.x, self.y = pos
