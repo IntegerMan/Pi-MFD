@@ -38,10 +38,9 @@ class MapEntity(object):
         :param name: The tag key
         :return: All tags (yielded) that have the matching name
         """
-
         for tag in self.tags:
             if tag[0] == name:
-                yield tag
+                yield {name: tag[1]}
 
     def add_tag(self, key, value='yes'):
         """

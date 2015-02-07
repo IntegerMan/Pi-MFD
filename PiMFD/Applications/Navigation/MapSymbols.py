@@ -290,7 +290,10 @@ class MapSymbol(MapEntity):
         elif self.has_tag('weather'):
             style = shape.none
             icons.append(WeatherIcon(self.get_tag_value('weather')))
-            extra_data = self.get_tag_value('wind:speed') + ' ' + self.get_tag_value('wind:direction_cardinal')
+
+            if self.has_tag('wind:speed') and self.has_tag('wind:direction_cardinal'):
+                extra_data = self.get_tag_value('wind:speed') + ' ' + self.get_tag_value('wind:direction_cardinal')
+
             display_name = self.get_tag_value('temperature') + "'F"
 
         elif self.has_tag('man_made'):

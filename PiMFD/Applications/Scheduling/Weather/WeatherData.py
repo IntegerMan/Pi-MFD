@@ -88,20 +88,17 @@ class WeatherData(object):
 
     def get_tags(self):
 
-        tags = list()
-
-        # tags.append(('city', self.city))
-        tags.append(('temperature', str(self.temperature)))
-        tags.append(('conditions', str(self.conditions)))
-        tags.append(('windchill', str(self.windchill)))
-        tags.append(('wind:speed', str(self.wind_speed)))
-        tags.append(('wind:direction', str(self.wind_numeric_direction)))
-        tags.append(('wind:direction_cardinal', str(self.wind_cardinal_direction)))
-        tags.append(('humidity', str(self.humidity)))
-        tags.append(('pressure', str(self.pressure)))
-        tags.append(('visibility', str(self.pressure)))
-        tags.append(('sunlight', str(self.sunrise) + "-" + str(self.sunset)))
-        tags.append(('weather', self.code))
+        tags = {'temperature': str(self.temperature),
+                'conditions': str(self.conditions),
+                'windchill': str(self.windchill),
+                'wind] =speed': str(self.wind_speed),
+                'wind] =direction': str(self.wind_numeric_direction),
+                'wind] =direction_cardinal': str(self.wind_cardinal_direction),
+                'humidity': str(self.humidity),
+                'pressure': str(self.pressure),
+                'visibility': str(self.pressure),
+                'sunlight': str(self.sunrise) + "-" + str(self.sunset),
+                'weather': self.code}
 
         return tags
 

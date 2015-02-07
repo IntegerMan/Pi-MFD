@@ -45,7 +45,7 @@ class ColorScheme(object):
     map_infrastructure = khaki
     map_residential = greenish
     map_recreation = greenish
-    map_vegitation = green
+    map_vegetation = green
     map_unknown = pink
     map_emergency = red
     map_health = red
