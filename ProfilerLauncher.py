@@ -21,7 +21,6 @@ def launch_app():
         app_options = MFDAppOptions()
         app_options.load_from_settings()
         app_options.save_to_settings()
-        app_options.lat, app_options.lng = 28.4012277, -81.2076703
 
         # Build a display using the standard windowed sizes. This is great for desktop testing.
         display = DisplayManager()

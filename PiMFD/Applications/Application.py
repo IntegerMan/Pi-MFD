@@ -20,6 +20,9 @@ class MFDApplication(object):
     always_render_background = False
 
     def __init__(self, controller):
+        """
+        :type controller: PiMFD.Controller.MFDController
+        """
         self.controller = controller
         self.display = controller.display
         self.pages = list()

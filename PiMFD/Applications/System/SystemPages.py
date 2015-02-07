@@ -7,6 +7,7 @@ import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
+from PiMFD.UI.SpinnerBox import SpinnerBox
 from PiMFD.UI.TextBoxes import TextBox
 from PiMFD.UI.Text import SpacerLine
 
@@ -139,6 +140,10 @@ class SettingsPage(MFDPage):
     txt_zipcode = None
 
     def __init__(self, controller, application):
+        """
+        :type application: PiMFD.Applications.System.SystemApplication.SysApplication
+        :type controller: PiMFD.Controller.MFDController
+        """
         super(SettingsPage, self).__init__(controller, application)
 
         # Build basic controls
@@ -149,7 +154,8 @@ class SettingsPage(MFDPage):
         self.txt_zipcode = TextBox(controller.display, self, label="Zip Code:")
         self.txt_zipcode.allow_alpha = False
         self.txt_zipcode.max_length = 5
-        self.ddl_color_scheme = self.get_label("Color Scheme: {}")
+        self.ddl_color_scheme = SpinnerBox(controller.display, self, 'Color Scheme:',
+                                           controller.display.color_scheme.name)
 
         # Add Controls to the page's panel
         self.panel.children = [header,
@@ -174,7 +180,7 @@ class SettingsPage(MFDPage):
         display = self.display
 
         # Update properties on controls
-        self.ddl_color_scheme.text_data = display.color_scheme.name
+        self.ddl_color_scheme.value = display.color_scheme.name
         self.chk_scanline.checked = opts.enable_scan_line
         self.chk_interlace.checked = opts.enable_interlacing
         self.chk_fps.checked = opts.enable_fps
@@ -192,8 +198,7 @@ class SettingsPage(MFDPage):
     def handle_control_state_changed(self, widget):
         """
         Responds to control state changes
-        :param widget:
-        :return:
+        :type widget: UIWidget
         """
         super(SettingsPage, self).handle_control_state_changed(widget)
 
