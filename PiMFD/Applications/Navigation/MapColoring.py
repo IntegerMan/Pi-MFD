@@ -13,8 +13,8 @@ class MapColorizer(object):
     def get_color(entity, context, cs):
 
         """
-        :type entity: MapEntity
-        :type context: MapContext
+        :type entity: PiMFD.Applications.Navigation.MapEntities.MapEntity
+        :type context: PiMFD.Applications.Navigation.MapContext.MapContext
         :type cs: ColorScheme
         :rtype: tuple
         """
@@ -161,6 +161,9 @@ class MapColorizer(object):
 
         elif entity.has_tag('noexit'):
             return cs.map_automotive
+
+        elif entity.has_tag_starting_with('abandoned:'):
+            return cs.map_structural
 
         return None
 

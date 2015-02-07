@@ -33,7 +33,6 @@ class MapEntity(object):
 
         self.color = None
         self.tags = {}
-        self.keys = set([])
         self.lat = lat
         self.lng = lng
 
@@ -207,3 +206,16 @@ class MapEntity(object):
         :type pos: tuple
         """
         self.x, self.y = pos
+
+    def has_tag_starting_with(self, key):
+
+        """
+
+        :type key: basestring
+        :rtype : bool
+        """
+        for tag in self.tags:
+            if tag.startswith(key):
+                return True
+
+        return False
