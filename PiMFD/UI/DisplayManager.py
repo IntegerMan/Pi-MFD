@@ -37,7 +37,8 @@ class DisplayManager(object):
 
     frames_per_second = 60
 
-    color_scheme = ColorSchemes.get_green_color_scheme()
+    color_scheme = None
+    color_schemes = []
 
     fonts = None
 
@@ -47,6 +48,8 @@ class DisplayManager(object):
         self.res_x = x
         self.res_y = y
         self.overlays = list()
+        self.color_schemes = ColorSchemes.get_color_schemes()
+        self.color_scheme = self.color_schemes[0]
 
     def start_mfd(self, app_options):
         """

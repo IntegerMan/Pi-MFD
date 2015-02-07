@@ -155,7 +155,8 @@ class SettingsPage(MFDPage):
         self.txt_zipcode.allow_alpha = False
         self.txt_zipcode.max_length = 5
         self.ddl_color_scheme = SpinnerBox(controller.display, self, 'Color Scheme:',
-                                           controller.display.color_scheme.name)
+                                           controller.display.color_scheme,
+                                           controller.display.color_schemes)
 
         # Add Controls to the page's panel
         self.panel.children = [header,
@@ -180,7 +181,7 @@ class SettingsPage(MFDPage):
         display = self.display
 
         # Update properties on controls
-        self.ddl_color_scheme.value = display.color_scheme.name
+        self.ddl_color_scheme.value = display.color_scheme
         self.chk_scanline.checked = opts.enable_scan_line
         self.chk_interlace.checked = opts.enable_interlacing
         self.chk_fps.checked = opts.enable_fps
@@ -212,6 +213,8 @@ class SettingsPage(MFDPage):
             opts.enable_interlacing = widget.checked
         elif widget is self.txt_zipcode and len(widget.text) >= 5:  # Ensure zip code is valid
             opts.location = widget.text
+        elif widget is self.ddl_color_scheme:
+            self.display.color_scheme = widget.value
 
         # Persist to disk
         opts.save_to_settings()

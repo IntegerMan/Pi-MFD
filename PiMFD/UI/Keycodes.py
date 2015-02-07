@@ -11,25 +11,68 @@ def is_enter_key(key):
     """
     Determines if the key specified is enter on the keyboard or number pad
     :param key: The keyboard key code
+    :type key: int
     :return: True if the key is Enter, otherwise False
+    :rtype : bool
     """
     return key in (KEY_RETURN, KEY_KP_ENTER)
 
 
 def is_up_key(key):
+    """
+    :param key: The keyboard key code
+    :type key: int
+    :return: True if the key is Up, otherwise False
+    :rtype : bool
+    """
     return key == KEY_KP8 or key == KEY_UP
 
 
 def is_down_key(key):
+    """
+    :param key: The keyboard key code
+    :type key: int
+    :return: True if the key is Down, otherwise False
+    :rtype : bool
+    """
     return key == KEY_KP2 or key == KEY_DOWN
 
 
 def is_left_key(key):
+    """
+    :type key: int
+    """
     return key == KEY_KP4 or key == KEY_LEFT
 
 
 def is_right_key(key):
+    """
+    :param key: The keyboard key code
+    :type key: int
+    :return: True if the key is Right, otherwise False
+    :rtype : bool
+    """
     return key == KEY_KP6 or key == KEY_RIGHT
+
+
+def is_plus_key(key):
+    """
+    :param key: The keyboard key code
+    :type key: int
+    :return: True if the key is Plus, otherwise False
+    :rtype : bool
+    """
+    return key == KEY_PLUS or key == KEY_KP_PLUS
+
+
+def is_minus_key(key):
+    """
+    :param key: The keyboard key code
+    :type key: int
+    :return: True if the key is Minus, otherwise False
+    :rtype : bool
+    """
+    return key == KEY_MINUS or key == KEY_KP_MINUS
 
 KEY_0 = 48
 KEY_1 = 49

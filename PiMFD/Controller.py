@@ -55,6 +55,10 @@ class MFDController(object):
 
     def __init__(self, display, app_options):
 
+        """
+        :type app_options: PiMFD.Options.MFDAppOptions
+        :type display: PiMFD.UI.DisplayManager.DisplayManager
+        """
         self.display = display
 
         if app_options is not None:
@@ -74,25 +78,9 @@ class MFDController(object):
         if self.options.key_sound:
             self.keypress_sound = pygame.mixer.Sound(self.options.key_sound)
 
-        # Placeholders for media app
-        # self.med_app = PlaceholderApp(self, 'MED')
-        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'IMG'))
-        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'PAND'))
-        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'TUBE'))
-        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'FLIX'))
-        #self.med_app.pages.append(SimpleMessagePage(self, self.med_app, 'AZIW'))
-
-        # Placeholders for social app
-        # self.soc_app = PlaceholderApp(self, 'SOCL')
-        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'NEWS'))
-        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'FACE'))
-        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'TWTR'))
-        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'RSS'))
-        #self.soc_app.pages.append(SimpleMessagePage(self, self.soc_app, 'WEB'))
-
         self.sys_app = SysApplication(self)
 
-        self.applications = list([self.sys_app, self.nav_app, self.sch_app])  #, self.med_app, self.soc_app])
+        self.applications = list([self.sys_app, self.nav_app, self.sch_app])
         
         self.active_app = self.sys_app
 

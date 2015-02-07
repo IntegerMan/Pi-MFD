@@ -65,6 +65,14 @@ class ColorScheme(object):
         self.name = name
         pass
 
+    def __str__(self):
+
+        if self.name:
+            return self.name
+
+        return super(ColorScheme, self).__str__()
+
+
     def clone_to(self, target):
         """
         Clones values in this object to other objects
@@ -175,4 +183,18 @@ class ColorSchemes(object):
                            disabled=(110, 90, 35),
                            detail=(128, 128, 128),
                            highlight=(255, 201, 14))
+
+    @classmethod
+    def get_color_schemes(cls):
+        """
+        :rtype : list
+        """
+        schemes = [cls.get_green_color_scheme(),
+                   cls.get_blue_color_scheme(),
+                   cls.get_amber_color_scheme(),
+                   cls.get_cyan_color_scheme(),
+                   cls.get_red_color_scheme(),
+                   cls.get_white_color_scheme()]
+
+        return schemes
 
