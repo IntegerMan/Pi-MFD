@@ -130,7 +130,7 @@ class ColorSchemes(object):
                            foreground=(0, 170, 170),
                            disabled=(0, 80, 80),
                            detail=(128, 128, 128),
-                           highlight=(0, 0, 255))
+                           highlight=(0, 255, 255))
 
     @staticmethod
     def get_blue_color_scheme():
