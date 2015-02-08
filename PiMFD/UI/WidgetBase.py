@@ -17,6 +17,9 @@ class UIObject(object):
     display = None
 
     def __init__(self, display):
+        """
+        :type display: PiMFD.UI.DisplayManager.DisplayManager
+        """
         super(UIObject, self).__init__()
         self.display = display
 
@@ -51,6 +54,7 @@ class UIWidget(UIObject):
     def render_at(self, pos):
         """
         A convenience method to position and render the control in one statement
+        :type pos: tuple
         :param pos: The position
         :return: The rect of the dimensions returned by render.
         """
@@ -82,10 +86,11 @@ class UIWidget(UIObject):
         self.rect = target.rect
 
         return self.rect
-
+    
     def set_dimensions_from_rect(self, rect):
         """
         Copies dimensional attributes from the specified rect
+        :type rect: pygame.Rect
         :param rect: The rectangle
         :returns: Returns self.rect for convenience
         """

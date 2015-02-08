@@ -148,6 +148,7 @@ class SettingsPage(MFDPage):
 
         # Build basic controls
         header = self.get_header_label("Settings")
+        self.chk_full_screen = CheckBox(controller.display, self, "Fullscreen:")  # Not currently working so don't add it
         self.chk_scanline = CheckBox(controller.display, self, "Scanline:")
         self.chk_interlace = CheckBox(controller.display, self, "Interlace:")
         self.chk_fps = CheckBox(controller.display, self, "FPS:")
@@ -185,6 +186,7 @@ class SettingsPage(MFDPage):
         self.chk_scanline.checked = opts.enable_scan_line
         self.chk_interlace.checked = opts.enable_interlacing
         self.chk_fps.checked = opts.enable_fps
+        self.chk_full_screen.checked = display.is_fullscreen
 
         # Render all controls
         return super(SettingsPage, self).render()
@@ -207,6 +209,8 @@ class SettingsPage(MFDPage):
 
         if widget is self.chk_scanline:
             opts.enable_scan_line = widget.checked
+        elif widget is self.chk_full_screen:
+            self.display.set_fullscreen(widget.checked)
         elif widget is self.chk_fps:
             opts.enable_fps = widget.checked
         elif widget is self.chk_interlace:

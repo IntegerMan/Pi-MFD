@@ -67,6 +67,13 @@ class DisplayManager(object):
         self.overlay_surface = pygame.Surface((self.res_x, self.res_y), pygame.SRCALPHA)
         self.overlay_surface.convert_alpha()
 
+    def set_fullscreen(self, is_fullscreen):
+        """
+        :type is_fullscreen: bool
+        """
+        self.is_fullscreen = is_fullscreen
+        self.prepare_display_surface()
+
     def wait_for_next_frame(self):
         """
         Updates the display and waits until it's time to render the next frame (prevent us from going too fast)
@@ -129,6 +136,36 @@ class DisplayManager(object):
 
         return (self.padding_y * 2) + font_size
 
+    def prepare_display_surface(self):
+
+        # Quit / Init can help window transitions
+        pygame.display.quit()
+        pygame.display.init()
+
+        res = (self.res_x, self.res_y)
+
+        # Prepare the Display
+        if self.is_fullscreen:
+            print('setting to fullscreen {}, {}'.format(res[0], res[1]))
+            display = pygame.display.set_mode(res, pygame.FULLSCREEN)
+        elif self.allow_resize:
+            print('setting to resizable window {}, {}'.format(res[0], res[1]))
+            display = pygame.display.set_mode(res, pygame.RESIZABLE)
+        else:
+            print('setting to window {}, {}'.format(res[0], res[1]))
+            display = pygame.display.set_mode(res, 0)
+
+        # Customize the Window
+        pygame.display.set_caption(self.options.app_name)
+
+        # Time to use our output
+        self.surface = display
+        self.surface.convert()
+        self.overlay_surface = pygame.Surface(res, pygame.SRCALPHA)
+        self.overlay_surface.convert_alpha()
+
+        pygame.display.update()
+
     def init_graphics(self, options):
         """
         Initializes graphics via pygame.
@@ -148,39 +185,33 @@ class DisplayManager(object):
 
         # If we haven't configured width / height, grab them from the current resolution
         if self.res_x is None or self.res_x < 8 or self.res_y is None or self.res_y < 8:
-            self.grab_dimensions_from_current_resolution()
-
-        # Prepare the Display
-        if self.is_fullscreen:
-            display = pygame.display.set_mode((self.res_x, self.res_y), pygame.FULLSCREEN)
-        elif self.allow_resize:
-            display = pygame.display.set_mode((self.res_x, self.res_y), pygame.RESIZABLE)
+            set_resolution = True
         else:
-            display = pygame.display.set_mode((self.res_x, self.res_y))
+            set_resolution = False
 
-        # Customize the Window
-        pygame.display.set_caption(options.app_name)
+        self.grab_dimensions_from_current_resolution(set_resolution=set_resolution)
+
+        # Initialize the display resolution
+        self.prepare_display_surface()
 
         # Set up Fonts
         self.fonts = FontManager(options)
         self.fonts.load_fonts()
 
-        # Time to use our output
-        self.surface = display
-        self.surface.convert()
-        self.overlay_surface = pygame.Surface((self.res_x, self.res_y), pygame.SRCALPHA)
-        self.overlay_surface.convert_alpha()
-
         # Initialize our overlays
         self.init_overlays(options)
 
-    def grab_dimensions_from_current_resolution(self):
+    def grab_dimensions_from_current_resolution(self, set_resolution=True):
         """
         Sets the dimensions of this object based on the current screen's resolution.
         """
         info = pygame.display.Info()
-        self.res_x = info.current_w
-        self.res_y = info.current_h
+
+        self.desktop_x, self.desktop_y = info.current_w, info.current_h
+
+        if set_resolution:
+            self.res_x = info.current_w
+            self.res_y = info.current_h
 
     def init_overlays(self, options):
         """
