@@ -182,7 +182,7 @@ class ColorSchemes(object):
                            foreground=(231, 176, 75),
                            disabled=(110, 90, 35),
                            detail=(128, 128, 128),
-                           highlight=(255, 201, 14))
+                           highlight=(250, 255, 51))
 
     @classmethod
     def get_color_schemes(cls):
