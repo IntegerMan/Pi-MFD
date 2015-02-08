@@ -178,7 +178,7 @@ class ColorSchemes(object):
         :return: A amber-based color scheme
         """
         return ColorScheme(name='Amber',
-                           background=(63, 47, 20),
+                           background=(30, 26, 4),
                            foreground=(231, 176, 75),
                            disabled=(110, 90, 35),
                            detail=(128, 128, 128),
