@@ -101,12 +101,10 @@ class MapInfoPage(MFDPage):
         self.lbl_header = self.get_header_label('{}')
         self.lbl_pos = self.get_label("GPS: {}, {}")
         self.pnl_tags = StackPanel(controller.display, self)
-        self.pnl_info = StackPanel(controller.display, self)
         self.pnl_image = StackPanel(controller.display, self)
-        self.pnl_info.children = [self.lbl_header, self.lbl_pos, self.pnl_tags]
         self.pnl_horizontal = StackPanel(controller.display, self, is_horizontal=True)
-        self.pnl_horizontal.children = [self.pnl_info, self.pnl_image]
-        self.panel.children = [self.pnl_horizontal]
+        self.pnl_horizontal.children = [self.pnl_image, self.pnl_tags]
+        self.panel.children = [self.lbl_header, self.lbl_pos, self.pnl_horizontal]
 
     def render(self):
         return super(MapInfoPage, self).render()
