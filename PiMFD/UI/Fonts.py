@@ -3,7 +3,6 @@
 """
 A class for managing multiple fonts
 """
-import traceback
 import pygame
 
 __author__ = 'Matt Eland'
@@ -56,6 +55,10 @@ class FontManager(object):
     nato_equip = None
 
     def __init__(self, options):
+        """
+
+        :type options: PiMFD.Options.MFDAppOptions
+        """
         super(FontManager, self).__init__()
 
         self.options = options
@@ -65,13 +68,16 @@ class FontManager(object):
         Loads fonts into the object
         """
 
-        self.normal = FontInfo(self.options.font_name, 24)
-        self.weather = FontInfo('Fonts/WeatherIcons.ttf', 32)
-        self.small = FontInfo(self.options.font_name, 8)
-        self.map1 = FontInfo('Fonts/mapz01.ttf', 24)
-        self.map2 = FontInfo('Fonts/mapz02.ttf', 24)
-        self.map3 = FontInfo('Fonts/mapz03.ttf', 24)
-        self.map4 = FontInfo('Fonts/mapz04.ttf', 24)
-        self.nato_equip = FontInfo('Fonts/app6a13.ttf', 24)
+        scale_factor = self.options.font_scaling
+        small_font_size = max(scale_factor, self.options.min_font_size)
+
+        self.normal = FontInfo(self.options.font_name, scale_factor * 3)
+        self.weather = FontInfo('Fonts/WeatherIcons.ttf', scale_factor * 4)
+        self.small = FontInfo(self.options.font_name, small_font_size)
+        self.map1 = FontInfo('Fonts/mapz01.ttf', scale_factor * 3)
+        self.map2 = FontInfo('Fonts/mapz02.ttf', scale_factor * 3)
+        self.map3 = FontInfo('Fonts/mapz03.ttf', scale_factor * 3)
+        self.map4 = FontInfo('Fonts/mapz04.ttf', scale_factor * 3)
+        self.nato_equip = FontInfo('Fonts/app6a13.ttf', scale_factor * 3)
 
 

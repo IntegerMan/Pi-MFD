@@ -31,6 +31,8 @@ class MFDAppOptions(object):
     map_output_file = 'map_data.xml'
     bing_maps_key = None
     color_scheme = 'Green'
+    font_scaling = 8
+    min_font_size = 8
 
     def load_from_settings(self, filename='settings.ini'):
         """

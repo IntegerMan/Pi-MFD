@@ -15,6 +15,10 @@ try:
     app_options.load_from_settings()
     app_options.save_to_settings()
 
+    # We really need to conserve space here
+    app_options.font_scaling = 4
+    app_options.min_font_size = 8
+
     # Build a display using the standard windowed sizes. This is great for desktop testing.
     display = DisplayManager()
     display.res_x = 320
