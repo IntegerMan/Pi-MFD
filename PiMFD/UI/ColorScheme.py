@@ -126,7 +126,7 @@ class ColorSchemes(object):
         :return: A cyan-based color scheme
         """
         return ColorScheme(name='Cyan',
-                           background=(0, 0, 32),
+                           background=(0, 32, 32),
                            foreground=(0, 170, 170),
                            disabled=(0, 80, 80),
                            detail=(128, 128, 128),
