@@ -92,14 +92,17 @@ class PillIcon(MapIcon):
         """
 
         y_size = 3
-        x_size = 8
+        x_size = 6
 
+        # left arc of the pill
         rect = Rect(pos[0] - x_size, pos[1] - y_size, x_size, (y_size * 2))
         draw_left_arc(display, rect, color)
 
+        # right arc of the pill
         rect = Rect(pos[0], pos[1] - y_size, x_size, (y_size * 2))
         draw_right_arc(display, rect, color)
 
+        # Draw supports / center line for the pill
         draw_vertical_line(display, color, pos[0], pos[1] - y_size, pos[1] + y_size)
         draw_horizontal_line(display, color, pos[0] - x_size + 3, pos[0] + x_size - 3, pos[1] - y_size)
         draw_horizontal_line(display, color, pos[0] - x_size + 3, pos[0] + x_size - 3, pos[1] + y_size)
