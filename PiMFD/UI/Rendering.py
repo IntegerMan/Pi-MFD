@@ -2,6 +2,7 @@
 """
 Contains various helper methods for rendering
 """
+from math import pi
 import traceback
 import pygame
 from pygame.rect import Rect
@@ -162,6 +163,41 @@ def render_triangle_down(display_manager, color, center_pos, radius, width=1):
     points = ((x, y + radius), (x - radius, y), (x + radius, y))
 
     return pygame.draw.polygon(display_manager.surface, color, points, width)
+
+
+def degrees_to_radians(deg):
+    """
+    :type deg: float or int
+    """
+    return deg / 180.0 * pi
+
+
+def draw_arc(display_manager, rect, color, start_degree, end_degree, surface=None, width=1):
+
+    if not surface:
+        surface = display_manager.surface
+
+    pygame.draw.arc(surface, color, rect, degrees_to_radians(start_degree), degrees_to_radians(end_degree), width)
+
+
+def draw_top_arc(display_manager, rect, color, surface=None, width=1):
+
+    draw_arc(display_manager, rect, color, 0, 180, surface, width)
+
+
+def draw_bottom_arc(display_manager, rect, color, surface=None, width=1):
+
+    draw_arc(display_manager, rect, color, 180, 360, surface, width)
+
+
+def draw_right_arc(display_manager, rect, color, surface=None, width=1):
+
+    draw_arc(display_manager, rect, color, 270, 450, surface, width)
+
+
+def draw_left_arc(display_manager, rect, color, surface=None, width=1):
+
+    draw_arc(display_manager, rect, color, 90, 270, surface, width)
 
 
 def render_text(display_manager, font, text, left, top, color, background=None, surface=None):
