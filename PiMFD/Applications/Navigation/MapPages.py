@@ -122,6 +122,10 @@ class MapInfoPage(MFDPage):
 
         self.lbl_pos.text_data = context.lat, context.lng
 
+        # By default, clear out our image settings
+        self.has_image = False
+        self.pnl_image.children = []
+
         # If we support images, show an image
         if 'image' in context.tags:
             image_url = context.tags['image']
@@ -200,6 +204,12 @@ class MapInfoPage(MFDPage):
             elif tag[1] == 'delivery':
                 return 'Delivery Access'
 
+        if tag[0] == 'surveillance':
+            if tag[1] == 'traffic':
+                return 'Traffic Camera'
+            else:
+                return 'Surveillance Camera (' + tag[1] + ')'
+
         if tag[0] == 'landuse':
             if tag[1] == 'construction':
                 return 'Construction Site'
@@ -241,6 +251,9 @@ class MapInfoPage(MFDPage):
             return False
 
         if tag[0] == 'sport' and entity.has_tag_value('leisure', 'pitch'):
+            return False
+
+        if tag[0] == 'man_made' and tag[1] == 'surveillance' and entity.has_tag('surveillance'):
             return False
 
         if tag[0] == 'building' and tag[1] == 'yes':
