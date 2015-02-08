@@ -3,6 +3,7 @@
 Contains code useful for rendering images to the screen
 """
 from StringIO import StringIO
+from datetime import datetime
 import urllib2
 
 import pygame
@@ -54,23 +55,39 @@ class WebImageRenderer(ImageRenderer):
         :type size: tuple
         """
 
-        self.interval = interval
+        self.interval = int(interval)
         self.url = url
 
-        surface = self.get_image_surface(url)
+        surface = self.get_image_surface()
+        self.last_fetch = datetime.now()
 
         # Let the core image Renderer take care of the rest of things from here on out
         super(WebImageRenderer, self).__init__(display, page, surface, size=size)
 
-    def get_image_surface(self, url):
+    def get_image_surface(self):
+
         # Grab the image data from the interwebs
-        data = StringIO(urllib2.urlopen(url).read())
+        data = StringIO(urllib2.urlopen(self.url).read())
+
+        self.last_fetch = datetime.now()
 
         # Build a surface-like object from the data
         adapter = StringIOImageAdapter(data)
         surface = pygame.image.load(adapter)
 
         return surface
+
+    def render(self):
+
+        # Auto-Refresh periodically
+        if self.interval > 0:
+            delta = datetime.now() - self.last_fetch
+
+            if delta.seconds > self.interval:
+                self.surface = self.get_image_surface()
+
+        # Let the base class
+        return super(WebImageRenderer, self).render()
 
 
 class StringIOImageAdapter(object):
