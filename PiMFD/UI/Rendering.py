@@ -67,7 +67,7 @@ def render_circle(display_manager, color, center_pos, radius, width=1):
     :param width: The thickness of the circle's edge or 0 for fill
     :return: A Rect indicating the bounds of the drawn areas
     """
-    return pygame.draw.circle(display_manager.surface, color, center_pos, radius, width)
+    return pygame.draw.circle(display_manager.surface, color, center_pos, int(radius), width)
 
 
 def render_diamond(display_manager, color, center_pos, radius, width=1):
@@ -178,6 +178,11 @@ def draw_arc(display_manager, rect, color, start_degree, end_degree, surface=Non
         surface = display_manager.surface
 
     pygame.draw.arc(surface, color, rect, degrees_to_radians(start_degree), degrees_to_radians(end_degree), width)
+
+
+def draw_full_arc(display_manager, rect, color, surface=None, width=1):
+
+    draw_arc(display_manager, rect, color, 0, 360, surface, width)
 
 
 def draw_top_arc(display_manager, rect, color, surface=None, width=1):

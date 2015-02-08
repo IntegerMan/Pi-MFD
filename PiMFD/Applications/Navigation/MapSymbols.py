@@ -6,7 +6,7 @@ Code organized around rendering locations to the map
 from pygame.rect import Rect
 
 from PiMFD.Applications.Navigation.MapEntities import MapEntity
-from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon, WeatherIcon
+from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon, WeatherIcon, EyeIcon
 from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond, \
     render_triangle_up, draw_vertical_line, draw_horizontal_line
 
@@ -248,6 +248,10 @@ class MapSymbol(MapEntity):
             elif shop == 'supermarket':
                 icons.append(FoodIcon())
 
+            elif shop == 'optician':
+                style = shape.none
+                icons.append(EyeIcon())
+
             elif shop == 'beauty':
                 style = shape_service
                 inner_text = 'SPA'
@@ -288,8 +292,8 @@ class MapSymbol(MapEntity):
             shape_size = 6
 
         elif self.has_tag('surveillance'):
-            style = shape.triangle
-            extra_data = 'cam'
+            style = shape.none
+            icons.append(EyeIcon())
 
         elif self.has_tag('weather'):
             style = shape.none
@@ -308,8 +312,8 @@ class MapSymbol(MapEntity):
                 style = shape.triangle
 
             elif man_made == 'surveillance':
-                style = shape.triangle
-                extra_data = 'cam'
+                style = shape.none
+                icons.append(EyeIcon())
 
         elif self.has_tag('actor'):
 

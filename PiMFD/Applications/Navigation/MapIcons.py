@@ -3,8 +3,10 @@
 """
 A file containing multiple unique procedural iconographic representations of locations
 """
+from pygame.rect import Rect
 from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_icon
-from PiMFD.UI.Rendering import draw_horizontal_line, draw_vertical_line, render_text_centered
+from PiMFD.UI.Rendering import draw_horizontal_line, draw_vertical_line, render_text_centered, draw_top_arc, \
+    draw_bottom_arc, render_circle, draw_full_arc
 
 __author__ = 'Matt Eland'
 
@@ -70,6 +72,32 @@ class WeatherIcon(MapIcon):
         icon = get_condition_icon(self.code)
         size = display.fonts.weather.measure(icon)
         render_text_centered(display, display.fonts.weather, icon, pos[0], pos[1] - (size[1] / 2.0), color)
+
+
+class EyeIcon(MapIcon):
+    """
+    Renders an open eye
+    Used as an icon for surveillance and optomitrists
+    """
+
+    def render(self, display, color, pos, half_size):
+        """
+        Renders the icon to the display
+        :param display: The display manager
+        :param color: The color
+        :param pos: The center point of the shape
+        :param half_size: Half the size of the shape
+        """
+
+        y_size = half_size / 2.0
+
+        rect = Rect(pos[0] - half_size, pos[1] - y_size, (half_size * 2), (y_size * 2))
+        draw_full_arc(display, rect, color)
+
+        # Finish with a filled circle
+        render_circle(display, color, pos, y_size - 1)
+
+
 
 class FoodIcon(MapIcon):
     """
