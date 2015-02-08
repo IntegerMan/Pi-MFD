@@ -4,9 +4,11 @@
 A file containing multiple unique procedural iconographic representations of locations
 """
 from pygame.rect import Rect
+
 from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_icon
-from PiMFD.UI.Rendering import draw_horizontal_line, draw_vertical_line, render_text_centered, draw_top_arc, \
-    draw_bottom_arc, render_circle, draw_full_arc
+from PiMFD.UI.Rendering import draw_horizontal_line, draw_vertical_line, render_text_centered, render_circle, \
+    draw_full_arc, draw_left_arc, draw_right_arc
+
 
 __author__ = 'Matt Eland'
 
@@ -74,6 +76,35 @@ class WeatherIcon(MapIcon):
         render_text_centered(display, display.fonts.weather, icon, pos[0], pos[1] - (size[1] / 2.0), color)
 
 
+class PillIcon(MapIcon):
+    """
+    Renders a medical pill icon
+    Used as an icon for pharmacies
+    """
+
+    def render(self, display, color, pos, half_size):
+        """
+        Renders the icon to the display
+        :param display: The display manager
+        :param color: The color
+        :param pos: The center point of the shape
+        :param half_size: Half the size of the shape
+        """
+
+        y_size = 3
+        x_size = 8
+
+        rect = Rect(pos[0] - x_size, pos[1] - y_size, x_size, (y_size * 2))
+        draw_left_arc(display, rect, color)
+
+        rect = Rect(pos[0], pos[1] - y_size, x_size, (y_size * 2))
+        draw_right_arc(display, rect, color)
+
+        draw_vertical_line(display, color, pos[0], pos[1] - y_size, pos[1] + y_size)
+        draw_horizontal_line(display, color, pos[0] - x_size + 3, pos[0] + x_size - 3, pos[1] - y_size)
+        draw_horizontal_line(display, color, pos[0] - x_size + 3, pos[0] + x_size - 3, pos[1] + y_size)
+
+
 class EyeIcon(MapIcon):
     """
     Renders an open eye
@@ -96,7 +127,6 @@ class EyeIcon(MapIcon):
 
         # Finish with a filled circle
         render_circle(display, color, pos, y_size - 1)
-
 
 
 class FoodIcon(MapIcon):

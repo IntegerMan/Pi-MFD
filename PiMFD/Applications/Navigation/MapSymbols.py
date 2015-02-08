@@ -6,7 +6,7 @@ Code organized around rendering locations to the map
 from pygame.rect import Rect
 
 from PiMFD.Applications.Navigation.MapEntities import MapEntity
-from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon, WeatherIcon, EyeIcon
+from PiMFD.Applications.Navigation.MapIcons import ChairIcon, FoodIcon, WeatherIcon, EyeIcon, PillIcon
 from PiMFD.UI.Rendering import render_text, render_circle, render_rectangle, render_text_centered, render_diamond, \
     render_triangle_up, draw_vertical_line, draw_horizontal_line
 
@@ -147,7 +147,8 @@ class MapSymbol(MapEntity):
             style = shape_shop
 
             if amenity == 'pharmacy':
-                inner_text = 'RX'
+                style = shape.none
+                icons.append(PillIcon())
 
             elif amenity == 'fuel':
                 inner_text = 'GAS'
