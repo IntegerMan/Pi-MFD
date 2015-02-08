@@ -55,6 +55,10 @@ class MapContext(object):
         self.active_filter = self.filters[0]
         self.cursor_pos = app.display.res_x / 2.0, app.display.res_y / 2.0
 
+        # If we're on a small display, start out at a small zoom
+        if min(app.display.res_x, app.display.res_y) < 420:
+            self.map_zoom = MapZooms.neighborhood
+
         self.tag_handlers = TagHandlerManager(self)
         self.tag_handlers.add_handler('highway', HighwayTagHandler(self))
         self.tag_handlers.add_handler('building', BuildingTagHandler(self))

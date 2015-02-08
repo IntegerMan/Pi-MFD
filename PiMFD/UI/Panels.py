@@ -58,7 +58,11 @@ class StackPanel(UIPanel):
                 self.height = max(self.height, child_rect.height)
                 self.width = child.right - self.left
 
-                x = child.right + self.padding[0]
+                # Don't add padding if we're zero-width
+                if child.right > child.left:
+                    x = child.right + self.padding[0]
+                else:
+                    x = child.right
 
             else:
 
@@ -66,7 +70,11 @@ class StackPanel(UIPanel):
                 self.width = max(self.width, child_rect.width)
                 self.height = child.bottom - self.top
 
-                y = child.bottom + self.padding[1]
+                # Don't add padding if we're zero-height
+                if child.bottom > child.top:
+                    y = child.bottom + self.padding[1]
+                else:
+                    y = child.bottom
 
         # Update and return our bounds
         self.rect = Rect(self.left, self.top, self.width, self.height)
