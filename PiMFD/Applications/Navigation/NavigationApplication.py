@@ -50,7 +50,7 @@ class NavigationApp(MFDApplication):
         self.btn_page = MFDButton(self.map_context.get_page_mode_text())
         self.btn_info = MFDButton("INFO", enabled=False)
         self.btn_back = MFDButton("BACK")
-        self.btn_detail_action = MFDButton("DTLS", enabled=False)
+        self.btn_detail_action = MFDButton("", enabled=False)
 
     def get_buttons(self):
 
@@ -74,7 +74,6 @@ class NavigationApp(MFDApplication):
             elif index == 1:
                 self.map_context.next_page_mode()
             elif index == 2:
-                self.always_render_background = False
                 if not self.map_context.cursor_context or not self.map_context.cursor_context.has_tag('weather'):
                     self.select_page(self.info_page)
                 else:
@@ -83,8 +82,10 @@ class NavigationApp(MFDApplication):
         elif self.active_page in (self.info_page, self.weather_page):
 
             if index == 0:
-                self.always_render_background = True
                 self.select_page(self.map_page)
+            elif index == 1:
+                if self.active_page is self.info_page:
+                    self.info_page.toggle_details()
 
     def get_default_page(self):
         """

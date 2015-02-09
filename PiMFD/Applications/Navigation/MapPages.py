@@ -93,6 +93,7 @@ class MapInfoPage(MFDPage):
     lbl_header = None
     map_context = None
     image = None
+    is_fullscreen_image = False
 
     def __init__(self, controller, application):
         super(MapInfoPage, self).__init__(controller, application)
@@ -109,7 +110,20 @@ class MapInfoPage(MFDPage):
     def render(self):
 
         if self.image:
-            self.image.max_width = self.display.res_x - 400
+            if self.is_fullscreen_image:
+
+                # Maximize the image!
+                self.image.min_width = self.display.res_x
+                self.image.max_width = self.image.min_width
+
+                # All we want to render is the image, so just do it now. This will preclude normal data rendering
+                return self.image.render_at((0, 0))
+
+            else:
+
+                # Reset the funkiness caused by full-screening an image
+                self.image.max_width = self.display.res_x - 400
+                self.image.min_width = None
 
         return super(MapInfoPage, self).render()
 
@@ -170,7 +184,32 @@ class MapInfoPage(MFDPage):
         # Set the labels into the children collection
         self.pnl_tags.children = tags
 
+        # Start Surveillance Cameras in Fullscreen mode; ensure others start normal mode.
+        if self.image and ('surveillance' in context.tags or 'contact:webcam' in context.tags):
+            self.is_fullscreen_image = True
+        else:
+            self.is_fullscreen_image = False
+
+        # Determine if an action is possible and, if so, enable the details button
+        if self.image or self.is_fullscreen_image:
+            self.application.btn_detail_action.enabled = True
+        else:
+            self.application.btn_detail_action.enabled = False
+
+        if self.is_fullscreen_image:
+            self.application.btn_detail_action.text = "INFO"
+        else:
+            self.application.btn_detail_action.text = "DTLS"
+
         super(MapInfoPage, self).handle_selected()
+
+    def toggle_details(self):
+        if self.image and not self.is_fullscreen_image:
+            self.is_fullscreen_image = True
+            self.application.btn_detail_action.text = "INFO"
+        else:
+            self.is_fullscreen_image = False
+            self.application.btn_detail_action.text = "DTLS"
 
     def get_tag_string(self, tag, entity):
 
