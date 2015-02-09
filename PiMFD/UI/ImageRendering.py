@@ -17,29 +17,67 @@ __author__ = 'Matt Eland'
 
 class ImageRenderer(UIWidget):
     """
-    A simple construct for a blank line
+    Handles image rendering as a widget
     """
 
-    def __init__(self, display, page, surface, size=None):
-        """
+    max_width = None
+    min_width = None
+    desired_width = None
+    desired_height = None
 
+    def __init__(self, display, page, surface, size=None, min_width=None, max_width=None):
+        """
+        :type display: PiMFD.UI.DisplayManager.DisplayManager
+        :type page: PiMFD.Applications.MFDPage.MFDPage
         :type size: tuple
         :type surface: pygame.Surface
+        :type max_width: int
+        :type min_width: int
         """
         super(ImageRenderer, self).__init__(display, page)
 
         self.surface = surface
 
+        self.min_width = min_width
+        self.max_width = max_width
+
         if size:
-            self.width = size[0]
-            self.height = size[1]
-        else:
-            self.width, self.height = surface.get_size()
+            self.desired_width = size[0]
+            self.desired_height = size[1]
 
     def render(self):
         """
         Renders the image to the screen
         """
+
+        image_size = self.surface.get_size()
+
+        if self.desired_width:
+            self.width = self.desired_width
+        else:
+            self.width = image_size[0]
+
+        if self.desired_height:
+            self.height = self.desired_height
+        else:
+            self.height = image_size[1]
+
+        # Ensure width <= max_width when max width present
+        if self.max_width and self.max_width < self.width:
+            scale_factor = self.max_width / float(self.width)
+            self.width = self.max_width
+            self.height = int(self.height * scale_factor)
+
+        # Ensure width >= min_width when min width present
+        if self.min_width and self.min_width > self.width:
+            scale_factor = self.min_width / float(self.width)
+            self.width = self.min_width
+            self.height = int(self.height * scale_factor)
+
+        # If we need to scale, perform the scale now
+        if self.width != image_size[0]:
+            self.surface = pygame.transform.scale(self.surface, (self.width, self.height))
+
         self.rect = self.set_dimensions_from_rect(Rect(self.pos[0], self.pos[1], self.width, self.height))
 
         self.display.surface.blit(self.surface, self.rect)
@@ -48,11 +86,14 @@ class ImageRenderer(UIWidget):
 
 
 class WebImageRenderer(ImageRenderer):
-    def __init__(self, display, page, url, size=None, interval=0):
+    def __init__(self, display, page, url, size=None, interval=0, min_width=None, max_width=None):
         """
-
-        :type url: basestring
+        :type display: PiMFD.UI.DisplayManager.DisplayManager
+        :type page: PiMFD.Applications.MFDPage.MFDPage
         :type size: tuple
+        :type max_width: int
+        :type min_width: int
+        :type url: str
         """
 
         self.interval = int(interval)
@@ -62,7 +103,7 @@ class WebImageRenderer(ImageRenderer):
         self.last_fetch = datetime.now()
 
         # Let the core image Renderer take care of the rest of things from here on out
-        super(WebImageRenderer, self).__init__(display, page, surface, size=size)
+        super(WebImageRenderer, self).__init__(display, page, surface, size=size, max_width=max_width, min_width=min_width)
 
     def get_image_surface(self):
 

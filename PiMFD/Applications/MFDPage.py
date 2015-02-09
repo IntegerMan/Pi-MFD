@@ -51,19 +51,21 @@ class MFDPage(UIPage):
         """
         return TextBlock(self.display, self, text, is_highlighted=True)
 
-    def get_image(self, image_path, interval=0):
+    def get_image(self, image_path, interval=0, max_width=None):
 
         """
         Builds an Image Renderer Component
         :rtype : ImageRenderer
-        :type image_path: basestring 
+        :type image_path: str
+        :type interval: int
+        :type max_width: int
         """
         try:
             if image_path.startswith('http'):
-                return WebImageRenderer(self.display, self, image_path, interval=interval)
+                return WebImageRenderer(self.display, self, image_path, interval=interval, max_width=max_width)
             else:
                 surface = pygame.image.load(image_path)
-                return ImageRenderer(self.display, self, surface)
+                return ImageRenderer(self.display, self, surface, max_width=max_width)
 
         except:
             error_message = "Problem loading image {0}: {1}\n".format(image_path, str(traceback.format_exc()))

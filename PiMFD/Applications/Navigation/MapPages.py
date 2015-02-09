@@ -92,7 +92,7 @@ class MapInfoPage(MFDPage):
 
     lbl_header = None
     map_context = None
-    has_image = False
+    image = None
 
     def __init__(self, controller, application):
         super(MapInfoPage, self).__init__(controller, application)
@@ -107,10 +107,23 @@ class MapInfoPage(MFDPage):
         self.panel.children = [self.lbl_header, self.lbl_pos, self.pnl_horizontal]
 
     def render(self):
+
+        if self.image:
+            self.image.max_width = self.display.res_x - 400
+
         return super(MapInfoPage, self).render()
 
     def get_button_text(self):
         return "INFO"
+
+    def get_image_url(self, context):
+
+        if 'contact:webcam' in context.tags:
+            return context.tags['contact:webcam']
+        elif 'image' in context.tags:
+            return context.tags['image']
+
+        return None
 
     def handle_selected(self):
 
@@ -125,26 +138,24 @@ class MapInfoPage(MFDPage):
         self.lbl_pos.text_data = context.lat, context.lng
 
         # By default, clear out our image settings
-        self.has_image = False
         self.pnl_image.children = []
+        self.image = None
 
         # If we support images, show an image
-        if 'image' in context.tags:
-            image_url = context.tags['image']
-            if image_url:
+        image_url = self.get_image_url(context)
+        if image_url:
 
-                # Determine Refresh Interval
-                if 'interval' in context.tags:
-                    interval = context.tags['interval']
-                else:
-                    interval = 0
+            # Determine Refresh Interval
+            if 'interval' in context.tags:
+                interval = context.tags['interval']
+            else:
+                interval = 0
 
-                # Build an image control
-                image = self.get_image(image_url, interval=interval)
-                if image:
-                    # Tell the page it has image content (will be used for selective rendering)
-                    self.pnl_image.children = [image]
-                    self.has_image = True
+            # Build an image control
+            self.image = self.get_image(image_url, interval=interval, max_width=self.display.res_x - 400)
+            if self.image:
+                # Tell the page it has image content (will be used for selective rendering)
+                self.pnl_image.children = [self.image]
 
         # Build a list of labels for all tags in this shape
         tags = []
@@ -237,7 +248,7 @@ class MapInfoPage(MFDPage):
         if tag[0] == 'image':
             return False  # Images are rendered - not displayed via paths
 
-        if tag[0] == 'interval' and self.has_image:
+        if tag[0] == 'interval' and self.image:
             return False  # This is just used to auto-refresh the image
 
         if tag[0] in ('iff', 'layer'):
@@ -253,6 +264,9 @@ class MapInfoPage(MFDPage):
             return False
 
         if tag[0] == 'sport' and entity.has_tag_value('leisure', 'pitch'):
+            return False
+
+        if tag[0] == 'contact:webcam':
             return False
 
         if tag[0] == 'man_made' and tag[1] == 'surveillance' and entity.has_tag('surveillance'):
