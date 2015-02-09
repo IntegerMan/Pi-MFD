@@ -13,13 +13,14 @@ class MapColorizer(object):
     def get_color(entity, context, cs):
 
         """
+
+        :type cs: PiMFD.UI.ColorSchemes.ColorScheme
         :type entity: PiMFD.Applications.Navigation.MapEntities.MapEntity
         :type context: PiMFD.Applications.Navigation.MapContext.MapContext
-        :type cs: ColorScheme
         :rtype: tuple
         """
         if entity.has_tag('railway'):
-            return cs.map_structural # TODO: There's likely a lot more nuance to be had here
+            return cs.map_structural  # TODO: There's likely a lot more nuance to be had here
 
         elif entity.has_tag('highway'):
             color = context.tag_handlers.get_color('highway', entity, cs)
@@ -103,7 +104,7 @@ class MapColorizer(object):
             if place in ('hamlet', 'town', 'village'):
                 return cs.map_government
             elif place == 'island':
-                return cs.map_vegitation
+                return cs.map_vegetation
 
         elif entity.has_tag_value('footway', 'crossing'):
             return cs.yellow

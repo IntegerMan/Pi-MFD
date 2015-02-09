@@ -1,6 +1,5 @@
 # coding=utf-8
 from datetime import datetime
-from time import strftime
 import math
 
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
@@ -101,18 +100,9 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
         # Render custom annotations over everything - these should always be recomputed
         if self.map.annotations:
-            for annotation in self.map.annotations:
-                sym = MapSymbol(annotation.lat, annotation.lng)
-                sym.copy_values_from(annotation)
-                pos = self.map.set_screen_position(annotation, self.size, self.center)
+            for sym in self.map.annotations:
+                pos = self.map.set_screen_position(sym, self.size, self.center)
                 sym.x, sym.y = pos
-                sym.add_tag('incident', annotation.incident_type)
-                if annotation.end:
-                    sym.add_tag('end_date', strftime('%m/%d/%Y', annotation.end))
-                if annotation.start:
-                    sym.add_tag('start_date', strftime('%m/%d/%Y', annotation.start))
-                sym.add_tag('note', annotation.description)
-                sym.add_tag('severity', annotation.severity)
                 sym.render(self.display, map_context)
 
         # Add ourself to the map - TODO: Add this to the annotation layer

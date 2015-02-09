@@ -1,16 +1,16 @@
 import json
-from time import gmtime
+from time import gmtime, strftime
 import traceback
 
 import requests
 
-from PiMFD.Applications.Navigation.MapEntities import MapEntity
+from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
 
 __author__ = 'Matt Eland'
 
 
-class TrafficIncident(MapEntity):
+class TrafficIncident(MapSymbol):
     """
     Represents a traffic incident
     """
@@ -55,21 +55,16 @@ class MapTraffic(object):
         print("Fetching traffic from: " + url)
         data = None
 
-        # TODO: What the heck? This looks to be infinitely calling the URL with no failover. That bad.
-        request = True
-        while request:
-            try:
-                response = requests.get(url)
-                response_text = response.text
-                print(response_text)
-                data = json.loads(response_text)
+        # Grab Data
+        try:
+            response = requests.get(url)
+            response_text = response.text
+            print(response_text)
+            data = json.loads(response_text)
 
-            except:
-                error_message = "Unhandled error getting request {0}\n".format(str(traceback.format_exc()))
-                print(error_message)
-                request = False
-            else:
-                break
+        except:
+            error_message = "Unhandled error getting request {0}\n".format(str(traceback.format_exc()))
+            print(error_message)
 
         if data:
             incidents = list()
@@ -118,6 +113,14 @@ class MapTraffic(object):
                                 incident.name = 'Alert'
                             elif incident.incident_type == 11:
                                 incident.name = 'Weather'
+
+                        incident.add_tag('incident', incident.incident_type)
+                        if incident.end:
+                            incident.add_tag('end_date', strftime('%m/%d/%Y', incident.end))
+                        if incident.start:
+                            incident.add_tag('start_date', strftime('%m/%d/%Y', incident.start))
+                        incident.add_tag('note', incident.description)
+                        incident.add_tag('severity', incident.severity)
 
                         incidents.append(incident)
 
