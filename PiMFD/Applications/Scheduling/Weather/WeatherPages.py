@@ -105,6 +105,7 @@ class WeatherPage(MFDPage):
         # Set up the main content panel
         self.content_panel = StackPanel(controller.display, self, is_horizontal=True)
         self.content_panel.children = (self.pnl_today, self.pnl_forecast)
+        self.content_panel.auto_orient = True
 
         # Set up the master panel
         self.panel.children = (self.content_panel, self.lbl_updated)
@@ -120,13 +121,6 @@ class WeatherPage(MFDPage):
         """
         Renders the weather page
         """
-
-        # Smart-Proportion the Stack Panel for weather based on the resoltion
-        if self.pnl_today.width + self.pnl_forecast.width > self.display.res_x - 32:
-            self.content_panel.is_horizontal = False
-        else:
-            self.content_panel.is_horizontal = True
-
         weather = self.weather_provider.weather_data
 
         self.lbl_today_header.text_data = weather.city

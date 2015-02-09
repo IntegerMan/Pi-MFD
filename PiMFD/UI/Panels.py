@@ -25,11 +25,13 @@ class StackPanel(UIPanel):
 
     padding = 8, 8
     is_horizontal = False
+    auto_orient = False
 
-    def __init__(self, display, page, is_horizontal=False):
+    def __init__(self, display, page, is_horizontal=False, auto_orient=False):
         super(StackPanel, self).__init__(display, page)
         self.padding = display.padding_x, display.padding_y
         self.is_horizontal = is_horizontal
+        self.auto_orient = auto_orient
 
     def render(self):
         """
@@ -75,6 +77,15 @@ class StackPanel(UIPanel):
                     y = child.bottom + self.padding[1]
                 else:
                     y = child.bottom
+
+        # This would be better suited during an arrange / render model, but we don't have one yet, so do it here and it
+        # will impact the next render pass
+        if self.auto_orient:
+            item_widths = [x.width + self.padding[0] for x in self.children]
+            if sum(item_widths) > self.display.res_x - 32:
+                self.is_horizontal = False
+            else:
+                self.is_horizontal = True
 
         # Update and return our bounds
         self.rect = Rect(self.left, self.top, self.width, self.height)
