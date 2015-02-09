@@ -18,7 +18,7 @@ class TourismTagHandler(TagHandler):
         """
         :type entity: MapEntity
         :type value: string
-        :type cs: ColorScheme
+        :type cs: PiMFD.UI.ColorScheme.ColorScheme
         :rtype : tuple
         """
         if value in ('alpine_hut', 'apartment', 'camp_site', 'caravan_site', 'chalet', 'guest_house', 'hostel', 'motel',
@@ -27,7 +27,7 @@ class TourismTagHandler(TagHandler):
         elif value in ('attraction', 'artwork', 'gallery', 'museum', 'theme_park', 'yes', 'zoo'):
             return cs.map_recreation
         elif value in ('information',):
-            return cs.map_services
+            return cs.map_service
         elif value in ('picnic_site', 'viewpoint'):
             return cs.map_pedestrian
 
