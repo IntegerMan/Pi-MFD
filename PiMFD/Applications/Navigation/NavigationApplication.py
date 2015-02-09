@@ -50,6 +50,7 @@ class NavigationApp(MFDApplication):
         self.btn_page = MFDButton(self.map_context.get_page_mode_text())
         self.btn_info = MFDButton("INFO", enabled=False)
         self.btn_back = MFDButton("BACK")
+        self.btn_detail_action = MFDButton("DTLS", enabled=False)
 
     def get_buttons(self):
 
@@ -62,7 +63,7 @@ class NavigationApp(MFDApplication):
             return [self.btn_map, self.btn_page, self.btn_info]
 
         else:
-            return [self.btn_back]
+            return [self.btn_back, self.btn_detail_action]
 
     def select_page_by_index(self, index):
 
