@@ -17,7 +17,7 @@ class MFDApplication(object):
     active_page = None
     controller = None
     display = None
-    always_render_background = False
+    always_render_background = True
 
     def __init__(self, controller):
         """

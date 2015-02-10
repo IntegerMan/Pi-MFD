@@ -10,7 +10,7 @@ from PiMFD.UI import Keycodes
 
 from PiMFD.UI.ImageRendering import ImageRenderer, WebImageRenderer
 from PiMFD.UI.Pages import UIPage
-from PiMFD.UI.Rendering import render_text_centered, render_triangle_down
+from PiMFD.UI.Rendering import render_text_centered, render_triangle_down, render_triangle_up
 from PiMFD.UI.Text import TextBlock
 
 
@@ -135,12 +135,22 @@ class MFDPage(UIPage):
         # Render Overflow indicators if off screen
         if self.auto_scroll:
 
-            # TODO: Show up arrow if on 2nd page
+            paging_color = self.display.color_scheme.foreground
+
+            # If we have already paged, show MORE link at the top
+            if self.page_y > 1:
+                arrow_pos = [self.display.res_x - 18, min_y]
+                render_triangle_up(self.display, paging_color, arrow_pos, 8)
+                render_text_centered(self.display,
+                                     self.display.fonts.small,
+                                     "MORE",
+                                     arrow_pos[0],
+                                     arrow_pos[1] + 3,
+                                     paging_color)
 
             # If we have more pages, show a MORE link at the bottom
             if self.page_y < self.num_pages_y:
                 arrow_pos = [self.display.res_x - 18, max_y]
-                paging_color = self.display.color_scheme.foreground
                 render_triangle_down(self.display, paging_color, arrow_pos, 8)
                 render_text_centered(self.display,
                                      self.display.fonts.small,
