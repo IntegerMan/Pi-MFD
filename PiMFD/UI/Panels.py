@@ -12,10 +12,12 @@ class UIPanel(UIWidget):
     """
 
     children = list()
+    keep_together = False
 
-    def __init__(self, display, page):
+    def __init__(self, display, page, keep_together=False):
         super(UIPanel, self).__init__(display, page)
         self.children = list()
+        self.keep_together = keep_together
 
 
 class StackPanel(UIPanel):
@@ -27,8 +29,8 @@ class StackPanel(UIPanel):
     is_horizontal = False
     auto_orient = False
 
-    def __init__(self, display, page, is_horizontal=False, auto_orient=False):
-        super(StackPanel, self).__init__(display, page)
+    def __init__(self, display, page, is_horizontal=False, auto_orient=False, keep_together=False):
+        super(StackPanel, self).__init__(display, page, keep_together=keep_together)
         self.padding = display.padding_x, display.padding_y
         self.is_horizontal = is_horizontal
         self.auto_orient = auto_orient

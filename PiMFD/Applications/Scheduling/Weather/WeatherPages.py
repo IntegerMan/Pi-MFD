@@ -44,7 +44,7 @@ class WeatherPage(MFDPage):
         self.weather_provider = weather_provider
 
         # Build out the Today Panel
-        self.pnl_today = StackPanel(controller.display, self)
+        self.pnl_today = StackPanel(controller.display, self, keep_together=True)
         self.lbl_today_header = self.get_header_label("{} Weather")
         self.lbl_temp = self.get_label(u"      Temp: {}{} (Chill: {}{})")
         self.lbl_cond = self.get_label(u"Conditions: {}")
@@ -73,7 +73,7 @@ class WeatherPage(MFDPage):
         )
 
         # Build out the Forecast Panel
-        self.pnl_forecast = StackPanel(controller.display, self)
+        self.pnl_forecast = StackPanel(controller.display, self, keep_together=True)
         forecast_header = self.get_header_label("Forecast")
         self.pnl_forecast.children.append(forecast_header)
 
