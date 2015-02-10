@@ -33,12 +33,14 @@ class TextBlock(UIWidget):
     text = None
     text_data = None
     is_highlighted = False
+    is_enabled = True
 
     def __init__(self, display, page, text, is_highlighted=False):
         super(TextBlock, self).__init__(display, page)
         self.font = display.fonts.normal
         self.text = text
         self.is_highlighted = is_highlighted
+        self.is_enabled = True
 
     def get_foreground(self):
         """
@@ -48,6 +50,9 @@ class TextBlock(UIWidget):
         :return: The foreground
         """
         cs = self.display.color_scheme
+
+        if not self.is_enabled:
+            return cs.disabled
 
         if self.is_highlighted:
             return cs.highlight
