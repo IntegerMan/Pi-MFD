@@ -26,7 +26,7 @@ try:
     display.padding_x = 8
     display.padding_y = 6
     display.allow_resize = False
-    display.is_fullscreen = True  # TODO: Once this is more developed, this should probably be True
+    display.is_fullscreen = False  # TODO: Once this is more developed, this should probably be True
 
     # Launch
     display.start_mfd(app_options)
