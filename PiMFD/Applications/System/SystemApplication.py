@@ -1,6 +1,6 @@
 # coding=utf-8
 from PiMFD.Applications.Application import MFDApplication
-from PiMFD.Applications.MFDPage import SimpleMessagePage
+from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Applications.System.ServicesPages import ServicesPage
 from PiMFD.Applications.System.SystemPages import SysRootPage, SysClockPage, SysExitPage, SettingsPage
 

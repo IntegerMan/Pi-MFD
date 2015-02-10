@@ -27,12 +27,17 @@ class MFDPage(UIPage):
     application = None
     controller = None
 
-    def __init__(self, controller, application):
+    auto_scroll = True
+
+    def __init__(self, controller, application, auto_scroll=True):
         super(MFDPage, self).__init__(controller.display)
+
         self.controller = controller
         self.application = application
         self.top_headers = list()
         self.bottom_headers = list()
+
+        self.auto_scroll = auto_scroll
 
     def get_label(self, text):
         """
@@ -118,33 +123,4 @@ class MFDPage(UIPage):
 
     def handle_mouse_left_click(self, pos):
         return False
-
-class SimpleMessagePage(MFDPage):
-    """
-    Represents a simple single-message page, defaulting to 'not implemented'.
-    """
-
-    button_text = "NI"
-    message = "NO DATA"
-
-    def __init__(self, controller, application, label, message='NO DATA'):
-        super(SimpleMessagePage, self).__init__(controller, application)
-        self.button_text = label
-        self.message = message
-
-    def get_button_text(self):
-        """
-        Gets the text for a button
-        :return: The button text
-        """
-        return self.button_text
-
-    def render(self):
-        """
-        Renders a simple message page.
-        """
-
-        self.center_text(self.message)
-
-        return super(SimpleMessagePage, self).render()
 

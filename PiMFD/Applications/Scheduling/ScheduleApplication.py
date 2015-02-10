@@ -4,7 +4,7 @@ The scheduling application
 """
 
 from PiMFD.Applications.Application import MFDApplication
-from PiMFD.Applications.MFDPage import SimpleMessagePage
+from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Applications.Scheduling.Weather.WeatherAPIWrapper import WeatherAPI
 from PiMFD.Applications.Scheduling.Weather.WeatherData import WeatherData
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage

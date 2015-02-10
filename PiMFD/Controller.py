@@ -8,7 +8,7 @@ import pygame
 
 from PiMFD.Applications.Navigation.NavigationApplication import NavigationApp
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
-from PiMFD.Applications.MFDPage import SimpleMessagePage
+from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Options import MFDAppOptions
 from PiMFD.UI import Keycodes
 from PiMFD.UI.Button import MFDButton
