@@ -3,7 +3,6 @@
 """
 Lists running services on this machine using WMI
 """
-import platform
 from wmi import WMI, x_wmi
 
 from PiMFD.Applications.MFDPage import MFDPage
@@ -51,8 +50,11 @@ class ServicesPage(MFDPage):
         self.pnl_services.children = []
         self.message = None
 
+        sys_path = "127.0.0.1"
+        sys_name = None
+
         try:
-            self.wmi = WMI("damocles")
+            self.wmi = WMI(sys_path)
 
         except x_wmi as x:  # Py3+ except wmi.x_wmi as x:
             print "WMI Exception: {}: {}".format(x.com_error.hresult, x.com_error.strerror)
@@ -62,6 +64,9 @@ class ServicesPage(MFDPage):
         num_services = 0
 
         for s in self.wmi.Win32_Service():
+
+            if not sys_name:
+                sys_name = s.SystemName
 
             lbl = self.get_label("{}: {}".format(s.Caption, s.State))
 
@@ -73,7 +78,11 @@ class ServicesPage(MFDPage):
 
             num_services += 1
 
-        self.lbl_header.text = "{} SERVICES ({})".format(platform.node(), num_services).upper()
+        # Default to path if we need to
+        if not sys_name:
+            sys_name = sys_path
+
+        self.lbl_header.text = "{} SERVICES ({})".format(sys_name, num_services).upper()
 
     def render(self):
 
