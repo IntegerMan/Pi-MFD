@@ -2,9 +2,11 @@
 """
 Defines the MFDPage used as a root for other pages in the application.
 """
+from math import ceil
 import traceback
-
 import pygame
+
+from PiMFD.UI import Keycodes
 
 from PiMFD.UI.ImageRendering import ImageRenderer, WebImageRenderer
 from PiMFD.UI.Pages import UIPage
@@ -28,6 +30,9 @@ class MFDPage(UIPage):
     controller = None
 
     auto_scroll = True
+
+    page_y = 1
+    num_pages_y = 1
 
     def __init__(self, controller, application, auto_scroll=True):
         super(MFDPage, self).__init__(controller.display)
@@ -104,17 +109,36 @@ class MFDPage(UIPage):
         """
         return 'UNKN'
 
+    def constrain_pages(self):
+        if self.page_y > self.num_pages_y:
+            self.page_y = max(1, self.num_pages_y)
+        elif self.page_y <= 0:
+            self.page_y = 1
+
     def render(self):
 
-        rect = super(MFDPage, self).render()
+        min_y = self.display.get_content_start_y()
+        max_y = self.display.get_content_end_y()
+        page_size_y = max_y - min_y
+
+        if self.panel:
+            target_pos = (self.display.get_content_start_x(), min_y - ((self.page_y - 1) * page_size_y))
+            rect = self.panel.render_at(target_pos)
+        else:
+            rect = super(MFDPage, self).render()
+
+        self.num_pages_y = ceil(rect.height / float(page_size_y))
+
+        # Smart-Constrain Page
+        self.constrain_pages()
 
         # Render Overflow indicators if off screen
         if self.auto_scroll:
 
-            max_y = self.display.get_content_end_y()
+            # TODO: Show up arrow if on 2nd page
 
             # If we have more pages, show a MORE link at the bottom
-            if rect.bottom > max_y:
+            if self.page_y < self.num_pages_y:
                 arrow_pos = [self.display.res_x - 18, max_y]
                 paging_color = self.display.color_scheme.foreground
                 render_triangle_down(self.display, paging_color, arrow_pos, 8)
@@ -126,6 +150,22 @@ class MFDPage(UIPage):
                                      paging_color)
 
         return rect
+
+    def handle_key(self, key):
+
+        if key == Keycodes.KEY_PAGEDOWN:
+            if self.num_pages_y > self.page_y:
+                self.page_y += 1
+                self.constrain_pages()
+                return True
+
+        elif key == Keycodes.KEY_PAGEUP:
+            if self.page_y > 1:
+                self.page_y -= 1
+                self.constrain_pages()
+                return True
+
+        return super(MFDPage, self).handle_key(key)
 
     def set_focus(self, widget):
         self.controller.play_button_sound()
