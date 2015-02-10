@@ -3,7 +3,8 @@
 """
 Lists running services on this machine using WMI
 """
-from wmi import WMI
+import platform
+from wmi import WMI, x_wmi
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Panels import StackPanel
@@ -17,6 +18,7 @@ class ServicesPage(MFDPage):
     """
 
     wmi = None
+    message = "NO DATA"
 
     def __init__(self, controller, application):
         super(ServicesPage, self).__init__(controller, application)
@@ -45,10 +47,17 @@ class ServicesPage(MFDPage):
 
     def refresh_services(self):
 
-        self.wmi = WMI("127.0.0.1")
-
-        self.services = []
+        self.wmi = None
         self.pnl_services.children = []
+        self.message = None
+
+        try:
+            self.wmi = WMI("damocles")
+
+        except x_wmi as x:  # Py3+ except wmi.x_wmi as x:
+            print "WMI Exception: {}: {}".format(x.com_error.hresult, x.com_error.strerror)
+            self.message = x.com_error.strerror
+            return
 
         num_services = 0
 
@@ -64,12 +73,12 @@ class ServicesPage(MFDPage):
 
             num_services += 1
 
-        self.lbl_header.text = "SERVICES ({})".format(num_services)
+        self.lbl_header.text = "{} SERVICES ({})".format(platform.node(), num_services).upper()
 
     def render(self):
 
-        if len(self.pnl_services.children) <= 0:
-            self.center_text("NO SERVICE DATA AVAILABLE", self.display.color_scheme.highlight)
+        if len(self.pnl_services.children) <= 0 and self.message:
+            self.center_text(self.message.upper(), self.display.color_scheme.highlight)
         else:
             return super(ServicesPage, self).render()
 
