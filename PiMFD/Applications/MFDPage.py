@@ -8,7 +8,7 @@ import pygame
 
 from PiMFD.UI.ImageRendering import ImageRenderer, WebImageRenderer
 from PiMFD.UI.Pages import UIPage
-from PiMFD.UI.Rendering import render_text_centered
+from PiMFD.UI.Rendering import render_text_centered, render_triangle_down
 from PiMFD.UI.Text import TextBlock
 
 
@@ -103,6 +103,29 @@ class MFDPage(UIPage):
         :return: The button text
         """
         return 'UNKN'
+
+    def render(self):
+
+        rect = super(MFDPage, self).render()
+
+        # Render Overflow indicators if off screen
+        if self.auto_scroll:
+
+            max_y = self.display.get_content_end_y()
+
+            # If we have more pages, show a MORE link at the bottom
+            if rect.bottom > max_y:
+                arrow_pos = [self.display.res_x - 18, max_y]
+                paging_color = self.display.color_scheme.foreground
+                render_triangle_down(self.display, paging_color, arrow_pos, 8)
+                render_text_centered(self.display,
+                                     self.display.fonts.small,
+                                     "MORE",
+                                     arrow_pos[0],
+                                     arrow_pos[1] - 3 - self.display.fonts.small.size,
+                                     paging_color)
+
+        return rect
 
     def set_focus(self, widget):
         self.controller.play_button_sound()

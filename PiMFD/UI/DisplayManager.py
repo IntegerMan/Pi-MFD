@@ -111,12 +111,26 @@ class DisplayManager(object):
         """
         return self.padding_x * 2
 
+    def get_content_end_x(self):
+        """
+        Gets the right X indentation level for content
+        :return: The X location at which content rendering is no longer acceptable
+        """
+        return self.res_x - (self.padding_x * 2)
+
     def get_content_start_y(self):
         """
         Gets the Y indentation level for content
         :return: The Y location at which content rendering is acceptable
         """
         return (self.padding_y * 4) + self.fonts.normal.size
+
+    def get_content_end_y(self):
+        """
+        Gets the bottom Y indentation level for content
+        :return: The Y location at which content rendering is no longer acceptable
+        """
+        return self.res_y - ((self.padding_y * 4) + self.fonts.normal.size)
 
     def get_content_start_pos(self):
         """
