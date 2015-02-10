@@ -3,6 +3,8 @@
 """
 Lists running services on this machine using WMI
 """
+from wmi import WMI
+
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Panels import StackPanel
 
@@ -15,11 +17,14 @@ class ServicesPage(MFDPage):
     """
 
     services = list()
+    wmi = None
 
     def __init__(self, controller, application):
         super(ServicesPage, self).__init__(controller, application)
 
         self.services = list()
+
+        self.wmi = WMI()
 
         self.lbl_header = self.get_header_label('RUNNING SERVICES')
         self.pnl_services = StackPanel(controller.display, self)
@@ -37,7 +42,14 @@ class ServicesPage(MFDPage):
         self.refresh_services()
 
     def refresh_services(self):
-        pass
+
+        self.services = []
+        self.pnl_services.children = []
+
+        for s in self.wmi.Win32_Service():
+            self.services.append(s)
+            lbl = self.get_label("{}: {}".format(s.Caption, s.State))
+            self.pnl_services.children.append(lbl)
 
     def render(self):
 
