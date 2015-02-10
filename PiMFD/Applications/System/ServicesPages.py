@@ -3,7 +3,15 @@
 """
 Lists running services on this machine using WMI
 """
-from wmi import WMI, x_wmi
+import traceback
+
+try:
+    from wmi import WMI, x_wmi
+except ImportError:
+    error_message = "Unhandled error importing WMI {0}\n".format(str(traceback.format_exc()))
+    print(error_message)
+    WMI = None
+    x_wmi = None
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Panels import StackPanel
@@ -52,6 +60,10 @@ class ServicesPage(MFDPage):
 
         sys_path = "127.0.0.1"
         sys_name = None
+
+        if not WMI:
+            self.message = "WMI NOT INSTALLED"
+            return
 
         try:
             self.wmi = WMI(sys_path)
