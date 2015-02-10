@@ -35,9 +35,13 @@ This code is available under the GNU General Public License. See LICENSE for mor
 ## Requirements
 Pi-MFD requires:
 
-* Python 2.7 or higher
+* Python 2.7
 * Pygame
 * Pywapi
+
+### Optional - Needed for WMI Support
+* WMI
+* Pywin32 - http://sourceforge.net/projects/pywin32/files/
 
 ## User Interface
 
@@ -61,40 +65,7 @@ The keypad will not allow users to select items on the top or bottom row.
 ## Features
 Pi-MFD is planned to integrate several disparate application modules and display dashboard information for each module.
 
-Planned applications and their pages are listed as follows:
-
-### Scheduling (SCH)
-#### Tasks (TASK) - Planned
-#### Mail (MAIL) - Planned
-#### Calendar (CAL) - Planned
-#### Weather (WTHR)
-Displays current weather conditions and a 5 day forecast.
-
-Planned improvements:
-
-* Icon support for forecast
-* Range Bar support for forecast
-
-### Navigation (NAV)
-#### Map (MAP) - Planned
-#### Gas (GAS) - Planned
-#### Food (FOOD) - Planned
-#### Traffic (TRAF) - Planned
-#### Weather Conditions (COND) - Planned
-
-### Social (SOC)
-#### News (NEWS) - Planned
-#### Facebook (FACE) - Planned
-#### Twitter (TWTR) - Planned
-#### Feedly (RSS) - Planned
-#### Browser (WEB) - Planned
-
-### Media (MED)
-#### Images (IMG) - Planned
-#### Pandora (PAND) - Planned
-#### YouTube (TUBE) - Planned
-#### Netflix (FLIX) - Planned
-#### Amazon Instant Watch (AZIW) - Planned
+Applications and their pages are listed as follows:
 
 ### System (SYS)
 
@@ -102,7 +73,10 @@ Planned improvements:
 Displays the current time in system and GMT time.
 
 #### Performance (PERF)  - Planned
-Displays performance metrics for this machine or a machine running WMI.
+Displays performance metrics for the WMI computer being monitored.
+
+#### Service (SRVC)
+Lists active services on the WMI computer being monitored.
 
 #### Network (NET) - Planned
 #### Options (OPTS)
@@ -110,6 +84,26 @@ Allows you to customize application options.
 
 #### Exit (EXIT)
 Exits the application
+
+### Navigation (NAV)
+Displays a representation of the world map using OpenStreetMaps data based on the Lat / Long configured in the settings
+file. Page / Pan using the arrow keys. Filter the map by toggling the map button. Move to pan / cursor mode by toggling
+the Page / Pan / Cur button. Move the cursor in cursor mode via mouse click or arrow keys. Drill into details for the
+selected node by clicking info when a node is selected.
+
+Weather nodes will display that area's weather data.
+
+Nodes with images or webcam feeds will display that image (and allow fullscreen view). Nodes with an image and an
+interval tag will auto-refresh (useful for traffic and weather cameras).
+
+Traffic accidents and construction from Bing Maps will be displayed.
+
+### Scheduling (SCH)
+#### Tasks (TASK) - Planned
+#### Mail (MAIL) - Planned
+#### Calendar (CAL) - Planned
+#### Weather (WTHR)
+Displays current weather conditions and a 5 day forecast.
 
 ## Future Integrations
 
