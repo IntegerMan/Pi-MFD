@@ -5,6 +5,7 @@ Contains application control logic for Pi-MFD.
 """
 
 import pygame
+from PiMFD.Applications.Core.CoreApplication import CoreApplication
 
 from PiMFD.Applications.Navigation.NavigationApplication import NavigationApp
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
@@ -44,11 +45,10 @@ class MFDController(object):
 
     time_format = '%m/%d/%Y - %H:%M:%S'
 
+    core_app = None
     sys_app = None
     sch_app = None
     nav_app = None
-    med_app = None
-    soc_app = None
 
     applications = list()
 
@@ -65,6 +65,9 @@ class MFDController(object):
         else:
             self.options = MFDAppOptions()
 
+        # Core App
+        self.core_app = CoreApplication(self)
+
         # Navigation app
         self.nav_app = NavigationApp(self)
 
@@ -79,9 +82,9 @@ class MFDController(object):
 
         self.sys_app = SysApplication(self)
 
-        self.applications = list([self.sys_app, self.nav_app, self.sch_app])
+        self.applications = list([self.core_app, self.sys_app, self.nav_app, self.sch_app])
         
-        self.active_app = self.sys_app
+        self.active_app = self.applications[0]
 
     def process_events(self):
         """

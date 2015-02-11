@@ -2,7 +2,7 @@
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Applications.System.ServicesPages import ServicesPage
-from PiMFD.Applications.System.SystemPages import SysRootPage, SysClockPage, SysExitPage, SettingsPage
+from PiMFD.Applications.System.SystemInfoPage import SysInfoPage
 
 __author__ = 'Matt Eland'
 
@@ -11,12 +11,9 @@ class SysApplication(MFDApplication):
     """
     The system application.
     """
-    root_page = None
-    clock_page = None
     perf_page = None
     services_page = None
-    opts_page = None
-    exit_page = None
+    sys_info_page = None
 
     def __init__(self, controller):
         """
@@ -24,22 +21,18 @@ class SysApplication(MFDApplication):
         """
         super(SysApplication, self).__init__(controller)
 
-        self.root_page = SysRootPage(controller, self)
-
-        self.clock_page = SysClockPage(controller, self)
+        self.sys_info_page = SysInfoPage(controller, self)
         self.perf_page = SimpleMessagePage(controller, self, "PERF")
         self.services_page = ServicesPage(controller, self)
-        self.opts_page = SettingsPage(controller, self)
-        self.exit_page = SysExitPage(controller, self)
 
-        self.pages = list([self.clock_page, self.perf_page, self.services_page, self.opts_page, self.exit_page])
+        self.pages = list([self.sys_info_page, self.perf_page, self.services_page])
 
     def get_default_page(self):
         """
         Gets the default page for the application
         :return: The default page for the application.
         """
-        return self.root_page
+        return self.sys_info_page
 
     def get_button_text(self):
         """
