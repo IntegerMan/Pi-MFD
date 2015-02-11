@@ -53,10 +53,7 @@ class SysRootPage(MFDPage):
         """
         return "SYS"  # Though this shouldn't get invoked since it's not going to be available
 
-    def render(self):
-        """
-        Renders the page.
-        """
+    def arrange(self):
 
         opts = self.controller.options
 
@@ -69,7 +66,8 @@ class SysRootPage(MFDPage):
         self.lbl_sys_display.text_data = self.display.res_x, self.display.res_y
         self.lbl_sys_python.text_data = platform.python_version(), platform.python_implementation(), platform.python_compiler()
 
-        return super(SysRootPage, self).render()
+        return super(SysRootPage, self).arrange()
+
 
 class SysExitPage(MFDPage):
     """
@@ -118,16 +116,13 @@ class SysClockPage(MFDPage):
         """
         return "TIME"
 
-    def render(self):
-        """
-        Renders the system clock page.
-        """
+    def arrange(self):
 
         # Grab the time and stick it in the labels
         self.lbl_sys_time.text_data = strftime(self.controller.time_format)
         self.lbl_gmt_time.text_data = strftime(self.controller.time_format, gmtime())
 
-        return super(SysClockPage, self).render()
+        return super(SysClockPage, self).arrange()
 
 
 class SettingsPage(MFDPage):
@@ -174,10 +169,8 @@ class SettingsPage(MFDPage):
         super(SettingsPage, self).handle_selected()
         self.txt_zipcode.text = self.controller.options.location
 
-    def render(self):
-        """
-        Renders the page.
-        """
+    def arrange(self):
+
         opts = self.controller.options
         display = self.display
 
@@ -188,8 +181,7 @@ class SettingsPage(MFDPage):
         self.chk_fps.checked = opts.enable_fps
         self.chk_full_screen.checked = display.is_fullscreen
 
-        # Render all controls
-        return super(SettingsPage, self).render()
+        return super(SettingsPage, self).arrange()
 
     def get_button_text(self):
         """
