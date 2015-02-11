@@ -81,6 +81,7 @@ class ServicesPage(MFDPage):
                 sys_name = s.SystemName
 
             lbl = self.get_label("{}: {}".format(s.Caption, s.State))
+            lbl.font = self.display.fonts.small
 
             # If it's not running, mark it as disabled color
             if s.State in ("Stopped", "Paused", "Unknown", "Continue Pending", "Start Pending"):
