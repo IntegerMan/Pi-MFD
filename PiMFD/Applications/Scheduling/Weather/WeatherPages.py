@@ -117,10 +117,8 @@ class WeatherPage(MFDPage):
         """
         return "WTHR"
 
-    def render(self):
-        """
-        Renders the weather page
-        """
+    def arrange(self):
+
         weather = self.weather_provider.weather_data
 
         self.lbl_today_header.text_data = weather.city
@@ -137,7 +135,6 @@ class WeatherPage(MFDPage):
 
         # Update Forecasts
         for i in range(0, self.max_forecasts):
-
             label = self.lbl_forecast[i]
             icon = self.lbl_forecast_icon[i]
             chart = self.chart_forecast[i]
@@ -148,5 +145,13 @@ class WeatherPage(MFDPage):
             icon.text_data = get_condition_icon(forecast.code)
             chart.value_low = forecast.low
             chart.value_high = forecast.high
+
+        return super(WeatherPage, self).arrange()
+
+
+    def render(self):
+        """
+        Renders the weather page
+        """
 
         super(WeatherPage, self).render()
