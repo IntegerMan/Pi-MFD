@@ -1,6 +1,7 @@
 # coding=utf-8
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
+from PiMFD.Applications.System.DiskPages import DiskDrivesPage
 from PiMFD.Applications.System.ServicesPages import ServicesPage
 
 __author__ = 'Matt Eland'
@@ -22,7 +23,7 @@ class SysApplication(MFDApplication):
 
         self.perf_page = SimpleMessagePage(controller, self, "PERF")
         self.proc_page = SimpleMessagePage(controller, self, "PROC")
-        self.disk_page = SimpleMessagePage(controller, self, "DISK")
+        self.disk_page = DiskDrivesPage(controller, self)
         self.net_page = SimpleMessagePage(controller, self, "NET")
         self.services_page = ServicesPage(controller, self)
 
