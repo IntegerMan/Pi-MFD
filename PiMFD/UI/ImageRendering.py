@@ -45,40 +45,47 @@ class ImageRenderer(UIWidget):
             self.desired_width = size[0]
             self.desired_height = size[1]
 
+    def arrange(self):
+
+        image_size = self.surface.get_size()
+
+        if self.desired_width:
+            width = self.desired_width
+        else:
+            width = image_size[0]
+
+        if self.desired_height:
+            height = self.desired_height
+        else:
+            height = image_size[1]
+
+        # Ensure width <= max_width when max width present
+        if self.max_width and self.max_width < width:
+            scale_factor = self.max_width / float(width)
+            width = self.max_width
+            height = int(height * scale_factor)
+
+        # Ensure width >= min_width when min width present
+        if self.min_width and self.min_width > width:
+            scale_factor = self.min_width / float(width)
+            width = self.min_width
+            height = int(height * scale_factor)
+
+        self.desired_size = width, height
+
+        # If we need to scale, perform the scale now
+        if width != image_size[0]:
+            self.surface = pygame.transform.scale(self.surface, self.desired_size)
+
+        return super(ImageRenderer, self).arrange()
+
     def render(self):
         """
         Renders the image to the screen
         """
 
-        image_size = self.surface.get_size()
-
-        if self.desired_width:
-            self.width = self.desired_width
-        else:
-            self.width = image_size[0]
-
-        if self.desired_height:
-            self.height = self.desired_height
-        else:
-            self.height = image_size[1]
-
-        # Ensure width <= max_width when max width present
-        if self.max_width and self.max_width < self.width:
-            scale_factor = self.max_width / float(self.width)
-            self.width = self.max_width
-            self.height = int(self.height * scale_factor)
-
-        # Ensure width >= min_width when min width present
-        if self.min_width and self.min_width > self.width:
-            scale_factor = self.min_width / float(self.width)
-            self.width = self.min_width
-            self.height = int(self.height * scale_factor)
-
-        # If we need to scale, perform the scale now
-        if self.width != image_size[0]:
-            self.surface = pygame.transform.scale(self.surface, (self.width, self.height))
-
-        self.rect = self.set_dimensions_from_rect(Rect(self.pos[0], self.pos[1], self.width, self.height))
+        self.rect = self.set_dimensions_from_rect(
+            Rect(self.pos[0], self.pos[1], self.desired_size[0], self.desired_size[1]))
 
         self.display.surface.blit(self.surface, self.rect)
 
@@ -118,7 +125,7 @@ class WebImageRenderer(ImageRenderer):
 
         return surface
 
-    def render(self):
+    def arrange(self):
 
         # Auto-Refresh periodically
         if self.interval > 0:
@@ -127,8 +134,7 @@ class WebImageRenderer(ImageRenderer):
             if delta.seconds > self.interval:
                 self.surface = self.get_image_surface()
 
-        # Let the base class
-        return super(WebImageRenderer, self).render()
+        return super(WebImageRenderer, self).arrange()
 
 
 class StringIOImageAdapter(object):
