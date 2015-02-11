@@ -34,6 +34,7 @@ class StackPanel(UIPanel):
     padding = 8, 8
     is_horizontal = False
     auto_orient = False
+    pad_last_item = True
 
     def __init__(self, display, page, is_horizontal=False, auto_orient=False, keep_together=False):
         super(StackPanel, self).__init__(display, page, keep_together=keep_together)
@@ -43,19 +44,59 @@ class StackPanel(UIPanel):
 
     def arrange(self):
 
+        x, y = self.pos
+
         width = 0
         height = 0
 
+        # Cause all children to arrange so we have valid sizes
+        for child in self.children:
+            child.arrange()
+
+        max_x = self.display.get_content_end_x()
+        page_size = self.display.get_content_size()[1]
+
+        page_remaining = page_size
+
+        # Auto-Orient as needed
+        if self.auto_orient:
+
+            item_widths = [c.width + self.padding[0] for c in self.children]
+            if sum(item_widths) > max_x:
+                self.is_horizontal = False
+            else:
+                self.is_horizontal = True
+
+        if self.children and len(self.children) > 0:
+            last_child = self.children[-1]
+        else:
+            last_child = None
+
+        # Put each child where it should be
         for child in self.children:
 
-            # Ask the child to measure itself
-            child_size = child.arrange()
+            child_size = child.desired_size
+
+            # Auto jump to next page to keep together
+            if self.keep_together and not self.is_horizontal:
+                if page_remaining < child_size[1] <= page_size:
+                    y += page_remaining
+                    page_remaining = page_size
+
+            child.pos = x, y
 
             if self.is_horizontal:
 
                 # Add up widths (with padding) and use largest height encountered
                 if child_size[0] > 0:
-                    width += child_size[0] + self.padding[0]
+
+                    if not self.pad_last_item and child is last_child:
+                        child_width = child_size[0]
+                    else:
+                        child_width = child_size[0] + self.padding[0]
+
+                    width += child_width
+                    x += child_width
 
                 height = max(child_size[1], height)
 
@@ -63,7 +104,16 @@ class StackPanel(UIPanel):
 
                 # Add up heights (with padding) and use largest width encountered
                 if child_size[1] > 0:
-                    height += child_size[1] + self.padding[1]
+
+                    if not self.pad_last_item and child is last_child:
+                        child_height = child_size[1]
+                    else:
+                        child_height = child_size[1] + self.padding[1]
+
+                    height += child_height
+                    y += child_height
+                    if self.keep_together:
+                        page_remaining -= child_height
 
                 width = max(child_size[0], width)
 
@@ -88,37 +138,9 @@ class StackPanel(UIPanel):
         self.width = self.desired_size[0]
         self.height = self.desired_size[1]
 
+        # Render children where arrange told us to
         for child in self.children:
-
-            # Position the child relative to where it should be and render it
-            child.render_at((x, y))
-
-            # Now that we've rendered, we need to adjust our running dimensions
-            # and figure out where to put the next one
-            if self.is_horizontal:
-
-                # Don't add padding if we're zero-width
-                if child.right > child.left:
-                    x = child.right + self.padding[0]
-                else:
-                    x = child.right
-
-            else:
-
-                # Don't add padding if we're zero-height
-                if child.bottom > child.top:
-                    y = child.bottom + self.padding[1]
-                else:
-                    y = child.bottom
-
-        # This would be better suited during an arrange / render model, but we don't have one yet, so do it here and it
-        # will impact the next render pass
-        if self.auto_orient:
-            item_widths = [x.width + self.padding[0] for x in self.children]
-            if sum(item_widths) > self.display.res_x - 32:
-                self.is_horizontal = False
-            else:
-                self.is_horizontal = True
+            child.render()
 
         # Update and return our bounds
         self.rect = Rect(self.left, self.top, self.width, self.height)

@@ -134,7 +134,12 @@ class MFDPage(UIPage):
         else:
             rect = super(MFDPage, self).render()
 
-        self.num_pages_y = ceil(rect.height / float(page_size_y))
+        # Calculate number of whole pages
+        self.num_pages_y = rect.height / page_size_y
+
+        # Advance to the next whole page if first page or non-trivial content on last page
+        if self.num_pages_y == 0 or rect.height % page_size_y > 16:
+            self.num_pages_y += 1
 
         # Smart-Constrain Page
         self.constrain_pages()

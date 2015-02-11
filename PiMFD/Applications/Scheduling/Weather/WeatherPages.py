@@ -6,6 +6,7 @@ from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_icon
 from PiMFD.UI.Charts import BoxChart
 from PiMFD.UI.Panels import StackPanel
+from PiMFD.UI.Text import SpacerLine
 
 __author__ = 'Matt Eland'
 
@@ -44,7 +45,7 @@ class WeatherPage(MFDPage):
         self.weather_provider = weather_provider
 
         # Build out the Today Panel
-        self.pnl_today = StackPanel(controller.display, self, keep_together=True)
+        self.pnl_today = StackPanel(controller.display, self)
         self.lbl_today_header = self.get_header_label("{} Weather")
         self.lbl_temp = self.get_label(u"      Temp: {}{} (Chill: {}{})")
         self.lbl_cond = self.get_label(u"Conditions: {}")
@@ -73,7 +74,7 @@ class WeatherPage(MFDPage):
         )
 
         # Build out the Forecast Panel
-        self.pnl_forecast = StackPanel(controller.display, self, keep_together=True)
+        self.pnl_forecast = StackPanel(controller.display, self)
         forecast_header = self.get_header_label("Forecast")
         self.pnl_forecast.children.append(forecast_header)
 
@@ -102,13 +103,17 @@ class WeatherPage(MFDPage):
             self.chart_forecast[i] = chart
             self.pnl_forecast.children.append(chart)
 
+        self.pnl_forecast.children.append(SpacerLine(controller.display, self))
+
         # Set up the main content panel
-        self.content_panel = StackPanel(controller.display, self, is_horizontal=True)
-        self.content_panel.children = (self.pnl_today, self.pnl_forecast)
+        self.content_panel = StackPanel(controller.display, self, is_horizontal=True, keep_together=True)
+        self.content_panel.pad_last_item = True
         self.content_panel.auto_orient = True
+        self.content_panel.children = (self.pnl_today, self.pnl_forecast)
 
         # Set up the master panel
         self.panel.children = (self.content_panel, self.lbl_updated)
+        self.panel.pad_last_item = False
 
     def get_button_text(self):
         """

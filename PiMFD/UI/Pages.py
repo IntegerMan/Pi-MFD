@@ -22,10 +22,19 @@ class UIPage(UIObject):
     focus = None
 
     def __init__(self, display):
+        """
+        :type display: PiMFD.UI.DisplayManager.DisplayManager
+        """
         super(UIPage, self).__init__(display)
-        self.panel = StackPanel(display, self)
+        self.panel = self.get_panel(display)
         self.focusables = list()
-
+        
+    def get_panel(self, display):
+        """
+        :type display: PiMFD.UI.DisplayManager.DisplayManager
+        """
+        return StackPanel(display, self)
+        
     def set_focus(self, widget):
         """
         Sets focused to the specified control. The prior focus (if one is present) will receive a lost_focus call and

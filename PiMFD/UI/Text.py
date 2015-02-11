@@ -16,11 +16,17 @@ class SpacerLine(UIWidget):
     A simple construct for a blank line
     """
 
+    def arrange(self):
+
+        self.desired_size = self.display.fonts.normal.size, self.display.fonts.normal.size
+
+        return super(SpacerLine, self).arrange()
+
     def render(self):
         """
         Renders a spacer line by taking up font-sized values and returning a modified bounding rect.
         """
-        self.rect = Rect(self.pos[0], self.pos[1], self.display.fonts.normal.size, self.display.fonts.normal.size)
+        self.rect = Rect(self.pos[0], self.pos[1], self.desired_size[0], self.desired_size[1])
         return self.set_dimensions_from_rect(self.rect)
 
 
