@@ -175,13 +175,13 @@ class MFDPage(UIPage):
 
     def handle_key(self, key):
 
-        if key == Keycodes.KEY_PAGEDOWN:
+        if key in (Keycodes.KEY_PAGEDOWN, Keycodes.KEY_KP3):
             if self.num_pages_y > self.page_y:
                 self.page_y += 1
                 self.constrain_pages()
                 return True
 
-        elif key == Keycodes.KEY_PAGEUP:
+        elif key in (Keycodes.KEY_PAGEUP, Keycodes.KEY_KP9):
             if self.page_y > 1:
                 self.page_y -= 1
                 self.constrain_pages()
