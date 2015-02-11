@@ -32,6 +32,11 @@ class BoxChart(UIWidget):
 
         self.ticks = list()
 
+    def arrange(self):
+        self.desired_size = self.width, self.height
+
+        return super(BoxChart, self).arrange()
+
     def render(self):
         """
         Renders the widget to the screen
