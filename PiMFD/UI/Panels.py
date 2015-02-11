@@ -57,7 +57,7 @@ class StackPanel(UIPanel):
                 if child_size[0] > 0:
                     width += child_size[0] + self.padding[0]
 
-                height = max(child_size[0], height)
+                height = max(child_size[1], height)
 
             else:
 
@@ -65,7 +65,7 @@ class StackPanel(UIPanel):
                 if child_size[1] > 0:
                     height += child_size[1] + self.padding[1]
 
-                height = max(child_size[1], height)
+                width = max(child_size[0], width)
 
         # Update size and return
         self.desired_size = width, height

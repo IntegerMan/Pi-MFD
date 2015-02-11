@@ -24,10 +24,18 @@ class CheckBoxGlyph(UIWidget):
 
     checked = False
     render_focus = False
+    check_pad = 4
 
     def __init__(self, display, page, checked=False):
         super(CheckBoxGlyph, self).__init__(display, page)
         self.checked = checked
+
+    def arrange(self):
+        rect_size = self.display.fonts.normal.size + self.check_pad
+
+        self.desired_size = rect_size, rect_size
+
+        return super(CheckBoxGlyph, self).arrange()
 
     def render(self):
         """
@@ -36,10 +44,9 @@ class CheckBoxGlyph(UIWidget):
         """
 
         # Size Constants
-        check_pad = 4
-        rect_size = self.display.fonts.normal.size + check_pad
+        rect_size = self.display.fonts.normal.size + self.check_pad
 
-        self.rect = Rect(self.pos[0], self.pos[1], rect_size, rect_size)
+        self.rect = Rect(self.pos[0], self.pos[1], self.desired_size[0], self.desired_size[1])
 
         focus_color = self.display.color_scheme.get_focus_color(self.render_focus)
 
@@ -48,10 +55,10 @@ class CheckBoxGlyph(UIWidget):
 
         # Draw checkmark (if checked)
         if self.checked:
-            checked_rect = Rect(self.pos[0] + check_pad,
-                                self.pos[1] + check_pad,
-                                rect_size - (check_pad * 2),
-                                rect_size - (check_pad * 2))
+            checked_rect = Rect(self.pos[0] + self.check_pad,
+                                self.pos[1] + self.check_pad,
+                                rect_size - (self.check_pad * 2),
+                                rect_size - (self.check_pad * 2))
 
             render_rectangle(self.display, focus_color, checked_rect, width=0)
 
@@ -79,6 +86,12 @@ class CheckBox(FocusableWidget):
 
         self.panel = StackPanel(display, page, is_horizontal=True)
         self.panel.children = [self.label, self.glyph]
+
+    def arrange(self):
+
+        self.desired_size = self.panel.arrange()
+
+        return super(CheckBox, self).arrange()
 
     def render(self):
         """
