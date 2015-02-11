@@ -41,16 +41,22 @@ class SpinnerBox(FocusableWidget):
         self.panel.children = [self.label_block, self.value_block]
         self.items = items
 
-    def render(self):
-        """
-        Renders the textblock to the default surface using the current properties of this object
-        :rtype : RectType
-        """
+    def arrange(self):
 
         self.label_block.text = self.label
         self.value_block.text = self.value
         self.label_block.is_highlighted = self.is_focused()
         self.value_block.is_highlighted = self.is_focused()
+
+        self.desired_size = self.panel.arrange()
+
+        return super(SpinnerBox, self).arrange()
+
+    def render(self):
+        """
+        Renders the textblock to the default surface using the current properties of this object
+        :rtype : RectType
+        """
 
         return self.set_dimensions_from_rect(self.panel.render_at(self.pos))
 
