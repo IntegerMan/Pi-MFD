@@ -1,8 +1,10 @@
 # coding=utf-8
 
 import platform
+
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Text import SpacerLine
+
 
 __author__ = 'Matt Eland'
 

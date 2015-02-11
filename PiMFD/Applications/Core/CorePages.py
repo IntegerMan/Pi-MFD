@@ -3,13 +3,11 @@
 Holds system pages for use in the system application.
 """
 from time import strftime, gmtime
-import platform
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
 from PiMFD.UI.SpinnerBox import SpinnerBox
 from PiMFD.UI.TextBoxes import TextBox
-from PiMFD.UI.Text import SpacerLine
 
 
 __author__ = 'Matt Eland'
@@ -82,7 +80,7 @@ class SettingsPage(MFDPage):
 
     def __init__(self, controller, application):
         """
-        :type application: PiMFD.Applications.System.SystemApplication.SysApplication
+        :type application: PiMFD.Applications.MFDApplication
         :type controller: PiMFD.Controller.MFDController
         """
         super(SettingsPage, self).__init__(controller, application)

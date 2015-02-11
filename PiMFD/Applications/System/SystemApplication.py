@@ -2,7 +2,6 @@
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Applications.System.ServicesPages import ServicesPage
-from PiMFD.Applications.System.SystemInfoPage import SysInfoPage
 
 __author__ = 'Matt Eland'
 
@@ -21,18 +20,20 @@ class SysApplication(MFDApplication):
         """
         super(SysApplication, self).__init__(controller)
 
-        self.sys_info_page = SysInfoPage(controller, self)
         self.perf_page = SimpleMessagePage(controller, self, "PERF")
+        self.proc_page = SimpleMessagePage(controller, self, "PROC")
+        self.disk_page = SimpleMessagePage(controller, self, "DISK")
+        self.net_page = SimpleMessagePage(controller, self, "NET")
         self.services_page = ServicesPage(controller, self)
 
-        self.pages = list([self.sys_info_page, self.perf_page, self.services_page])
+        self.pages = list([self.perf_page, self.disk_page, self.services_page, self.proc_page, self.net_page])
 
     def get_default_page(self):
         """
         Gets the default page for the application
         :return: The default page for the application.
         """
-        return self.sys_info_page
+        return self.perf_page
 
     def get_button_text(self):
         """

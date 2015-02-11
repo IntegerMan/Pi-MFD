@@ -2,7 +2,6 @@
 """
 Defines the MFDPage used as a root for other pages in the application.
 """
-from math import ceil
 import traceback
 
 import pygame
@@ -35,12 +34,21 @@ class MFDPage(UIPage):
     num_pages_y = 1
 
     def __init__(self, controller, application, auto_scroll=True):
+        """
+
+        :type controller: PiMFD.Controller.MFDController
+        """
         super(MFDPage, self).__init__(controller.display)
 
         self.controller = controller
         self.application = application
         self.top_headers = list()
         self.bottom_headers = list()
+
+        # Position at start of content area
+        self.panel.pos = controller.display.get_content_start_pos()
+        self.panel.left = self.panel.pos[0]
+        self.panel.top = self.panel.pos[1]
 
         self.auto_scroll = auto_scroll
 
