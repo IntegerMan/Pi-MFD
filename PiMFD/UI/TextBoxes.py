@@ -22,6 +22,17 @@ class TextGlyph(UIWidget):
 
     render_focus = False
     text_width = 85
+    text = None
+    pad_x = 6
+    pad_y = 6
+
+    def arrange(self):
+        vert_size = self.display.fonts.normal.size + self.display.padding_y + self.display.padding_y
+
+        self.desired_size = self.text_width, vert_size
+
+        return super(TextGlyph, self).arrange()
+
 
     def render(self):
         """
@@ -30,9 +41,7 @@ class TextGlyph(UIWidget):
         """
 
         # Size Constants
-        vert_size = self.display.fonts.normal.size + self.display.padding_y + self.display.padding_y
-
-        self.rect = Rect(self.pos[0], self.pos[1], self.text_width, vert_size)
+        self.rect = Rect(self.pos[0], self.pos[1], self.desired_size[0], self.desired_size[1])
 
         # Draw the border
         focus_color = self.display.color_scheme.get_focus_color(self.render_focus)
@@ -40,9 +49,8 @@ class TextGlyph(UIWidget):
 
         # Draw the text
         display = self.display
-        pad_x = 6
-        pad_y = 6
-        render_text(display, display.fonts.normal, self.text, self.pos[0] + pad_x, self.pos[1] + pad_y, focus_color)
+        render_text(display, display.fonts.normal, self.text, self.pos[0] + self.pad_x, self.pos[1] + self.pad_y,
+                    focus_color)
 
         # Update and return our dimensions
         return self.set_dimensions_from_rect(self.rect)
@@ -72,15 +80,21 @@ class TextBox(FocusableWidget):
         self.panel = StackPanel(display, page, is_horizontal=True)
         self.panel.children = [self.label, self.glyph]
 
+    def arrange(self):
+
+        # Pass along our values to the children
+        self.label.text = self.label_text
+        self.glyph.text = self.text
+
+        self.desired_size = self.panel.arrange()
+
+        return super(TextBox, self).arrange()
+
     def render(self):
         """
         Renders the TextBox with its current state
         :return: The rectangle of the TextBox
         """
-
-        # Pass along our values to the children
-        self.label.text = self.label_text
-        self.glyph.text = self.text
 
         # Render the panel's contents
         self.panel.set_dimensions_from(self)
