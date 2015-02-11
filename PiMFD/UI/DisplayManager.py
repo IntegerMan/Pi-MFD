@@ -236,3 +236,16 @@ class DisplayManager(object):
         self.overlays.append(ScanlineOverlay(options))
         self.overlays.append(InterlaceOverlay(options))
         self.overlays.append(FPSOverlay(options))
+
+    def get_content_size(self):
+
+        """
+        Gets the width and height of the content area
+        :rtype : tuple
+        :return: The width and height of the content area
+        """
+
+        width = self.get_content_end_x() - self.get_content_start_x()
+        height = self.get_content_end_y() - self.get_content_start_y()
+
+        return width, height

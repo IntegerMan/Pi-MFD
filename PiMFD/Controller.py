@@ -8,7 +8,6 @@ import pygame
 
 from PiMFD.Applications.Navigation.NavigationApplication import NavigationApp
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
-from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Options import MFDAppOptions
 from PiMFD.UI import Keycodes
 from PiMFD.UI.Button import MFDButton
@@ -232,12 +231,12 @@ class MFDController(object):
         self.update_application()
 
         # Render the current page
-        if self.active_app is not None and self.active_app.active_page is not None:
+        if self.active_app is not None and self.active_app.active_page:
+
             # let the page speak for itself
-            self.active_app.active_page.render()
-        else:
-            # No content defined for the app. Render a not implemented message
-            SimpleMessagePage(self, self.active_app, 'N/A').render()
+            page = self.active_app.active_page
+            page.arrange()
+            page.render()
 
         # Render the headers on top of everything else
         self.render_button_rows()

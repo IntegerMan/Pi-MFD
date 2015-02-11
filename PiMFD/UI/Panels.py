@@ -19,6 +19,12 @@ class UIPanel(UIWidget):
         self.children = list()
         self.keep_together = keep_together
 
+    def arrange(self):
+        # Not a correct implementation for most usages, but we do want to ensure things get arranged
+        for child in self.children:
+            child.arrange()
+
+        return super(UIPanel, self).arrange()
 
 class StackPanel(UIPanel):
     """

@@ -4,10 +4,10 @@ Defines the MFDPage used as a root for other pages in the application.
 """
 from math import ceil
 import traceback
+
 import pygame
 
 from PiMFD.UI import Keycodes
-
 from PiMFD.UI.ImageRendering import ImageRenderer, WebImageRenderer
 from PiMFD.UI.Pages import UIPage
 from PiMFD.UI.Rendering import render_text_centered, render_triangle_down, render_triangle_up
@@ -114,6 +114,13 @@ class MFDPage(UIPage):
             self.page_y = max(1, self.num_pages_y)
         elif self.page_y <= 0:
             self.page_y = 1
+
+    def arrange(self):
+
+        self.desired_size = self.panel.arrange()
+
+        return super(MFDPage, self).arrange()
+
 
     def render(self):
 

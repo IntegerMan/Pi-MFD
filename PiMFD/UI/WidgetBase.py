@@ -15,6 +15,7 @@ class UIObject(object):
     """
 
     display = None
+    desired_size = 0, 0
 
     def __init__(self, display):
         """
@@ -23,10 +24,23 @@ class UIObject(object):
         super(UIObject, self).__init__()
         self.display = display
 
+    # noinspection PyMethodMayBeStatic
+    def arrange(self):
+        """
+        Measures the widget and returns desired dimensions
+        :return: The size used for arrangement
+        :rtype: tuple
+        """
+
+        return self.desired_size
+
+    # noinspection PyMethodMayBeStatic
     def render(self):
         """
-        Renders the UIObject
+        Renders the widget to the screen
+        :return: The rect of the control as it was rendered
         """
+
         pass
 
 
@@ -48,6 +62,10 @@ class UIWidget(UIObject):
     page = None
 
     def __init__(self, display, page):
+        """
+        :type page: PiMFD.UI.Pages.UIPage
+        :type display: PiMFD.UI.DisplayManager.DisplayManager
+        """
         super(UIWidget, self).__init__(display)
         self.page = page
 

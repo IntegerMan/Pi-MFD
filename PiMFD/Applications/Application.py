@@ -97,7 +97,7 @@ class MFDApplication(object):
     def select_page(self, page):
         """
         Selects the specified page
-        :type page: The MFDPage in this application
+        :type page: PiMFD.Applications.MFDPage.MFDPage
         """
 
         # Don't allow switching to a "none" page
