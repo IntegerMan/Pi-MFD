@@ -138,9 +138,15 @@ class StackPanel(UIPanel):
         self.width = self.desired_size[0]
         self.height = self.desired_size[1]
 
+        min_y = self.display.get_content_start_y()
+        max_y = self.display.get_content_end_y()
+
         # Render children where arrange told us to
         for child in self.children:
-            child.render()
+
+            # Only render nodes that will be visible
+            if child.pos[1] < max_y and (child.pos[1] + child.desired_size[1]) > min_y:
+                child.render()
 
         # Update and return our bounds
         self.rect = Rect(self.left, self.top, self.width, self.height)
