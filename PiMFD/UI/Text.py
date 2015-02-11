@@ -59,6 +59,32 @@ class TextBlock(UIWidget):
         else:
             return cs.foreground
 
+    def arrange(self):
+
+        effective_text = self.get_effective_text()
+
+        self.desired_size = self.font.measure(effective_text)
+
+        return super(TextBlock, self).arrange()
+
+    def get_effective_text(self):
+
+        # Do string formatting as needed
+        effective_text = str(self.text)
+
+        try:
+            if self.text is not None:
+
+                if isinstance(self.text, str) or isinstance(self.text, unicode):
+                    if isinstance(self.text_data, tuple):
+                        effective_text = self.text.format(*self.text_data)
+                    else:
+                        effective_text = self.text.format(self.text_data)
+        except:
+            effective_text = str(self.text)
+
+        return effective_text
+
     def render(self):
         """
         Renders the textblock to the default surface using the current properties of this object
@@ -68,17 +94,7 @@ class TextBlock(UIWidget):
         self.left = self.pos[0]
         self.top = self.pos[1]
 
-        # Do string formatting as needed
-        effective_text = self.text
-        if self.text is not None:
-
-            if isinstance(self.text, str) or isinstance(self.text, unicode):
-                if isinstance(self.text_data, tuple):
-                    effective_text = self.text.format(*self.text_data)
-                else:
-                    effective_text = self.text.format(self.text_data)
-            else:
-                effective_text = str(self.text)
+        effective_text = self.get_effective_text()
 
         if self.font is not None and effective_text is not None:
             color = self.get_foreground()

@@ -41,6 +41,37 @@ class StackPanel(UIPanel):
         self.is_horizontal = is_horizontal
         self.auto_orient = auto_orient
 
+    def arrange(self):
+
+        width = 0
+        height = 0
+
+        for child in self.children:
+
+            # Ask the child to measure itself
+            child_size = child.arrange()
+
+            if self.is_horizontal:
+
+                # Add up widths (with padding) and use largest height encountered
+                if child_size[0] > 0:
+                    width += child_size[0] + self.padding[0]
+
+                height = max(child_size[0], height)
+
+            else:
+
+                # Add up heights (with padding) and use largest width encountered
+                if child_size[1] > 0:
+                    height += child_size[1] + self.padding[1]
+
+                height = max(child_size[1], height)
+
+        # Update size and return
+        self.desired_size = width, height
+        return self.desired_size
+
+
     def render(self):
         """
         Renders the panel and all of its children
@@ -54,19 +85,17 @@ class StackPanel(UIPanel):
 
         self.top = y
         self.left = x
+        self.width = self.desired_size[0]
+        self.height = self.desired_size[1]
 
         for child in self.children:
 
             # Position the child relative to where it should be and render it
-            child_rect = child.render_at((x, y))
+            child.render_at((x, y))
 
             # Now that we've rendered, we need to adjust our running dimensions
             # and figure out where to put the next one
             if self.is_horizontal:
-
-                # Horizontal layout mode - go left to right
-                self.height = max(self.height, child_rect.height)
-                self.width = child.right - self.left
 
                 # Don't add padding if we're zero-width
                 if child.right > child.left:
@@ -75,10 +104,6 @@ class StackPanel(UIPanel):
                     x = child.right
 
             else:
-
-                # Vertical layout mode (default) - go top to bottom
-                self.width = max(self.width, child_rect.width)
-                self.height = child.bottom - self.top
 
                 # Don't add padding if we're zero-height
                 if child.bottom > child.top:
