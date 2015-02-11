@@ -3,7 +3,6 @@ import pygame
 
 from PiMFD.Applications.System.SystemApplication import SysApplication
 from PiMFD.Controller import MFDController
-from PiMFD.Applications.Core.CorePages import SysClockPage
 
 
 __author__ = 'Matt Eland'

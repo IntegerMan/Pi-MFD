@@ -7,6 +7,7 @@ from time import strftime, gmtime
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
 from PiMFD.UI.SpinnerBox import SpinnerBox
+from PiMFD.UI.Text import SpacerLine
 from PiMFD.UI.TextBoxes import TextBox
 
 
@@ -40,25 +41,34 @@ class SysExitPage(MFDPage):
         self.controller.requested_exit = True
 
 
-class SysClockPage(MFDPage):
+class DashboardPage(MFDPage):
     """
     A system clock page displaying the time in GMT and the current time zone.
     """
 
     def __init__(self, controller, application):
-        super(SysClockPage, self).__init__(controller, application)
+        super(DashboardPage, self).__init__(controller, application)
 
         header = self.get_header_label("Current Time")
         self.lbl_sys_time = self.get_label("SYS: {}")
         self.lbl_gmt_time = self.get_label("GMT: {}")
-        self.panel.children = [header, self.lbl_sys_time, self.lbl_gmt_time]
+
+        header_alerts = self.get_header_label("Alerts")
+        self.lbl_alerts = self.get_label("No Alerts")
+
+        self.panel.children = [header,
+                               self.lbl_sys_time,
+                               self.lbl_gmt_time,
+                               SpacerLine(self.display, self),
+                               header_alerts,
+                               self.lbl_alerts]
 
     def get_button_text(self):
         """
         Gets the button text.
         :return: The button text.
         """
-        return "TIME"
+        return "ALRT"
 
     def arrange(self):
 
@@ -66,7 +76,7 @@ class SysClockPage(MFDPage):
         self.lbl_sys_time.text_data = strftime(self.controller.time_format)
         self.lbl_gmt_time.text_data = strftime(self.controller.time_format, gmtime())
 
-        return super(SysClockPage, self).arrange()
+        return super(DashboardPage, self).arrange()
 
 
 class SettingsPage(MFDPage):
