@@ -1,5 +1,9 @@
 # coding=utf-8
-import psutil
+
+try:
+    import psutil
+except ImportError:
+    psutil = None
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Widgets.MenuItem import MenuItem
@@ -18,6 +22,9 @@ class ProcessPage(MFDPage):
         self.refresh()
 
     def refresh(self,):
+
+        if not psutil:
+            return
 
         self.processes = psutil.get_process_list()
 
@@ -48,6 +55,13 @@ class ProcessPage(MFDPage):
 
     def arrange(self):
         return super(ProcessPage, self).arrange()
+
+    def render(self):
+
+        if not psutil:
+            self.center_text("psutil offline".upper())
+
+        return super(ProcessPage, self).render()
 
     def handle_reselected(self):
         self.refresh()

@@ -1,5 +1,8 @@
 # coding=utf-8
-import psutil
+try:
+    import psutil
+except ImportError:
+    psutil = None
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Widgets.MenuItem import MenuItem
@@ -18,6 +21,10 @@ class DiskDrivesPage(MFDPage):
         self.refresh()
 
     def refresh(self,):
+
+        if not psutil:
+            self.partitions = None
+            return
 
         self.partitions = psutil.disk_partitions(all=True)
 
@@ -54,6 +61,13 @@ class DiskDrivesPage(MFDPage):
 
     def arrange(self):
         return super(DiskDrivesPage, self).arrange()
+
+    def render(self):
+
+        if not psutil:
+            self.center_text("psutil offline".upper())
+
+        return super(DiskDrivesPage, self).render()
 
     def handle_reselected(self):
         self.refresh()

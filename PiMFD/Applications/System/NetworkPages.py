@@ -2,7 +2,10 @@
 from _socket import SOCK_STREAM, SOCK_DGRAM, SOCK_RAW, SOCK_RDM, SOCK_SEQPACKET, AF_INET, AF_INET6, AF_APPLETALK, \
     AF_DECnet, AF_IPX, AF_IRDA, AF_SNA, AF_UNSPEC
 
-import psutil
+try:
+    import psutil
+except ImportError:
+    psutil = None
 
 try:
     from psutil._common import AF_UNIX
@@ -35,6 +38,9 @@ class NetworkPage(MFDPage):
         self.refresh()
 
     def refresh(self, ):
+
+        if not psutil:
+            return
 
         try:
             self.connections = psutil.net_connections(kind='all')
