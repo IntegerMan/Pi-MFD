@@ -2,6 +2,7 @@
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Applications.System.DiskPages import DiskDrivesPage
+from PiMFD.Applications.System.NetworkPages import NetworkPage
 from PiMFD.Applications.System.ProcessPages import ProcessPage
 from PiMFD.Applications.System.WMIServicesPages import WMIServicesPage
 
@@ -25,7 +26,7 @@ class SysApplication(MFDApplication):
         self.perf_page = SimpleMessagePage(controller, self, "PERF")
         self.proc_page = ProcessPage(controller, self)
         self.disk_page = DiskDrivesPage(controller, self)
-        self.net_page = SimpleMessagePage(controller, self, "NET")
+        self.net_page = NetworkPage(controller, self)
         self.services_page = WMIServicesPage(controller, self)
 
         self.pages = list([self.perf_page, self.disk_page, self.services_page, self.proc_page, self.net_page])
