@@ -12,6 +12,8 @@ class FocusableWidget(UIWidget):
     A UIWidget that can receieve and manage focus
     """
 
+    is_enabled = True
+
     def __init__(self, display, page):
         super(FocusableWidget, self).__init__(display, page)
         page.register_focusable(self)

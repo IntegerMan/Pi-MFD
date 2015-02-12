@@ -47,12 +47,8 @@ class FontManager(object):
 
     normal = None
     small = None
+    list = None
     weather = None
-    map1 = None
-    map2 = None
-    map3 = None
-    map4 = None
-    nato_equip = None
 
     def __init__(self, options):
         """
@@ -70,14 +66,11 @@ class FontManager(object):
 
         scale_factor = self.options.font_scaling
         small_font_size = max(scale_factor, self.options.min_font_size)
+        list_font_size = scale_factor * 2
 
         self.normal = FontInfo(self.options.font_name, scale_factor * 3)
-        self.weather = FontInfo('Fonts/WeatherIcons.ttf', scale_factor * 4)
         self.small = FontInfo(self.options.font_name, small_font_size)
-        self.map1 = FontInfo('Fonts/mapz01.ttf', scale_factor * 3)
-        self.map2 = FontInfo('Fonts/mapz02.ttf', scale_factor * 3)
-        self.map3 = FontInfo('Fonts/mapz03.ttf', scale_factor * 3)
-        self.map4 = FontInfo('Fonts/mapz04.ttf', scale_factor * 3)
-        self.nato_equip = FontInfo('Fonts/app6a13.ttf', scale_factor * 3)
-
+        self.list = FontInfo(self.options.font_name, list_font_size)
+        
+        self.weather = FontInfo('Fonts/WeatherIcons.ttf', scale_factor * 4)
 

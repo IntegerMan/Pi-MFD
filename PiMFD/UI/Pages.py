@@ -97,6 +97,8 @@ class UIPage(UIObject):
 
         # Okay, control didn't want anything, now let's process some specialized input handlers for navigation
 
+        # TODO: This code will need to bypass disabled focusable controls
+
         if is_up_key(key):
             if self.focus:
                 index = self.focusables.index(self.focus)

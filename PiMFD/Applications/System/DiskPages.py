@@ -21,7 +21,7 @@ class DiskDrivesPage(MFDPage):
 
         self.partitions = psutil.disk_partitions(all=True)
 
-        self.panel.children.append(self.get_header_label('Disk Drives'))
+        self.panel.children.append(self.get_header_label('Drives ({})'.format(len(self.partitions))))
 
         is_first_control = True
         

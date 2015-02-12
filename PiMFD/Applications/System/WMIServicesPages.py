@@ -81,7 +81,7 @@ class WMIServicesPage(MFDPage):
                 sys_name = s.SystemName
 
             lbl = self.get_label("{}: {}".format(s.Caption, s.State))
-            lbl.font = self.display.fonts.small
+            lbl.font = self.display.fonts.list
 
             # If it's not running, mark it as disabled color
             if s.State in ("Stopped", "Paused", "Unknown", "Continue Pending", "Start Pending"):

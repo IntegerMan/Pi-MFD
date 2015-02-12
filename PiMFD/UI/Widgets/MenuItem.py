@@ -21,7 +21,7 @@ class MenuItem(FocusableWidget):
     text = None
     text_data = None
     last_click = None
-
+    
     def __init__(self, display, page, text):
 
         """
@@ -41,6 +41,7 @@ class MenuItem(FocusableWidget):
         self.label.text = self.text
         self.label.text_data = self.text_data
         self.label.is_highlighted = self.is_focused()
+        self.label.is_enabled = self.is_enabled
         self.label.arrange()
 
         self.desired_size = self.label.desired_size
@@ -64,23 +65,24 @@ class MenuItem(FocusableWidget):
         """
 
         # Allow the user to click it via enter / space / right
-        if is_enter_key(key) or key == Keycodes.KEY_SPACE or is_right_key(key):
-
-            process = True
-
-            # Ensure we're not clicking too closely to a prior click event
-            now = datetime.now()
-            if self.last_click:
-                delta = now - self.last_click
-                if delta.microseconds < 300000:
-                    process = False
-
-            # Okay, it's not a sticky key - go for it
-            if process:
-                self.last_click = now
-                self.play_button_sound()
-                self.state_changed()
-                return True
+        if self.is_enabled:
+            if is_enter_key(key) or key == Keycodes.KEY_SPACE or is_right_key(key):
+        
+                process = True
+        
+                # Ensure we're not clicking too closely to a prior click event
+                now = datetime.now()
+                if self.last_click:
+                    delta = now - self.last_click
+                    if delta.microseconds < 300000:
+                        process = False
+        
+                # Okay, it's not a sticky key - go for it
+                if process:
+                    self.last_click = now
+                    self.play_button_sound()
+                    self.state_changed()
+                    return True
 
         return super(MenuItem, self).handle_key(key)
 
