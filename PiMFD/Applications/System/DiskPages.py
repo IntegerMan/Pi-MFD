@@ -1,6 +1,9 @@
 # coding=utf-8
 import psutil
+
 from PiMFD.Applications.MFDPage import MFDPage
+from PiMFD.UI.Widgets.MenuItem import MenuItem
+
 
 __author__ = 'Matt Eland'
 
@@ -19,6 +22,9 @@ class DiskDrivesPage(MFDPage):
         self.partitions = psutil.disk_partitions(all=True)
 
         self.panel.children.append(self.get_header_label('Disk Drives'))
+
+        is_first_control = True
+        
         for p in self.partitions:
 
             drive = p.device
@@ -38,8 +44,13 @@ class DiskDrivesPage(MFDPage):
                 percent = usage.percent
                 text = "{} {} {} ({} % Full)".format(drive, file_system, options, percent)
 
-            lbl = self.get_label(text)
+            lbl = MenuItem(self.controller.display, self, text)
             self.panel.children.append(lbl)
+
+            if is_first_control:
+                self.set_focus(lbl)
+                is_first_control = False
+
 
     def arrange(self):
         return super(DiskDrivesPage, self).arrange()

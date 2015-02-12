@@ -6,7 +6,7 @@ from time import strftime, gmtime
 
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Checkboxes import CheckBox
-from PiMFD.UI.SpinnerBox import SpinnerBox
+from PiMFD.UI.Widgets.SpinnerBox import SpinnerBox
 from PiMFD.UI.Text import SpacerLine
 from PiMFD.UI.TextBoxes import TextBox
 

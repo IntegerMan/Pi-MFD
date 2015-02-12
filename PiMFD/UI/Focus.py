@@ -52,3 +52,11 @@ class FocusableWidget(UIWidget):
         """
         if self.page:
             self.page.handle_control_state_changed(self)
+
+    def play_button_sound(self):
+        """
+        Makes a click sound effect
+        """
+
+        if self.page:
+            self.page.controller.play_button_sound()
