@@ -19,7 +19,7 @@ from PiMFD.UI.Panels import StackPanel
 __author__ = 'Matt'
 
 
-class ServicesPage(MFDPage):
+class WMIServicesPage(MFDPage):
     """
     A page containing information on running services
     """
@@ -28,7 +28,7 @@ class ServicesPage(MFDPage):
     message = "NO DATA"
 
     def __init__(self, controller, application):
-        super(ServicesPage, self).__init__(controller, application)
+        super(WMIServicesPage, self).__init__(controller, application)
 
         self.services = list()
 
@@ -37,18 +37,18 @@ class ServicesPage(MFDPage):
         self.panel.children = [self.lbl_header, self.pnl_services]
 
     def handle_unselected(self):
-        super(ServicesPage, self).handle_unselected()
+        super(WMIServicesPage, self).handle_unselected()
 
     def get_button_text(self):
         return "SRVC"
 
     def handle_selected(self):
-        super(ServicesPage, self).handle_selected()
+        super(WMIServicesPage, self).handle_selected()
 
         self.refresh_services()
 
     def handle_reselected(self):
-        super(ServicesPage, self).handle_reselected()
+        super(WMIServicesPage, self).handle_reselected()
 
         self.refresh_services()
 
@@ -102,5 +102,5 @@ class ServicesPage(MFDPage):
         if len(self.pnl_services.children) <= 0 and self.message:
             self.center_text(self.message.upper(), self.display.color_scheme.highlight)
         else:
-            return super(ServicesPage, self).render()
+            return super(WMIServicesPage, self).render()
 

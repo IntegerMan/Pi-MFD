@@ -2,7 +2,7 @@
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Applications.System.DiskPages import DiskDrivesPage
-from PiMFD.Applications.System.ServicesPages import ServicesPage
+from PiMFD.Applications.System.WMIServicesPages import WMIServicesPage
 
 __author__ = 'Matt Eland'
 
@@ -25,7 +25,7 @@ class SysApplication(MFDApplication):
         self.proc_page = SimpleMessagePage(controller, self, "PROC")
         self.disk_page = DiskDrivesPage(controller, self)
         self.net_page = SimpleMessagePage(controller, self, "NET")
-        self.services_page = ServicesPage(controller, self)
+        self.services_page = WMIServicesPage(controller, self)
 
         self.pages = list([self.perf_page, self.disk_page, self.services_page, self.proc_page, self.net_page])
 
