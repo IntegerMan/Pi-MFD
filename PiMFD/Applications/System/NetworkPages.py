@@ -13,10 +13,20 @@ from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Widgets.MenuItem import MenuItem
 
 
+"""
+Contains code related to network monitoring. Note that code here can be OS sensitive.
+"""
+
 __author__ = 'Matt Eland'
 
 
 class NetworkPage(MFDPage):
+    """
+    A page containing network connection information
+    :type controller: PiMFD.Controller.MFDController
+    :type application: PiMFD.Applications.System.SystemApplication.SysApplication
+    :type auto_scroll: bool
+    """
     connections = None
 
     def __init__(self, controller, application, auto_scroll=True):
@@ -38,7 +48,6 @@ class NetworkPage(MFDPage):
 
         for c in self.connections:
 
-            file_descriptor = c.fd
             family = self.get_connection_family_text(c.family)
             conn_type = self.get_connection_type_text(c.type)
             local_address = self.get_address_text(c.laddr)  # May be tuple or path
@@ -147,9 +156,6 @@ class NetworkPage(MFDPage):
             return "SEQ Packet"
 
         return "UNK: " + str(conn_type)
-
-    def arrange(self):
-        return super(NetworkPage, self).arrange()
 
     def render(self):
 
