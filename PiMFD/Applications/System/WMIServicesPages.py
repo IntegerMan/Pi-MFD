@@ -21,7 +21,7 @@ __author__ = 'Matt'
 
 class WMIServicesPage(MFDPage):
     """
-    A page containing information on running services
+    A page containing information on running services using WMI
     """
 
     wmi = None
