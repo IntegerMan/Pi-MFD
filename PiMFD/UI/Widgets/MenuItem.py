@@ -21,6 +21,7 @@ class MenuItem(FocusableWidget):
     text = None
     text_data = None
     last_click = None
+    font = None
     
     def __init__(self, display, page, text):
 
@@ -29,6 +30,7 @@ class MenuItem(FocusableWidget):
         """
         super(MenuItem, self).__init__(display, page)
         self.text = text
+        self.font = display.fonts.normal
         self.label = TextBlock(display, page, text)
 
     def arrange(self):
@@ -42,6 +44,7 @@ class MenuItem(FocusableWidget):
         self.label.text_data = self.text_data
         self.label.is_highlighted = self.is_focused()
         self.label.is_enabled = self.is_enabled
+        self.label.font = self.font
         self.label.arrange()
 
         self.desired_size = self.label.desired_size
