@@ -16,6 +16,10 @@ from PiMFD.UI.Widgets.MenuItem import MenuItem
 __author__ = 'Matt Eland'
 
 
+class DiskDrive(object):
+    pass
+    
+
 class DiskDrivesPage(MFDPage):
     """
     A page displaying a list of disk drives on this machine.
@@ -23,7 +27,7 @@ class DiskDrivesPage(MFDPage):
     :type application: PiMFD.Applications.System.SystemApplication.SysApplication
     :type auto_scroll: bool
     """
-    partitions = None
+    drives = None
 
     def __init__(self, controller, application, auto_scroll=True):
         super(DiskDrivesPage, self).__init__(controller, application, auto_scroll)
@@ -37,35 +41,43 @@ class DiskDrivesPage(MFDPage):
         """
         
         if not psutil:
-            self.partitions = None
+            self.drives = None
             return
 
-        self.partitions = psutil.disk_partitions(all=True)
+        partitions = psutil.disk_partitions(all=True)
 
-        self.panel.children.append(self.get_header_label('Drives ({})'.format(len(self.partitions))))
+        self.panel.children.append(self.get_header_label('Drives ({})'.format(len(partitions))))
 
         is_first_control = True
-        
-        for p in self.partitions:
 
-            drive = p.device
-            options = p.opts.upper()
-            file_system = p.fstype
+        drives = list()
+
+        for p in partitions:
+
+            drive = DiskDrive()
+
+            drives.append(drive)
+
+            drive.device = p.device
+            drive.options = p.opts.upper()
+            drive.file_system = p.fstype
 
             # Determine if it's a CD-Drive
-            if 'CDROM' in options or file_system == '':
+            if 'CDROM' in drive.options or drive.file_system == '':
 
                 # For CD-ROM Drives, we don't want to grab usage information
-                text = "{} {}".format(drive, options)
+                text = "{} {}".format(drive.device, drive.options)
 
             else:
 
                 # Normal disk - display information on availability / etc.
-                usage = psutil.disk_usage(p.mountpoint)
-                percent = usage.percent
-                text = "{} {} {} ({} % Full)".format(drive, file_system, options, percent)
+                drive.usage = psutil.disk_usage(p.mountpoint)
+                drive.usage_percent = drive.usage.percent
+                text = "{} {} {} ({} % Full)".format(drive.device, drive.file_system, drive.options,
+                                                     drive.usage_percent)
 
             lbl = MenuItem(self.controller.display, self, text)
+            lbl.data_context = drive
             lbl.font = self.controller.display.fonts.list
             self.panel.children.append(lbl)
 
@@ -106,6 +118,43 @@ class DiskDrivesPage(MFDPage):
         """
         return "DRVS"
 
+    def handle_control_state_changed(self, widget):
+
+        drive = widget.data_context
+
+        if drive:
+            self.application.select_page(DiskDetailsPage(self.controller, self.application, drive))
+
+        super(DiskDrivesPage, self).handle_control_state_changed(widget)
 
 
+class DiskDetailsPage(MFDPage):
+    drive = None
 
+    def __init__(self, controller, application, drive, auto_scroll=True):
+        super(DiskDetailsPage, self).__init__(controller, application, auto_scroll)
+
+        self.drive = drive
+
+        self.panel.children.append(self.get_header_label("Drive Information"))
+
+        # Grab all attributes of the drive and show them around
+        self.panel.children.append(self.get_label("General"))
+        for key in self.drive.__dict__.keys():
+            lbl = self.get_label("{}: {}".format(key, self.drive.__dict__[key]))
+            lbl.font = self.controller.display.fonts.list
+            self.panel.children.append(lbl)
+
+
+    def arrange(self):
+        return super(DiskDetailsPage, self).arrange()
+
+    def render(self):
+        return super(DiskDetailsPage, self).render()
+
+    def get_button_text(self):
+        return "INFO"        
+    
+
+        
+    

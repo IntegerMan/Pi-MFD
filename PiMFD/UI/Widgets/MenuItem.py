@@ -22,7 +22,7 @@ class MenuItem(FocusableWidget):
     text_data = None
     last_click = None
     font = None
-    
+
     def __init__(self, display, page, text):
 
         """

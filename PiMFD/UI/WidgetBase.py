@@ -60,6 +60,7 @@ class UIWidget(UIObject):
     height = 0
     rect = Rect(0, 0, 0, 0)
     page = None
+    data_context = None
 
     def __init__(self, display, page):
         """
