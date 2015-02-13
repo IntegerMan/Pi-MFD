@@ -51,9 +51,14 @@ class WeatherData(object):
     city = 'Unknown'
     lat = 'UNK'
     long = 'UNK'
+    temp_units = "F"
+    wind_units = "MPH"
     code = -1
     forecasts = list()
     gps = 0, 0
+    wind_numeric_direction = 0
+    pressure_units = 'in'
+    visibility_units = 'mi'
 
     data = None
 

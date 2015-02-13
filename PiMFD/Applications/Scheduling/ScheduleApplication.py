@@ -23,7 +23,7 @@ class ScheduleApp(MFDApplication):
     calendar_page = None
     weather_page = None
 
-    weather_data = WeatherData()
+    weather_data = None
     weather_api = WeatherAPI()
 
     def __init__(self, controller):

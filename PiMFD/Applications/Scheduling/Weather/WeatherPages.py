@@ -126,30 +126,34 @@ class WeatherPage(MFDPage):
 
         weather = self.weather_provider.weather_data
 
-        self.lbl_today_header.text_data = weather.city
-        self.lbl_temp.text_data = (weather.temperature, weather.temp_units, weather.windchill, weather.temp_units)
-        self.lbl_cond.text_data = weather.conditions
-        self.lbl_cond_icon.text_data = get_condition_icon(weather.code)
-        self.lbl_wind.text_data = (weather.wind_speed, weather.wind_units, weather.wind_cardinal_direction)
-        self.lbl_humidity.text_data = weather.humidity
-        self.lbl_visible.text_data = (weather.visibility, weather.visibility_units)
-        self.lbl_pressure.text_data = (weather.pressure, weather.pressure_units)
-        self.lbl_daylight.text_data = (weather.sunrise, weather.sunset)
-        self.lbl_gps.text_data = (weather.lat, weather.long)
-        self.lbl_updated.text_data = weather.last_result
+        self.weather = weather
 
-        # Update Forecasts
-        for i in range(0, self.max_forecasts):
-            label = self.lbl_forecast[i]
-            icon = self.lbl_forecast_icon[i]
-            chart = self.chart_forecast[i]
+        if weather:
+            self.lbl_today_header.text_data = weather.city
+            self.lbl_temp.text_data = (weather.temperature, weather.temp_units, weather.windchill, weather.temp_units)
+            self.lbl_cond.text_data = weather.conditions
+            self.lbl_cond_icon.text_data = get_condition_icon(weather.code)
+            self.lbl_wind.text_data = (weather.wind_speed, weather.wind_units, weather.wind_cardinal_direction)
+            self.lbl_humidity.text_data = weather.humidity
+            self.lbl_visible.text_data = (weather.visibility, weather.visibility_units)
+            self.lbl_pressure.text_data = (weather.pressure, weather.pressure_units)
+            self.lbl_daylight.text_data = (weather.sunrise, weather.sunset)
+            self.lbl_gps.text_data = (weather.lat, weather.long)
+            self.lbl_updated.text_data = weather.last_result
 
-            forecast = weather.forecasts[i]
+            # Update Forecasts
+            i = 0
+            for forecast in weather.forecasts:
+                label = self.lbl_forecast[i]
+                icon = self.lbl_forecast_icon[i]
+                chart = self.chart_forecast[i]
 
-            label.text_data = (forecast.day, forecast.low, forecast.high, weather.temp_units)
-            icon.text_data = get_condition_icon(forecast.code)
-            chart.value_low = forecast.low
-            chart.value_high = forecast.high
+                label.text_data = (forecast.day, forecast.low, forecast.high, weather.temp_units)
+                icon.text_data = get_condition_icon(forecast.code)
+                chart.value_low = forecast.low
+                chart.value_high = forecast.high
+
+                i += 1
 
         return super(WeatherPage, self).arrange()
 
@@ -159,4 +163,7 @@ class WeatherPage(MFDPage):
         Renders the weather page
         """
 
-        super(WeatherPage, self).render()
+        if not self.weather:
+            self.center_text("NO WEATHER DATA")
+        else:
+            super(WeatherPage, self).render()

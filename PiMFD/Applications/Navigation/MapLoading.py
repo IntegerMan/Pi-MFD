@@ -12,8 +12,16 @@ from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 Contains code related to rendering maps to the screen
 """
 from math import floor
-import requests
-import xmltodict
+
+try:
+    import requests
+except ImportError:
+    requests = None
+
+try:
+    import xmltodict
+except ImportError:
+    xmltodict = None
 
 __author__ = 'Multiple'
 
@@ -139,6 +147,11 @@ class Maps(object):
                 print(data)
                 self.has_data = False
                 self.status_text = 'Map Server Offline'
+                return
+
+
+            if not xmltodict:
+                self.status_text = "xmltodict not available".upper()
                 return
 
             osm_dict = xmltodict.parse(data)
