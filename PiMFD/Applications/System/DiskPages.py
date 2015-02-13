@@ -101,26 +101,28 @@ class DiskDrive(object):
 
     def get_performance_info(self):
         if self.counters:
-            o = self.old_counters
             c = self.counters
-            yield "Read Count: {}".format(c.read_count - o.read_count)
-            yield "Read Bytes: {}".format(c.read_bytes - o.read_bytes)
-            yield "Read Time: {}".format(c.read_time - o.read_time)
-            yield "Write Count: {}".format(c.write_count - o.write_count)
-            yield "Write Bytes: {}".format(c.write_bytes - o.write_bytes)
-            yield "Write Time: {}".format(c.write_time - o.write_time)
+            if self.old_counters:
+                o = self.old_counters
+                yield "Read Count: {}".format(c.read_count - o.read_count)
+                yield "Read Bytes: {}".format(c.read_bytes - o.read_bytes)
+                yield "Read Time: {}".format(c.read_time - o.read_time)
+                yield "Write Count: {}".format(c.write_count - o.write_count)
+                yield "Write Bytes: {}".format(c.write_bytes - o.write_bytes)
+                yield "Write Time: {}".format(c.write_time - o.write_time)
+            else:
+                yield "Measuring..."
 
-    def load_counters(self, key, old_counter, new_counter):
+    def load_counters(self, key, counters):
         self.counter_key = key
-        self.counters = new_counter
-        self.old_counters = old_counter
+        self.old_counters = self.counters
+        self.counters = counters
 
     def refresh_counters(self):
 
-        # TODO: Refresh the counters!
+        counters = psutil.disk_io_counters(perdisk=True)
 
-        pass
-
+        self.load_counters(self.counter_key, counters[self.counter_key])
 
 class DiskDrivesPage(MFDPage):
     """
@@ -169,7 +171,7 @@ class DiskDrivesPage(MFDPage):
 
             if drive.can_get_usage() and counter_index < len(old_counters):
                 key = old_counters.keys()[counter_index]
-                drive.load_counters(key, old_counters[key], new_counters[key])
+                drive.load_counters(key, new_counters[key])
                 counter_index += 1
 
             text = drive.get_display_text()
