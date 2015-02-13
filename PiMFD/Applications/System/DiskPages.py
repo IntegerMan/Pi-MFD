@@ -3,6 +3,7 @@
 """
 Contains Disk Drive Pages
 """
+from datetime import datetime
 from math import log
 
 from PiMFD.UI.Panels import StackPanel
@@ -266,6 +267,7 @@ class DiskDetailsPage(MFDPage):
             self.perf_panel = StackPanel(self.display, self)
             self.refresh_performance_counters()
             self.segment_panel.children.append(self.perf_panel)
+            self.last_refresh = datetime.now()
 
     def refresh_performance_counters(self):
 
@@ -282,7 +284,13 @@ class DiskDetailsPage(MFDPage):
     def arrange(self):
 
         if self.drive.counter_key:
-            self.refresh_performance_counters()
+
+            now = datetime.now()
+
+            delta = now - self.last_refresh
+            if delta.seconds >= 1:
+                self.last_refresh = now
+                self.refresh_performance_counters()                
         
         return super(DiskDetailsPage, self).arrange()
 
