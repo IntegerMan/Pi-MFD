@@ -37,12 +37,11 @@ Pi-MFD requires:
 
 * Python 2.7
 * Pygame
-* Pywapi
-* psutil - https://github.com/giampaolo/psutil/
 
-### Optional - Needed for WMI Support
+### Optional - Needed for Full Functionality
 * WMI
 * Pywin32 - http://sourceforge.net/projects/pywin32/files/
+* psutil - https://github.com/giampaolo/psutil/
 
 ## User Interface
 
