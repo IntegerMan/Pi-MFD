@@ -39,6 +39,7 @@ Pi-MFD requires:
 * Pygame
 
 ### Optional - Needed for Full Functionality
+* xmltodict
 * WMI
 * Pywin32 - http://sourceforge.net/projects/pywin32/files/
 * psutil - https://github.com/giampaolo/psutil/
