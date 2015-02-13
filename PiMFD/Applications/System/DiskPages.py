@@ -4,6 +4,7 @@
 Contains Disk Drive Pages
 """
 from math import log
+import time
 
 from PiMFD.UI.Panels import StackPanel
 
@@ -33,6 +34,9 @@ class DiskDrive(object):
         self.options = partition.opts.upper()
         self.mountpoint = partition.mountpoint
         self.file_system = partition.fstype
+        self.counters = None
+        self.old_counters = None
+        self.counter_key = None
 
         if self.can_get_usage():
 
@@ -88,13 +92,34 @@ class DiskDrive(object):
         yield "File System: {}".format(self.file_system)
         yield "Options: {}".format(self.options)
 
-
     def get_storage_info(self):
         if self.can_get_usage():
             yield "Storage Space: {}".format(self.format_size(self.usage.total))
             yield "Space Used: {}".format(self.format_size(self.usage.used))
             yield "Space Free: {}".format(self.format_size(self.usage.free))
             yield "{} % Full".format(self.usage.percent)
+
+    def get_performance_info(self):
+        if self.counters:
+            o = self.old_counters
+            c = self.counters
+            yield "Read Count: {}".format(c.read_count - o.read_count)
+            yield "Read Bytes: {}".format(c.read_bytes - o.read_bytes)
+            yield "Read Time: {}".format(c.read_time - o.read_time)
+            yield "Write Count: {}".format(c.write_count - o.write_count)
+            yield "Write Bytes: {}".format(c.write_bytes - o.write_bytes)
+            yield "Write Time: {}".format(c.write_time - o.write_time)
+
+    def load_counters(self, key, old_counter, new_counter):
+        self.counter_key = key
+        self.counters = new_counter
+        self.old_counters = old_counter
+
+    def refresh_counters(self):
+
+        # TODO: Refresh the counters!
+
+        pass
 
 
 class DiskDrivesPage(MFDPage):
@@ -123,6 +148,14 @@ class DiskDrivesPage(MFDPage):
 
         partitions = psutil.disk_partitions(all=True)
 
+        # Grab Disk IO over the course of a second
+        psutil.disk_io_counters(perdisk=True)
+        old_counters = psutil.disk_io_counters(perdisk=True)
+        time.sleep(0.1)
+        new_counters = psutil.disk_io_counters(perdisk=True)
+
+        counter_index = 0
+
         self.panel.children = [self.get_header_label('Drives ({})'.format(len(partitions)))]
 
         is_first_control = True
@@ -133,6 +166,11 @@ class DiskDrivesPage(MFDPage):
 
             drive = DiskDrive(p)
             drives.append(drive)
+
+            if drive.can_get_usage() and counter_index < len(old_counters):
+                key = old_counters.keys()[counter_index]
+                drive.load_counters(key, old_counters[key], new_counters[key])
+                counter_index += 1
 
             text = drive.get_display_text()
 
@@ -197,6 +235,7 @@ class DiskDetailsPage(MFDPage):
     :type auto_scroll: bool
     """
     drive = None
+    perf_panel = None
 
     def __init__(self, controller, application, drive, auto_scroll=True):
         super(DiskDetailsPage, self).__init__(controller, application, auto_scroll)
@@ -224,7 +263,28 @@ class DiskDetailsPage(MFDPage):
                 usage_panel.children.append(lbl)
             self.segment_panel.children.append(usage_panel)
 
+        if self.drive.counters:
+            self.refresh_performance_counters()
+            self.segment_panel.children.append(self.perf_panel)
+
+    def refresh_performance_counters(self):
+
+        if self.drive.counters:
+
+            self.drive.refresh_counters()
+
+            self.perf_panel = StackPanel(self.display, self)
+            self.perf_panel.children.append(self.get_label("Performance"))
+            for info_item in self.drive.get_performance_info():
+                lbl = self.get_label(info_item)
+                lbl.font = self.controller.display.fonts.list
+                self.perf_panel.children.append(lbl)
+
     def arrange(self):
+
+        if self.drive.counter_key:
+            self.refresh_performance_counters()
+        
         return super(DiskDetailsPage, self).arrange()
 
     def render(self):
