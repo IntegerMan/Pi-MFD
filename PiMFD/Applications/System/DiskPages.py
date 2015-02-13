@@ -104,6 +104,7 @@ class DiskDrive(object):
             c = self.counters
             if self.old_counters:
                 o = self.old_counters
+                #  yield "{}".format(self.counter_key)
                 yield "Read Count: {}".format(c.read_count - o.read_count)
                 yield "Read Bytes: {}".format(c.read_bytes - o.read_bytes)
                 yield "Read Time: {}".format(c.read_time - o.read_time)
@@ -168,7 +169,7 @@ class DiskDrivesPage(MFDPage):
             drives.append(drive)
 
             if drive.can_get_usage() and counter_index < len(new_counters):
-                key = new_counters.keys()[counter_index]
+                key = "PhysicalDrive" + str(counter_index)
                 drive.load_counters(key, new_counters[key])
                 counter_index += 1
 
