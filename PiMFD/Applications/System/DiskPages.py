@@ -4,7 +4,6 @@
 Contains Disk Drive Pages
 """
 from math import log
-import time
 
 from PiMFD.UI.Panels import StackPanel
 
@@ -152,8 +151,6 @@ class DiskDrivesPage(MFDPage):
 
         # Grab Disk IO over the course of a second
         psutil.disk_io_counters(perdisk=True)
-        old_counters = psutil.disk_io_counters(perdisk=True)
-        time.sleep(0.1)
         new_counters = psutil.disk_io_counters(perdisk=True)
 
         counter_index = 0
@@ -169,8 +166,8 @@ class DiskDrivesPage(MFDPage):
             drive = DiskDrive(p)
             drives.append(drive)
 
-            if drive.can_get_usage() and counter_index < len(old_counters):
-                key = old_counters.keys()[counter_index]
+            if drive.can_get_usage() and counter_index < len(new_counters):
+                key = new_counters.keys()[counter_index]
                 drive.load_counters(key, new_counters[key])
                 counter_index += 1
 
@@ -266,6 +263,7 @@ class DiskDetailsPage(MFDPage):
             self.segment_panel.children.append(usage_panel)
 
         if self.drive.counters:
+            self.perf_panel = StackPanel(self.display, self)
             self.refresh_performance_counters()
             self.segment_panel.children.append(self.perf_panel)
 
@@ -275,8 +273,7 @@ class DiskDetailsPage(MFDPage):
 
             self.drive.refresh_counters()
 
-            self.perf_panel = StackPanel(self.display, self)
-            self.perf_panel.children.append(self.get_label("Performance"))
+            self.perf_panel.children = [self.get_label("Performance")]
             for info_item in self.drive.get_performance_info():
                 lbl = self.get_label(info_item)
                 lbl.font = self.controller.display.fonts.list
