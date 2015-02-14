@@ -133,6 +133,19 @@ class ColorSchemes(object):
                            highlight=(0, 250, 0))
 
     @staticmethod
+    def get_terminal_color_scheme():
+        """
+        Gets a green-based color scheme resembling a terminal display
+        :return: A green-based color scheme resembling military avionics displays
+        """
+        return ColorScheme(name='Terminal',
+                           background=(1, 19, 1),
+                           foreground=(0, 150, 66),
+                           disabled=(0, 75, 33),
+                           detail=(0, 69, 20),
+                           highlight=(182, 179, 174))
+
+    @staticmethod
     def get_cyan_color_scheme():
         """
         Gets a cyan-based color scheme
@@ -204,6 +217,7 @@ class ColorSchemes(object):
         """
         schemes = [cls.get_green_color_scheme(),
                    cls.get_avionics_color_scheme(),
+                   cls.get_terminal_color_scheme(),
                    cls.get_blue_color_scheme(),
                    cls.get_amber_color_scheme(),
                    cls.get_cyan_color_scheme(),

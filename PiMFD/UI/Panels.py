@@ -13,7 +13,6 @@ class UIPanel(UIWidget):
 
     children = list()
     keep_together = False
-    is_highlighted = None
 
     def __init__(self, display, page, keep_together=False):
         super(UIPanel, self).__init__(display, page)

@@ -50,14 +50,16 @@ class BoxChart(UIWidget):
         self.set_dimensions_from_rect(self.rect)
 
         color = self.display.color_scheme.foreground
-        highlight = self.display.color_scheme.highlight
+
+        if self.is_highlighted:
+            highlight = self.display.color_scheme.highlight
+        else:
+            highlight = color
 
         # Draw the basic skeleton of the control
         draw_vertical_line(self.display, color, self.left, self.top, self.bottom)
         draw_vertical_line(self.display, color, self.right, self.top, self.bottom)
         draw_horizontal_line(self.display, color, self.left, self.right, self.top + 4)
-
-        # TODO: a lot of this math should probably be hardened to protect against bad values
 
         # We need to do a bit of math to figure out how to position items
         range_increment = self.width / float(self.range_high - self.range_low)
@@ -116,7 +118,9 @@ class BarChart(UIWidget):
         self.set_dimensions_from_rect(self.rect)
 
         color = self.display.color_scheme.foreground
-        highlight = self.display.color_scheme.highlight
+
+        if self.is_highlighted:
+            color = self.display.color_scheme.highlight
 
         # Draw the basic skeleton of the control
         render_rectangle(self.display, color, self.rect)
@@ -128,7 +132,7 @@ class BarChart(UIWidget):
         if self.value > self.range_low:
             x = (self.value - self.range_low) * range_increment
             chart_rect = Rect(self.left, self.top, x, self.height)
-            render_rectangle(self.display, highlight, chart_rect, width=0)
+            render_rectangle(self.display, color, chart_rect, width=0)
 
         # Return our dimensions
         return self.rect
