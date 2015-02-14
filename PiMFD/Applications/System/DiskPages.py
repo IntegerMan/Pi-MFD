@@ -4,7 +4,7 @@
 Contains Disk Drive Pages
 """
 from datetime import datetime
-from math import log
+from PiMFD.Applications.System.ByteFormatting import format_size
 
 from PiMFD.UI.Panels import StackPanel
 
@@ -51,26 +51,6 @@ class DiskDrive(object):
     def can_get_usage(self):
         return not ('CDROM' in self.options or self.file_system == '')
 
-    @staticmethod
-    def format_size(num):
-        """Human friendly file size
-        :type num: int
-        :param num: The size in bytes
-        """
-        if num > 1:
-            unit_list = zip(['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'], [0, 0, 1, 2, 2, 2])
-            exponent = min(int(log(num, 1024)), len(unit_list) - 1)
-            quotient = float(num) / 1024 ** exponent
-            unit, num_decimals = unit_list[exponent]
-            format_string = '{:.%sf} {}' % num_decimals
-            return format_string.format(quotient, unit)
-
-        if num == 0:
-            return '0 bytes'
-
-        if num == 1:
-            return '1 byte'
-
     def get_display_text(self):
 
         # Determine if it's a CD-Drive
@@ -94,9 +74,9 @@ class DiskDrive(object):
 
     def get_storage_info(self):
         if self.can_get_usage():
-            yield "Storage Space: {}".format(self.format_size(self.usage.total))
-            yield "Space Used: {}".format(self.format_size(self.usage.used))
-            yield "Space Free: {}".format(self.format_size(self.usage.free))
+            yield "Storage Space: {}".format(format_size(self.usage.total))
+            yield "Space Used: {}".format(format_size(self.usage.used))
+            yield "Space Free: {}".format(format_size(self.usage.free))
             yield "{} % Full".format(self.usage.percent)
 
     def get_performance_info(self):

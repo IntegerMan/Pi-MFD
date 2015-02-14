@@ -4,6 +4,7 @@
 Contains Computer Performance Pages
 """
 from datetime import datetime
+from PiMFD.Applications.System.ByteFormatting import format_size
 
 from PiMFD.UI.Panels import StackPanel
 
@@ -35,7 +36,7 @@ class PerformancePage(MFDPage):
         self.pnl_swap_mem = StackPanel(controller.display, self)
 
         self.panel.is_horizontal = True
-        self.panel.auto_scroll = True
+        self.panel.auto_orient = True
         self.panel.children = [self.pnl_cpu, self.pnl_virt_mem, self.pnl_swap_mem]
 
         self.refresh()
@@ -70,10 +71,10 @@ class PerformancePage(MFDPage):
 
         if virt_mem:
             self.pnl_virt_mem.children.append(self.get_list_label("Percent Used: {} %".format(virt_mem.percent)))
-            self.pnl_virt_mem.children.append(self.get_list_label("Total: {}".format(virt_mem.total)))
-            self.pnl_virt_mem.children.append(self.get_list_label("Used: {}".format(virt_mem.used)))
-            self.pnl_virt_mem.children.append(self.get_list_label("Free: {}".format(virt_mem.free)))
-            self.pnl_virt_mem.children.append(self.get_list_label("Available: {}".format(virt_mem.available)))
+            self.pnl_virt_mem.children.append(self.get_list_label("Total: {}".format(format_size(virt_mem.total))))
+            self.pnl_virt_mem.children.append(self.get_list_label("Used: {}".format(format_size(virt_mem.used))))
+            self.pnl_virt_mem.children.append(self.get_list_label("Free: {}".format(format_size(virt_mem.free))))
+            self.pnl_virt_mem.children.append(self.get_list_label("Available: {}".format(format_size(virt_mem.available))))
 
         # Swap Memory
         self.pnl_swap_mem.children = [self.get_header_label('Swap Memory')]
@@ -81,10 +82,9 @@ class PerformancePage(MFDPage):
 
         if swap_mem:
             self.pnl_swap_mem.children.append(self.get_list_label("Percent Used: {} %".format(swap_mem.percent)))
-            self.pnl_swap_mem.children.append(self.get_list_label("Total: {}".format(swap_mem.total)))
-            self.pnl_swap_mem.children.append(self.get_list_label("Used: {}".format(swap_mem.used)))
-            self.pnl_swap_mem.children.append(self.get_list_label("Free: {}".format(swap_mem.free)))
-
+            self.pnl_swap_mem.children.append(self.get_list_label("Total: {}".format(format_size(swap_mem.total))))
+            self.pnl_swap_mem.children.append(self.get_list_label("Used: {}".format(format_size(swap_mem.used))))
+            self.pnl_swap_mem.children.append(self.get_list_label("Free: {}".format(format_size(swap_mem.free))))
 
     def arrange(self):
         """
