@@ -109,7 +109,7 @@ class ColorSchemes(object):
     @staticmethod
     def get_green_color_scheme():
         """
-        Gets a green-based color scheme resembling military avionics displays
+        Gets a green-based color scheme
         :return: A green-based color scheme resembling military avionics displays
         """
         return ColorScheme(name='Green',
@@ -118,6 +118,19 @@ class ColorSchemes(object):
                            disabled=(0, 100, 0),
                            detail=(85, 251, 167),
                            highlight=(230, 230, 230))
+
+    @staticmethod
+    def get_avionics_color_scheme():
+        """
+        Gets a green-based color scheme resembling military avionics displays
+        :return: A green-based color scheme resembling military avionics displays
+        """
+        return ColorScheme(name='Avoionics',
+                           background=(13, 36, 11),
+                           foreground=(0, 194, 0),
+                           disabled=(0, 90, 0),
+                           detail=(0, 123, 0),
+                           highlight=(0, 250, 0))
 
     @staticmethod
     def get_cyan_color_scheme():
@@ -190,6 +203,7 @@ class ColorSchemes(object):
         :rtype : list
         """
         schemes = [cls.get_green_color_scheme(),
+                   cls.get_avionics_color_scheme(),
                    cls.get_blue_color_scheme(),
                    cls.get_amber_color_scheme(),
                    cls.get_cyan_color_scheme(),

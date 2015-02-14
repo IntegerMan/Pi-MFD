@@ -258,7 +258,7 @@ class DiskDetailsPage(MFDPage):
                 else:
                     usage_panel.children.append(lbl)
 
-        self.segment_panel.children.append(usage_panel)
+            self.segment_panel.children.append(usage_panel)
 
         if self.drive.counters:
             self.perf_panel = StackPanel(self.display, self)
