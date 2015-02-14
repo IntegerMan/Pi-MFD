@@ -76,10 +76,10 @@ class DiskDrive(object):
 
     def get_storage_info(self):
         if self.can_get_usage():
+            yield "{} % Full".format(self.usage.percent)
             yield "Storage Space: {}".format(format_size(self.usage.total))
             yield "Space Used: {}".format(format_size(self.usage.used))
             yield "Space Free: {}".format(format_size(self.usage.free))
-            yield "{} % Full".format(self.usage.percent)
 
     def get_performance_info(self):
         if self.counters:
@@ -247,10 +247,18 @@ class DiskDetailsPage(MFDPage):
             usage_panel = StackPanel(self.display, self)
             usage_panel.children.append(self.get_label("Storage"))
             for info_item in self.drive.get_storage_info():
-                lbl = self.get_label(info_item)
-                lbl.font = self.controller.display.fonts.list
-                usage_panel.children.append(lbl)
-            self.segment_panel.children.append(usage_panel)
+                lbl = self.get_list_label(info_item)
+                if info_item.endswith('% Full'):
+                    chart = BarChart(self.display, self, value=float(self.drive.usage_percent))
+                    chart.height = lbl.font.size
+                    chart.width = lbl.font.size
+                    pnl = StackPanel(self.display, self, is_horizontal=True)
+                    pnl.children = [chart, lbl]
+                    usage_panel.children.append(pnl)
+                else:
+                    usage_panel.children.append(lbl)
+
+        self.segment_panel.children.append(usage_panel)
 
         if self.drive.counters:
             self.perf_panel = StackPanel(self.display, self)
