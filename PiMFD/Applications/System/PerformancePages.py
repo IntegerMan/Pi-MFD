@@ -50,6 +50,9 @@ class PerformancePage(MFDPage):
         Refreshes the list of drives
         """
 
+        if not psutil:
+            return
+
         # CPU Usage        
         percentages = psutil.cpu_percent(percpu=True)
 
