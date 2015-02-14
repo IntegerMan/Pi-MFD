@@ -124,10 +124,11 @@ class BarChart(UIWidget):
         # We need to do a bit of math to figure out how to position items
         range_increment = self.width / float(self.range_high - self.range_low)
 
-        # Draw the box of the control
-        x = (self.value - self.range_low) * range_increment
-        chart_rect = Rect(self.left, self.top, x, self.height)
-        render_rectangle(self.display, highlight, chart_rect, width=0)
+        # Draw the box of the control - unless we're below or at min-val
+        if self.value > self.range_low:
+            x = (self.value - self.range_low) * range_increment
+            chart_rect = Rect(self.left, self.top, x, self.height)
+            render_rectangle(self.display, highlight, chart_rect, width=0)
 
         # Return our dimensions
         return self.rect

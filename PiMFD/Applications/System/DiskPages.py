@@ -6,6 +6,7 @@ Contains Disk Drive Pages
 from datetime import datetime
 
 from PiMFD.Applications.System.ByteFormatting import format_size
+from PiMFD.UI.Charts import BarChart
 
 from PiMFD.UI.Panels import StackPanel
 
@@ -18,7 +19,7 @@ except ImportError:
     sdiskpart = None
 
 from PiMFD.Applications.MFDPage import MFDPage
-from PiMFD.UI.Widgets.MenuItem import TextMenuItem
+from PiMFD.UI.Widgets.MenuItem import MenuItem
 
 __author__ = 'Matt Eland'
 
@@ -47,7 +48,7 @@ class DiskDrive(object):
 
         else:
             self.usage = None
-            self.usage_percent = 'N/A'
+            self.usage_percent = 0.0
 
     def can_get_usage(self):
         return not ('CDROM' in self.options or self.file_system == '')
@@ -156,13 +157,19 @@ class DiskDrivesPage(MFDPage):
 
             text = drive.get_display_text()
 
-            lbl = TextMenuItem(self.controller.display, self, text)
-            lbl.data_context = drive
-            lbl.font = self.controller.display.fonts.list
-            self.panel.children.append(lbl)
+            lbl = self.get_list_label(text)
+            chart = BarChart(self.display, self, float(drive.usage_percent), width=lbl.font.size * 2,
+                             height=lbl.font.size)
+            sp = StackPanel(self.display, self, is_horizontal=True)
+            sp.children = [chart, lbl]
+
+            mi = MenuItem(self.controller.display, self, sp)
+            mi.data_context = drive
+
+            self.panel.children.append(mi)
 
             if is_first_control:
-                self.set_focus(lbl)
+                self.set_focus(mi)
                 is_first_control = False
 
     def arrange(self):
