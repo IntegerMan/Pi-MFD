@@ -13,6 +13,7 @@ class UIPanel(UIWidget):
 
     children = list()
     keep_together = False
+    is_highlighted = None
 
     def __init__(self, display, page, keep_together=False):
         super(UIPanel, self).__init__(display, page)
@@ -52,6 +53,8 @@ class StackPanel(UIPanel):
         # Cause all children to arrange so we have valid sizes
         for child in self.children:
             child.arrange()
+            if self.is_highlighted is not None:
+                child.is_highlighted = self.is_highlighted
 
         max_x = self.display.get_content_end_x()
         page_size = self.display.get_content_size()[1]

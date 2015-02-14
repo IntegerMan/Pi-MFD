@@ -14,6 +14,8 @@ from PiMFD.UI.Text import TextBlock
 
 
 class MenuItem(FocusableWidget):
+    last_click = None
+
     def __init__(self, display, page, content=None):
         super(MenuItem, self).__init__(display, page)
 
@@ -34,6 +36,7 @@ class MenuItem(FocusableWidget):
 
         if self.content:
             self.content.arrange()
+            self.content.is_highlighted = self.is_focused()
             self.desired_size = self.content.desired_size
 
         return super(MenuItem, self).arrange()
@@ -76,7 +79,7 @@ class TextMenuItem(MenuItem):
 
     text = None
     text_data = None
-    last_click = None
+    label = None
     font = None
 
     def __init__(self, display, page, text):
