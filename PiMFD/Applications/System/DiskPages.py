@@ -115,12 +115,15 @@ class DiskDrivesPage(MFDPage):
     :type auto_scroll: bool
     """
     drives = None
+    refresh_interval = 10
 
     def __init__(self, controller, application, auto_scroll=True):
         super(DiskDrivesPage, self).__init__(controller, application, auto_scroll)
 
+        self.last_refresh = datetime.now()
+        self.selected_device = None
         self.refresh()
-
+        
     def refresh(self):
 
         """
@@ -168,15 +171,34 @@ class DiskDrivesPage(MFDPage):
 
             self.panel.children.append(mi)
 
-            if is_first_control:
-                self.set_focus(mi)
+            if is_first_control and not self.selected_device:
+                self.set_focus(mi, play_sound=False)
                 is_first_control = False
+            elif self.selected_device and self.selected_device == drive.device:
+                self.set_focus(mi, play_sound=False)
+
+    def set_focus(self, widget, play_sound=True):
+        
+        if widget and widget.data_context:
+            self.selected_device = widget.data_context.device
+        else:
+            self.selected_device = None
+        
+        return super(DiskDrivesPage, self).set_focus(widget, play_sound=play_sound)
 
     def arrange(self):
         """
         Arranges the control to the page
         :return: The desired size of the page
         """
+
+        now = datetime.now()
+
+        delta = now - self.last_refresh
+        if delta.seconds >= self.refresh_interval:
+            self.last_refresh = now
+            self.refresh()
+            
         return super(DiskDrivesPage, self).arrange()
 
     def render(self):

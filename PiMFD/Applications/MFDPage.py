@@ -210,8 +210,10 @@ class MFDPage(UIPage):
 
         return super(MFDPage, self).handle_key(key)
 
-    def set_focus(self, widget):
-        self.controller.play_button_sound()
+    def set_focus(self, widget, play_sound=True):
+        
+        if play_sound and widget:
+            self.controller.play_button_sound()
 
         return super(MFDPage, self).set_focus(widget)
 
