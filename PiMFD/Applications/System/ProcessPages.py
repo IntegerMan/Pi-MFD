@@ -6,7 +6,7 @@ except ImportError:
     psutil = None
 
 from PiMFD.Applications.MFDPage import MFDPage
-from PiMFD.UI.Widgets.MenuItem import MenuItem
+from PiMFD.UI.Widgets.MenuItem import TextMenuItem
 
 
 __author__ = 'Matt Eland'
@@ -43,7 +43,7 @@ class ProcessPage(MFDPage):
             except psutil.NoSuchProcess:
                 continue
 
-            lbl = MenuItem(self.controller.display, self, "{}: {}".format(p.pid, name))
+            lbl = TextMenuItem(self.controller.display, self, "{}: {}".format(p.pid, name))
             lbl.font = self.display.fonts.list
             lbl.data_context = p
 

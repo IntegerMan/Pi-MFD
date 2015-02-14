@@ -13,7 +13,7 @@ except ImportError:
     AF_UNIX = 1
 
 from PiMFD.Applications.MFDPage import MFDPage
-from PiMFD.UI.Widgets.MenuItem import MenuItem
+from PiMFD.UI.Widgets.MenuItem import TextMenuItem
 
 
 """
@@ -68,7 +68,7 @@ class NetworkPage(MFDPage):
                 
             text = "{} {} {}/{} {}".format(status, address_text, conn_type, family, pid)
 
-            lbl = MenuItem(self.controller.display, self, text)
+            lbl = TextMenuItem(self.controller.display, self, text)
             lbl.font = self.controller.display.fonts.list
             lbl.data_context = c
             self.panel.children.append(lbl)

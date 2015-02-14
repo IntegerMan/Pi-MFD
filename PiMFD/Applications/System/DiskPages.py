@@ -4,6 +4,7 @@
 Contains Disk Drive Pages
 """
 from datetime import datetime
+
 from PiMFD.Applications.System.ByteFormatting import format_size
 
 from PiMFD.UI.Panels import StackPanel
@@ -17,7 +18,7 @@ except ImportError:
     sdiskpart = None
 
 from PiMFD.Applications.MFDPage import MFDPage
-from PiMFD.UI.Widgets.MenuItem import MenuItem
+from PiMFD.UI.Widgets.MenuItem import TextMenuItem
 
 __author__ = 'Matt Eland'
 
@@ -155,7 +156,7 @@ class DiskDrivesPage(MFDPage):
 
             text = drive.get_display_text()
 
-            lbl = MenuItem(self.controller.display, self, text)
+            lbl = TextMenuItem(self.controller.display, self, text)
             lbl.data_context = drive
             lbl.font = self.controller.display.fonts.list
             self.panel.children.append(lbl)
