@@ -90,10 +90,15 @@ class BarChart(UIWidget):
     width = 100
     height = 8
 
-    def __init__(self, display, page):
+    def __init__(self, display, page, value=0, range_low=0, range_high=100, width=100, height=8):
         super(BarChart, self).__init__(display, page)
 
         self.ticks = list()
+        self.value = value
+        self.range_low = range_low
+        self.range_high = range_high
+        self.width = width
+        self.height = height
 
     def arrange(self):
         self.desired_size = self.width, self.height

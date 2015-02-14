@@ -7,7 +7,6 @@ from datetime import datetime
 
 from PiMFD.Applications.System.ByteFormatting import format_size
 from PiMFD.UI.Charts import BarChart
-
 from PiMFD.UI.Panels import StackPanel
 
 
@@ -52,10 +51,10 @@ class PerformancePage(MFDPage):
         """
 
         # CPU Usage        
-        self.pnl_cpu.children = [self.get_header_label('CPU Performance')]
         percentages = psutil.cpu_percent(percpu=True)
 
         if percentages:
+            self.pnl_cpu.children = [self.get_header_label('CPU Performance')]
             cpu_index = 1
             for percent in percentages:
 
@@ -73,22 +72,38 @@ class PerformancePage(MFDPage):
                 cpu_index += 1
 
         # Virtual Memory
-        self.pnl_virt_mem.children = [self.get_header_label('Virtual Memory')]
         virt_mem = psutil.virtual_memory()
 
         if virt_mem:
+            self.pnl_virt_mem.children = [self.get_header_label('Virtual Memory')]
             self.pnl_virt_mem.children.append(self.get_list_label("Percent Used: {} %".format(virt_mem.percent)))
+
+            self.pnl_virt_mem.children.append(BarChart(self.display,
+                                                       self,
+                                                       value=virt_mem.percent,
+                                                       width=200,
+                                                       height=5))
+            
             self.pnl_virt_mem.children.append(self.get_list_label("Total: {}".format(format_size(virt_mem.total))))
             self.pnl_virt_mem.children.append(self.get_list_label("Used: {}".format(format_size(virt_mem.used))))
             self.pnl_virt_mem.children.append(self.get_list_label("Free: {}".format(format_size(virt_mem.free))))
-            self.pnl_virt_mem.children.append(self.get_list_label("Available: {}".format(format_size(virt_mem.available))))
+            if virt_mem.free != virt_mem.available:
+                self.pnl_virt_mem.children.append(
+                    self.get_list_label("Available: {}".format(format_size(virt_mem.available))))
 
         # Swap Memory
-        self.pnl_swap_mem.children = [self.get_header_label('Swap Memory')]
         swap_mem = psutil.swap_memory()
 
         if swap_mem:
+            self.pnl_swap_mem.children = [self.get_header_label('Swap Memory')]
             self.pnl_swap_mem.children.append(self.get_list_label("Percent Used: {} %".format(swap_mem.percent)))
+
+            self.pnl_swap_mem.children.append(BarChart(self.display,
+                                                       self,
+                                                       value=swap_mem.percent,
+                                                       width=200,
+                                                       height=5))
+            
             self.pnl_swap_mem.children.append(self.get_list_label("Total: {}".format(format_size(swap_mem.total))))
             self.pnl_swap_mem.children.append(self.get_list_label("Used: {}".format(format_size(swap_mem.used))))
             self.pnl_swap_mem.children.append(self.get_list_label("Free: {}".format(format_size(swap_mem.free))))
