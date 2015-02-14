@@ -60,6 +60,17 @@ class MFDPage(UIPage):
         """
         return TextBlock(self.display, self, text)
 
+    def get_list_label(self, text):
+        """
+        Builds a label with the specified text. This is a conveinence method since labels are extremely common
+        :param text: The text for the label
+        :return: The TextBlock
+        """
+
+        block = self.get_label(text)
+        block.font = self.display.fonts.list
+        return block
+
     def get_header_label(self, text):
         """
         Builds a highlighted header label with the specified text.
@@ -67,7 +78,9 @@ class MFDPage(UIPage):
         :param text: The text for the label
         :return: The TextBlock
         """
-        return TextBlock(self.display, self, text, is_highlighted=True)
+        block = self.get_label(text)
+        block.is_highlighted = True
+        return block
 
     def get_image(self, image_path, interval=0, max_width=None):
 

@@ -31,8 +31,12 @@ class PerformancePage(MFDPage):
         super(PerformancePage, self).__init__(controller, application, auto_scroll)
 
         self.pnl_cpu = StackPanel(controller.display, self)
+        self.pnl_virt_mem = StackPanel(controller.display, self)
+        self.pnl_swap_mem = StackPanel(controller.display, self)
 
-        self.panel.children = [self.pnl_cpu]
+        self.panel.is_horizontal = True
+        self.panel.auto_scroll = True
+        self.panel.children = [self.pnl_cpu, self.pnl_virt_mem, self.pnl_swap_mem]
 
         self.refresh()
 
@@ -44,15 +48,42 @@ class PerformancePage(MFDPage):
         Refreshes the list of drives
         """
 
+        # CPU Usage        
         self.pnl_cpu.children = [self.get_header_label('CPU Performance')]
         percentages = psutil.cpu_percent(percpu=True)
 
-        cpu_index = 1
-        for percent in percentages:
-            lbl = self.get_label('{}: {:02.1f} %'.format(cpu_index, percent))
-            lbl.font = self.controller.display.fonts.list
-            self.pnl_cpu.children.append(lbl)
-            cpu_index += 1
+        if percentages:
+            cpu_index = 1
+            for percent in percentages:
+
+                # Protect against bad values on first round
+                if not percent:
+                    percent = 0.0
+
+                lbl = self.get_list_label('{}: {:02.1f} %'.format(cpu_index, percent))
+                self.pnl_cpu.children.append(lbl)
+                cpu_index += 1
+
+        # Virtual Memory
+        self.pnl_virt_mem.children = [self.get_header_label('Virtual Memory')]
+        virt_mem = psutil.virtual_memory()
+
+        if virt_mem:
+            self.pnl_virt_mem.children.append(self.get_list_label("Percent Used: {} %".format(virt_mem.percent)))
+            self.pnl_virt_mem.children.append(self.get_list_label("Total: {}".format(virt_mem.total)))
+            self.pnl_virt_mem.children.append(self.get_list_label("Used: {}".format(virt_mem.used)))
+            self.pnl_virt_mem.children.append(self.get_list_label("Free: {}".format(virt_mem.free)))
+            self.pnl_virt_mem.children.append(self.get_list_label("Available: {}".format(virt_mem.available)))
+
+        # Swap Memory
+        self.pnl_swap_mem.children = [self.get_header_label('Swap Memory')]
+        swap_mem = psutil.swap_memory()
+
+        if swap_mem:
+            self.pnl_swap_mem.children.append(self.get_list_label("Percent Used: {} %".format(swap_mem.percent)))
+            self.pnl_swap_mem.children.append(self.get_list_label("Total: {}".format(swap_mem.total)))
+            self.pnl_swap_mem.children.append(self.get_list_label("Used: {}".format(swap_mem.used)))
+            self.pnl_swap_mem.children.append(self.get_list_label("Free: {}".format(swap_mem.free)))
 
 
     def arrange(self):
