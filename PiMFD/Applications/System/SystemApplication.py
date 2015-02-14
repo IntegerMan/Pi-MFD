@@ -1,8 +1,8 @@
 # coding=utf-8
 from PiMFD.Applications.Application import MFDApplication
-from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Applications.System.DiskPages import DiskDrivesPage
 from PiMFD.Applications.System.NetworkPages import NetworkPage
+from PiMFD.Applications.System.PerformancePages import PerformancePage
 from PiMFD.Applications.System.ProcessPages import ProcessPage
 from PiMFD.Applications.System.WMIServicesPages import WMIServicesPage
 
@@ -23,7 +23,7 @@ class SysApplication(MFDApplication):
         """
         super(SysApplication, self).__init__(controller)
 
-        self.perf_page = SimpleMessagePage(controller, self, "PERF")
+        self.perf_page = PerformancePage(controller, self)
         self.proc_page = ProcessPage(controller, self)
         self.disk_page = DiskDrivesPage(controller, self)
         self.net_page = NetworkPage(controller, self)
