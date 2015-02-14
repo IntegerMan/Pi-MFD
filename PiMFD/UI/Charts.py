@@ -13,10 +13,12 @@ __author__ = 'Matt Eland'
 
 
 class BoxChart(UIWidget):
+
     """
     A widget that renders a box chart indicating a range of values.
+    :type display: PiMFD.UI.DisplayManager.DisplayManager
+    :type page: PiMFD.Applications.MFDPage.MFDPage
     """
-
     range_low = 0
     range_high = 100
     value_low = 0
@@ -74,4 +76,54 @@ class BoxChart(UIWidget):
         # Return our dimensions
         return self.rect
 
+
+class BarChart(UIWidget):
+    """
+    A widget that renders a bar chart indicating a single point value in a predicted range.
+    :type display: PiMFD.UI.DisplayManager.DisplayManager
+    :type page: PiMFD.Applications.MFDPage.MFDPage
+    """
+    range_low = 0
+    range_high = 100
+    value = 0
+
+    width = 100
+    height = 8
+
+    def __init__(self, display, page):
+        super(BarChart, self).__init__(display, page)
+
+        self.ticks = list()
+
+    def arrange(self):
+        self.desired_size = self.width, self.height
+
+        return super(BarChart, self).arrange()
+
+    def render(self):
+        """
+        Renders the widget to the screen
+        :return: The rect of the control as it was rendered
+        """
+
+        # Standardize our dimensions
+        self.rect = Rect(self.pos[0], self.pos[1], self.width, self.height)
+        self.set_dimensions_from_rect(self.rect)
+
+        color = self.display.color_scheme.foreground
+        highlight = self.display.color_scheme.highlight
+
+        # Draw the basic skeleton of the control
+        render_rectangle(self.display, color, self.rect)
+
+        # We need to do a bit of math to figure out how to position items
+        range_increment = self.width / float(self.range_high - self.range_low)
+
+        # Draw the box of the control
+        x = (self.value - self.range_low) * range_increment
+        chart_rect = Rect(self.left, self.top, x, self.height)
+        render_rectangle(self.display, highlight, chart_rect, width=0)
+
+        # Return our dimensions
+        return self.rect
 

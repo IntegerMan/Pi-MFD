@@ -4,7 +4,9 @@
 Contains Computer Performance Pages
 """
 from datetime import datetime
+
 from PiMFD.Applications.System.ByteFormatting import format_size
+from PiMFD.UI.Charts import BarChart
 
 from PiMFD.UI.Panels import StackPanel
 
@@ -61,8 +63,13 @@ class PerformancePage(MFDPage):
                 if not percent:
                     percent = 0.0
 
-                lbl = self.get_list_label('{}: {:02.1f} %'.format(cpu_index, percent))
-                self.pnl_cpu.children.append(lbl)
+                pnl = StackPanel(self.display, self, is_horizontal=True)
+                lbl = self.get_list_label('{:02.1f} %'.format(percent))
+                chart = BarChart(self.display, self)
+                chart.value = percent
+                chart.width, chart.height = 50, lbl.font.size
+                pnl.children = [self.get_list_label('{}:'.format(cpu_index)), chart, lbl]
+                self.pnl_cpu.children.append(pnl)
                 cpu_index += 1
 
         # Virtual Memory
