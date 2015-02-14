@@ -159,6 +159,19 @@ class ColorSchemes(object):
                            highlight=(0, 255, 255))
 
     @staticmethod
+    def get_tactical_color_scheme():
+        """
+        Gets a tactical blue / cyan color scheme
+        :return: A tactical blue / cyan color scheme
+        """
+        return ColorScheme(name='Tactical',
+                           background=(16, 29, 44),
+                           foreground=(104, 147, 152),
+                           disabled=(32, 60, 68),
+                           detail=(51, 98, 106),
+                           highlight=(203, 203, 191))
+
+    @staticmethod
     def get_blue_color_scheme():
         """
         Gets an ice-blue-based color scheme
@@ -221,6 +234,7 @@ class ColorSchemes(object):
                    cls.get_blue_color_scheme(),
                    cls.get_amber_color_scheme(),
                    cls.get_cyan_color_scheme(),
+                   cls.get_tactical_color_scheme(),
                    cls.get_red_color_scheme(),
                    cls.get_white_color_scheme()]
 
