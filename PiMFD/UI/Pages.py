@@ -3,10 +3,11 @@
 """
 Contains logic on pages for rendering controls and handling input
 """
+from PiMFD.UI.Focus import FocusableWidget
 from PiMFD.UI.Keycodes import is_up_key, is_down_key
 
 from PiMFD.UI.Panels import StackPanel
-from PiMFD.UI.WidgetBase import UIObject
+from PiMFD.UI.WidgetBase import UIObject, UIWidget
 
 __author__ = 'Matt Eland'
 
@@ -39,6 +40,7 @@ class UIPage(UIObject):
         """
         Sets focused to the specified control. The prior focus (if one is present) will receive a lost_focus call and
         the newly focused control (if one is present) will receive a got_focus control
+        :type widget: FocusableWidget
         :param widget: The widget to focus. Can be None.
         :return: The new focus
         """
@@ -56,6 +58,9 @@ class UIPage(UIObject):
         # Tell the new focus it's getting some TLC
         if widget:
             widget.got_focus()
+            
+            if widget.parent:
+                widget.parent.child_focused(widget)
 
         return self.focus
 

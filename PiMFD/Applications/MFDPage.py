@@ -32,6 +32,9 @@ class MFDPage(UIPage):
 
     page_y = 1
     num_pages_y = 1
+    min_y = 100
+    max_y = 500
+    page_size_y = 400
 
     def __init__(self, controller, application, auto_scroll=True):
         """
@@ -142,24 +145,23 @@ class MFDPage(UIPage):
 
         return super(MFDPage, self).arrange()
 
-
     def render(self):
 
-        min_y = self.display.get_content_start_y()
-        max_y = self.display.get_content_end_y()
-        page_size_y = max_y - min_y
+        self.min_y = self.display.get_content_start_y()
+        self.max_y = self.display.get_content_end_y()
+        self.page_size_y = self.max_y - self.min_y
 
         if self.panel:
-            target_pos = (self.display.get_content_start_x(), min_y - ((self.page_y - 1) * page_size_y))
+            target_pos = (self.display.get_content_start_x(), self.min_y - ((self.page_y - 1) * self.page_size_y))
             rect = self.panel.render_at(target_pos)
         else:
             rect = super(MFDPage, self).render()
 
         # Calculate number of whole pages
-        self.num_pages_y = rect.height / page_size_y
+        self.num_pages_y = rect.height / self.page_size_y
 
         # Advance to the next whole page if first page or non-trivial content on last page
-        if self.num_pages_y == 0 or rect.height % page_size_y > 16:
+        if self.num_pages_y == 0 or rect.height % self.page_size_y > 16:
             self.num_pages_y += 1
 
         # Smart-Constrain Page
@@ -172,7 +174,7 @@ class MFDPage(UIPage):
 
             # If we have already paged, show MORE link at the top
             if self.page_y > 1:
-                arrow_pos = [self.display.res_x - 18, min_y]
+                arrow_pos = [self.display.res_x - 18, self.min_y]
                 render_triangle_up(self.display, paging_color, arrow_pos, 8)
                 render_text_centered(self.display,
                                      self.display.fonts.small,
@@ -183,7 +185,7 @@ class MFDPage(UIPage):
 
             # If we have more pages, show a MORE link at the bottom
             if self.page_y < self.num_pages_y:
-                arrow_pos = [self.display.res_x - 18, max_y]
+                arrow_pos = [self.display.res_x - 18, self.max_y]
                 render_triangle_down(self.display, paging_color, arrow_pos, 8)
                 render_text_centered(self.display,
                                      self.display.fonts.small,
@@ -214,7 +216,24 @@ class MFDPage(UIPage):
         
         if play_sound and widget:
             self.controller.play_button_sound()
-
+            
+        if widget:
+            
+            y = widget.pos[1]
+            
+            # Ensure we can see the widget
+            if y < self.min_y:
+                while y < self.min_y:
+                    self.page_y -= 1
+                    y += self.page_size_y
+            else:
+                while y > self.max_y:
+                    self.page_y += 1
+                    y -= self.page_size_y
+                
+            # Ensure we didn't somehow get lost
+            self.constrain_pages()
+            
         return super(MFDPage, self).set_focus(widget)
 
     def center_text(self, text, color=None):

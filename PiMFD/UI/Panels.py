@@ -22,9 +22,13 @@ class UIPanel(UIWidget):
     def arrange(self):
         # Not a correct implementation for most usages, but we do want to ensure things get arranged
         for child in self.children:
+            child.parent = self
             child.arrange()
 
         return super(UIPanel, self).arrange()
+    
+    def child_focused(self, widget):
+        pass
 
 class StackPanel(UIPanel):
     """
@@ -51,6 +55,7 @@ class StackPanel(UIPanel):
 
         # Cause all children to arrange so we have valid sizes
         for child in self.children:
+            child.parent = self
             child.arrange()
             if self.is_highlighted is not None:
                 child.is_highlighted = self.is_highlighted
@@ -122,7 +127,6 @@ class StackPanel(UIPanel):
         # Update size and return
         self.desired_size = width, height
         return self.desired_size
-
 
     def render(self):
         """

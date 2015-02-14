@@ -62,6 +62,7 @@ class UIWidget(UIObject):
     page = None
     data_context = None
     is_highlighted = None
+    parent = None
 
     def __init__(self, display, page):
         """
