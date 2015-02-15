@@ -90,7 +90,11 @@ class StackPanel(UIPanel):
                     y += page_remaining
                     page_remaining = page_size
 
-            child.pos = x, y
+            # Set position. Some things use abstract positioning, so we'll need to invalidate arrange if our position
+            # has changed since initial arrange.
+            if child.pos[0] != x or child.pos[1] != y:
+                child.pos = x, y
+                child.arrange()
 
             if self.is_horizontal:
 

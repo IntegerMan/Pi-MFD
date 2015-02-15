@@ -141,19 +141,21 @@ class MFDPage(UIPage):
 
     def arrange(self):
 
-        self.desired_size = self.panel.arrange()
-
-        return super(MFDPage, self).arrange()
-
-    def render(self):
-
         self.min_y = self.display.get_content_start_y()
         self.max_y = self.display.get_content_end_y()
         self.page_size_y = self.max_y - self.min_y
 
         if self.panel:
             target_pos = (self.display.get_content_start_x(), self.min_y - ((self.page_y - 1) * self.page_size_y))
-            rect = self.panel.render_at(target_pos)
+            self.panel.pos = target_pos
+            self.desired_size = self.panel.arrange()
+
+        return super(MFDPage, self).arrange()
+
+    def render(self):
+
+        if self.panel:
+            rect = self.panel.render()
         else:
             rect = super(MFDPage, self).render()
 

@@ -35,6 +35,7 @@ class WeatherPage(MFDPage):
     chart_forecast = None
 
     weather_provider = None
+    weather = None
 
     max_forecasts = 5
 
@@ -156,7 +157,6 @@ class WeatherPage(MFDPage):
                 i += 1
 
         return super(WeatherPage, self).arrange()
-
 
     def render(self):
         """

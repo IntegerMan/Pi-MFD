@@ -27,14 +27,14 @@ class UIPage(UIObject):
         :type display: PiMFD.UI.DisplayManager.DisplayManager
         """
         super(UIPage, self).__init__(display)
-        self.panel = self.get_panel(display)
+        self.panel = self.get_panel()
         self.focusables = list()
         
-    def get_panel(self, display):
+    def get_panel(self):
         """
         :type display: PiMFD.UI.DisplayManager.DisplayManager
         """
-        return StackPanel(display, self)
+        return StackPanel(self.display, self)
         
     def set_focus(self, widget):
         """
@@ -70,12 +70,19 @@ class UIPage(UIObject):
         """
         self.set_focus(None)
 
+    def arrange(self):
+        
+        if self.panel:
+            self.panel.pos = self.display.get_content_start_pos()
+            self.desired_size = self.panel.desired_size
+        
+        return super(UIPage, self).arrange()
+
     def render(self):
         """
         Handles rendering the page.
-        :type display: PiMFD.DisplayManager.DisplayManager The display manager.
         """
-        return self.panel.render_at(self.display.get_content_start_pos())
+        return self.panel.render()
 
     def focus_first_eligibile(self):
         """
