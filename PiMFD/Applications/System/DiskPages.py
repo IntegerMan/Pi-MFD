@@ -7,7 +7,6 @@ from datetime import datetime
 
 from PiMFD.Applications.System.ByteFormatting import format_size
 from PiMFD.UI.Charts import BarChart
-
 from PiMFD.UI.Panels import StackPanel
 
 
@@ -88,10 +87,10 @@ class DiskDrive(object):
                 o = self.old_counters
                 #  yield "{}".format(self.counter_key)
                 yield "Read Count: {}".format(c.read_count - o.read_count)
-                yield "Read Bytes: {}".format(c.read_bytes - o.read_bytes)
+                yield "Read Bytes: {}".format(format_size(c.read_bytes - o.read_bytes))
                 yield "Read Time: {}".format(c.read_time - o.read_time)
                 yield "Write Count: {}".format(c.write_count - o.write_count)
-                yield "Write Bytes: {}".format(c.write_bytes - o.write_bytes)
+                yield "Write Bytes: {}".format(format_size(c.write_bytes - o.write_bytes))
                 yield "Write Time: {}".format(c.write_time - o.write_time)
             else:
                 yield "Measuring..."

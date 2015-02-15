@@ -130,7 +130,7 @@ class BarChart(UIWidget):
 
         # Draw the box of the control - unless we're below or at min-val
         if self.value > self.range_low:
-            x = (self.value - self.range_low) * range_increment
+            x = (min(self.value, self.range_high) - self.range_low) * range_increment
             chart_rect = Rect(self.left, self.top, x, self.height)
             render_rectangle(self.display, color, chart_rect, width=0)
 

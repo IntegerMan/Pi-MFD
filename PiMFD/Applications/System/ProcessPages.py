@@ -1,6 +1,11 @@
 # coding=utf-8
 from datetime import datetime
 
+from PiMFD.Applications.System.ByteFormatting import format_size
+from PiMFD.UI.Charts import BarChart
+from PiMFD.UI.Panels import StackPanel
+
+
 try:
     import psutil
 except ImportError:
@@ -28,6 +33,11 @@ class ProcessDetailsPage(MFDPage):
         self.process = process
         self.last_refresh = datetime.now()
 
+        try:
+            self.name = process.name()
+        except:
+            self.name = "Unknown Process"
+
         self.refresh_performance_counters()
 
     def render(self):
@@ -49,10 +59,44 @@ class ProcessDetailsPage(MFDPage):
 
     def refresh_performance_counters(self):
 
-        self.panel.children = []
+        self.panel.children = [self.get_header_label("{} (PID: {})".format(self.name, self.process.pid))]
 
-        for k in self.process.__dict__:
-            self.panel.children.append(self.get_list_label('{}: {}'.format(k, self.process.__dict__[k])))
+        # Render CPU
+        pct = self.process.cpu_percent()
+        if not pct:
+            pct = 0.0
+
+        lbl_cpu = self.get_list_label("CPU:")
+        lbl_cpu_pct = self.get_list_label("{} %".format(pct))
+        chrt_cpu = BarChart(self.display, self, pct, width=25, height=lbl_cpu.font.size)
+        pnl_cpu = StackPanel(self.display, self, is_horizontal=True)
+        pnl_cpu.children = [lbl_cpu, chrt_cpu, lbl_cpu_pct]
+
+        self.panel.children.append(pnl_cpu)
+
+        # Render Memory
+        mem = self.process.memory_info()
+        if mem:
+            pnl_mem = StackPanel(self.display, self)
+            pnl_mem.children.append(self.get_label("Memory"))
+            pnl_mem.children.append(self.get_list_label("Memory Usage: {}".format(format_size(mem.rss))))
+            pnl_mem.children.append(self.get_list_label("Virtual Memory Size: {}".format(format_size(mem.vms))))
+            self.panel.children.append(pnl_mem)
+
+        # Render threads
+        pnl_threads = StackPanel(self.display, self)
+        try:
+            threads = self.process.threads()
+            pnl_threads.children = [self.get_label("Threads ({})".format(len(threads)))]
+
+            for t in threads:
+                lbl = self.get_list_label("{}: User: {}, SYS: {}".format(t.id, t.user_time, t.system_time))
+                pnl_threads.children.append(lbl)
+
+        except psutil.AccessDenied:
+            pnl_threads.children = [self.get_label("Threads"), self.get_list_label("No Access")]
+
+        self.panel.children.append(pnl_threads)
 
 
 class ProcessPage(MFDPage):
@@ -71,7 +115,7 @@ class ProcessPage(MFDPage):
 
         self.processes = psutil.get_process_list()
 
-        self.panel.children.append(self.get_header_label('Processes ({})'.format(len(self.processes))))
+        self.panel.children = [self.get_header_label('Processes ({})'.format(len(self.processes)))]
 
         is_first_control = True
         
