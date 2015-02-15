@@ -217,6 +217,19 @@ class ColorSchemes(object):
         :return: A amber-based color scheme
         """
         return ColorScheme(name='Amber',
+                           background=(39, 38, 35),
+                           foreground=(247, 241, 158),
+                           disabled=(128, 116, 39),
+                           detail=(164, 156, 71),
+                           highlight=(249, 245, 250))
+
+    @staticmethod
+    def get_gold_color_scheme():
+        """
+        Gets an amber-based color scheme
+        :return: A amber-based color scheme
+        """
+        return ColorScheme(name='Gold',
                            background=(30, 26, 4),
                            foreground=(231, 176, 75),
                            disabled=(110, 90, 35),
@@ -233,6 +246,7 @@ class ColorSchemes(object):
                    cls.get_terminal_color_scheme(),
                    cls.get_blue_color_scheme(),
                    cls.get_amber_color_scheme(),
+                   cls.get_gold_color_scheme(),
                    cls.get_cyan_color_scheme(),
                    cls.get_tactical_color_scheme(),
                    cls.get_red_color_scheme(),
