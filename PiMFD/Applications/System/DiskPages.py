@@ -143,7 +143,10 @@ class DiskDrivesPage(MFDPage):
         if log:
             log = open("counters.log", "w")
             log.write(str(new_counters))
-            log.write(new_counters.keys())
+            log.write(' KEYS: ')
+            for k in new_counters.keys():
+                log.write(k)
+                log.write(', ')
             log.close()
 
         counter_index = 0
