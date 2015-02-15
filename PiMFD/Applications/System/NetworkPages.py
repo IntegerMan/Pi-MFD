@@ -77,6 +77,14 @@ class NetworkPage(MFDPage):
                 self.set_focus(lbl)
                 is_first_control = False
 
+    def handle_control_state_changed(self, widget):
+
+        conn = widget.data_context
+        if conn:
+            self.application.navigate_to_process(conn.pid)
+            
+        super(NetworkPage, self).handle_control_state_changed(widget)
+        
     @staticmethod
     def get_address_text(address):
         """
@@ -165,7 +173,9 @@ class NetworkPage(MFDPage):
 
     def render(self):
 
-        if not self.connections:
+        if not psutil:
+            self.center_text("psutil offline")
+        elif not self.connections:
             self.center_text("ACCESS DENIED")
 
         return super(NetworkPage, self).render()

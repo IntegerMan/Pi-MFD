@@ -115,7 +115,11 @@ class ProcessDetailsPage(MFDPage):
             pass
 
         # Render Files
-        files = self.process.open_files()
+        try:
+            files = self.process.open_files()
+        except psutil.AccessDenied:
+            files = None
+            
         if files:
             pnl_files = StackPanel(self.display, self)
             pnl_files.children.append(self.get_label("Files ({})".format(len(files))))
@@ -126,39 +130,40 @@ class ProcessDetailsPage(MFDPage):
                 pnl_files.children.append(lbl)
 
             self.panel.children.append(pnl_files)
-
+                
         # Render Children
         try:
             children = self.process.children()
-            if children:
-                pnl_children = StackPanel(self.display, self)
-                pnl_children.children.append(self.get_label("Children ({})".format(len(children))))
-
-                for c in children:
-                    name = self.get_process_name(c)
-                    lbl = self.get_list_label("{}: {}".format(c.pid, name))
-                    lbl.data_context = c
-                    pnl_children.children.append(lbl)
-
-                self.panel.children.append(pnl_children)
-
         except psutil.NoSuchProcess or psutil.AccessDenied:
-            pass
+            children = None
+
+        if children:
+            pnl_children = StackPanel(self.display, self)
+            pnl_children.children.append(self.get_label("Children ({})".format(len(children))))
+
+            for c in children:
+                name = self.get_process_name(c)
+                lbl = self.get_list_label("{}: {}".format(c.pid, name))
+                lbl.data_context = c
+                pnl_children.children.append(lbl)
+
+            self.panel.children.append(pnl_children)
 
         # Render threads
-        pnl_threads = StackPanel(self.display, self)
         try:
             threads = self.process.threads()
+        except psutil.AccessDenied or psutil.NoSuchProcess:
+            threads = None
+            
+        if threads:
+            pnl_threads = StackPanel(self.display, self)
             pnl_threads.children = [self.get_label("Threads ({})".format(len(threads)))]
 
             for t in threads:
                 lbl = self.get_list_label("{}: User: {}, SYS: {}".format(t.id, t.user_time, t.system_time))
                 pnl_threads.children.append(lbl)
 
-        except psutil.AccessDenied or psutil.NoSuchProcess:
-            pnl_threads.children = [self.get_label("Threads"), self.get_list_label("No Access")]
-
-        self.panel.children.append(pnl_threads)
+            self.panel.children.append(pnl_threads)
 
 
 class ProcessPage(MFDPage):

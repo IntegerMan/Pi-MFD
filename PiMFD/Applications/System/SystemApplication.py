@@ -1,9 +1,10 @@
 # coding=utf-8
+import psutil
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.System.DiskPages import DiskDrivesPage
 from PiMFD.Applications.System.NetworkPages import NetworkPage
 from PiMFD.Applications.System.PerformancePages import PerformancePage
-from PiMFD.Applications.System.ProcessPages import ProcessPage
+from PiMFD.Applications.System.ProcessPages import ProcessPage, ProcessDetailsPage
 from PiMFD.Applications.System.WMIServicesPages import WMIServicesPage
 
 __author__ = 'Matt Eland'
@@ -44,5 +45,23 @@ class SysApplication(MFDApplication):
         :return: The button text for the application
         """
         return 'SYS'
+
+    def navigate_to_process(self, pid):
+        try:
+            processes = psutil.get_process_list()
+        except psutil.AccessDenied:
+            processes = None
+
+        if processes:
+
+            # Find the process from the list
+            proc = None
+            for p in processes:
+                if p.pid == pid:
+                    proc = p
+                    break
+
+            if proc:
+                self.select_page(ProcessDetailsPage(self.controller, self, proc))
 
 
