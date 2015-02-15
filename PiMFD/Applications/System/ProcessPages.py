@@ -2,6 +2,7 @@
 from datetime import datetime
 
 from PiMFD.Applications.System.ByteFormatting import format_size
+from PiMFD.Applications.System.NetworkPages import NetworkPage
 from PiMFD.UI.Charts import BarChart
 from PiMFD.UI.Panels import StackPanel
 
@@ -87,6 +88,32 @@ class ProcessDetailsPage(MFDPage):
             pnl_mem.children.append(self.get_list_label("Virtual Memory Size: {}".format(format_size(mem.vms))))
             self.panel.children.append(pnl_mem)
 
+        # Render Connections
+        try:
+            connections = self.process.connections()
+            if connections:
+                pnl_connections = StackPanel(self.display, self)
+                pnl_connections.children.append(self.get_label("Connections ({})".format(len(connections))))
+                self.panel.children.append(pnl_connections)
+
+                for c in connections:
+                    if c.laddr == c.raddr:
+                        address_text = NetworkPage.get_address_text(c.raddr)
+                    else:
+                        address_text = "{}({})".format(NetworkPage.get_address_text(c.raddr),
+                                                       NetworkPage.get_address_text(c.laddr))
+
+                    text = "{} {} {}/{}".format(c.status,
+                                                address_text,
+                                                NetworkPage.get_connection_type_text(c.type),
+                                                NetworkPage.get_connection_family_text(c.family))
+
+                    lbl = self.get_list_label(text)
+                    pnl_connections.children.append(lbl)
+
+        except psutil.NoSuchProcess or psutil.AccessDenied:
+            pass
+
         # Render Files
         files = self.process.open_files()
         if files:
@@ -117,8 +144,6 @@ class ProcessDetailsPage(MFDPage):
 
         except psutil.NoSuchProcess or psutil.AccessDenied:
             pass
-
-        # TODO: Render Connections
 
         # Render threads
         pnl_threads = StackPanel(self.display, self)
