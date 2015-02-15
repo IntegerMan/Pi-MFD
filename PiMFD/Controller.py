@@ -5,8 +5,8 @@ Contains application control logic for Pi-MFD.
 """
 
 import pygame
-from PiMFD.Applications.Core.CoreApplication import CoreApplication
 
+from PiMFD.Applications.Core.CoreApplication import CoreApplication
 from PiMFD.Applications.Navigation.NavigationApplication import NavigationApp
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
 from PiMFD.Options import MFDAppOptions
@@ -159,7 +159,7 @@ class MFDController(object):
         elif button in (15, 16, 17, 18, 19):  # MFD Left - 15 bottom, 19 top
             pass
         elif button in (5, 6, 7, 8, 9):  # MFD Right - 9 bottom, 5 top
-            pass
+            self.handle_keyboard_event(Keycodes.KEY_KP_ENTER)
 
     def handle_keyboard_event(self, key):
         """
