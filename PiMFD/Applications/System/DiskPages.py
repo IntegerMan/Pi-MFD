@@ -143,6 +143,7 @@ class DiskDrivesPage(MFDPage):
         if log:
             log = open("counters.log", "w")
             log.write(str(new_counters))
+            log.write(new_counters.keys())
             log.close()
 
         counter_index = 0
@@ -163,7 +164,8 @@ class DiskDrivesPage(MFDPage):
                 if key in new_counters:
                     drive.load_counters(key, new_counters[key])
                 else:
-                    drive.load_counters(new_counters.keys()[counter_index], new_counters[counter_index])
+                    key = new_counters.keys()[counter_index]
+                    drive.load_counters(key, new_counters[key])
                 counter_index += 1
 
             text = drive.get_display_text()
