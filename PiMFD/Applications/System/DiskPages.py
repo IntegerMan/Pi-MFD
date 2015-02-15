@@ -122,9 +122,9 @@ class DiskDrivesPage(MFDPage):
 
         self.last_refresh = datetime.now()
         self.selected_device = None
-        self.refresh()
-        
-    def refresh(self):
+        self.refresh(log=True)
+
+    def refresh(self, log=False):
 
         """
         Refreshes the list of drives
@@ -139,6 +139,11 @@ class DiskDrivesPage(MFDPage):
         # Grab Disk IO over the course of a second
         psutil.disk_io_counters(perdisk=True)
         new_counters = psutil.disk_io_counters(perdisk=True)
+
+        if log:
+            log = open("counters.log", "w")
+            log.write(str(new_counters))
+            log.close()
 
         counter_index = 0
 
@@ -158,7 +163,6 @@ class DiskDrivesPage(MFDPage):
                 if key in new_counters:
                     drive.load_counters(key, new_counters[key])
                 else:
-                    print(new_counters)
                     drive.load_counters(new_counters.keys()[counter_index], new_counters[counter_index])
                 counter_index += 1
 
