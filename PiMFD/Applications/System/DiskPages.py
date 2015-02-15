@@ -122,7 +122,7 @@ class DiskDrivesPage(MFDPage):
 
         self.last_refresh = datetime.now()
         self.selected_device = None
-        self.refresh(log=True)
+        self.refresh(log=False)
 
     def refresh(self, log=False):
 
@@ -134,7 +134,7 @@ class DiskDrivesPage(MFDPage):
             self.drives = None
             return
 
-        partitions = psutil.disk_partitions(all=True)
+        partitions = psutil.disk_partitions(all=False)
 
         # Grab Disk IO over the course of a second
         psutil.disk_io_counters(perdisk=True)
