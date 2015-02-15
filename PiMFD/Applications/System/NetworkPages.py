@@ -175,7 +175,7 @@ class NetworkPage(MFDPage):
         super(NetworkPage, self).handle_reselected()
 
     def get_button_text(self):
-        return "NTWK"
+        return "CONN"
 
 
 
