@@ -33,12 +33,16 @@ class ProcessDetailsPage(MFDPage):
         self.process = process
         self.last_refresh = datetime.now()
 
-        try:
-            self.name = process.name()
-        except:
-            self.name = "Unknown Process"
+        self.name = self.get_process_name(process)
 
         self.refresh_performance_counters()
+
+    @staticmethod
+    def get_process_name(process):
+        try:
+            return process.name()
+        except:
+            return "Unknown Process"        
 
     def render(self):
         return super(ProcessDetailsPage, self).render()
@@ -83,6 +87,39 @@ class ProcessDetailsPage(MFDPage):
             pnl_mem.children.append(self.get_list_label("Virtual Memory Size: {}".format(format_size(mem.vms))))
             self.panel.children.append(pnl_mem)
 
+        # Render Files
+        files = self.process.open_files()
+        if files:
+            pnl_files = StackPanel(self.display, self)
+            pnl_files.children.append(self.get_label("Files ({})".format(len(files))))
+
+            for f in files:
+                lbl = self.get_list_label(f.path)
+                lbl.data_context = f
+                pnl_files.children.append(lbl)
+
+            self.panel.children.append(pnl_files)
+
+        # Render Children
+        try:
+            children = self.process.children()
+            if children:
+                pnl_children = StackPanel(self.display, self)
+                pnl_children.children.append(self.get_label("Children ({})".format(len(children))))
+
+                for c in children:
+                    name = self.get_process_name(c)
+                    lbl = self.get_list_label("{}: {}".format(c.pid, name))
+                    lbl.data_context = c
+                    pnl_children.children.append(lbl)
+
+                self.panel.children.append(pnl_children)
+
+        except psutil.NoSuchProcess or psutil.AccessDenied:
+            pass
+
+        # TODO: Render Connections
+
         # Render threads
         pnl_threads = StackPanel(self.display, self)
         try:
@@ -93,7 +130,7 @@ class ProcessDetailsPage(MFDPage):
                 lbl = self.get_list_label("{}: User: {}, SYS: {}".format(t.id, t.user_time, t.system_time))
                 pnl_threads.children.append(lbl)
 
-        except psutil.AccessDenied:
+        except psutil.AccessDenied or psutil.NoSuchProcess:
             pnl_threads.children = [self.get_label("Threads"), self.get_list_label("No Access")]
 
         self.panel.children.append(pnl_threads)
