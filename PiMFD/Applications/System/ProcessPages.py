@@ -1,4 +1,5 @@
 # coding=utf-8
+from datetime import datetime
 
 try:
     import psutil
@@ -10,6 +11,48 @@ from PiMFD.UI.Widgets.MenuItem import TextMenuItem
 
 
 __author__ = 'Matt Eland'
+
+
+class ProcessDetailsPage(MFDPage):
+    """
+    :param controller: 
+    :param application: 
+    :param process: 
+    :param auto_scroll:
+    :type process: psutil.Process
+    """
+
+    def __init__(self, controller, application, process, auto_scroll=True):
+        super(ProcessDetailsPage, self).__init__(controller, application, auto_scroll)
+
+        self.process = process
+        self.last_refresh = datetime.now()
+
+        self.refresh_performance_counters()
+
+    def render(self):
+        return super(ProcessDetailsPage, self).render()
+
+    def arrange(self):
+
+        now = datetime.now()
+
+        delta = now - self.last_refresh
+        if delta.seconds >= 1:
+            self.last_refresh = now
+            self.refresh_performance_counters()
+
+        return super(ProcessDetailsPage, self).arrange()
+
+    def get_button_text(self):
+        return "INFO"
+
+    def refresh_performance_counters(self):
+
+        self.panel.children = []
+
+        for k in self.process.__dict__:
+            self.panel.children.append(self.get_list_label('{}: {}'.format(k, self.process.__dict__[k])))
 
 
 class ProcessPage(MFDPage):
@@ -52,6 +95,15 @@ class ProcessPage(MFDPage):
             if is_first_control:
                 self.set_focus(lbl)
                 is_first_control = False
+
+    def handle_control_state_changed(self, widget):
+
+        process = widget.data_context
+
+        if process:
+            self.application.select_page(ProcessDetailsPage(self.controller, self.application, process))
+
+        super(ProcessPage, self).handle_control_state_changed(widget)
 
     def arrange(self):
         return super(ProcessPage, self).arrange()
