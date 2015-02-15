@@ -111,8 +111,18 @@ class MFDController(object):
                 if event.button == 1:  # Left Mouse Button
                     self.handle_mouse_left_click(event.pos)
 
+            elif event.type == pygame.MOUSEMOTION:
+                pass
+
             elif event.type == pygame.KEYDOWN:
+                print("Key: {}".format(event.key))
                 self.handle_keyboard_event(event.key)
+                
+            elif event.type == pygame.JOYBUTTONDOWN:
+                self.handle_joystick_button_down(event.button)
+                
+            else:
+                print("Event: {}".format(str(event)))
 
     def get_active_page(self):
         """
@@ -123,6 +133,33 @@ class MFDController(object):
             return self.active_app.active_page
         else:
             return None
+
+    def handle_joystick_button_down(self,  button):
+
+        if button in (0, 1, 2, 3, 4):  # MFD Top row - 0 left, 4 right
+            self.handle_button(button, True)
+        elif button in (10, 11, 12, 13, 14):  # MFD Bottom row - 14 left, 10 right
+            self.handle_button(14 - button, False)
+        elif button == 20:  # MFD SYM Up - Upper right corner
+            self.handle_keyboard_event(Keycodes.KEY_PLUS)
+        elif button == 21:  # MFD SYM Down - Upper right corner
+            self.handle_keyboard_event(Keycodes.KEY_MINUS)
+        elif button == 22:  # MFD CON Up - lower right corner
+            self.handle_keyboard_event(Keycodes.KEY_UP)
+        elif button == 23:  # MFD CON Down - lower right corner
+            self.handle_keyboard_event(Keycodes.KEY_DOWN)
+        elif button == 24:  # MFD BRT UP - lower left corner
+            self.handle_keyboard_event(Keycodes.KEY_LEFT)
+        elif button == 25:  # MFD BRT DOWN - lower left corner
+            self.handle_keyboard_event(Keycodes.KEY_RIGHT)
+        elif button == 26:  # MFD GAIN UP - Upper left corner
+            self.handle_keyboard_event(Keycodes.KEY_PAGEUP)
+        elif button == 27:  # MFD GAIN DOWN - Upper left corner
+            self.handle_keyboard_event(Keycodes.KEY_PAGEDOWN)
+        elif button in (15, 16, 17, 18, 19):  # MFD Left - 15 bottom, 19 top
+            pass
+        elif button in (5, 6, 7, 8, 9):  # MFD Right - 9 bottom, 5 top
+            pass
 
     def handle_keyboard_event(self, key):
         """

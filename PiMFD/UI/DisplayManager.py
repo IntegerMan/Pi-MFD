@@ -195,6 +195,13 @@ class DisplayManager(object):
 
         # Initialize the pygame engine
         pygame.init()
+        
+        # Initialize Joystick Input
+        pygame.joystick.init()
+        joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+        for stick in joysticks:
+            stick.init()
+            
         self.clock = pygame.time.Clock()
 
         # If we haven't configured width / height, grab them from the current resolution
