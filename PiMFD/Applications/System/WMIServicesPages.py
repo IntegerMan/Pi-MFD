@@ -6,6 +6,7 @@ Lists running services on this machine using WMI
 import traceback
 
 try:
+    # Note: This is not working on Unix. I likely need to find a wrapper that does work before I invest more in WMI.
     from wmi import WMI, x_wmi
 except ImportError:
     error_message = "Unhandled error importing WMI {0}\n".format(str(traceback.format_exc()))
