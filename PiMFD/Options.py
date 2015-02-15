@@ -21,7 +21,7 @@ class MFDAppOptions(object):
     display = None
     location = '43035'
     lat = 40
-    lng = -80
+    lng = -83
     enable_scan_line = True
     enable_interlacing = True
     enable_fps = True

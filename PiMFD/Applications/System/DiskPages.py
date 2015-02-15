@@ -155,7 +155,11 @@ class DiskDrivesPage(MFDPage):
 
             if drive.can_get_usage() and counter_index < len(new_counters):
                 key = "PhysicalDrive" + str(counter_index)
-                drive.load_counters(key, new_counters[key])
+                if key in new_counters:
+                    drive.load_counters(key, new_counters[key])
+                else:
+                    print(new_counters)
+                    drive.load_counters(new_counters.keys()[counter_index], new_counters[counter_index])
                 counter_index += 1
 
             text = drive.get_display_text()
