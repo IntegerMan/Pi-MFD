@@ -139,9 +139,9 @@ class MFDController(object):
         elif button in (10, 11, 12, 13, 14):  # MFD Bottom row - 14 left, 10 right
             self.handle_button(14 - button, False)
         elif button == 20:  # MFD SYM Up - Upper right corner
-            self.handle_keyboard_event(Keycodes.KEY_PLUS)
+            self.handle_keyboard_event(Keycodes.KEY_PAGEUP)
         elif button == 21:  # MFD SYM Down - Upper right corner
-            self.handle_keyboard_event(Keycodes.KEY_MINUS)
+            self.handle_keyboard_event(Keycodes.KEY_PAGEDOWN)
         elif button == 22:  # MFD CON Up - lower right corner
             self.handle_keyboard_event(Keycodes.KEY_UP)
         elif button == 23:  # MFD CON Down - lower right corner
@@ -151,9 +151,9 @@ class MFDController(object):
         elif button == 25:  # MFD BRT DOWN - lower left corner
             self.handle_keyboard_event(Keycodes.KEY_RIGHT)
         elif button == 26:  # MFD GAIN UP - Upper left corner
-            self.handle_keyboard_event(Keycodes.KEY_PAGEUP)
+            self.handle_keyboard_event(Keycodes.KEY_PLUS)
         elif button == 27:  # MFD GAIN DOWN - Upper left corner
-            self.handle_keyboard_event(Keycodes.KEY_PAGEDOWN)
+            self.handle_keyboard_event(Keycodes.KEY_MINUS)
         elif button in (15, 16, 17, 18, 19):  # MFD Left - 15 bottom, 19 top
             pass
         elif button in (5, 6, 7, 8, 9):  # MFD Right - 9 bottom, 5 top

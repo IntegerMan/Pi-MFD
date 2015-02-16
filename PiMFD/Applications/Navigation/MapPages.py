@@ -51,11 +51,11 @@ class MapPage(MFDPage):
 
     def handle_key(self, key):
 
-        if key == Keycodes.KEY_KP_PLUS or key == Keycodes.KEY_PLUS:
+        if key == Keycodes.KEY_KP_PLUS or key == Keycodes.KEY_PLUS or key == Keycodes.KEY_PAGEUP:
             self.application.zoom_in()
             return True
 
-        elif key == Keycodes.KEY_KP_MINUS or key == Keycodes.KEY_MINUS:
+        elif key == Keycodes.KEY_KP_MINUS or key == Keycodes.KEY_MINUS or key == Keycodes.KEY_PAGEDOWN:
             self.application.zoom_out()
             return True
 

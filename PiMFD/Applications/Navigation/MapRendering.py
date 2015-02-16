@@ -82,7 +82,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
         weather_data = self.map.weather_data
         if weather_data:
             self.weather = self.build_symbol(weather_data.gps[0], weather_data.gps[1])
-            self.weather.set_pos((self.display.res_x - 45, 50))
+            self.weather.set_pos((self.display.bounds.right - 45, 50))
             self.weather.name = "{} Weather".format(weather_data.city)
             self.weather.tags = weather_data.get_tags()
             self.map_context.weather_data = weather_data
