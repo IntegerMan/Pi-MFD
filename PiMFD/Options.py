@@ -14,7 +14,7 @@ class MFDAppOptions(object):
 
     version = 0.06
     app_name = 'Pi-MFD'
-    app_version = '0.06 Development Version'
+    app_version = '0.07 Development Version'
     app_author = 'Matt Eland'
     copyright_year = 2015
     font_name = 'Fonts/VeraMono.ttf'
@@ -33,6 +33,7 @@ class MFDAppOptions(object):
     color_scheme = 'Green'
     font_scaling = 8
     min_font_size = 8
+    force_square_resolution = False
 
     def load_from_settings(self, filename='settings.ini'):
         """
@@ -55,6 +56,9 @@ class MFDAppOptions(object):
 
             if version >= 0.06:
                 self.color_scheme = settings.get('ui', 'color_scheme')
+
+            if version >= 0.07:
+                self.force_square_resolution = settings.getboolean('ui', 'force_square_resolution')
 
         if 'location' in settings.sections():
             self.location = settings.get('location', 'zipcode')
@@ -85,6 +89,7 @@ class MFDAppOptions(object):
         settings.set('ui', 'enable_scan_line', bool(self.enable_scan_line))
         settings.set('ui', 'enable_interlacing', bool(self.enable_interlacing))
         settings.set('ui', 'enable_fps', bool(self.enable_fps))
+        settings.set('ui', 'force_square_resolution', bool(self.force_square_resolution))
         settings.set('ui', 'color_scheme', self.color_scheme)
 
         settings.add_section('auth')

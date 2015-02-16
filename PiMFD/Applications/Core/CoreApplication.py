@@ -1,6 +1,7 @@
 # coding=utf-8
 from PiMFD.Applications.Application import MFDApplication
-from PiMFD.Applications.Core.CorePages import SysExitPage, SettingsPage, DashboardPage
+from PiMFD.Applications.Core.CorePages import SysExitPage, DashboardPage
+from PiMFD.Applications.Core.SettingsPage import SettingsPage
 from PiMFD.Applications.Core.SystemInfoPage import SysInfoPage
 
 __author__ = 'Matt Eland'
