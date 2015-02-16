@@ -187,7 +187,7 @@ class MapContext(object):
 
     def maintain_cursor_position(self):
         x, y = self.cursor_pos
-        x = max(0, min(x, self.app.display.res_x - 1))
-        y = max(0, min(y, self.app.display.res_y - 1))
+        x = max(0, min(x, self.app.display.bounds.right - 1))
+        y = max(0, min(y, self.app.display.bounds.bottom - 1))
         self.cursor_pos = x, y
         return self.cursor_pos
