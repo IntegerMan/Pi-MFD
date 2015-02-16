@@ -103,9 +103,7 @@ class MFDController(object):
             # TODO: It'd be nice to be able to enforce a minimum width / height - we don't support watch-sized resolutions yet
             elif event.type == pygame.VIDEORESIZE:
                 pygame.display.set_mode(event.dict['size'], pygame.RESIZABLE)
-                self.display.res_x = event.dict['size'][0]
-                self.display.res_y = event.dict['size'][1]
-                self.display.update_graphics_mode()
+                self.display.update_resolution(event.dict['size'][0], event.dict['size'][1])
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left Mouse Button
@@ -204,7 +202,7 @@ class MFDController(object):
         :type is_top: bool True if this is the top row, False for the bottom row
         """
         # Do division up front
-        header_offset = self.display.res_x / float(self.max_app_buttons)
+        header_offset = self.display.get_content_size()[0] / float(self.max_app_buttons)
 
         # Render from left to right
         x_offset = 0

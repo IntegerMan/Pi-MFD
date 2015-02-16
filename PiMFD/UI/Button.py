@@ -41,7 +41,7 @@ class MFDButton(object):
         # Figure out where we're starting vertically
         y = display.padding_y
         if not is_top:
-            y = display.res_y - display.padding_y - display.fonts.normal.size
+            y = display.bounds.bottom - display.padding_y - display.fonts.normal.size - 2
 
         if self.enabled:
             font_color = display.color_scheme.foreground

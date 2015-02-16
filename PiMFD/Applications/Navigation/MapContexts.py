@@ -53,10 +53,11 @@ class MapContext(object):
                         WifiMapFilter(self),
                         WikipediaMapFilter(self))
         self.active_filter = self.filters[0]
-        self.cursor_pos = app.display.res_x / 2.0, app.display.res_y / 2.0
+        self.cursor_pos = app.display.get_content_center()
 
         # If we're on a small display, start out at a small zoom
-        if min(app.display.res_x, app.display.res_y) < 420:
+        size = app.display.get_content_size()
+        if min(size[0], size[1]) <= 480:
             self.map_zoom = MapZooms.neighborhood
 
         self.tag_handlers = TagHandlerManager(self)

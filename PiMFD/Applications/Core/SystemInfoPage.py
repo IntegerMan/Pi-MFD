@@ -57,7 +57,7 @@ class SysInfoPage(MFDPage):
         self.lbl_sys_name.text_data = platform.platform(), platform.release(), platform.machine()
         self.lbl_sys_processor.text_data = platform.processor()
         self.lbl_sys_net_id.text_data = platform.node()
-        self.lbl_sys_display.text_data = self.display.res_x, self.display.res_y
+        self.lbl_sys_display.text_data = self.display.bounds.right, self.display.bounds.bottom
         self.lbl_sys_python.text_data = platform.python_version(), platform.python_implementation(), platform.python_compiler()
 
         return super(SysInfoPage, self).arrange()

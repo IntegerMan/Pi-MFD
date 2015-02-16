@@ -51,7 +51,7 @@ class ScanlineOverlay(Overlay):
         if not self.options.enable_scan_line:
             return
 
-        max_x = display.res_x - 1
+        max_x = display.bounds.right - 1
 
         # Draw our line
         c = display.color_scheme.highlight
@@ -61,7 +61,7 @@ class ScanlineOverlay(Overlay):
 
         # Animate downwards - try to keep a constant perceived pace, regardless of FPS setting
         effective_speed = self.speed * (60.0 / display.frames_per_second)
-        if self.y < display.res_y + self.height + (self.delay * effective_speed):
+        if self.y < display.bounds.bottom + self.height + (self.delay * effective_speed):
             self.y += effective_speed
         else:
             self.y = -self.height
@@ -87,8 +87,8 @@ class InterlaceOverlay(Overlay):
         color = (0, 0, 0, self.alpha)
 
         y = 1
-        while y < display.res_y - 1:
-            draw_horizontal_line(display, color, 0, display.res_x - 1, y, surface=surface)
+        while y < display.bounds.bottom - 1:
+            draw_horizontal_line(display, color, 0, display.bounds.right - 1, y, surface=surface)
             y += 2  # Move two lines down
 
 
@@ -112,9 +112,9 @@ class ShadowEffectOverlay(Overlay):
 
         color = (0, 0, 0, self.alpha)
 
-        rect_top = Rect(0, 0, display.res_x, self.size)
-        rect_left = Rect(0, self.size, self.size, display.res_y - self.size)
-        rect_right = Rect(display.res_x - self.size, self.size, self.size, display.res_y - self.size)
+        rect_top = Rect(display.bounds.left, display.bounds.top, display.bounds.width, self.size)
+        rect_left = Rect(display.bounds.left, self.size, self.size, display.bounds.right - self.size)
+        rect_right = Rect(display.bounds.right - self.size, self.size, self.size, display.bounds.height - self.size)
 
         render_rectangle(display, color, rect_top, width=0, surface=surface)
         render_rectangle(display, color, rect_left, width=0, surface=surface)

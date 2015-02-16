@@ -12,7 +12,7 @@ class MFDAppOptions(object):
     Contains misc. application options
     """
 
-    version = 0.06
+    version = 0.07
     app_name = 'Pi-MFD'
     app_version = '0.07 Development Version'
     app_author = 'Matt Eland'

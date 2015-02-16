@@ -15,7 +15,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
     def __init__(self, map, display, map_context, size=(200, 200)):
         self.map = map
         self.display = display
-        self.center = ((display.res_x / 2.0), (display.res_y / 2.0))
+        self.center = display.get_content_center()
         self.size = size
         self.map_context = map_context
         self.osm_shapes = None
@@ -59,7 +59,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
     def render(self):
 
         # Smart scale the size to accomodate for the greatest dimension. This lets us support many aspect ratios.
-        max_available = max(self.display.res_x, self.display.res_y)
+        max_available = max(self.display.bounds.width, self.display.bounds.height)
 
         # Only recompute the expensive stuff if the resolution has changed or the data fetch time has changed
         if max_available != self.size[0] or \
@@ -69,7 +69,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
 
             # Recompute our dimensions
             self.size = (max_available, max_available)
-            self.center = ((self.display.res_x / 2.0), (self.display.res_y / 2.0))
+            self.center = self.display.get_content_center()
 
             # Translate the various curves, etc. into their appropraite screen positions
             self.osm_shapes = self.map.translate_shapes(self.size, self.center)

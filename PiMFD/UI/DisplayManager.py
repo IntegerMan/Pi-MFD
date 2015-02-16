@@ -20,8 +20,8 @@ class DisplayManager(object):
     Individual rendering methods are now found in Rendering.py
     """
 
-    res_x = 800
-    res_y = 480
+    _res_x = 800
+    _res_y = 480
     desktop_x = 800
     desktop_y = 480
     bounds = None
@@ -49,8 +49,8 @@ class DisplayManager(object):
     options = None
 
     def __init__(self, x=800, y=480):
-        self.res_x = x
-        self.res_y = y
+        self._res_x = x
+        self._res_y = y
         self.overlays = list()
         self.color_schemes = ColorSchemes.get_color_schemes()
         self.color_scheme = self.color_schemes[0]
@@ -171,7 +171,7 @@ class DisplayManager(object):
         pygame.display.quit()
         pygame.display.init()
 
-        res = (self.res_x, self.res_y)
+        res = (self._res_x, self._res_y)
 
         # Prepare the Display
         if self.is_fullscreen:
@@ -220,7 +220,7 @@ class DisplayManager(object):
         self.clock = pygame.time.Clock()
 
         # If we haven't configured width / height, grab them from the current resolution
-        if self.res_x is None or self.res_x < 8 or self.res_y is None or self.res_y < 8:
+        if self._res_x is None or self._res_x < 8 or self._res_y is None or self._res_y < 8:
             set_resolution = True
         else:
             set_resolution = False
@@ -228,7 +228,7 @@ class DisplayManager(object):
         self.grab_dimensions_from_current_resolution(set_resolution=set_resolution)
 
         # Initialize the bounds for other things
-        self.bounds = Rect(0, 0, self.res_x, self.res_y)
+        self.refresh_bounds()
 
         # Initialize the display resolution
         self.prepare_display_surface()
@@ -240,6 +240,9 @@ class DisplayManager(object):
         # Initialize our overlays
         self.init_overlays(options)
 
+    def refresh_bounds(self):
+        self.bounds = Rect(0, 0, self._res_x, self._res_y)
+
     def grab_dimensions_from_current_resolution(self, set_resolution=True):
         """
         Sets the dimensions of this object based on the current screen's resolution.
@@ -249,8 +252,10 @@ class DisplayManager(object):
         self.desktop_x, self.desktop_y = info.current_w, info.current_h
 
         if set_resolution:
-            self.res_x = info.current_w
-            self.res_y = info.current_h
+            self._res_x = info.current_w
+            self._res_y = info.current_hs
+            self.refresh_bounds()
+
 
     def init_overlays(self, options):
         """
@@ -274,3 +279,12 @@ class DisplayManager(object):
         height = self.get_content_end_y() - self.get_content_start_y()
 
         return width, height
+
+    def update_resolution(self, res_x, res_y):
+
+        self._res_x = res_x
+        self._res_y = res_y
+
+        self.refresh_bounds()
+
+        self.update_graphics_mode()
