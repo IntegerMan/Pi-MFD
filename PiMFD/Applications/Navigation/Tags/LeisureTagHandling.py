@@ -11,6 +11,9 @@ __author__ = 'Matt Eland'
 class LeisureTagHandler(TagHandler):
     def get_color(self, entity, value, cs):
 
+        """
+        :type cs: PiMFD.UI.ColorScheme.ColorScheme
+        """
         if value in ('pitch', 'park', 'golf_course', 'sports_centre', 'adult_gaming_centr', 'amusement_arcade',
                      'beach_resort', 'bandstand', 'dog_park', 'dance', 'hackerspace', 'ice_rink', 'sports_centre',
                      'stadium', 'summer_camp'):
@@ -20,7 +23,7 @@ class LeisureTagHandler(TagHandler):
             return cs.map_pedestrian
 
         elif value in ('garden', 'golf_course', 'miniature_golf', 'nature_reserve'):
-            return cs.map_vegitation
+            return cs.map_vegetation
 
         elif value in ('swimming_pool', 'marina', 'water_park'):
             return cs.map_water

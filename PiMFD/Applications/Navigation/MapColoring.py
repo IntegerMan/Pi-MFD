@@ -3,6 +3,7 @@
 """
 Contains color-related items
 """
+from PiMFD.UI.ColorScheme import ColorScheme
 
 __author__ = 'Matt Eland'
 
@@ -14,11 +15,12 @@ class MapColorizer(object):
 
         """
 
-        :type cs: PiMFD.UI.ColorSchemes.ColorScheme
+        :type cs: ColorScheme
         :type entity: PiMFD.Applications.Navigation.MapEntities.MapEntity
         :type context: PiMFD.Applications.Navigation.MapContext.MapContext
         :rtype: tuple
         """
+
         if entity.has_tag('railway'):
             return cs.map_structural  # TODO: There's likely a lot more nuance to be had here
 
@@ -34,7 +36,7 @@ class MapColorizer(object):
             return cs.map_water
 
         elif entity.has_tag('wood'):
-            return cs.map_vegitation
+            return cs.map_vegetation
 
         elif entity.has_tag('natural'):
             color = context.tag_handlers.get_color('natural', entity, cs)
@@ -65,7 +67,7 @@ class MapColorizer(object):
                 return cs.map_infrastructure
 
             elif landuse == 'wetlands':
-                return cs.map_vegitation
+                return cs.map_vegetation
 
         elif entity.has_tag('tourism'):
             color = context.tag_handlers.get_color('tourism', entity, cs)

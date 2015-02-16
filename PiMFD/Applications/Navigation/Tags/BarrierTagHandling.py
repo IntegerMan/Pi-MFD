@@ -16,7 +16,7 @@ class BarrierTagHandler(TagHandler):
             return cs.map_structural
 
         elif value in ('ditch', 'retaining_wall', 'hedge', 'horse_stile', 'log'):
-            return cs.map_vegitation
+            return cs.map_vegetation
 
         elif value in ('wall', 'fence', 'entrance', 'gate', 'hampshire_gate', 'lift_gate', 'spikes'):
             return cs.map_private
