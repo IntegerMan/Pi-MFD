@@ -6,7 +6,7 @@ Contains Computer Performance Pages
 from datetime import datetime
 
 from PiMFD.Applications.System.ByteFormatting import format_size
-from PiMFD.UI.Charts import BarChart
+from PiMFD.UI.Widgets.Charts import BarChart
 from PiMFD.UI.Panels import StackPanel
 
 

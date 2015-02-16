@@ -4,7 +4,7 @@ Holds the weather page
 """
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_icon
-from PiMFD.UI.Charts import BoxChart
+from PiMFD.UI.Widgets.Charts import BoxChart
 from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Text import SpacerLine
 
