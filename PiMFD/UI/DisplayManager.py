@@ -58,8 +58,9 @@ class DisplayManager(object):
     def start_mfd(self, app_options):
         """
         Starts the MFD Application
-        :type app_options: PiMFD.MFDAppOptions the app options
+        :type app_options: PiMFD.Options.MFDAppOptions the app options
         """
+        
         self.options = app_options
         start_mfd(self, app_options)
 
@@ -241,7 +242,12 @@ class DisplayManager(object):
         self.init_overlays(options)
 
     def refresh_bounds(self):
-        self.bounds = Rect(0, 0, self._res_x, self._res_y)
+        
+        if self.options and self.options.force_square_resolution:
+            min_dim = min(self._res_x, self._res_y)
+            self.bounds = Rect(0, 0, min_dim, min_dim)
+        else:
+            self.bounds = Rect(0, 0, self._res_x, self._res_y)
 
     def grab_dimensions_from_current_resolution(self, set_resolution=True):
         """

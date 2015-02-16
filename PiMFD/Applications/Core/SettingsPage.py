@@ -91,16 +91,23 @@ class SettingsPage(MFDPage):
 
         if widget is self.chk_scanline:
             opts.enable_scan_line = widget.checked
+            
         elif widget is self.chk_full_screen:
             self.display.set_fullscreen(widget.checked)
+            
         elif widget is self.chk_fps:
             opts.enable_fps = widget.checked
+            
         elif widget is self.chk_interlace:
             opts.enable_interlacing = widget.checked
+            
         elif widget is self.txt_zipcode and len(widget.text) >= 5:  # Ensure zip code is valid
             opts.location = widget.text
-        elif widget is self.chk_force_square_resolution:
+            
+        elif widget is self.chk_force_square_resolution:            
             opts.force_square_resolution = widget.checked
+            self.display.refresh_bounds()
+            
         elif widget is self.ddl_color_scheme:
             opts.color_scheme = str(widget.value)
             self.display.color_scheme = widget.value
