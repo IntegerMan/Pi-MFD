@@ -176,7 +176,7 @@ class MFDPage(UIPage):
 
             # If we have already paged, show MORE link at the top
             if self.page_y > 1:
-                arrow_pos = [self.display.res_x - 18, self.min_y]
+                arrow_pos = [self.display.bounds.right - 18, self.min_y]
                 render_triangle_up(self.display, paging_color, arrow_pos, 8)
                 render_text_centered(self.display,
                                      self.display.fonts.small,
@@ -187,7 +187,7 @@ class MFDPage(UIPage):
 
             # If we have more pages, show a MORE link at the bottom
             if self.page_y < self.num_pages_y:
-                arrow_pos = [self.display.res_x - 18, self.max_y]
+                arrow_pos = [self.display.bounds.right - 18, self.max_y]
                 render_triangle_down(self.display, paging_color, arrow_pos, 8)
                 render_text_centered(self.display,
                                      self.display.fonts.small,
@@ -242,11 +242,12 @@ class MFDPage(UIPage):
         if not color:
             color = self.display.color_scheme.highlight
 
+        center = self.display.get_content_center()
         render_text_centered(self.display,
                              self.display.fonts.normal,
                              text,
-                             self.display.res_x / 2.0,
-                             self.display.res_y / 2.0 - (self.display.fonts.normal.size / 2),
+                             center[0],
+                             center[1] - (self.display.fonts.normal.size / 2),
                              color)
 
 

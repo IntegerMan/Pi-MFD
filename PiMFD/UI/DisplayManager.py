@@ -3,6 +3,7 @@
 Contains DisplayManager.
 """
 import pygame
+from pygame.rect import Rect
 
 from PiMFD import start_mfd
 from PiMFD.UI.ColorScheme import ColorSchemes
@@ -21,6 +22,9 @@ class DisplayManager(object):
 
     res_x = 800
     res_y = 480
+    desktop_x = 800
+    desktop_y = 480
+    bounds = None
 
     clock = None
 
@@ -64,7 +68,7 @@ class DisplayManager(object):
         Causes the graphics mode to refresh to take into account new resolutions
         """
         pygame.display.update()
-        self.overlay_surface = pygame.Surface((self.res_x, self.res_y), pygame.SRCALPHA)
+        self.overlay_surface = pygame.Surface((self.desktop_x, self.desktop_y), pygame.SRCALPHA)
         self.overlay_surface.convert_alpha()
 
     def set_fullscreen(self, is_fullscreen):
@@ -108,6 +112,7 @@ class DisplayManager(object):
         """
         Gets the X indentation level for content
         :return: The X location at which content rendering is acceptable
+        :rtype: int
         """
         return self.padding_x * 2
 
@@ -115,27 +120,37 @@ class DisplayManager(object):
         """
         Gets the right X indentation level for content
         :return: The X location at which content rendering is no longer acceptable
+        :rtype : int
         """
-        return self.res_x - (self.padding_x * 2)
+        return self.bounds.right - (self.padding_x * 2)
 
     def get_content_start_y(self):
         """
         Gets the Y indentation level for content
         :return: The Y location at which content rendering is acceptable
+        :rtype : int        
         """
-        return (self.padding_y * 4) + self.fonts.normal.size
+        return self.bounds.top + (self.padding_y * 4) + self.fonts.normal.size
 
     def get_content_end_y(self):
         """
         Gets the bottom Y indentation level for content
         :return: The Y location at which content rendering is no longer acceptable
+        :rtype : int
         """
-        return self.res_y - ((self.padding_y * 4) + self.fonts.normal.size)
+        return self.bounds.bottom - ((self.padding_y * 4) + self.fonts.normal.size)
+
+    def get_content_center(self):
+        """
+        :rtype : tuple
+        """
+        return self.bounds.left + (self.bounds.width / 2.0), self.bounds.top + (self.bounds.height / 2.0)
 
     def get_content_start_pos(self):
         """
         Gets positional coordinates for X and Y start for content
         :return: positional coordinates for X and Y start
+        :rtype : tuple
         """
         return self.get_content_start_x(), self.get_content_start_y()
 
@@ -143,7 +158,7 @@ class DisplayManager(object):
         """
         Calculates the Y amount of padding needed for a single blank line
         :type font_size: int The size of the font or None to use the height from font_size_normal
-        :return:
+        :rtype : int
         """
         if font_size is None:
             font_size = self.fonts.normal.size
@@ -211,6 +226,9 @@ class DisplayManager(object):
             set_resolution = False
 
         self.grab_dimensions_from_current_resolution(set_resolution=set_resolution)
+
+        # Initialize the bounds for other things
+        self.bounds = Rect(0, 0, self.res_x, self.res_y)
 
         # Initialize the display resolution
         self.prepare_display_surface()
