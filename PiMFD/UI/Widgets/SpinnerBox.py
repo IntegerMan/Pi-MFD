@@ -3,7 +3,7 @@
 Contains code useful for rendering spinner (+ / -) selection boxes
 """
 from PiMFD.UI.Focus import FocusableWidget
-from PiMFD.UI.Keycodes import is_right_key, is_plus_key, is_minus_key, is_left_key
+from PiMFD.UI.Keycodes import is_right_key, is_plus_key, is_minus_key, is_left_key, is_enter_key
 from PiMFD.UI.Panels import StackPanel
 
 from PiMFD.UI.Text import TextBlock
@@ -62,7 +62,7 @@ class SpinnerBox(FocusableWidget):
 
     def handle_key(self, key):
 
-        if is_plus_key(key) or is_right_key(key):
+        if is_plus_key(key) or is_right_key(key) or is_enter_key(key):
             self.move_next()
             return True
 
