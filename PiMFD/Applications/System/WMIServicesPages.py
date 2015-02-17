@@ -3,6 +3,7 @@
 """
 Lists running services on this machine using WMI
 """
+from threading import Thread
 import traceback
 
 try:
@@ -20,6 +21,49 @@ from PiMFD.UI.Panels import StackPanel
 __author__ = 'Matt'
 
 
+class WMIServiceLoader(Thread):
+    
+    def __init__(self, page, group=None, target=None, name=None, args=(), kwargs=None, verbose=None):
+        super(WMIServiceLoader, self).__init__(group, target, name, args, kwargs, verbose)
+        
+        self.page = page
+
+    def run(self):
+        super(WMIServiceLoader, self).run()
+
+        self.page.pnl_services.children = []
+        self.page.message = "Loading Services"
+
+        sys_path = "127.0.0.1"
+
+        if not WMI:
+            self.page.message = "WMI NOT INSTALLED"
+            return
+
+        try:
+            wmi = WMI(sys_path)
+            services = wmi.Win32_Service()
+            self.page.is_loading_services = False
+
+        except x_wmi as x:  # Py3+ except wmi.x_wmi as x:
+            self.page.message = x.com_error.strerror
+            return
+        
+        self.page.message = None
+        num_services = len(services)
+        self.page.lbl_header.text = "SERVICES ({})".format(num_services).upper()
+
+        for s in services:
+
+            lbl = self.page.get_list_label("{}: {}".format(s.Caption, s.State))
+
+            # If it's not running, mark it as disabled color
+            if s.State in ("Stopped", "Paused", "Unknown", "Continue Pending", "Start Pending"):
+                lbl.is_enabled = False
+
+            self.page.pnl_services.children.append(lbl)
+
+
 class WMIServicesPage(MFDPage):
     """
     A page containing information on running services using WMI
@@ -33,9 +77,11 @@ class WMIServicesPage(MFDPage):
 
         self.services = list()
 
-        self.lbl_header = self.get_header_label('SERVICES')
+        self.lbl_header = self.get_header_label('Services')
         self.pnl_services = StackPanel(controller.display, self)
         self.panel.children = [self.lbl_header, self.pnl_services]
+        
+        self.refresh_services()
 
     def handle_unselected(self):
         super(WMIServicesPage, self).handle_unselected()
@@ -54,49 +100,9 @@ class WMIServicesPage(MFDPage):
         self.refresh_services()
 
     def refresh_services(self):
-
-        self.wmi = None
-        self.pnl_services.children = []
-        self.message = None
-
-        sys_path = "127.0.0.1"
-        sys_name = None
-
-        if not WMI:
-            self.message = "WMI NOT INSTALLED"
-            return
-
-        try:
-            self.wmi = WMI(sys_path)
-
-        except x_wmi as x:  # Py3+ except wmi.x_wmi as x:
-            print "WMI Exception: {}: {}".format(x.com_error.hresult, x.com_error.strerror)
-            self.message = x.com_error.strerror
-            return
-
-        num_services = 0
-
-        for s in self.wmi.Win32_Service():
-
-            if not sys_name:
-                sys_name = s.SystemName
-
-            lbl = self.get_label("{}: {}".format(s.Caption, s.State))
-            lbl.font = self.display.fonts.list
-
-            # If it's not running, mark it as disabled color
-            if s.State in ("Stopped", "Paused", "Unknown", "Continue Pending", "Start Pending"):
-                lbl.is_enabled = False
-
-            self.pnl_services.children.append(lbl)
-
-            num_services += 1
-
-        # Default to path if we need to
-        if not sys_name:
-            sys_name = sys_path
-
-        self.lbl_header.text = "{} SERVICES ({})".format(sys_name, num_services).upper()
+        
+        loader = WMIServiceLoader(self)
+        loader.start()
 
     def render(self):
 
