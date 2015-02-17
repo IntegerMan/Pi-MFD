@@ -389,9 +389,7 @@ class MFDController(object):
         elif self.keypress_sound:
             self.keypress_sound.play()
 
-    def get_weather_data(self, zip):
-        return self.sch_app.get_weather_for_zip(zip)
-
-
+    def get_weather_data(self, zip, consumer=None):
+        self.sch_app.get_weather_for_zip(zip, consumer)
 
 

@@ -121,12 +121,13 @@ class Maps(object):
     lat = None
     lng = None
 
-    def __init__(self):
+    def __init__(self, application):
         super(Maps, self).__init__()
 
         self.shapes = []
         self.annotations = []
         self.nodes = []
+        self.application = application
 
     def float_floor_to_precision(self, value, precision):
         for i in range(precision):
@@ -384,3 +385,5 @@ class Maps(object):
 
         self.has_data = self.nodes and len(self.nodes) > 0
         self.status_text = "Loaded {} Nodes of Map Data".format(len(self.nodes))
+
+        self.application.map_loaded(self.bounds)

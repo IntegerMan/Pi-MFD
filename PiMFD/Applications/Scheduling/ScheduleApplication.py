@@ -6,7 +6,6 @@ The scheduling application
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Applications.Scheduling.Weather.WeatherAPIWrapper import WeatherAPI
-from PiMFD.Applications.Scheduling.Weather.WeatherData import WeatherData
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
 
 __author__ = 'Matt Eland'
@@ -43,21 +42,25 @@ class ScheduleApp(MFDApplication):
         # TODO: This should be in another thread so the UI can keep rendering
         self.get_weather()
 
-    def get_weather(self):
+    def get_weather(self, consumer=None):
         """
         Gets weather data from the weather API (Yahoo Weather) and stores it for the weather page.
         """
 
-        if self.controller.options.location:
-            weather = self.get_weather_for_zip(self.controller.options.location, updateError=True)
-            if weather:
-                self.weather_data = weather
+        if not consumer:
+            consumer = self
 
-    def get_weather_for_zip(self, zip, updateError=False):
+        if self.controller.options.location:
+            self.weather_api.get_yahoo_weather_async(self.controller.options.location, consumer)
+
+    def get_weather_for_zip(self, zip, consumer=None, updateError=False):
 
         try:
-            # TODO: I might want to impose some frequency restrictions here
-            return self.weather_api.get_yahoo_weather(zip)
+            if consumer:
+                self.weather_api.get_yahoo_weather_async(zip, consumer)
+            else:
+                return self.weather_api.get_yahoo_weather(zip)
+            
         except Exception as exception:
 
             if updateError:
@@ -65,6 +68,8 @@ class ScheduleApp(MFDApplication):
 
             return None
 
+    def weather_received(self, location, weather):
+        self.weather_data = weather
 
     def get_default_page(self):
         """

@@ -34,7 +34,7 @@ class NavigationApp(MFDApplication):
     def __init__(self, controller):
         super(NavigationApp, self).__init__(controller)
 
-        self.map = Maps()
+        self.map = Maps(self)
         self.map_context = MapContext(self, self.map)
         self.traffic = MapTraffic(controller.options)
 
@@ -136,22 +136,32 @@ class NavigationApp(MFDApplication):
                     lng = self.controller.options.lng
 
             self.map.fetch_by_coordinate(lat, lng, self.map_context.map_zoom)
-            bounds = self.map.bounds
-
-        self.map.annotations = self.traffic.get_traffic(bounds)
-
-        # Find the first zip code
-        zip = None
-        for shape in self.map.shapes:
-            zip = shape.get_tag_value('addr:postcode')
-            if zip:
-                break
-
-                # Get Weather Data for our current location
-        if zip:
-            self.map.weather_data = self.controller.get_weather_data(zip)
 
         self.initialized = True
+
+    def map_loaded(self, bounds):
+
+        if bounds:
+            self.map.annotations = self.traffic.get_traffic(bounds)
+
+        # Find the first zip code
+        zipcode = None
+        for shape in self.map.shapes:
+            zipcode = shape.get_tag_value('addr:postcode')
+            if not zipcode:
+                zipcode = shape.get_tag_value('tiger:zip_left')
+            if not zipcode:
+                zipcode = shape.get_tag_value('tiger:zip_right')
+            if zipcode:
+                break
+
+        # Get Weather Data for our current location
+        if zipcode:
+            self.controller.get_weather_data(zipcode, consumer=self)
+
+
+    def weather_received(self, location, weather):
+        self.map.weather_data = weather
 
     def get_map_data_on_current_cursor_pos(self):
 
@@ -173,7 +183,6 @@ class NavigationApp(MFDApplication):
 
         if self.map_context.zoom_in():
             self.get_map_data_on_current_cursor_pos()
-
 
     def zoom_out(self):
 
