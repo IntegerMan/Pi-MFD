@@ -78,6 +78,7 @@ class TextBox(FocusableWidget):
         self.text_width = 100
 
         self.panel = StackPanel(display, page, is_horizontal=True)
+        self.panel.center_align = True
         self.panel.children = [self.label, self.glyph]
 
     def arrange(self):

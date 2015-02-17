@@ -39,6 +39,7 @@ class StackPanel(UIPanel):
     is_horizontal = False
     auto_orient = False
     pad_last_item = True
+    center_align = False
 
     def __init__(self, display, page, is_horizontal=False, auto_orient=False, keep_together=False):
         super(StackPanel, self).__init__(display, page, keep_together=keep_together)
@@ -127,6 +128,18 @@ class StackPanel(UIPanel):
                         page_remaining -= child_height
 
                 width = max(child_size[0], width)
+                
+        if self.center_align:
+            if self.is_horizontal:
+                for c in self.children:
+                    half_delta = (height - c.desired_size[1]) / 2.0
+                    if half_delta > 0:
+                        c.pos = c.pos[0], y + half_delta
+            else:
+                for c in self.children:
+                    half_delta = (width - c.desired_size[0]) / 2.0
+                    if half_delta > 0:
+                        c.pos = x + half_delta, c.pos[1]
 
         # Update size and return
         self.desired_size = width, height

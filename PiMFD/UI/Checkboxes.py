@@ -85,6 +85,7 @@ class CheckBox(FocusableWidget):
         self.glyph = CheckBoxGlyph(display, page)
 
         self.panel = StackPanel(display, page, is_horizontal=True)
+        self.panel.center_align = True
         self.panel.children = [self.label, self.glyph]
 
     def arrange(self):
