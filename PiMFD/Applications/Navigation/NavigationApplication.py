@@ -142,7 +142,7 @@ class NavigationApp(MFDApplication):
     def map_loaded(self, bounds):
 
         if bounds:
-            self.map.annotations = self.traffic.get_traffic(bounds)
+            self.traffic.get_traffic(bounds, self.map)
 
         # Find the first zip code
         zipcode = None
@@ -158,7 +158,6 @@ class NavigationApp(MFDApplication):
         # Get Weather Data for our current location
         if zipcode:
             self.controller.get_weather_data(zipcode, consumer=self)
-
 
     def weather_received(self, location, weather):
         self.map.weather_data = weather

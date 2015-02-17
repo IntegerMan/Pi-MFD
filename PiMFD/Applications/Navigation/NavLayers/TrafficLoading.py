@@ -1,4 +1,5 @@
 import json
+from threading import Thread
 from time import gmtime, strftime
 import traceback
 
@@ -29,20 +30,18 @@ class TrafficIncident(MapSymbol):
     verified = False
 
 
-class MapTraffic(object):
-    options = None
+class TrafficFetchThread(Thread):
+    def __init__(self, bounds, map, options, group=None, target=None, name=None, args=(), kwargs=None, verbose=None):
+        super(TrafficFetchThread, self).__init__(group, target, name, args, kwargs, verbose)
 
-    def __init__(self, options):
-        super(MapTraffic, self).__init__()
-
+        self.bounds = bounds
+        self.map = map
         self.options = options
 
-    def get_traffic(self, bounds):
+    def run(self):
+        super(TrafficFetchThread, self).run()
 
-        incidents = None
-
-        if not self.options.bing_maps_key:
-            return None
+        bounds = self.bounds
 
         url = "http://dev.virtualearth.net/REST/v1/Traffic/Incidents/%f,%f,%f,%f?key=%s" % (
             bounds[1],
@@ -52,7 +51,6 @@ class MapTraffic(object):
             self.options.bing_maps_key
         )
 
-        print("Fetching traffic from: " + url)
         data = None
 
         # Grab Data
@@ -66,65 +64,67 @@ class MapTraffic(object):
             error_message = "Unhandled error getting request {0}\n".format(str(traceback.format_exc()))
             print(error_message)
 
-        if data:
-            incidents = list()
-            resource_sets = data['resourceSets']
-            if len(resource_sets) > 0:
-                resources = resource_sets[0]['resources']
-                if len(resources) > 0:
-                    for res in resources:
-                        lat = res['point']['coordinates'][0]
-                        lng = res['point']['coordinates'][1]
-                        incident = TrafficIncident(lat, lng)
+        if not data:
+            return
 
-                        incident.id = self.get_safe_value(res, 'incidentId')
-                        incident.congestion_info = self.get_safe_value(res, 'congestion')
-                        incident.description = self.get_safe_value(res, 'description')
-                        incident.detour = self.get_safe_value(res, 'detour')
-                        incident.lane = self.get_safe_value(res, 'lane')
-                        incident.incident_type = self.get_safe_value(res, 'type')
-                        incident.road_closed = self.get_safe_value(res, 'roadClosed')
-                        incident.severity = self.get_safe_value(res, 'severity')
-                        incident.verified = self.get_safe_value(res, 'verified')
-                        incident.end = self.get_safe_value(res, 'end')
-                        incident.start = self.get_safe_value(res, 'start')
+        incidents = list()
+        resource_sets = data['resourceSets']
+        if len(resource_sets) > 0:
+            resources = resource_sets[0]['resources']
+            if len(resources) > 0:
+                for res in resources:
+                    lat = res['point']['coordinates'][0]
+                    lng = res['point']['coordinates'][1]
+                    incident = TrafficIncident(lat, lng)
 
-                        if incident.incident_type:
-                            incident.incident_type = int(incident.incident_type)
-                            if incident.incident_type == 1:
-                                incident.name = 'Accident'
-                            elif incident.incident_type == 2:
-                                incident.name = 'Congestion'
-                            elif incident.incident_type == 3:
-                                incident.name = 'Disabled Vehicle'
-                            elif incident.incident_type == 4:
-                                incident.name = 'Mass Transit'  # Whaaaaaat?
-                            elif incident.incident_type == 5:
-                                incident.name = 'Misc. Traffic'
-                            elif incident.incident_type == 6:
-                                incident.name = 'News Alert'
-                            elif incident.incident_type == 7:
-                                incident.name = 'Event'
-                            elif incident.incident_type == 8:
-                                incident.name = 'Hazard'
-                            elif incident.incident_type == 9:
-                                incident.name = 'Construction'
-                            elif incident.incident_type == 10:
-                                incident.name = 'Alert'
-                            elif incident.incident_type == 11:
-                                incident.name = 'Weather'
+                    incident.id = self.get_safe_value(res, 'incidentId')
+                    incident.congestion_info = self.get_safe_value(res, 'congestion')
+                    incident.description = self.get_safe_value(res, 'description')
+                    incident.detour = self.get_safe_value(res, 'detour')
+                    incident.lane = self.get_safe_value(res, 'lane')
+                    incident.incident_type = self.get_safe_value(res, 'type')
+                    incident.road_closed = self.get_safe_value(res, 'roadClosed')
+                    incident.severity = self.get_safe_value(res, 'severity')
+                    incident.verified = self.get_safe_value(res, 'verified')
+                    incident.end = self.get_safe_value(res, 'end')
+                    incident.start = self.get_safe_value(res, 'start')
 
-                        incident.add_tag('incident', incident.incident_type)
-                        if incident.end:
-                            incident.add_tag('end_date', strftime('%m/%d/%Y', incident.end))
-                        if incident.start:
-                            incident.add_tag('start_date', strftime('%m/%d/%Y', incident.start))
-                        incident.add_tag('note', incident.description)
-                        incident.add_tag('severity', incident.severity)
+                    if incident.incident_type:
+                        incident.incident_type = int(incident.incident_type)
+                        if incident.incident_type == 1:
+                            incident.name = 'Accident'
+                        elif incident.incident_type == 2:
+                            incident.name = 'Congestion'
+                        elif incident.incident_type == 3:
+                            incident.name = 'Disabled Vehicle'
+                        elif incident.incident_type == 4:
+                            incident.name = 'Mass Transit'  # Whaaaaaat?
+                        elif incident.incident_type == 5:
+                            incident.name = 'Misc. Traffic'
+                        elif incident.incident_type == 6:
+                            incident.name = 'News Alert'
+                        elif incident.incident_type == 7:
+                            incident.name = 'Event'
+                        elif incident.incident_type == 8:
+                            incident.name = 'Hazard'
+                        elif incident.incident_type == 9:
+                            incident.name = 'Construction'
+                        elif incident.incident_type == 10:
+                            incident.name = 'Alert'
+                        elif incident.incident_type == 11:
+                            incident.name = 'Weather'
 
-                        incidents.append(incident)
+                    incident.add_tag('incident', incident.incident_type)
+                    if incident.end:
+                        incident.add_tag('end_date', strftime('%m/%d/%Y', incident.end))
+                    if incident.start:
+                        incident.add_tag('start_date', strftime('%m/%d/%Y', incident.start))
+                    incident.add_tag('note', incident.description)
+                    incident.add_tag('severity', incident.severity)
 
-        return incidents
+                    incidents.append(incident)
+
+        self.map.handle_traffic_data(incidents)
 
     @staticmethod
     def get_safe_value(res, key):
@@ -140,3 +140,20 @@ class MapTraffic(object):
                 value = gmtime(seconds)
 
         return value
+
+
+class MapTraffic(object):
+    options = None
+
+    def __init__(self, options):
+        super(MapTraffic, self).__init__()
+
+        self.options = options
+
+    def get_traffic(self, bounds, map):
+        if not self.options.bing_maps_key:
+            return None
+
+        fetch = TrafficFetchThread(bounds, map, self.options)
+        fetch.start()
+

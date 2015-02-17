@@ -285,6 +285,9 @@ class Maps(object):
         entity.x, entity.y = self.gps_to_screen(entity.lat, entity.lng, dimensions, offset)
         return entity.x, entity.y
 
+    def handle_traffic_data(self, incidents):
+        self.annotations = incidents
+
     def load_map_from_data(self, data):
 
         if 'service unavailable' in data.lower():
