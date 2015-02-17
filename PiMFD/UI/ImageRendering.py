@@ -4,6 +4,7 @@ Contains code useful for rendering images to the screen
 """
 from StringIO import StringIO
 from datetime import datetime
+from threading import Thread
 import urllib2
 
 import pygame
@@ -47,7 +48,10 @@ class ImageRenderer(UIWidget):
 
     def arrange(self):
 
-        image_size = self.surface.get_size()
+        if self.surface:
+            image_size = self.surface.get_size()
+        else:
+            image_size = 0, 0
 
         if self.desired_width:
             width = self.desired_width
@@ -59,22 +63,24 @@ class ImageRenderer(UIWidget):
         else:
             height = image_size[1]
 
-        # Ensure width <= max_width when max width present
-        if self.max_width and self.max_width < width:
-            scale_factor = self.max_width / float(width)
-            width = self.max_width
-            height = int(height * scale_factor)
+        if width > 0:
 
-        # Ensure width >= min_width when min width present
-        if self.min_width and self.min_width > width:
-            scale_factor = self.min_width / float(width)
-            width = self.min_width
-            height = int(height * scale_factor)
+            # Ensure width <= max_width when max width present
+            if self.max_width and self.max_width < width:
+                scale_factor = self.max_width / float(width)
+                width = self.max_width
+                height = int(height * scale_factor)
+
+            # Ensure width >= min_width when min width present
+            if self.min_width and self.min_width > width:
+                scale_factor = self.min_width / float(width)
+                width = self.min_width
+                height = int(height * scale_factor)
 
         self.desired_size = width, height
 
         # If we need to scale, perform the scale now
-        if width != image_size[0]:
+        if self.surface and width != image_size[0]:
             self.surface = pygame.transform.scale(self.surface, self.desired_size)
 
         return super(ImageRenderer, self).arrange()
@@ -87,7 +93,8 @@ class ImageRenderer(UIWidget):
         self.rect = self.set_dimensions_from_rect(
             Rect(self.pos[0], self.pos[1], self.desired_size[0], self.desired_size[1]))
 
-        self.display.surface.blit(self.surface, self.rect)
+        if self.surface:
+            self.display.surface.blit(self.surface, self.rect)
 
         return self.rect
 
@@ -106,11 +113,11 @@ class WebImageRenderer(ImageRenderer):
         self.interval = int(interval)
         self.url = url
 
-        surface = self.get_image_surface()
+        self.request_image()
         self.last_fetch = datetime.now()
 
         # Let the core image Renderer take care of the rest of things from here on out
-        super(WebImageRenderer, self).__init__(display, page, surface, size=size, max_width=max_width, min_width=min_width)
+        super(WebImageRenderer, self).__init__(display, page, None, size=size, max_width=max_width, min_width=min_width)
 
     def get_image_surface(self):
 
@@ -132,9 +139,34 @@ class WebImageRenderer(ImageRenderer):
             delta = datetime.now() - self.last_fetch
 
             if delta.seconds > self.interval:
-                self.surface = self.get_image_surface()
+                self.request_image()
 
         return super(WebImageRenderer, self).arrange()
+
+    def request_image(self):
+        self.last_fetch = datetime.now()
+        thread = ImageLoadingThread(self, self.url)
+        thread.start()
+
+
+class ImageLoadingThread(Thread):
+    def __init__(self, image, url, group=None, target=None, name=None, args=(), kwargs=None, verbose=None):
+        super(ImageLoadingThread, self).__init__(group, target, name, args, kwargs, verbose)
+
+        self.image = image
+        self.url = url
+
+    def run(self):
+        super(ImageLoadingThread, self).run()
+
+        # Grab the image data from the interwebs
+        data = StringIO(urllib2.urlopen(self.url).read())
+
+        self.image.last_fetch = datetime.now()
+
+        # Build a surface-like object from the data
+        adapter = StringIOImageAdapter(data)
+        self.image.surface = pygame.image.load(adapter)
 
 
 class StringIOImageAdapter(object):
