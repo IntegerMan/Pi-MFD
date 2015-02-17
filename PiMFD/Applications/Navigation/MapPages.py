@@ -113,7 +113,7 @@ class MapInfoPage(MFDPage):
             if self.is_fullscreen_image:
 
                 # Maximize the image!
-                self.image.min_width = self.display.res_x
+                self.image.min_width = self.display.bounds.right
                 self.image.max_width = self.image.min_width
 
                 # All we want to render is the image, so just do it now. This will preclude normal data rendering
@@ -122,7 +122,7 @@ class MapInfoPage(MFDPage):
             else:
 
                 # Reset the funkiness caused by full-screening an image
-                self.image.max_width = self.display.res_x - 400
+                self.image.max_width = self.display.bounds.right - 400
                 self.image.min_width = None
 
         return super(MapInfoPage, self).render()
@@ -166,10 +166,12 @@ class MapInfoPage(MFDPage):
                 interval = 0
 
             # Build an image control
-            self.image = self.get_image(image_url, interval=interval, max_width=self.display.res_x - 400)
-            if self.image:
-                # Tell the page it has image content (will be used for selective rendering)
-                self.pnl_image.children = [self.image]
+            max_width = self.display.bounds.right - 400
+            if max_width > 8:
+                self.image = self.get_image(image_url, interval=interval, max_width=max_width)
+                if self.image:
+                    # Tell the page it has image content (will be used for selective rendering)
+                    self.pnl_image.children = [self.image]
 
         # Build a list of labels for all tags in this shape
         tags = []

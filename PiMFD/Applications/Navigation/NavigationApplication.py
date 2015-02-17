@@ -74,10 +74,11 @@ class NavigationApp(MFDApplication):
             elif index == 1:
                 self.map_context.next_page_mode()
             elif index == 2:
-                if not self.map_context.cursor_context or not self.map_context.cursor_context.has_tag('weather'):
-                    self.select_page(self.info_page)
-                else:
-                    self.select_page(self.weather_page)
+                if self.map_context.cursor_context:
+                    if not self.map_context.cursor_context.has_tag('weather'):
+                        self.select_page(self.info_page)
+                    else:
+                        self.select_page(self.weather_page)
 
         elif self.active_page in (self.info_page, self.weather_page):
 
