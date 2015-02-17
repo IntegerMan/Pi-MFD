@@ -55,14 +55,18 @@ class WMIServiceLoader(Thread):
 
         for s in services:
 
-            lbl = self.page.get_list_label("{}: {}".format(s.Caption, s.State))
+            try:
+                lbl = self.page.get_list_label("{}: {}".format(s.Caption, s.State))
 
-            # If it's not running, mark it as disabled color
-            if s.State in ("Stopped", "Paused", "Unknown", "Continue Pending", "Start Pending"):
-                lbl.is_enabled = False
+                # If it's not running, mark it as disabled color
+                if s.State in ("Stopped", "Paused", "Unknown", "Continue Pending", "Start Pending"):
+                    lbl.is_enabled = False
 
-            self.page.pnl_services.children.append(lbl)
+                self.page.pnl_services.children.append(lbl)
 
+            except:
+                pass
+                
 
 class WMIServicesPage(MFDPage):
     """
