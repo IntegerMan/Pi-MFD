@@ -88,6 +88,24 @@ class MapPage(MFDPage):
 
         return super(MapPage, self).handle_key(key)
 
+
+class MapLocationsPage(MFDPage):
+    def __init__(self, controller, application, map_context):
+        super(MapLocationsPage, self).__init__(controller, application)
+        self.map_context = map_context
+
+    def get_button_text(self):
+        return "GOTO"
+
+    def arrange(self):
+        return super(MapLocationsPage, self).arrange()
+
+    def render(self):
+        self.center_text("NO LOCATIONS DEFINED")
+
+        return super(MapLocationsPage, self).render()
+
+
 class MapInfoPage(MFDPage):
 
     lbl_header = None

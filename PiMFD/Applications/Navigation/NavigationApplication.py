@@ -5,7 +5,7 @@ The navigation application
 
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.Navigation.MapContexts import MapContext
-from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
+from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage, MapLocationsPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
@@ -42,6 +42,7 @@ class NavigationApp(MFDApplication):
 
         self.map_page = MapPage(controller, self)
         self.info_page = MapInfoPage(controller, self)
+        self.locations_page = MapLocationsPage(controller, self, self.map_context)
         self.weather_page = WeatherPage(controller, self, self.map_context)
         self.always_render_background = True
 
@@ -49,6 +50,7 @@ class NavigationApp(MFDApplication):
         self.btn_map = MFDButton(None, selected=True)
         self.btn_page = MFDButton(self.map_context.get_page_mode_text())
         self.btn_info = MFDButton("INFO", enabled=False)
+        self.btn_goto = MFDButton("GOTO")
         self.btn_back = MFDButton("BACK")
         self.btn_detail_action = MFDButton("", enabled=False)
 
@@ -60,7 +62,7 @@ class NavigationApp(MFDApplication):
             self.btn_page.text = self.map_context.get_page_mode_text()
             self.btn_info.enabled = self.map_context.cursor_context
 
-            return [self.btn_map, self.btn_page, self.btn_info]
+            return [self.btn_map, self.btn_page, self.btn_info, self.btn_goto]
 
         else:
             return [self.btn_back, self.btn_detail_action]
@@ -79,8 +81,10 @@ class NavigationApp(MFDApplication):
                         self.select_page(self.info_page)
                     else:
                         self.select_page(self.weather_page)
+            elif index == 3:
+                self.select_page(self.locations_page)
 
-        elif self.active_page in (self.info_page, self.weather_page):
+        elif self.active_page in (self.info_page, self.weather_page, self.locations_page):
 
             if index == 0:
                 self.select_page(self.map_page)
@@ -118,7 +122,6 @@ class NavigationApp(MFDApplication):
         Handles the selected event for this application.
         """
         if not self.initialized:
-            # TODO: This should be in another thread so the UI can keep rendering
             self.get_map_data()
 
     def get_map_data(self, bounds=None, lat=None, lng=None):
