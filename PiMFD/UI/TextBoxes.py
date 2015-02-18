@@ -33,7 +33,6 @@ class TextGlyph(UIWidget):
 
         return super(TextGlyph, self).arrange()
 
-
     def render(self):
         """
         Renders the glyph and returns its dimensions
@@ -62,11 +61,14 @@ class TextBox(FocusableWidget):
     """
 
     label_text = None
-    text = None
+    text = ''
     text_width = 100
     max_length = None
     allow_alpha = True
     allow_numeric = True
+    allow_space = True
+    allow_negative = True
+    allow_decimal = True
 
     def __init__(self, display, page, label=None, text=None, text_width=100):
         super(TextBox, self).__init__(display, page)
@@ -75,7 +77,7 @@ class TextBox(FocusableWidget):
         self.label_text = label
         self.label = TextBlock(display, page, label)
         self.glyph = TextGlyph(display, page)
-        self.text_width = 100
+        self.text_width = text_width
 
         self.panel = StackPanel(display, page, is_horizontal=True)
         self.panel.center_align = True
@@ -85,6 +87,7 @@ class TextBox(FocusableWidget):
 
         # Pass along our values to the children
         self.label.text = self.label_text
+        self.glyph.text_width = self.text_width
         self.glyph.text = self.text
 
         self.desired_size = self.panel.arrange()
@@ -102,6 +105,20 @@ class TextBox(FocusableWidget):
         self.panel.render()
 
         return self.set_dimensions_from(self.panel)
+
+    def set_alphanumeric(self):
+        self.allow_alpha = True
+        self.allow_negative = True
+        self.allow_numeric = True
+        self.allow_decimal = True
+        self.allow_space = True
+
+    def set_numeric(self, allow_negative=True, allow_decimal=True):
+        self.allow_alpha = False
+        self.allow_negative = allow_negative
+        self.allow_decimal = allow_decimal
+        self.allow_numeric = True
+        self.allow_space = False
 
     def got_focus(self):
         """
@@ -133,6 +150,10 @@ class TextBox(FocusableWidget):
         :returns: True if the event was handled; otherwise False
         """
 
+        # ensure we have text in the textbox
+        if not self.text:
+            self.text = ''
+
         if key == Keycodes.KEY_BACKSPACE:
             if self.text and len(self.text) > 0:
                 self.text = self.text[:-1]  # TODO: This is simplistic and needs to work with a cursor index
@@ -152,6 +173,21 @@ class TextBox(FocusableWidget):
         if self.allow_alpha and Keycodes.KEY_a <= key <= Keycodes.KEY_z and self.can_input_more():
             char = chr(key)
             self.text += str(char).upper()  # TODO: This will need to take cursor location into account
+            self.state_changed()
+            return True
+
+        if self.allow_negative and key in [Keycodes.KEY_KP_MINUS, Keycodes.KEY_MINUS]:
+            self.text += '-'
+            self.state_changed()
+            return True
+
+        if self.allow_decimal and key in [Keycodes.KEY_KP_PERIOD, Keycodes.KEY_PERIOD]:
+            self.text += '.'
+            self.state_changed()
+            return True
+
+        if self.allow_space and key == Keycodes.KEY_SPACE and self.can_input_more():
+            self.text += ' '
             self.state_changed()
             return True
 

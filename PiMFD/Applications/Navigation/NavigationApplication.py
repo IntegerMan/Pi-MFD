@@ -5,7 +5,8 @@ The navigation application
 
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.Navigation.MapContexts import MapContext
-from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage, MapLocationsPage
+from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
+from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
@@ -44,7 +45,7 @@ class NavigationApp(MFDApplication):
 
         self.map_page = MapPage(controller, self)
         self.info_page = MapInfoPage(controller, self)
-        self.locations_page = MapLocationsPage(controller, self, self.map_context)
+        self.locations_page = MapLocationsPage(controller, self, self.map_context, self.map_page)
         self.weather_page = WeatherPage(controller, self, self.map_context)
         self.always_render_background = True
 
@@ -55,7 +56,6 @@ class NavigationApp(MFDApplication):
         self.btn_goto = MFDButton("GOTO")
         self.btn_back = MFDButton("BACK")
         self.btn_detail_action = MFDButton("", enabled=False)
-        self.btn_add_location = MFDButton("ADD")
 
     def get_buttons(self):
 
@@ -66,13 +66,21 @@ class NavigationApp(MFDApplication):
             self.btn_info.enabled = self.map_context.cursor_context
 
             return [self.btn_map, self.btn_page, self.btn_info, self.btn_goto]
-        elif self.active_page is self.locations_page:
-            return [self.btn_back, self.btn_add_location]
+
         else:
+
+            # If the page supports it, use it to get buttons
+            buttons = self.active_page.get_lower_buttons()
+            if buttons and len(buttons) > 0:
+                return buttons
+            
             return [self.btn_back, self.btn_detail_action]
 
     def select_page_by_index(self, index):
 
+        if self.active_page and self.active_page.handle_lower_button(index):
+            return
+        
         if self.active_page is self.map_page:
 
             if index == 0:
@@ -88,10 +96,11 @@ class NavigationApp(MFDApplication):
             elif index == 3:
                 self.select_page(self.locations_page)
 
-        elif self.active_page in (self.info_page, self.weather_page, self.locations_page):
+        elif self.active_page in (self.info_page, self.weather_page):
 
             if index == 0:
                 self.select_page(self.map_page)
+
             elif index == 1:
                 if self.active_page is self.info_page:
                     self.info_page.toggle_details()

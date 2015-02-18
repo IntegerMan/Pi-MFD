@@ -55,6 +55,12 @@ class MFDPage(UIPage):
 
         self.auto_scroll = auto_scroll
 
+    def handle_lower_button(self, index):
+        return False
+
+    def get_lower_buttons(self):
+        return []
+
     def get_label(self, text):
         """
         Builds a label with the specified text. This is a conveinence method since labels are extremely common

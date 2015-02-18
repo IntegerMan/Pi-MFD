@@ -36,7 +36,7 @@ class SettingsPage(MFDPage):
         self.chk_fps = CheckBox(controller.display, self, "FPS:")
         self.chk_force_square_resolution = CheckBox(controller.display, self, "Force Square Aspect:")
         self.txt_zipcode = TextBox(controller.display, self, label="Zip Code:")
-        self.txt_zipcode.allow_alpha = False
+        self.txt_zipcode.set_numeric(allow_decimal=False)
         self.txt_zipcode.max_length = 5
         self.ddl_color_scheme = SpinnerBox(controller.display, self, 'Color Scheme:',
                                            controller.display.color_scheme,
