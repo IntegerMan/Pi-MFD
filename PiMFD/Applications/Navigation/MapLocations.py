@@ -7,6 +7,7 @@ This file contains map locations information
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Button import MFDButton
 from PiMFD.UI.TextBoxes import TextBox
+from PiMFD.UI.Widgets.MenuItem import TextMenuItem
 
 __author__ = 'Matt Eland'
 
@@ -69,7 +70,9 @@ class MapLocationAddPage(MFDPage):
 
         elif index == 1:  # Add
 
-            # TODO: Actually add the thing!
+            # Actually add the thing
+            location = MapLocation(self.txt_name.text, self.txt_lat.text, self.txt_lng.text)
+            self.application.locations.append(location)
 
             self.application.select_page(self.back_page)
             return True
@@ -92,7 +95,6 @@ class MapLocationAddPage(MFDPage):
         return super(MapLocationAddPage, self).arrange()
 
     def render(self):
-
         return super(MapLocationAddPage, self).render()
 
 
@@ -111,6 +113,26 @@ class MapLocationsPage(MFDPage):
         self.btn_back = MFDButton("BACK")
         self.btn_add_location = MFDButton("NEW")
         self.back_page = back_page
+
+    def handle_selected(self):
+
+        is_first = True
+
+        if self.application.locations and len(self.application.locations) > 0:
+
+            self.panel.children = [self.get_header_label('Locations ({})'.format(len(self.application.locations)))]
+
+            for l in self.application.locations:
+
+                item = TextMenuItem(self.display, self, '{}: {}, {}'.format(l.name, l.lat, l.lng))
+                item.font = self.display.fonts.list
+                self.panel.children.append(item)
+
+                if is_first:
+                    self.set_focus(item)
+                    is_first = False
+
+        super(MapLocationsPage, self).handle_selected()
 
     def get_lower_buttons(self):
         return [self.btn_back, self.btn_add_location]
@@ -131,12 +153,6 @@ class MapLocationsPage(MFDPage):
         return "GOTO"
 
     def arrange(self):
-
-        if self.application.locations and len(self.application.locations) > 0:
-            self.panel.children = [self.get_header_label('Locations ({})'.format(len(self.application.locations)))]
-            for l in self.application.locations:
-                self.panel.children.append(self.get_list_label('{}: {}, {}'.format(l.name, l.lat, l.lng)))
-
         return super(MapLocationsPage, self).arrange()
 
     def render(self):

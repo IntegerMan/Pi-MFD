@@ -6,7 +6,7 @@ The navigation application
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
-from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage
+from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage, MapLocation
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
@@ -26,7 +26,7 @@ class NavigationApp(MFDApplication):
 
     initialized = False
 
-    locations = None
+    locations = []
 
     map = None
     map_context = None
@@ -48,6 +48,9 @@ class NavigationApp(MFDApplication):
         self.locations_page = MapLocationsPage(controller, self, self.map_context, self.map_page)
         self.weather_page = WeatherPage(controller, self, self.map_context)
         self.always_render_background = True
+
+        default_location = MapLocation('Default Location', controller.options.lat, controller.options.lng)
+        self.locations = [default_location]
 
         self.pages = list([self.map_page])
         self.btn_map = MFDButton(None, selected=True)
