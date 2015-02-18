@@ -45,8 +45,13 @@ class WMIServiceLoader(Thread):
             services = wmi.Win32_Service()
             self.page.is_loading_services = False
 
-        except x_wmi as x:  # Py3+ except wmi.x_wmi as x:
+        except x_wmi as x:
             self.page.message = x.com_error.strerror
+            return
+
+        except AttributeError:
+            if self.page:
+                self.page.message = "Unknown Error. App may be terminating."
             return
         
         self.page.message = None
