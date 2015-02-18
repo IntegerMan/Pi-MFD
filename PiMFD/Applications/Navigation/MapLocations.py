@@ -35,6 +35,7 @@ class MapLocation(object):
 
 
 class MapLocationAddPage(MFDPage):
+    
     def __init__(self, controller, application, map_context, back_page):
         super(MapLocationAddPage, self).__init__(controller, application)
         self.map_context = map_context
@@ -81,11 +82,6 @@ class MapLocationAddPage(MFDPage):
 
     def arrange(self):
 
-        if self.application.locations and len(self.application.locations) > 0:
-            self.panel.children = [self.get_header_label('Locations ({})'.format(len(self.application.locations)))]
-            for l in self.application.locations:
-                self.panel.children.append(self.get_list_label('{}: {}, {}'.format(l.name, l.lat, l.lng)))
-
         # Update the valid state of the add button
         if self.txt_lng.has_text() and self.txt_lat.has_text() and self.txt_name.has_text():
             self.btn_add_location.enabled = True
@@ -126,6 +122,7 @@ class MapLocationsPage(MFDPage):
 
                 item = TextMenuItem(self.display, self, '{}: {}, {}'.format(l.name, l.lat, l.lng))
                 item.font = self.display.fonts.list
+                item.data_context = l
                 self.panel.children.append(item)
 
                 if is_first:
@@ -133,6 +130,14 @@ class MapLocationsPage(MFDPage):
                     is_first = False
 
         super(MapLocationsPage, self).handle_selected()
+
+    def handle_control_state_changed(self, widget):
+        
+        location = widget.data_context
+        if location:
+            self.application.show_map(location.lat, location.lng)
+
+        super(MapLocationsPage, self).handle_control_state_changed(widget)
 
     def get_lower_buttons(self):
         return [self.btn_back, self.btn_add_location]
@@ -161,5 +166,3 @@ class MapLocationsPage(MFDPage):
             self.center_text("NO LOCATIONS DEFINED")
         else:
             return super(MapLocationsPage, self).render()
-        
-        

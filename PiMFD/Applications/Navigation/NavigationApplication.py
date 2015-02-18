@@ -139,6 +139,11 @@ class NavigationApp(MFDApplication):
         """
         if not self.initialized:
             self.get_map_data()
+            
+    def show_map(self, lat, lng):
+        
+        self.select_page(self.map_page)
+        self.get_map_data(lat=lat, lng=lng)
 
     def get_map_data(self, bounds=None, lat=None, lng=None):
 
@@ -184,8 +189,8 @@ class NavigationApp(MFDApplication):
     def get_map_data_on_current_cursor_pos(self):
 
         # Build precursors that are needed for the map
-        dim_coef = self.map.get_dimension_coefficients((self.display.res_x, self.display.res_y))
-        offset = ((self.display.res_x / 2.0), (self.display.res_y / 2.0))
+        dim_coef = self.map.get_dimension_coefficients((self.display.bounds.width, self.display.bounds.height))
+        offset = self.display.get_content_center()
 
         # Figure out the Lat / Lng
         pos = self.map_context.cursor_pos
@@ -195,7 +200,7 @@ class NavigationApp(MFDApplication):
         self.get_map_data(lat=lat, lng=lng)
 
         # Recenter the Cursor
-        self.map_context.cursor_pos = (self.display.res_x / 2.0, self.display.res_y / 2.0)
+        self.map_context.cursor_pos = self.display.get_content_center()
 
     def zoom_in(self):
 
