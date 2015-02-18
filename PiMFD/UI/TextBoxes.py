@@ -193,5 +193,8 @@ class TextBox(FocusableWidget):
 
         return super(TextBox, self).handle_key(key)
 
+    def has_text(self):
+
+        return self.text and len(self.text) > 0
 
 

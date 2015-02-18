@@ -83,6 +83,12 @@ class MapLocationAddPage(MFDPage):
             for l in self.application.locations:
                 self.panel.children.append(self.get_list_label('{}: {}, {}'.format(l.name, l.lat, l.lng)))
 
+        # Update the valid state of the add button
+        if self.txt_lng.has_text() and self.txt_lat.has_text() and self.txt_name.has_text():
+            self.btn_add_location.enabled = True
+        else:
+            self.btn_add_location.enabled = False
+
         return super(MapLocationAddPage, self).arrange()
 
     def render(self):
