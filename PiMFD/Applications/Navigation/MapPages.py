@@ -98,12 +98,20 @@ class MapLocationsPage(MFDPage):
         return "GOTO"
 
     def arrange(self):
+
+        if self.application.locations and len(self.application.locations) > 0:
+            self.panel.children = [self.get_header_label('Locations ({})'.format(len(self.application.locations)))]
+            for l in self.application.locations:
+                self.panel.children.append(self.get_list_label('{}: {}, {}'.format(l.name, l.lat, l.lng)))
+        
         return super(MapLocationsPage, self).arrange()
 
     def render(self):
-        self.center_text("NO LOCATIONS DEFINED")
 
-        return super(MapLocationsPage, self).render()
+        if not self.application.locations or len(self.application.locations) < 0:
+            self.center_text("NO LOCATIONS DEFINED")
+        else:
+            return super(MapLocationsPage, self).render()
 
 
 class MapInfoPage(MFDPage):

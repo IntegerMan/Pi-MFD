@@ -25,6 +25,8 @@ class NavigationApp(MFDApplication):
 
     initialized = False
 
+    locations = None
+
     map = None
     map_context = None
     traffic = None
@@ -53,6 +55,7 @@ class NavigationApp(MFDApplication):
         self.btn_goto = MFDButton("GOTO")
         self.btn_back = MFDButton("BACK")
         self.btn_detail_action = MFDButton("", enabled=False)
+        self.btn_add_location = MFDButton("ADD")
 
     def get_buttons(self):
 
@@ -63,7 +66,8 @@ class NavigationApp(MFDApplication):
             self.btn_info.enabled = self.map_context.cursor_context
 
             return [self.btn_map, self.btn_page, self.btn_info, self.btn_goto]
-
+        elif self.active_page is self.locations_page:
+            return [self.btn_back, self.btn_add_location]
         else:
             return [self.btn_back, self.btn_detail_action]
 
