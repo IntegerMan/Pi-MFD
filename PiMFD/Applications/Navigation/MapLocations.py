@@ -25,6 +25,8 @@ class MapLocation(object):
     name = None
     lat = None
     lng = None
+    tags = {}
+    id = None
 
     def __init__(self, name, lat, lng):
         super(MapLocation, self).__init__()
@@ -73,7 +75,7 @@ class MapLocationAddPage(MFDPage):
 
             # Actually add the thing
             location = MapLocation(self.txt_name.text, self.txt_lat.text, self.txt_lng.text)
-            self.application.locations.append(location)
+            self.application.add_location(location)
 
             self.application.select_page(self.back_page)
             return True
