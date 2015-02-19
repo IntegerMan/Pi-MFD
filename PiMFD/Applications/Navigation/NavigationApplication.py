@@ -224,6 +224,10 @@ class NavigationApp(MFDApplication):
         self.locations.append(location)
         self.save_locations()
         
+    def delete_location(self, location):
+        self.locations.remove(location)
+        self.save_locations()
+        
     def save_locations(self):
         try:
             f = open(self.my_locations_file, "w")

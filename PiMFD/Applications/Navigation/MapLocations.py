@@ -38,9 +38,8 @@ class MapLocation(object):
 
 class MapLocationAddPage(MFDPage):
     
-    def __init__(self, controller, application, map_context, back_page):
+    def __init__(self, controller, application, back_page):
         super(MapLocationAddPage, self).__init__(controller, application)
-        self.map_context = map_context
 
         self.btn_back = MFDButton("BACK")
         self.btn_add_location = MFDButton("ADD")
@@ -96,6 +95,78 @@ class MapLocationAddPage(MFDPage):
         return super(MapLocationAddPage, self).render()
 
 
+class MapLocationDetailsPage(MFDPage):
+
+    def __init__(self, controller, application, location, back_page):
+        super(MapLocationDetailsPage, self).__init__(controller, application)
+
+        self.location = location
+
+        self.btn_back = MFDButton("BACK")
+        self.btn_save = MFDButton("SAVE")
+        self.btn_delete = MFDButton("DEL")
+        self.back_page = back_page
+
+        self.lbl_header = self.get_header_label('Edit Location')
+
+        self.txt_name = TextBox(self.display, self, label='Name:', text_width=300, text=location.name)
+        self.txt_lat = TextBox(self.display, self, label=' Lat:', text_width=160, text=location.lat)
+        self.txt_lng = TextBox(self.display, self, label='Long:', text_width=160, text=location.lng)
+        
+        self.txt_name.set_alphanumeric()
+        self.txt_name.max_length = 20
+        self.txt_lat.max_length = 10
+        self.txt_lng.max_length = 10
+        self.txt_lat.set_numeric(allow_decimal=True)
+        self.txt_lng.set_numeric(allow_decimal=True)
+
+        self.panel.children = [self.lbl_header, self.txt_name, self.txt_lat, self.txt_lng]
+
+        self.set_focus(self.txt_name)
+
+    def get_lower_buttons(self):
+        return [self.btn_back, self.btn_save, None, None, self.btn_delete]
+
+    def handle_lower_button(self, index):
+
+        if index == 0:  # Back
+            self.application.select_page(self.back_page)
+            return True
+
+        elif index == 1:  # Save
+
+            # Actually add the thing
+            self.location.name = self.txt_name.text
+            self.location.lat = self.txt_lat.text
+            self.location.lng = self.txt_lng.text
+            self.application.save_locations()
+
+            self.application.select_page(self.back_page)
+            return True
+        
+        elif index == 4:  # Delete
+            
+            # TODO: Once my UI framework has grown a bit more, add a confirm functionality.
+            self.application.delete_location(self.location)
+            self.application.select_page(self.back_page)
+            return True
+        
+        return super(MapLocationDetailsPage, self).handle_lower_button(index)
+
+    def arrange(self):
+
+        # Update the valid state of the add button
+        if self.txt_lng.has_text() and self.txt_lat.has_text() and self.txt_name.has_text():
+            self.btn_save.enabled = True
+        else:
+            self.btn_save.enabled = False
+
+        return super(MapLocationDetailsPage, self).arrange()
+
+    def render(self):
+        return super(MapLocationDetailsPage, self).render()
+    
+
 class MapLocationsPage(MFDPage):
     """
     Lists map locations the user has saved
@@ -109,6 +180,7 @@ class MapLocationsPage(MFDPage):
         self.map_context = map_context
 
         self.btn_back = MFDButton("BACK")
+        self.btn_edit_location = MFDButton("EDIT")
         self.btn_add_location = MFDButton("NEW")
         self.back_page = back_page
 
@@ -142,7 +214,7 @@ class MapLocationsPage(MFDPage):
         super(MapLocationsPage, self).handle_control_state_changed(widget)
 
     def get_lower_buttons(self):
-        return [self.btn_back, self.btn_add_location]
+        return [self.btn_back, self.btn_edit_location, self.btn_add_location]
 
     def handle_lower_button(self, index):
 
@@ -150,8 +222,15 @@ class MapLocationsPage(MFDPage):
             self.application.select_page(self.back_page)
             return True
 
-        elif index == 1:  # Add
-            self.application.select_page(MapLocationAddPage(self.controller, self.application, self.map_context, self))
+        elif index == 1:  # Edit
+            if self.focus:
+                loc = self.focus.data_context
+                if loc:
+                    self.application.select_page(MapLocationDetailsPage(self.controller, self.application, loc, self))
+                    return True
+
+        elif index == 2:  # Add
+            self.application.select_page(MapLocationAddPage(self.controller, self.application, self))
             return True
 
         return super(MapLocationsPage, self).handle_lower_button(index)

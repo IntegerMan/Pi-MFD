@@ -73,6 +73,9 @@ class TextBox(FocusableWidget):
     def __init__(self, display, page, label=None, text=None, text_width=100):
         super(TextBox, self).__init__(display, page)
 
+        if text:
+            text = str(text)
+            
         self.text = text
         self.label_text = label
         self.label = TextBlock(display, page, label)
