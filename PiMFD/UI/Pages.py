@@ -45,6 +45,8 @@ class UIPage(UIObject):
         :return: The new focus
         """
 
+        had_focus = self.focus is not None
+
         # If this is a non-event, just go away
         if self.focus is widget:
             return
@@ -57,10 +59,15 @@ class UIPage(UIObject):
 
         # Tell the new focus it's getting some TLC
         if widget:
+
+            print('focusing {}'.format(str(widget)))
             widget.got_focus()
             
             if widget.parent:
                 widget.parent.child_focused(widget)
+
+        elif had_focus:
+            print('no focus')
 
         return self.focus
 

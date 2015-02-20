@@ -188,6 +188,7 @@ class MapLocationsPage(MFDPage):
 
         is_first = True
 
+        self.clear_focusables()
         if self.application.locations and len(self.application.locations) > 0:
 
             self.panel.children = [self.get_header_label('Locations ({})'.format(len(self.application.locations)))]
