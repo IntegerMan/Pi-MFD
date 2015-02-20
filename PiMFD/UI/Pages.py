@@ -7,7 +7,7 @@ from PiMFD.UI.Focus import FocusableWidget
 from PiMFD.UI.Keycodes import is_up_key, is_down_key
 
 from PiMFD.UI.Panels import StackPanel
-from PiMFD.UI.WidgetBase import UIObject, UIWidget
+from PiMFD.UI.WidgetBase import UIObject
 
 __author__ = 'Matt Eland'
 
@@ -174,4 +174,16 @@ class UIPage(UIObject):
         if focusable is not None:
             self.focusables.append(focusable)
 
+    def unregister_focusable(self, focusable):
+        """
+        Deregisters a control as a focusable input element.
+        :param focusable: The control that can no longer receive focus
+        """
+        if focusable is not None and focusable in self.focusables:
+            self.focusables.remove(focusable)
 
+    def clear_focusables(self):
+        """
+        Clears the list of focusable controls.
+        """
+        self.focusables = []

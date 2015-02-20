@@ -2,7 +2,6 @@
 """
 The navigation application
 """
-from json import dumps, load, loads
 import pickle
 import traceback
 
@@ -13,8 +12,8 @@ from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage, MapLoca
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
-from PiMFD.Serialization import PythonObjectEncoder
 from PiMFD.UI.Button import MFDButton
+
 
 __author__ = 'Matt Eland'
 
