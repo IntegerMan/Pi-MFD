@@ -4,6 +4,9 @@ Contains code related to application options management
 """
 from ConfigParser import ConfigParser
 
+from PiMFD.CougarMFDHandling import CougarMFDInputHandler
+
+
 __author__ = 'Matt Eland'
 
 
@@ -34,6 +37,7 @@ class MFDAppOptions(object):
     font_scaling = 8
     min_font_size = 8
     force_square_resolution = False
+    mfd_controller_rotation = CougarMFDInputHandler.rotation_up
 
     def load_from_settings(self, filename='settings.ini'):
         """
@@ -68,6 +72,9 @@ class MFDAppOptions(object):
         if 'auth' in settings.sections():
             self.bing_maps_key = settings.get('auth', 'bing_maps_key')
 
+        if 'input' in settings.sections():
+            self.mfd_controller_rotation = settings.get('input', 'mfd_controller_rotation')
+
     def save_to_settings(self, filename='settings.ini'):
         """
         Persists settings to a configuration file.
@@ -94,6 +101,9 @@ class MFDAppOptions(object):
 
         settings.add_section('auth')
         settings.set('auth', 'bing_maps_key', self.bing_maps_key)
+
+        settings.add_section('input')
+        settings.set('input', 'mfd_controller_rotation', self.mfd_controller_rotation)
 
         # Output to the file
         config_file = open(filename, 'w')

@@ -9,6 +9,7 @@ import pygame
 from PiMFD.Applications.Core.CoreApplication import CoreApplication
 from PiMFD.Applications.Navigation.NavigationApplication import NavigationApp
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
+from PiMFD.CougarMFDHandling import CougarMFDInputHandler
 from PiMFD.Options import MFDAppOptions
 from PiMFD.UI import Keycodes
 from PiMFD.UI.Button import MFDButton
@@ -42,6 +43,8 @@ class MFDController(object):
 
     button_sound = None
     keypress_sound = None
+
+    mfd_joystick_controller = None
 
     time_format = '%m/%d/%Y - %H:%M:%S'
 
@@ -79,6 +82,8 @@ class MFDController(object):
             self.button_sound = pygame.mixer.Sound(self.options.button_sound)
         if self.options.key_sound:
             self.keypress_sound = pygame.mixer.Sound(self.options.key_sound)
+
+        self.mfd_joystick_controller = CougarMFDInputHandler(self, self.options.mfd_controller_rotation)
 
         self.sys_app = SysApplication(self)
 
@@ -132,32 +137,10 @@ class MFDController(object):
         else:
             return None
 
-    def handle_joystick_button_down(self,  button):
+    def handle_joystick_button_down(self, button):
 
-        if button in (0, 1, 2, 3, 4):  # MFD Top row - 0 left, 4 right
-            self.handle_button(button, True)
-        elif button in (10, 11, 12, 13, 14):  # MFD Bottom row - 14 left, 10 right
-            self.handle_button(14 - button, False)
-        elif button == 20:  # MFD SYM Up - Upper right corner
-            self.handle_keyboard_event(Keycodes.KEY_PAGEUP)
-        elif button == 21:  # MFD SYM Down - Upper right corner
-            self.handle_keyboard_event(Keycodes.KEY_PAGEDOWN)
-        elif button == 22:  # MFD CON Up - lower right corner
-            self.handle_keyboard_event(Keycodes.KEY_UP)
-        elif button == 23:  # MFD CON Down - lower right corner
-            self.handle_keyboard_event(Keycodes.KEY_DOWN)
-        elif button == 24:  # MFD BRT UP - lower left corner
-            self.handle_keyboard_event(Keycodes.KEY_LEFT)
-        elif button == 25:  # MFD BRT DOWN - lower left corner
-            self.handle_keyboard_event(Keycodes.KEY_RIGHT)
-        elif button == 26:  # MFD GAIN UP - Upper left corner
-            self.handle_keyboard_event(Keycodes.KEY_PLUS)
-        elif button == 27:  # MFD GAIN DOWN - Upper left corner
-            self.handle_keyboard_event(Keycodes.KEY_MINUS)
-        elif button in (15, 16, 17, 18, 19):  # MFD Left - 15 bottom, 19 top
-            pass
-        elif button in (5, 6, 7, 8, 9):  # MFD Right - 9 bottom, 5 top
-            self.handle_keyboard_event(Keycodes.KEY_KP_ENTER)
+        if self.mfd_joystick_controller:
+            self.mfd_joystick_controller.handle_button_down(button)
 
     def handle_keyboard_event(self, key):
         """
