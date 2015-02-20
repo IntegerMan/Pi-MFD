@@ -91,10 +91,10 @@ class CougarMFDInputHandler(object):
 
     def handle_button_down_down(self, button):
 
-        if button in (0, 1, 2, 3, 4):  # MFD Top row - 0 left, 4 right
-            self.controller.handle_button(button, True)
-        elif button in (10, 11, 12, 13, 14):  # MFD Bottom row - 14 left, 10 right
-            self.controller.handle_button(14 - button, False)
+        if button in (10, 11, 12, 13, 14):  # MFD Top row - 10 left, 14 right
+            self.controller.handle_button(button - 10, True)
+        elif button in (0, 1, 2, 3, 4):  # MFD Bottom row - 4 left, 0 right
+            self.controller.handle_button(4 - button, False)
         elif button == 20:  # MFD SYM Up - Upper right corner
             self.controller.handle_keyboard_event(Keycodes.KEY_PAGEUP)
         elif button == 21:  # MFD SYM Down - Upper right corner
@@ -111,9 +111,9 @@ class CougarMFDInputHandler(object):
             self.controller.handle_keyboard_event(Keycodes.KEY_PLUS)
         elif button == 27:  # MFD GAIN DOWN - Upper left corner
             self.controller.handle_keyboard_event(Keycodes.KEY_MINUS)
-        elif button in (15, 16, 17, 18, 19):  # MFD Left - 15 bottom, 19 top
-            pass
         elif button in (5, 6, 7, 8, 9):  # MFD Right - 9 bottom, 5 top
+            pass
+        elif button in (15, 16, 17, 18, 19):  # MFD Left - 15 bottom, 19 top
             self.controller.handle_keyboard_event(Keycodes.KEY_KP_ENTER)
 
     def handle_button_down_right(self, button):
