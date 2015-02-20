@@ -24,8 +24,6 @@ class CougarMFDInputHandler(object):
 
     def handle_button_down(self, button):
 
-        print(button)
-
         if self.rotation == self.rotation_right:
             self.handle_button_down_right(button)
         elif self.rotation == self.rotation_down:
@@ -118,27 +116,27 @@ class CougarMFDInputHandler(object):
 
     def handle_button_down_right(self, button):
 
-        if button in (5, 6, 7, 8, 9):  # MFD Top row - 15 left, 19 right
-            self.controller.handle_button(button - 5, True)
+        if button in (15, 16, 17, 18, 19):  # MFD Top row - 15 left, 19 right
+            self.controller.handle_button(button - 15, True)
         elif button in (9, 8, 7, 6, 5):  # MFD Bottom row - 9 left, 5 right
             self.controller.handle_button(9 - button, False)
-        elif button == 23:  # MFD SYM Up - Upper right corner
+        elif button == 20:  # MFD SYM Up - Upper right corner
             self.controller.handle_keyboard_event(Keycodes.KEY_PAGEUP)
-        elif button == 22:  # MFD SYM Down - Upper right corner
+        elif button == 21:  # MFD SYM Down - Upper right corner
             self.controller.handle_keyboard_event(Keycodes.KEY_PAGEDOWN)
-        elif button == 20:  # MFD CON Up - lower right corner
+        elif button == 22:  # MFD CON Up - lower right corner
             self.controller.handle_keyboard_event(Keycodes.KEY_UP)
-        elif button == 21:  # MFD CON Down - lower right corner
+        elif button == 23:  # MFD CON Down - lower right corner
             self.controller.handle_keyboard_event(Keycodes.KEY_DOWN)
-        elif button == 23:  # MFD BRT UP - lower left corner
+        elif button == 24:  # MFD BRT UP - lower left corner
             self.controller.handle_keyboard_event(Keycodes.KEY_LEFT)
-        elif button == 22:  # MFD BRT DOWN - lower left corner
+        elif button == 25:  # MFD BRT DOWN - lower left corner
             self.controller.handle_keyboard_event(Keycodes.KEY_RIGHT)
         elif button == 26:  # MFD GAIN UP - Upper left corner
             self.controller.handle_keyboard_event(Keycodes.KEY_PLUS)
         elif button == 27:  # MFD GAIN DOWN - Upper left corner
             self.controller.handle_keyboard_event(Keycodes.KEY_MINUS)
-        elif button in (10, 11, 12, 13, 14):  # MFD Left - 10 bottom, 14 top
-            pass
         elif button in (0, 1, 2, 3, 4):  # MFD Right - 4 bottom, 0 top
             self.controller.handle_keyboard_event(Keycodes.KEY_KP_ENTER)
+        elif button in (14, 13, 12, 11, 10):  # MFD Left - 14 top, 10 bottom
+            pass
