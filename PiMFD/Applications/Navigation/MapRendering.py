@@ -98,19 +98,21 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
             for shape in self.osm_shapes:
                 shape.render(self.display, map_context)
 
+        # Render locations
+        for loc in self.map_context.app.locations:
+            sym = self.build_symbol(float(loc.lat), float(loc.lng))
+            sym.name = loc.name
+            pos = self.map.set_screen_position(sym, self.size, self.center)
+            sym.x, sym.y = pos
+            sym.tags = {'location': 'bookmark', 'iff': 'self'}
+            sym.render(self.display, map_context)
+
         # Render custom annotations over everything - these should always be recomputed
         if self.map.annotations:
             for sym in self.map.annotations:
                 pos = self.map.set_screen_position(sym, self.size, self.center)
                 sym.x, sym.y = pos
                 sym.render(self.display, map_context)
-
-        # Add ourself to the map - TODO: Add this to the annotation layer
-        me = self.build_symbol(self.display.options.lat, self.display.options.lng)
-        me.name = 'ME'
-        me.add_tag('actor', 'self')
-        me.add_tag('iff', 'self')
-        me.render(self.display, map_context)
 
         if self.weather:
             self.weather.render(self.display, map_context)
@@ -120,7 +122,6 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
             cur = self.build_symbol(0, 0)
             cur.set_pos(self.map_context.cursor_pos)
             cur.add_tag('actor', 'cursor')
-            cur.add_tag('owner', me.name)
             cur.add_tag('iff', 'self')
             cur.lat, cur.lng = self.map.translate_x_y_to_lat_lng(cur.x, cur.y,
                                                                  self.map.get_dimension_coefficients(self.size),

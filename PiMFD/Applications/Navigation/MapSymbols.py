@@ -337,6 +337,10 @@ class MapSymbol(MapEntity):
             extra_data = end
 
             shape_width = 2
+            
+        elif self.has_tag('location'):
+            style = shape.bullseye
+            shape_width = 5
 
         half_size = shape_size / 2
 
@@ -361,6 +365,12 @@ class MapSymbol(MapEntity):
 
             elif style == shape.triangle:
                 render_triangle_up(display, color, pos, half_size + 2, shape_width)
+
+            elif style == shape.bullseye:
+                render_circle(display, color, pos, half_size * 2, 1)
+                render_circle(display, color, pos, half_size, 1)
+                draw_horizontal_line(display, color, pos[0] - (half_size * 3), pos[0] + (half_size * 3), pos[1])
+                draw_vertical_line(display, color, pos[0], pos[1] - (half_size * 3), pos[1] + (half_size * 3))
 
             elif style == shape.double_circle:
                 render_circle(display, color, pos, half_size + 2, shape_width)

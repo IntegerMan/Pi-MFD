@@ -184,8 +184,7 @@ class MapEntity(object):
             return name
 
         # Chop off silly opening words
-        if names[0].lower() == 'the' or names[0].lower() == 'le' or names[0].lower() == 'la' or names[
-            0].lower() == 'el':
+        if names[0].lower() == 'the' or names[0].lower() == 'le' or names[0].lower() == 'la' or names[0].lower() == 'el':
             names = names[1:]
             return MapEntity.abbreviate(' '.join(names))
 

@@ -156,6 +156,15 @@ class MapColorizer(object):
         elif entity.has_tag_starting_with('abandoned:'):
             return cs.map_structural
 
+        elif entity.has_tag_value('iff', 'self'):
+            return cs.white
+
+        elif entity.has_tag_value('iff', 'friend'):
+            return cs.blue
+
+        elif entity.has_tag_value('iff', 'foe'):
+            return cs.red
+
         return None
 
 
