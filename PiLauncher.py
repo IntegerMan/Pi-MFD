@@ -18,18 +18,15 @@ try:
     app_options.load_from_settings()
     app_options.save_to_settings()
 
-    # Build a display using the standard windowed sizes. This is great for desktop testing.
-    display = DisplayManager()
-    display.res_x = 800
-    display.res_y = 480
-    display.allow_resize = False
-    display.is_fullscreen = False  # TODO: Once this is more developed, this should probably be True
+    # Create a new display in fullscreen mode without specifying resolution. Resolution will be auto-detected.
+    display = DisplayManager(800, 480)
+    display.frames_per_second = 30
+    display.is_fullscreen = True
 
-    # Launch
+    # Launch!
     display.start_mfd(app_options)
 
 except Exception as e:
-
     error_message = "Unhandled error {0}\n".format(str(traceback.format_exc()))
 
     print(error_message)
