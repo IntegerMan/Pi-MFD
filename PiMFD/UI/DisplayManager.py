@@ -33,6 +33,8 @@ class DisplayManager(object):
 
     overlays = None
 
+    show_mouse = True
+
     surface = None
     overlay_surface = None
 
@@ -211,6 +213,9 @@ class DisplayManager(object):
 
         # Initialize the pygame engine
         pygame.init()
+        
+        # Hide the cursor as necessary
+        pygame.mouse.set_visible(self.show_mouse)
         
         # Initialize Joystick Input
         pygame.joystick.init()

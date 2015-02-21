@@ -19,9 +19,10 @@ try:
     app_options.save_to_settings()
 
     # Create a new display in fullscreen mode without specifying resolution. Resolution will be auto-detected.
-    display = DisplayManager(800, 480)
+    display = DisplayManager(None, None)
     display.frames_per_second = 30
-    display.is_fullscreen = True
+    display.show_mouse = False
+    #display.is_fullscreen = True
 
     # Launch!
     display.start_mfd(app_options)
