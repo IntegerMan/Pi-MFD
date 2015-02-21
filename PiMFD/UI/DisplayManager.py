@@ -259,7 +259,7 @@ class DisplayManager(object):
 
         if set_resolution:
             self._res_x = info.current_w
-            self._res_y = info.current_hs
+            self._res_y = info.current_h
             self.refresh_bounds()
 
 
