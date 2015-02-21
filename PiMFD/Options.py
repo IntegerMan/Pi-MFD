@@ -37,7 +37,7 @@ class MFDAppOptions(object):
     font_scaling = 8
     min_font_size = 8
     force_square_resolution = False
-    mfd_controller_rotation = CougarMFDInputHandler.rotation_up
+    mfd_controller_rotation = CougarMFDInputHandler.rotation_left
 
     def load_from_settings(self, filename='settings.ini'):
         """
