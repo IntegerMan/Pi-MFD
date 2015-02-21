@@ -40,7 +40,7 @@ class UIPage(UIObject):
         """
         Sets focused to the specified control. The prior focus (if one is present) will receive a lost_focus call and
         the newly focused control (if one is present) will receive a got_focus control
-        :type widget: FocusableWidget
+        :type widget: FocusableWidget or None
         :param widget: The widget to focus. Can be None.
         :return: The new focus
         """

@@ -104,6 +104,7 @@ class MapLocationDetailsPage(MFDPage):
 
         self.btn_back = MFDButton("BACK")
         self.btn_save = MFDButton("SAVE")
+        self.btn_home = MFDButton("HOME")
         self.btn_delete = MFDButton("DEL")
         self.back_page = back_page
 
@@ -125,7 +126,7 @@ class MapLocationDetailsPage(MFDPage):
         self.set_focus(self.txt_name)
 
     def get_lower_buttons(self):
-        return [self.btn_back, self.btn_save, None, None, self.btn_delete]
+        return [self.btn_back, self.btn_save, self.btn_home, None, self.btn_delete]
 
     def handle_lower_button(self, index):
 
@@ -143,7 +144,15 @@ class MapLocationDetailsPage(MFDPage):
 
             self.application.select_page(self.back_page)
             return True
-        
+
+        elif index == 2:  # Home
+
+            # Set this as home
+            self.controller.options.lat = float(self.txt_lat.text)
+            self.controller.options.lng = float(self.txt_lng.text)
+            
+            return True
+
         elif index == 4:  # Delete
             
             # TODO: Once my UI framework has grown a bit more, add a confirm functionality.
@@ -160,6 +169,16 @@ class MapLocationDetailsPage(MFDPage):
             self.btn_save.enabled = True
         else:
             self.btn_save.enabled = False
+            
+        # Mark as home if it's your home location
+        try:
+            if float(self.txt_lat.text) == self.controller.options.lat and \
+               float(self.txt_lng.text) == self.controller.options.lng:
+                self.btn_home.selected = True
+            else:
+                self.btn_home.selected = False
+        except:
+            self.btn_home.selected = False
 
         return super(MapLocationDetailsPage, self).arrange()
 
