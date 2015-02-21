@@ -8,7 +8,7 @@ import traceback
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
-from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage, MapLocation
+from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage, MapLocation, MapLocationAddPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
@@ -63,6 +63,7 @@ class NavigationApp(MFDApplication):
         self.btn_goto = MFDButton("GOTO")
         self.btn_back = MFDButton("BACK")
         self.btn_detail_action = MFDButton("", enabled=False)
+        self.btn_save = MFDButton("SAVE")
 
     def get_buttons(self):
 
@@ -81,7 +82,7 @@ class NavigationApp(MFDApplication):
             if buttons and len(buttons) > 0:
                 return buttons
             
-            return [self.btn_back, self.btn_detail_action]
+            return [self.btn_back, self.btn_detail_action, self.btn_save]
 
     def select_page_by_index(self, index):
 
@@ -111,6 +112,11 @@ class NavigationApp(MFDApplication):
             elif index == 1:
                 if self.active_page is self.info_page:
                     self.info_page.toggle_details()
+
+            elif index == 2:  # Save
+                add_page = MapLocationAddPage(self.controller, self, self.map_page)
+                add_page.set_values_from_context(self.map_context.cursor_context)
+                self.select_page(add_page)
 
     def get_default_page(self):
         """

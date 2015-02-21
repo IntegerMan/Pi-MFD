@@ -38,6 +38,8 @@ class MapLocation(object):
 
 class MapLocationAddPage(MFDPage):
     
+    id = None
+    
     def __init__(self, controller, application, back_page):
         super(MapLocationAddPage, self).__init__(controller, application)
 
@@ -48,18 +50,26 @@ class MapLocationAddPage(MFDPage):
         self.lbl_header = self.get_header_label('Add Location')
 
         self.txt_name = TextBox(self.display, self, label='Name:', text_width=300)
-        self.txt_lat = TextBox(self.display, self, label=' Lat:', text_width=160)
-        self.txt_lng = TextBox(self.display, self, label='Long:', text_width=160)
+        self.txt_lat = TextBox(self.display, self, label=' Lat:', text_width=180)
+        self.txt_lng = TextBox(self.display, self, label='Long:', text_width=180)
         self.txt_name.set_alphanumeric()
         self.txt_name.max_length = 20
-        self.txt_lat.max_length = 10
-        self.txt_lng.max_length = 10
+        self.txt_lat.max_length = 12
+        self.txt_lng.max_length = 12
         self.txt_lat.set_numeric(allow_decimal=True)
         self.txt_lng.set_numeric(allow_decimal=True)
 
         self.panel.children = [self.lbl_header, self.txt_name, self.txt_lat, self.txt_lng]
 
         self.set_focus(self.txt_name)
+        
+    def set_values_from_context(self, context):
+        
+        if context:
+            self.txt_lat.text = str(context.lat)
+            self.txt_lng.text = str(context.lng)
+            self.txt_name.text = context.get_display_name()
+            self.id = context.id
 
     def get_lower_buttons(self):
         return [self.btn_back, self.btn_add_location]
@@ -74,6 +84,7 @@ class MapLocationAddPage(MFDPage):
 
             # Actually add the thing
             location = MapLocation(self.txt_name.text, self.txt_lat.text, self.txt_lng.text)
+            location.id = self.id
             self.application.add_location(location)
 
             self.application.select_page(self.back_page)
@@ -111,13 +122,13 @@ class MapLocationDetailsPage(MFDPage):
         self.lbl_header = self.get_header_label('Edit Location')
 
         self.txt_name = TextBox(self.display, self, label='Name:', text_width=300, text=location.name)
-        self.txt_lat = TextBox(self.display, self, label=' Lat:', text_width=160, text=location.lat)
-        self.txt_lng = TextBox(self.display, self, label='Long:', text_width=160, text=location.lng)
+        self.txt_lat = TextBox(self.display, self, label=' Lat:', text_width=180, text=location.lat)
+        self.txt_lng = TextBox(self.display, self, label='Long:', text_width=180, text=location.lng)
         
         self.txt_name.set_alphanumeric()
         self.txt_name.max_length = 20
-        self.txt_lat.max_length = 10
-        self.txt_lng.max_length = 10
+        self.txt_lat.max_length = 12
+        self.txt_lng.max_length = 12
         self.txt_lat.set_numeric(allow_decimal=True)
         self.txt_lng.set_numeric(allow_decimal=True)
 
