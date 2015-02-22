@@ -47,8 +47,6 @@ class MFDController(object):
 
     mfd_joystick_controller = None
 
-    time_format = '%m/%d/%Y - %H:%M:%S'
-
     core_app = None
     sys_app = None
     sch_app = None

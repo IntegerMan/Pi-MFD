@@ -23,14 +23,14 @@ class CoreApplication(MFDApplication):
         """
         super(CoreApplication, self).__init__(controller)
 
-        self.dash_page = DashboardPage(controller, self)
+        self.data_provider = CoreDataProvider(self)
+
+        self.dash_page = DashboardPage(controller, self, self.data_provider)
         self.sys_info_page = SysInfoPage(controller, self)
         self.opts_page = SettingsPage(controller, self)
         self.exit_page = SysExitPage(controller, self)
 
         self.pages = list([self.dash_page, self.sys_info_page, self.opts_page, self.exit_page])
-
-        self.data_provider = CoreDataProvider(self)
 
     def get_default_page(self):
         """
