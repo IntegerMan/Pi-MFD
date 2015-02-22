@@ -37,6 +37,17 @@ class DashboardPage(MFDPage):
         return "HOME"
 
     def arrange(self):
+
+        # Get the widgets from the data provider
+        self.pnl_alerts.children = []
+        if self.controller.data_providers:
+            for provider in self.controller.data_providers:
+                widgets = provider.get_dashboard_widgets(self.display, self)
+                if widgets:
+                    for widget in widgets:
+                        if widget:
+                            self.pnl_alerts.children.append(widget)
+
         # Grab the time and stick it in the labels
         self.lbl_sys_time.text_data = self.time_data_provider.system_time
         self.lbl_gmt_time.text_data = self.time_data_provider.gmt_time
