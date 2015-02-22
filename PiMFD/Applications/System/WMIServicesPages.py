@@ -49,7 +49,7 @@ class WMIServiceLoader(Thread):
             self.page.message = x.com_error.strerror
             return
 
-        except AttributeError:
+        except AttributeError or TypeError:
             if self.page:
                 self.page.message = "Unknown Error. App may be terminating."
             return

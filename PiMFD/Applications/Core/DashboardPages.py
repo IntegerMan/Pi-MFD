@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """
-This file contains TODO: Describe File
+This file contains dashboard pages
 """
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Panels import StackPanel
@@ -18,12 +18,8 @@ class DashboardPage(MFDPage):
         super(DashboardPage, self).__init__(controller, application)
 
         header = self.get_header_label("Pi-MFD System Dashboard")
-        
-        self.lbl_sys_time = self.get_label("SYS: {}")
-        self.lbl_gmt_time = self.get_label("GMT: {}")
 
         self.pnl_alerts = StackPanel(controller.display, self)
-        self.pnl_alerts.children = [self.lbl_sys_time, self.lbl_gmt_time]
 
         self.time_data_provider = time_data_provider
 
@@ -47,9 +43,5 @@ class DashboardPage(MFDPage):
                     for widget in widgets:
                         if widget:
                             self.pnl_alerts.children.append(widget)
-
-        # Grab the time and stick it in the labels
-        self.lbl_sys_time.text_data = self.time_data_provider.system_time
-        self.lbl_gmt_time.text_data = self.time_data_provider.gmt_time
 
         return super(DashboardPage, self).arrange()
