@@ -3,10 +3,11 @@
 """
 This file contains the core module data provider
 """
+from datetime import datetime
 from time import strftime, gmtime
 
 from PiMFD.DataProvider import DataProvider
-from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget
+from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus
 
 
 __author__ = 'Matt Eland'
@@ -43,5 +44,16 @@ class CoreDataProvider(DataProvider):
         else:
             # Update with current system time
             self.time_widget.value = self.system_time
-
+        
+        # Set status based on time of day
+        hour = datetime.now().hour
+        if hour >= 23 or hour == 0 or hour == 6:
+            status = DashboardStatus.Caution
+        elif 1 <= hour <= 5:
+            status = DashboardStatus.Critical
+        else:
+            status = DashboardStatus.Passive
+            
+        self.time_widget.status = status
+        
         return [self.time_widget]

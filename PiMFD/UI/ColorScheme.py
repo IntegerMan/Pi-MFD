@@ -35,6 +35,12 @@ class ColorScheme(object):
     disabled = (0, 120, 0)
     detail = (128, 128, 128),
     highlight = (255, 255, 255)
+    
+    # Status Colors
+    caution = (170, 170, 0)
+    caution_bg = (40, 40, 0)
+    critical = (170, 0, 0)
+    critical_bg = (40, 0, 0)
 
     # Map Colors
     map_commercial = slight_blue

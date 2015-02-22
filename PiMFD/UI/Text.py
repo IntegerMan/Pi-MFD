@@ -40,6 +40,7 @@ class TextBlock(UIWidget):
     text_data = None
     is_highlighted = False
     is_enabled = True
+    color = None
 
     def __init__(self, display, page, text, is_highlighted=False):
         super(TextBlock, self).__init__(display, page)
@@ -55,6 +56,11 @@ class TextBlock(UIWidget):
         always grab the correct color from the color scheme, even when the color scheme changes.
         :return: The foreground
         """
+        
+        # When using custom colors, just use that
+        if self.color:
+            return self.color
+        
         cs = self.display.color_scheme
 
         if not self.is_enabled:
