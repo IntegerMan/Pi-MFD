@@ -82,6 +82,9 @@ class NavigationApp(MFDApplication):
             if buttons and len(buttons) > 0:
                 return buttons
             
+            if self.active_page is self.weather_page:
+                return [self.btn_back]
+            
             return [self.btn_back, self.btn_detail_action, self.btn_save]
 
     def select_page_by_index(self, index):

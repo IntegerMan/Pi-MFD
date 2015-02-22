@@ -31,6 +31,8 @@ class TextDashboardWidget(UIWidget):
     :type value: str The value used in the widget
     """
     
+    padding = 8
+    
     def __init__(self, display, page, title, value, status=DashboardStatus.Passive):
         super(TextDashboardWidget, self).__init__(display, page)
 
@@ -83,8 +85,7 @@ class TextDashboardWidget(UIWidget):
         self.lbl_title.color = self.get_title_color()
 
         # Render an outline around the entire control
-        padding = 8
-        rect = Rect(self.pos[0], self.pos[1], self.panel.desired_size[0] + (padding * 2), self.panel.desired_size[1] + (padding * 2))
+        rect = Rect(self.pos[0], self.pos[1], self.panel.desired_size[0] + (self.padding * 2), self.panel.desired_size[1] + (self.padding * 2))
         
         # Some statuses need custom backgrounds
         if self.status == DashboardStatus.Caution:
@@ -96,7 +97,7 @@ class TextDashboardWidget(UIWidget):
         render_rectangle(self.display, color, rect)
 
         # Render the base content with some padding
-        pos = self.pos[0] + padding, self.pos[1] + padding
+        pos = self.pos[0] + self.padding, self.pos[1] + self.padding
         self.panel.render_at(pos)
 
         # Assume the width of the outer outline
@@ -107,5 +108,5 @@ class TextDashboardWidget(UIWidget):
         self.lbl_value.text = self.value
 
         self.panel.arrange()
-        self.desired_size = self.panel.desired_size
+        self.desired_size = self.panel.desired_size[0] + (self.padding * 2), self.panel.desired_size[1] + (self.padding * 2)
         return self.desired_size

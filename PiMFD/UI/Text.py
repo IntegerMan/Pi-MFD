@@ -82,7 +82,10 @@ class TextBlock(UIWidget):
     def get_effective_text(self):
 
         # Do string formatting as needed
-        effective_text = str(self.text)
+        if isinstance(self.text, unicode):
+            effective_text = self.text
+        else:
+            effective_text = str(self.text)
 
         try:
             if self.text is not None:

@@ -6,6 +6,7 @@ The scheduling application
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 from PiMFD.Applications.Scheduling.Weather.WeatherAPIWrapper import WeatherAPI
+from PiMFD.Applications.Scheduling.Weather.WeatherDataProvider import WeatherDataProvider
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
 
 __author__ = 'Matt Eland'
@@ -22,24 +23,25 @@ class ScheduleApp(MFDApplication):
     calendar_page = None
     weather_page = None
 
-    weather_data = None
-    weather_api = WeatherAPI()
+    weather_api = None
+    weather_data_provider = None
 
     def __init__(self, controller):
 
         super(ScheduleApp, self).__init__(controller)
 
-        self.root_page = SimpleMessagePage(controller, self, self.get_button_text())
+        self.weather_api = WeatherAPI()
+        self.weather_data_provider = WeatherDataProvider(self)
 
+        self.root_page = SimpleMessagePage(controller, self, self.get_button_text())
         self.task_page = SimpleMessagePage(controller, self, "TASK")
         self.mail_page = SimpleMessagePage(controller, self, "MAIL")
         self.calendar_page = SimpleMessagePage(controller, self, "CAL")
-        self.weather_page = WeatherPage(controller, self, self)
+        self.weather_page = WeatherPage(controller, self, self.weather_data_provider)
 
         self.pages = list([self.task_page, self.mail_page, self.calendar_page, self.weather_page])
 
         # TODO: There's no automatic mechanism to refresh weather data.
-        # TODO: This should be in another thread so the UI can keep rendering
         self.get_weather()
 
     def get_weather(self, consumer=None):
@@ -64,12 +66,12 @@ class ScheduleApp(MFDApplication):
         except Exception as exception:
 
             if updateError:
-                self.weather_data.last_result = 'Could not get weather: ' + exception.message
+                self.weather_data_provider.weather_data.last_result = 'Could not get weather: ' + exception.message
 
             return None
 
     def weather_received(self, location, weather):
-        self.weather_data = weather
+        self.weather_data_provider.weather_data = weather
 
     def get_default_page(self):
         """
@@ -104,6 +106,11 @@ class ScheduleApp(MFDApplication):
         # Fetch weather data!
         self.get_weather()
 
+    def initialize(self):
+        super(ScheduleApp, self).initialize()
+        
+        self.controller.register_data_provider(self.weather_data_provider)
 
+    
 
 
