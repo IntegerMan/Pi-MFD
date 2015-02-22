@@ -38,7 +38,7 @@ class DashboardPage(MFDPage):
         Gets the button text.
         :return: The button text.
         """
-        return "ALRT"
+        return "HOME"
 
     def arrange(self):
         # Grab the time and stick it in the labels
