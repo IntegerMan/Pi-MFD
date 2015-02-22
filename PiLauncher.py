@@ -18,7 +18,11 @@ try:
     app_options.load_from_settings()
     app_options.save_to_settings()
     app_options.save_map_to_disk = False
-    
+
+    # We really need to conserve space here
+    app_options.font_scaling = 4
+    app_options.min_font_size = 6
+
     # Create a new display in fullscreen mode without specifying resolution. Resolution will be auto-detected.
     display = DisplayManager(None, None)
     display.frames_per_second = 30

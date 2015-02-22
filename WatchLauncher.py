@@ -21,12 +21,13 @@ try:
 
     # Build a display using the standard windowed sizes. This is great for desktop testing.
     display = DisplayManager()
-    display.res_x = 320
-    display.res_y = 320
+    # display.res_x = 320
+    #display.res_y = 320
     display.padding_x = 8
     display.padding_y = 6
+    display.frames_per_second = 30
     display.allow_resize = False
-    display.is_fullscreen = False  # TODO: Once this is more developed, this should probably be True
+    display.is_fullscreen = True  # TODO: Once this is more developed, this should probably be True
 
     # Launch
     display.start_mfd(app_options)
