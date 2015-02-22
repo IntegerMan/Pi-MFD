@@ -17,12 +17,13 @@ try:
     app_options = MFDAppOptions()
     app_options.load_from_settings()
     app_options.save_to_settings()
-
+    app_options.save_map_to_disk = False
+    
     # Create a new display in fullscreen mode without specifying resolution. Resolution will be auto-detected.
     display = DisplayManager(None, None)
     display.frames_per_second = 30
     display.show_mouse = False
-    #display.is_fullscreen = True
+    display.is_fullscreen = True
 
     # Launch!
     display.start_mfd(app_options)

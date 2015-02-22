@@ -91,7 +91,8 @@ class MapLoadThread(Thread):
         self.map_loader.last_data_received = datetime.now()
 
         # Dump to disk for diagnostics
-        self.map_loader.save_map_data(data)
+        if self.map_loader.application.controller.options.save_map_to_disk:
+            self.map_loader.save_map_data(data)
 
         self.map_loader.load_map_from_data(data)
 
