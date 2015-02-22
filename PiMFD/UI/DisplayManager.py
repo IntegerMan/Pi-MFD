@@ -254,8 +254,8 @@ class DisplayManager(object):
             min_dim = min(self._res_x, self._res_y)
             self.bounds = Rect(self.start_offset[0],
                                self.start_offset[1],
-                               min_dim - self.end_offset[0],
-                               min_dim - self.end_offset[1])
+                               min_dim - self.start_offset[0] - self.end_offset[0],
+                               min_dim - self.start_offset[1] - self.end_offset[1])
         else:
             self.bounds = Rect(self.start_offset[0],
                                self.start_offset[1],

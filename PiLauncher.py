@@ -27,9 +27,9 @@ try:
     display = DisplayManager(None, None)
     display.frames_per_second = 30
     display.show_mouse = False
-    display.is_fullscreen = True
+    display.is_fullscreen = False
     display.start_offset = 2, 0
-    display.end_offset = 400, 2
+    display.end_offset = 320, 2
 
     # Launch!
     display.start_mfd(app_options)
