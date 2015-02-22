@@ -28,8 +28,8 @@ try:
     display.frames_per_second = 30
     display.show_mouse = False
     display.is_fullscreen = True
-    display.start_offset = 2, 0
-    display.end_offset = 320, 2
+    display.start_offset = 8, 0
+    display.end_offset = 420, 2
 
     # Launch!
     display.start_mfd(app_options)
