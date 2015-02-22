@@ -29,7 +29,7 @@ class MFDButton(object):
         self.enabled = enabled
         self.draw_border = False
 
-    def render(self, display, x_start, x_end, is_top):
+    def render(self, display, x_start, x_end, y, is_top):
         """
         Renders the button with its current state.
         :type display: The PiMFD.DisplayManager.DisplayManager that manages display settings
@@ -37,11 +37,6 @@ class MFDButton(object):
         :param x_end: The rightmost side of the button's bounds
         :type is_top: bool True if this button is on the top of the screen, False if on the bottom.
         """
-
-        # Figure out where we're starting vertically
-        y = display.padding_y
-        if not is_top:
-            y = display.bounds.bottom - display.padding_y - display.fonts.normal.size - 2
 
         if self.enabled:
             font_color = display.color_scheme.foreground

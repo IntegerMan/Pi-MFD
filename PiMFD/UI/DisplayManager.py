@@ -49,6 +49,8 @@ class DisplayManager(object):
     fonts = None
 
     options = None
+    start_offset = 0, 0
+    end_offset = 0, 0
 
     def __init__(self, x=800, y=480):
         self._res_x = x
@@ -117,7 +119,7 @@ class DisplayManager(object):
         :return: The X location at which content rendering is acceptable
         :rtype: int
         """
-        return self.padding_x * 2
+        return self.bounds.left + self.padding_x * 2
 
     def get_content_end_x(self):
         """
@@ -250,9 +252,15 @@ class DisplayManager(object):
         
         if self.options and self.options.force_square_resolution:
             min_dim = min(self._res_x, self._res_y)
-            self.bounds = Rect(0, 0, min_dim, min_dim)
+            self.bounds = Rect(self.start_offset[0],
+                               self.start_offset[1],
+                               min_dim - self.end_offset[0],
+                               min_dim - self.end_offset[1])
         else:
-            self.bounds = Rect(0, 0, self._res_x, self._res_y)
+            self.bounds = Rect(self.start_offset[0],
+                               self.start_offset[1],
+                               self._res_x - self.start_offset[0] - self.end_offset[0],
+                               self._res_y - self.start_offset[1] - self.end_offset[1])
 
     def grab_dimensions_from_current_resolution(self, set_resolution=True):
         """

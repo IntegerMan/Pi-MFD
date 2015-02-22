@@ -185,14 +185,19 @@ class MFDController(object):
         :type is_top: bool True if this is the top row, False for the bottom row
         """
         # Do division up front
-        header_offset = self.display.get_content_size()[0] / float(self.max_app_buttons)
+        header_offset = self.display.bounds.width / float(self.max_app_buttons)
+
+        # Figure out where the buttons ought to be
+        x_offset = self.display.bounds.left
+        y = self.display.bounds.top + self.display.padding_y
+        if not is_top:
+            y = self.display.bounds.bottom - self.display.padding_y - self.display.fonts.normal.size - 2
 
         # Render from left to right
-        x_offset = 0
         for header in headers[0:self.max_app_buttons]:  # TODO: Support > max_app_buttons apps by allowing paging
             x = x_offset
             if header:
-                header.render(self.display, x, x + header_offset, is_top)
+                header.render(self.display, x, x + header_offset, y, is_top)
             x_offset += header_offset
 
     def render_button_rows(self):
