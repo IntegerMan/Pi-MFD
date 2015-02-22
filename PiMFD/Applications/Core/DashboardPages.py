@@ -4,7 +4,6 @@
 This file contains TODO: Describe File
 """
 from PiMFD.Applications.MFDPage import MFDPage
-from PiMFD.UI.Text import SpacerLine
 
 __author__ = 'Matt Eland'
 
@@ -21,17 +20,11 @@ class DashboardPage(MFDPage):
         self.lbl_sys_time = self.get_label("SYS: {}")
         self.lbl_gmt_time = self.get_label("GMT: {}")
 
-        header_alerts = self.get_header_label("Alerts")
-        self.lbl_alerts = self.get_label("No Alerts")
-
         self.time_data_provider = time_data_provider
 
         self.panel.children = [header,
                                self.lbl_sys_time,
-                               self.lbl_gmt_time,
-                               SpacerLine(self.display, self),
-                               header_alerts,
-                               self.lbl_alerts]
+                               self.lbl_gmt_time]
 
     def get_button_text(self):
         """
