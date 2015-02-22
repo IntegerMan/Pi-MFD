@@ -1,5 +1,6 @@
 # coding=utf-8
 from PiMFD.Applications.Application import MFDApplication
+from PiMFD.Applications.Core.CoreDataProvider import CoreDataProvider
 from PiMFD.Applications.Core.CorePages import SysExitPage, DashboardPage
 from PiMFD.Applications.Core.SettingsPage import SettingsPage
 from PiMFD.Applications.Core.SystemInfoPage import SysInfoPage
@@ -28,6 +29,8 @@ class CoreApplication(MFDApplication):
         self.exit_page = SysExitPage(controller, self)
 
         self.pages = list([self.dash_page, self.sys_info_page, self.opts_page, self.exit_page])
+
+        self.data_provider = CoreDataProvider(self)
 
     def get_default_page(self):
         """
