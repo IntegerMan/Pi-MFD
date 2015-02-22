@@ -392,4 +392,6 @@ class MFDController(object):
     def get_weather_data(self, zip, consumer=None):
         self.sch_app.get_weather_for_zip(zip, consumer)
 
-
+    def register_data_provider(self, provider):
+        if provider and provider not in self.data_providers:
+            self.data_providers.append(provider)

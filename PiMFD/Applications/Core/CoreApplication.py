@@ -14,6 +14,7 @@ class CoreApplication(MFDApplication):
     services_page = None
     opts_page = None
     exit_page = None
+    data_provider = None
 
     def __init__(self, controller):
         """
@@ -42,4 +43,10 @@ class CoreApplication(MFDApplication):
         """
         return 'CORE'
 
+    def initialize(self):
+        super(CoreApplication, self).initialize()
+
+        self.controller.register_data_provider(self.data_provider)
+
+    
 
