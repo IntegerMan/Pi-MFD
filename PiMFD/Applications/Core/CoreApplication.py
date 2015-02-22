@@ -1,7 +1,8 @@
 # coding=utf-8
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.Core.CoreDataProvider import CoreDataProvider
-from PiMFD.Applications.Core.CorePages import SysExitPage, DashboardPage
+from PiMFD.Applications.Core.CorePages import SysExitPage
+from PiMFD.Applications.Core.DashboardPages import DashboardPage
 from PiMFD.Applications.Core.SettingsPage import SettingsPage
 from PiMFD.Applications.Core.SystemInfoPage import SysInfoPage
 
