@@ -4,6 +4,7 @@
 This file contains TODO: Describe File
 """
 from PiMFD.Applications.MFDPage import MFDPage
+from PiMFD.UI.Panels import StackPanel
 
 __author__ = 'Matt Eland'
 
@@ -16,15 +17,17 @@ class DashboardPage(MFDPage):
     def __init__(self, controller, application, time_data_provider):
         super(DashboardPage, self).__init__(controller, application)
 
-        header = self.get_header_label("Current Time")
+        header = self.get_header_label("Pi-MFD System Dashboard")
+        
         self.lbl_sys_time = self.get_label("SYS: {}")
         self.lbl_gmt_time = self.get_label("GMT: {}")
 
+        self.pnl_alerts = StackPanel(controller.display, self)
+        self.pnl_alerts.children = [self.lbl_sys_time, self.lbl_gmt_time]
+
         self.time_data_provider = time_data_provider
 
-        self.panel.children = [header,
-                               self.lbl_sys_time,
-                               self.lbl_gmt_time]
+        self.panel.children = [header, self.pnl_alerts]
 
     def get_button_text(self):
         """
