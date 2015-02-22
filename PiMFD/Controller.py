@@ -35,6 +35,7 @@ class MFDController(object):
 
     active_app = None
 
+    # TODO: This will need to hold left / right edge buttons as well
     top_headers = list()
     bottom_headers = list()
 
@@ -53,7 +54,8 @@ class MFDController(object):
     sch_app = None
     nav_app = None
 
-    applications = list()
+    applications = []
+    data_providers = []    
 
     def __init__(self, display, app_options):
 
@@ -67,6 +69,9 @@ class MFDController(object):
             self.options = app_options
         else:
             self.options = MFDAppOptions()
+
+        # Set up the provider collection
+        self.data_providers = []
 
         # Core App
         self.core_app = CoreApplication(self)
@@ -91,6 +96,9 @@ class MFDController(object):
         
         self.active_app = self.applications[0]
 
+        for app in self.applications:
+            app.initialize()
+        
     def process_events(self):
         """
         Processes events such as keyboard, mouse, and hardware input as well as external events such as window resize
@@ -247,7 +255,7 @@ class MFDController(object):
 
         # Ensure an app is selected
         if self.active_app is None:
-            self.active_app = self.sys_app
+            self.active_app = self.core_app
 
         # Ensure a page is selected
         if self.active_app.active_page is None:
@@ -255,6 +263,10 @@ class MFDController(object):
 
         # Update the headers
         self.update_application()
+
+        # Request each data provider update itself
+        for provider in self.data_providers:
+            provider.update()
 
         # Render the current page
         if self.active_app is not None and self.active_app.active_page:

@@ -27,6 +27,9 @@ class MFDApplication(object):
         self.display = controller.display
         self.pages = list()
 
+    def initialize(self):
+        pass
+
     def get_buttons(self):
         """
         Gets the page buttons associated with the application.
@@ -97,7 +100,7 @@ class MFDApplication(object):
     def select_page(self, page):
         """
         Selects the specified page
-        :type page: PiMFD.Applications.MFDPage.MFDPage
+        :type page: PiMFD.Applications.MFDPage.MFDPage or None
         """
 
         # Don't allow switching to a "none" page
