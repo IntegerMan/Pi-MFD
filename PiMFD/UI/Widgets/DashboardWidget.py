@@ -58,7 +58,7 @@ class TextDashboardWidget(UIWidget):
         elif self.status == DashboardStatus.Inactive:
             return self.display.color_scheme.disabled
         elif self.status == DashboardStatus.Caution:
-            return self.display.color_scheme.caution
+            return self.display.color_scheme.highlight
         elif self.status == DashboardStatus.Critical:
             return self.display.color_scheme.critical
 

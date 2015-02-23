@@ -5,7 +5,6 @@ The scheduling application
 
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
-from PiMFD.Applications.Scheduling.Weather.WeatherAPIWrapper import WeatherAPI
 from PiMFD.Applications.Scheduling.Weather.WeatherDataProvider import WeatherDataProvider
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
 
@@ -23,15 +22,13 @@ class ScheduleApp(MFDApplication):
     calendar_page = None
     weather_page = None
 
-    weather_api = None
     weather_data_provider = None
 
     def __init__(self, controller):
 
         super(ScheduleApp, self).__init__(controller)
 
-        self.weather_api = WeatherAPI()
-        self.weather_data_provider = WeatherDataProvider(self)
+        self.weather_data_provider = WeatherDataProvider(self, controller.options)
 
         self.root_page = SimpleMessagePage(controller, self, self.get_button_text())
         self.task_page = SimpleMessagePage(controller, self, "TASK")
@@ -42,36 +39,7 @@ class ScheduleApp(MFDApplication):
         self.pages = list([self.task_page, self.mail_page, self.calendar_page, self.weather_page])
 
         # TODO: There's no automatic mechanism to refresh weather data.
-        self.get_weather()
-
-    def get_weather(self, consumer=None):
-        """
-        Gets weather data from the weather API (Yahoo Weather) and stores it for the weather page.
-        """
-
-        if not consumer:
-            consumer = self
-
-        if self.controller.options.location:
-            self.weather_api.get_yahoo_weather_async(self.controller.options.location, consumer)
-
-    def get_weather_for_zip(self, zip, consumer=None, updateError=False):
-
-        try:
-            if consumer:
-                self.weather_api.get_yahoo_weather_async(zip, consumer)
-            else:
-                return self.weather_api.get_yahoo_weather(zip)
-            
-        except Exception as exception:
-
-            if updateError:
-                self.weather_data_provider.weather_data.last_result = 'Could not get weather: ' + exception.message
-
-            return None
-
-    def weather_received(self, location, weather):
-        self.weather_data_provider.weather_data = weather
+        self.weather_data_provider.get_weather()
 
     def get_default_page(self):
         """
@@ -96,7 +64,7 @@ class ScheduleApp(MFDApplication):
 
         # If the user re-selects weather, refresh data
         if page is self.weather_page:
-            self.get_weather()
+            self.weather_data_provider.get_weather()
 
     def handle_selected(self):
         """
@@ -104,7 +72,7 @@ class ScheduleApp(MFDApplication):
         """
 
         # Fetch weather data!
-        self.get_weather()
+        self.weather_data_provider.get_weather()
 
     def initialize(self):
         super(ScheduleApp, self).initialize()

@@ -3,24 +3,57 @@
 """
 This file contains data provider for weather information
 """
+from PiMFD.Applications.Scheduling.Weather.WeatherAPIWrapper import WeatherAPI
 from PiMFD.DataProvider import DataProvider
 from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus
 
 __author__ = 'Matt Eland'
 
+
 class WeatherDataProvider(DataProvider):
 
     weather_data = None
+    weather_api = None
 
-    def __init__(self, application):
+    def __init__(self, application, options):
         super(WeatherDataProvider, self).__init__("Weather Data Provider")
 
         self.application = application
-
+        self.weather_api = WeatherAPI()
+        self.options = options
         self.current_conditions_widget = None
 
     def update(self):
         super(WeatherDataProvider, self).update()
+
+    def get_weather(self, consumer=None):
+        """
+        Gets weather data from the weather API (Yahoo Weather) and stores it for the weather page.
+        """
+
+        if not consumer:
+            consumer = self
+
+        if self.options.location:
+            self.weather_api.get_yahoo_weather_async(self.options.location, consumer)
+
+    def get_weather_for_zip(self, zip, consumer=None, updateError=False):
+
+        try:
+            if consumer:
+                self.weather_api.get_yahoo_weather_async(zip, consumer)
+            else:
+                return self.weather_api.get_yahoo_weather(zip)
+
+        except Exception as exception:
+
+            if updateError:
+                self.weather_data.last_result = 'Could not get weather: ' + exception.message
+
+            return None
+
+    def weather_received(self, location, weather):
+        self.weather_data = weather
 
     def get_dashboard_widgets(self, display, page):
 

@@ -388,7 +388,7 @@ class MFDController(object):
             self.keypress_sound.play()
 
     def get_weather_data(self, zip, consumer=None):
-        self.sch_app.get_weather_for_zip(zip, consumer)
+        self.sch_app.weather_data_provider.get_weather_for_zip(zip, consumer)
 
     def register_data_provider(self, provider):
         if provider and provider not in self.data_providers:
