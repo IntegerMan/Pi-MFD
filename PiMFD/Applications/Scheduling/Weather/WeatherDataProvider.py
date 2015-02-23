@@ -28,6 +28,7 @@ class WeatherDataProvider(DataProvider):
         self.options = options
         self.current_conditions_widget = None
         self.tomorrow_conditions_widget = None
+        self.today_forecast_widget = None
 
     def update(self):
 
@@ -69,14 +70,14 @@ class WeatherDataProvider(DataProvider):
     def weather_received(self, location, weather):
         self.weather_data = weather
 
-    def build_weather(self, display, page, widget, label, forecast_index):
+    def build_weather(self, display, page, widget, label, forecast_index, is_forecast):
         # Update the current weather widget
         if not widget:
             widget = WeatherForecastDashboardWidget(display, 
                                                     page, 
                                                     label,
-                                                    self.weather_data, 
-                                                    is_today=(forecast_index == 0))
+                                                    self.weather_data,
+                                                    is_forecast=is_forecast)
         else:
             widget.weather = self.weather_data
         if self.weather_data and self.weather_data.forecasts and len(self.weather_data.forecasts) > forecast_index:
@@ -88,7 +89,11 @@ class WeatherDataProvider(DataProvider):
 
     def get_dashboard_widgets(self, display, page):
 
-        self.current_conditions_widget = self.build_weather(display, page, self.current_conditions_widget, "Current Weather", 0)
-        self.tomorrow_conditions_widget = self.build_weather(display, page, self.tomorrow_conditions_widget, "Tomorrow's Weather", 1)
+        self.current_conditions_widget = self.build_weather(display, page, self.current_conditions_widget,
+                                                            "Current Weather", 0, False)
+        self.today_forecast_widget = self.build_weather(display, page, self.today_forecast_widget, "Today's Weather", 0,
+                                                        True)
+        self.tomorrow_conditions_widget = self.build_weather(display, page, self.tomorrow_conditions_widget,
+                                                             "Tomorrow's Weather", 1, True)
 
-        return [self.current_conditions_widget, self.tomorrow_conditions_widget]
+        return [self.current_conditions_widget, self.today_forecast_widget, self.tomorrow_conditions_widget]

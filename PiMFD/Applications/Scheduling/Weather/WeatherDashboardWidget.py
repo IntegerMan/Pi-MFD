@@ -24,13 +24,13 @@ class WeatherForecastDashboardWidget(DashboardWidget):
     :type value: str The value used in the widget
     """
 
-    def __init__(self, display, page, title, weather=None, forecast=None, is_today=False):
+    def __init__(self, display, page, title, weather=None, forecast=None, is_forecast=True):
         super(WeatherForecastDashboardWidget, self).__init__(display, page, DashboardStatus.Inactive)
 
         self.title = title
         self.forecast = forecast
         self.weather = weather
-        self.is_today = is_today
+        self.is_forecast = is_forecast
 
         self.panel = StackPanel(display, page)
 
@@ -84,7 +84,7 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         self.status = self.get_status()
         self.lbl_title.text = self.title
         if self.forecast and self.weather:
-            if self.is_today:
+            if not self.is_forecast:
                 self.lbl_value.text = u'{}{} {}'.format(self.weather.temperature, self.weather.temp_units,
                                                         self.forecast.conditions)
             else:
@@ -93,12 +93,19 @@ class WeatherForecastDashboardWidget(DashboardWidget):
             self.lbl_value.text = 'Offline'
 
         if self.forecast:
-            self.chart.value_low = self.forecast.low
-            self.chart.value_high = self.forecast.high
 
-            if self.is_today:
-                self.chart.value_current = float(self.weather.temperature)
-                self.chart.box_width = -1
+            if not self.is_forecast:
+                temp = float(self.weather.temperature)
+                if temp >= 0:
+                    self.chart.value_low = 0
+                    self.chart.value_high = temp
+                else:
+                    self.chart.value_low = temp
+                    self.chart.value_high = 0
+
+            else:
+                self.chart.value_low = self.forecast.low
+                self.chart.value_high = self.forecast.high
 
         self.panel.arrange()
         self.desired_size = self.panel.desired_size[0] + (self.padding * 2), self.panel.desired_size[1] + (self.padding * 2)
@@ -114,7 +121,7 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         high = self.forecast.high
 
         # If it's today, we don't care about forecast - go off of current temperature
-        if self.is_today:
+        if not self.is_forecast:
             low = high = float(self.weather.temperature)
         
         if low <= 10 or high >= 100:
