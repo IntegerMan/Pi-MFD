@@ -90,10 +90,10 @@ class WeatherDataProvider(DataProvider):
     def get_dashboard_widgets(self, display, page):
 
         self.current_conditions_widget = self.build_weather(display, page, self.current_conditions_widget,
-                                                            "Current Weather", 0, False)
-        self.today_forecast_widget = self.build_weather(display, page, self.today_forecast_widget, "Today's Weather", 0,
+                                                            "Weather", 0, False)
+        self.today_forecast_widget = self.build_weather(display, page, self.today_forecast_widget, "Today", 0,
                                                         True)
         self.tomorrow_conditions_widget = self.build_weather(display, page, self.tomorrow_conditions_widget,
-                                                             "Tomorrow's Weather", 1, True)
+                                                             "Tomorrow", 1, True)
 
         return [self.current_conditions_widget, self.today_forecast_widget, self.tomorrow_conditions_widget]

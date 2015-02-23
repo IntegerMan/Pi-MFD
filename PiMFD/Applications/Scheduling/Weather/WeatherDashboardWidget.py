@@ -4,8 +4,8 @@
 This file contains definitions for a custom dashboard widget for weather conditions and forecasts
 """
 from pygame.rect import Rect
-from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_status, get_condition_icon
 
+from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_status, get_condition_icon
 from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Rendering import render_rectangle
 from PiMFD.UI.Text import TextBlock
@@ -53,7 +53,7 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         self.panel.children.append(pnl_value)
 
         self.chart = BoxChart(display, page)
-        self.chart.width = 200
+        self.chart.width = 150
         self.chart.range_low = -20
         self.chart.range_high = 120
         self.chart.is_highlighted = False

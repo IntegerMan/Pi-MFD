@@ -72,6 +72,7 @@ class TextDashboardWidget(DashboardWidget):
 
         self.title = title
         self.value = value
+        self.width = 150
 
         self.panel = StackPanel(display, page)
 
@@ -91,7 +92,7 @@ class TextDashboardWidget(DashboardWidget):
         self.lbl_title.color = self.get_title_color()
 
         # Render an outline around the entire control
-        rect = Rect(self.pos[0], self.pos[1], self.panel.desired_size[0] + (self.padding * 2), self.panel.desired_size[1] + (self.padding * 2))
+        rect = Rect(self.pos[0], self.pos[1], self.desired_size[0], self.desired_size[1])
         
         # Some statuses need custom backgrounds
         if self.status == DashboardStatus.Caution:
@@ -114,5 +115,5 @@ class TextDashboardWidget(DashboardWidget):
         self.lbl_value.text = self.value
 
         self.panel.arrange()
-        self.desired_size = self.panel.desired_size[0] + (self.padding * 2), self.panel.desired_size[1] + (self.padding * 2)
+        self.desired_size = 150 + (self.padding * 2), self.panel.desired_size[1] + (self.padding * 2)
         return self.desired_size

@@ -4,7 +4,7 @@
 This file contains the core module data provider
 """
 from datetime import datetime
-from time import strftime, gmtime
+from time import strftime
 
 from PiMFD.DataProvider import DataProvider
 from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus
@@ -19,7 +19,9 @@ class CoreDataProvider(DataProvider):
     :param application: The application
     :type application: MFDApplication
     """
-    time_format = '%m/%d/%Y - %H:%M:%S'
+    date_time_format = '%m/%d/%Y - %H:%M:%S'
+    time_format = '%H:%M:%S'
+    date_format = '%m/%d/%Y'
 
     def __init__(self, application):
         super(CoreDataProvider, self).__init__("Core Data Provider")
@@ -27,14 +29,12 @@ class CoreDataProvider(DataProvider):
         self.application = application
         
         self.system_time = ''
-        self.gmt_time = ''
         self.time_widget = None
 
     def update(self):
         super(CoreDataProvider, self).update()
 
         self.system_time = strftime(self.time_format)
-        self.gmt_time = strftime(self.time_format, gmtime())
 
     def get_dashboard_widgets(self, display, page):
 
