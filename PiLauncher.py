@@ -29,7 +29,7 @@ try:
     display.show_mouse = False
     display.is_fullscreen = True
     display.start_offset = 8, 0
-    display.end_offset = 260, 2
+    display.end_offset = 255, 2
 
     # Launch!
     display.start_mfd(app_options)
