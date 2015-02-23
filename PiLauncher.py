@@ -20,7 +20,7 @@ try:
     app_options.save_map_to_disk = False
 
     # We really need to conserve space here
-    app_options.font_scaling = 6
+    app_options.font_scaling = 7
     app_options.min_font_size = 8
     
     # Create a new display in fullscreen mode without specifying resolution. Resolution will be auto-detected.
