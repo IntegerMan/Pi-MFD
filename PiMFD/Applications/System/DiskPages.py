@@ -113,61 +113,40 @@ class DiskDrivesPage(MFDPage):
     :type application: PiMFD.Applications.System.SystemApplication.SysApplication
     :type auto_scroll: bool
     """
-    drives = None
-    refresh_interval = 10
 
     def __init__(self, controller, application, auto_scroll=True):
         super(DiskDrivesPage, self).__init__(controller, application, auto_scroll)
 
         self.last_refresh = datetime.now()
         self.selected_device = None
-        self.refresh(log=False)
 
-    def refresh(self, log=False):
+    def refresh(self):
 
         """
         Refreshes the list of drives
         """
 
-        if not psutil:
-            self.drives = None
-            return
-
-        partitions = psutil.disk_partitions(all=False)
-
-        # Grab Disk IO over the course of a second
-        psutil.disk_io_counters(perdisk=True)
-        new_counters = psutil.disk_io_counters(perdisk=True)
-
-        if log:
-            log = open("counters.log", "w")
-            log.write(str(new_counters))
-            log.write(' KEYS: ')
-            for k in new_counters.keys():
-                log.write(k)
-                log.write(', ')
-            log.close()
-
         counter_index = 0
 
-        self.panel.children = [self.get_header_label('Drives ({})'.format(len(partitions)))]
+        self.panel.children = [
+            self.get_header_label('Drives ({})'.format(len(self.application.data_provider.partitions)))]
 
         is_first_control = True
 
         drives = list()
 
-        for p in partitions:
+        for p in self.application.data_provider.partitions:
 
             drive = DiskDrive(p)
             drives.append(drive)
 
-            if drive.can_get_usage() and counter_index < len(new_counters):
+            if drive.can_get_usage() and counter_index < len(self.application.data_provider.disk_counters):
                 key = "PhysicalDrive" + str(counter_index)
-                if key in new_counters:
-                    drive.load_counters(key, new_counters[key])
+                if key in self.application.data_provider.disk_counters:
+                    drive.load_counters(key, self.application.data_provider.disk_counters[key])
                 else:
-                    key = new_counters.keys()[counter_index]
-                    drive.load_counters(key, new_counters[key])
+                    key = self.application.data_provider.disk_counters.keys()[counter_index]
+                    drive.load_counters(key, self.application.data_provider.disk_counters[key])
                 counter_index += 1
 
             text = drive.get_display_text()
@@ -203,13 +182,6 @@ class DiskDrivesPage(MFDPage):
         Arranges the control to the page
         :return: The desired size of the page
         """
-
-        now = datetime.now()
-
-        delta = now - self.last_refresh
-        if delta.seconds >= self.refresh_interval:
-            self.last_refresh = now
-            self.refresh()
             
         return super(DiskDrivesPage, self).arrange()
 
@@ -219,8 +191,8 @@ class DiskDrivesPage(MFDPage):
         Renders the control to the screen
         :return: The rectangle of the control
         """
-        if not psutil:
-            self.center_text("psutil offline".upper())
+        if not self.application.data_provider.has_psutil:
+            self.center_text("System Monitoring Offline".upper())
 
         return super(DiskDrivesPage, self).render()
 
