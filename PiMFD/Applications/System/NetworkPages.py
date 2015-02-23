@@ -3,11 +3,6 @@ from _socket import SOCK_STREAM, SOCK_DGRAM, SOCK_RAW, SOCK_RDM, SOCK_SEQPACKET,
     AF_DECnet, AF_IPX, AF_IRDA, AF_SNA, AF_UNSPEC
 
 try:
-    import psutil
-except ImportError:
-    psutil = None
-
-try:
     from psutil._common import AF_UNIX
 except ImportError:
     AF_UNIX = 1
@@ -30,7 +25,6 @@ class NetworkPage(MFDPage):
     :type application: PiMFD.Applications.System.SystemApplication.SysApplication
     :type auto_scroll: bool
     """
-    connections = None
 
     def __init__(self, controller, application, auto_scroll=True):
         super(NetworkPage, self).__init__(controller, application, auto_scroll)
@@ -39,20 +33,13 @@ class NetworkPage(MFDPage):
 
     def refresh(self, ):
 
-        if not psutil:
-            return
+        provider = self.application.data_provider
 
-        try:
-            self.connections = psutil.net_connections(kind='all')
-        except psutil.AccessDenied:
-            self.connections = None
-            return
-
-        self.panel.children.append(self.get_header_label('Connections ({})'.format(len(self.connections))))
+        self.panel.children = [self.get_header_label('Connections ({})'.format(len(provider.connections))) ]
 
         is_first_control = True
 
-        for c in self.connections:
+        for c in provider.connections:
 
             family = self.get_connection_family_text(c.family)
             conn_type = self.get_connection_type_text(c.type)
@@ -173,9 +160,9 @@ class NetworkPage(MFDPage):
 
     def render(self):
 
-        if not psutil:
-            self.center_text("psutil offline")
-        elif not self.connections:
+        if not self.application.data_provider.has_psutil:
+            self.center_text("System Monitoring Offline")
+        elif not self.application.data_provider.connections:
             self.center_text("ACCESS DENIED")
 
         return super(NetworkPage, self).render()

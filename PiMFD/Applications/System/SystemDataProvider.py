@@ -12,13 +12,16 @@ __author__ = 'Matt Eland'
 
 
 class SystemDataProvider(DataProvider):
+    
     last_proc_update = None
     last_perf_update = None
     last_drive_update = None
+    last_conn_update = None
     
     process_update_interval = 60
     perf_update_interval = 1
-    drives_refresh_interval = 10
+    drives_update_interval = 10
+    conn_update_interval = 60
 
     def __init__(self, name, application):
         super(SystemDataProvider, self).__init__(name)
@@ -30,6 +33,7 @@ class SystemDataProvider(DataProvider):
         self.swap_mem = None
         self.partitions = []
         self.disk_counters = None
+        self.connections = []
 
         if psutil:
             self.has_psutil = True
@@ -46,6 +50,7 @@ class SystemDataProvider(DataProvider):
             # Update Perf Data as needed
             if not self.last_perf_update or (now - self.last_perf_update).seconds >= self.perf_update_interval:
                 self.percentages = psutil.cpu_percent(percpu=True)
+                
                 self.last_perf_update = now
 
             # Update Processes as needed
@@ -53,10 +58,11 @@ class SystemDataProvider(DataProvider):
                 self.processes = psutil.get_process_list()
                 self.virt_mem = psutil.virtual_memory()
                 self.swap_mem = psutil.swap_memory()
+                
                 self.last_proc_update = now
 
             # Update Disk Drives
-            if not self.last_drive_update or (now - self.last_drive_update).seconds >= self.drives_refresh_interval:
+            if not self.last_drive_update or (now - self.last_drive_update).seconds >= self.drives_update_interval:
                 self.partitions = psutil.disk_partitions()
 
                 # Grab Disk IO over the course of a second
@@ -64,5 +70,14 @@ class SystemDataProvider(DataProvider):
                 self.disk_counters = psutil.disk_io_counters(perdisk=True)
 
                 self.last_drive_update = now
+                
+            # Connections
+            if not self.last_conn_update or (now - self.last_conn_update).seconds >= self.conn_update_interval:
+                try:
+                    self.connections = psutil.net_connections(kind='all')
+                except psutil.AccessDenied:
+                    self.connections = []
+                    
+                self.last_conn_update = now
 
         super(SystemDataProvider, self).update(now)
