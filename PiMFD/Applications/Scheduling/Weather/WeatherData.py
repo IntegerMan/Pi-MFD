@@ -3,6 +3,7 @@
 Contains data models used to insulate the weather data from the web API and used by the pages to get data in displayable
 format.
 """
+from PiMFD.UI.Widgets.DashboardWidget import DashboardStatus
 
 __author__ = 'Matt Eland'
 
@@ -254,3 +255,48 @@ def get_condition_icon(code):
         return 'K'
 
     return ' '
+
+def get_condition_status(code):
+    """
+    Returns the condition icon code from the condition
+    :param code: The condition code
+    :return: The condition icon code or a space
+    """
+
+    if code in (0, 1, 2, 3):  # Tornado, tropical storm, hurricane, severe thunderstorm
+        return DashboardStatus.Critical
+    elif code in (4, 37, 38, 39, 45, 47):  # Severe Thunderstorm, Thunderstorm, iso t-storms, scattered t-storms, thundershowers, iso thundershowers
+        return DashboardStatus.Caution
+    elif code in (5, 8, 10):  # Mixed Rain / Snow, Freezing Drizzle, Freezing Rain
+        return DashboardStatus.Caution
+    elif code in (6, 35):  # Mixed Rain / Sleet, Mixed Rain / Hail
+        return DashboardStatus.Critical
+    elif code == 7:  # Mixed Snow / Sleet
+        return DashboardStatus.Caution
+    elif code in (9, 11, 12, 40):  # Drizzle, Showers, scattered showers
+        return DashboardStatus.Caution
+    elif code in (13, 14, 15, 16, 41, 42, 43,
+                  46):  # Snow Flurries, light snow showers, blowing snow, snow, h. snow, sct. snow, snow showers
+        return DashboardStatus.Caution
+    elif code in (17, 18):  # Hail, Sleet
+        return DashboardStatus.Critical
+    elif code in (19, 20, 21, 22):  # Dust, Fog, Haze, Smoky
+        return DashboardStatus.Caution
+    elif code in (23, 24):  # Blustery, Windy
+        return DashboardStatus.Passive
+    elif code == 25:  # Cold
+        return DashboardStatus.Caution
+    elif code in (26, 27, 28):  # Cloudy, Mostly Cloudy (day / night)
+        return DashboardStatus.Passive
+    elif code == 29:  # Partly Cloudy Night
+        return DashboardStatus.Passive
+    elif code in (30, 44):  # Partly Cloudy Day, partly cloudy
+        return DashboardStatus.Passive
+    elif code in (31, 33):  # Clear Night, Fair (night)
+        return DashboardStatus.Passive
+    elif code in (32, 34):  # Sunny, Fair (day)
+        return DashboardStatus.Passive
+    elif code == 56:  # Hot
+        return DashboardStatus.Caution
+
+    return DashboardStatus.Passive

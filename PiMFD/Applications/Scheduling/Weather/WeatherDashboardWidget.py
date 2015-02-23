@@ -4,6 +4,7 @@
 This file contains definitions for a custom dashboard widget for weather conditions and forecasts
 """
 from pygame.rect import Rect
+from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_status
 
 from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Rendering import render_rectangle
@@ -112,6 +113,22 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         return self.desired_size
 
     def get_status(self):
+
+        if not self.weather or not self.forecast:
+            return DashboardStatus.Inactive
+
+        temp_status = self.get_temperature_status()
+        cond_status = get_condition_status(self.forecast.code)
+        
+        if cond_status == DashboardStatus.Critical or temp_status == DashboardStatus.Critical:
+            return DashboardStatus.Critical
+
+        if cond_status == DashboardStatus.Caution or temp_status == DashboardStatus.Caution:
+            return DashboardStatus.Caution
+        
+        return temp_status
+
+    def get_temperature_status(self):
 
         if not self.weather or not self.forecast:
             return DashboardStatus.Inactive
