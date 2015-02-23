@@ -4,7 +4,7 @@
 This file contains definitions for a custom dashboard widget for weather conditions and forecasts
 """
 from pygame.rect import Rect
-from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_status
+from PiMFD.Applications.Scheduling.Weather.WeatherData import get_condition_status, get_condition_icon
 
 from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Rendering import render_rectangle
@@ -39,9 +39,18 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         self.lbl_title.font = display.fonts.list
         self.panel.children.append(self.lbl_title)
 
+        pnl_value = StackPanel(display, page, is_horizontal=True)
+        pnl_value.center_align = True
+
+        self.lbl_condition = TextBlock(display, page, "{}")
+        self.lbl_condition.font = display.fonts.weather
+
         self.lbl_value = TextBlock(display, page, "Offline")
         self.lbl_value.font = display.fonts.list
-        self.panel.children.append(self.lbl_value)
+        
+        pnl_value.children = [self.lbl_value, self.lbl_condition]
+        
+        self.panel.children.append(pnl_value)
 
         self.chart = BoxChart(display, page)
         self.chart.width = 200
@@ -58,6 +67,7 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         color = self.get_color()
         self.lbl_value.color = color
         self.lbl_title.color = self.get_title_color()
+        self.lbl_condition.color = color
         self.chart.color = color
 
         # Render an outline around the entire control
@@ -86,11 +96,13 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         self.lbl_title.text = self.title
         if self.forecast and self.weather:
             if not self.is_forecast:
-                self.lbl_value.text = u'{}{} {}'.format(self.weather.temperature, self.weather.temp_units,
-                                                        self.forecast.conditions)
+                self.lbl_condition.text_data = get_condition_icon(self.weather.code)
+                self.lbl_value.text = u'{}{}'.format(self.weather.temperature, self.weather.temp_units)
             else:
-                self.lbl_value.text = u'{} {}'.format(self.forecast.temp_range, self.forecast.conditions)
+                self.lbl_condition.text_data = get_condition_icon(self.forecast.code)
+                self.lbl_value.text = u'{}'.format(self.forecast.temp_range)
         else:
+            self.lbl_condition.text_data = None
             self.lbl_value.text = 'Offline'
 
         if self.forecast:

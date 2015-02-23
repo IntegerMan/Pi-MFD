@@ -40,7 +40,7 @@ class DashboardWidget(UIWidget):
         elif self.status == DashboardStatus.Caution:
             return self.display.color_scheme.highlight
         elif self.status == DashboardStatus.Critical:
-            return self.display.color_scheme.critical
+            return self.display.color_scheme.caution
 
         return self.display.color_scheme.highlight
 
