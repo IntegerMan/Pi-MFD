@@ -1,5 +1,4 @@
 # coding=utf-8
-import psutil
 
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.System.DiskPages import DiskDrivesPage
@@ -52,13 +51,10 @@ class SysApplication(MFDApplication):
         return 'SYS'
 
     def navigate_to_process(self, pid):
-        try:
-            processes = psutil.get_process_list()
-        except psutil.AccessDenied:
-            processes = None
+
+        processes = self.data_provider.processes
 
         if processes:
-
             # Find the process from the list
             proc = None
             for p in processes:

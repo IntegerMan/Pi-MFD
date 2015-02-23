@@ -8,13 +8,6 @@ from datetime import datetime
 from PiMFD.Applications.System.ByteFormatting import format_size
 from PiMFD.UI.Widgets.Charts import BarChart
 from PiMFD.UI.Panels import StackPanel
-
-
-try:
-    import psutil
-except ImportError:
-    psutil = None
-
 from PiMFD.Applications.MFDPage import MFDPage
 
 __author__ = 'Matt Eland'
@@ -27,7 +20,6 @@ class PerformancePage(MFDPage):
     :type application: PiMFD.Applications.System.SystemApplication.SysApplication
     :type auto_scroll: bool
     """
-    drives = None
 
     def __init__(self, controller, application, auto_scroll=True):
         super(PerformancePage, self).__init__(controller, application, auto_scroll)
@@ -50,16 +42,11 @@ class PerformancePage(MFDPage):
         Refreshes the list of drives
         """
 
-        if not psutil:
-            return
-
-        # CPU Usage        
-        percentages = psutil.cpu_percent(percpu=True)
-
-        if percentages:
+        # CPU Usage
+        if self.application.data_provider.percentages:
             self.pnl_cpu.children = [self.get_header_label('CPU Performance')]
             cpu_index = 1
-            for percent in percentages:
+            for percent in self.application.data_provider.percentages:
 
                 # Protect against bad values on first round
                 if not percent:
@@ -75,8 +62,7 @@ class PerformancePage(MFDPage):
                 cpu_index += 1
 
         # Virtual Memory
-        virt_mem = psutil.virtual_memory()
-
+        virt_mem = self.application.data_provider.virt_mem
         if virt_mem:
             self.pnl_virt_mem.children = [self.get_header_label('Virtual Memory')]
             self.pnl_virt_mem.children.append(self.get_list_label("Percent Used: {} %".format(virt_mem.percent)))
@@ -95,8 +81,7 @@ class PerformancePage(MFDPage):
                     self.get_list_label("Available: {}".format(format_size(virt_mem.available))))
 
         # Swap Memory
-        swap_mem = psutil.swap_memory()
-
+        swap_mem = self.application.data_provider.swap_mem
         if swap_mem:
             self.pnl_swap_mem.children = [self.get_header_label('Swap Memory')]
             self.pnl_swap_mem.children.append(self.get_list_label("Percent Used: {} %".format(swap_mem.percent)))
@@ -117,13 +102,7 @@ class PerformancePage(MFDPage):
         :return: The desired size of the page
         """
 
-        if psutil:
-            now = datetime.now()
-
-            delta = now - self.last_refresh
-            if delta.seconds >= 1:
-                self.last_refresh = now
-                self.refresh()
+        self.refresh()
 
         return super(PerformancePage, self).arrange()
 
@@ -133,8 +112,8 @@ class PerformancePage(MFDPage):
         Renders the control to the screen
         :return: The rectangle of the control
         """
-        if not psutil:
-            self.center_text("psutil offline".upper())
+        if not self.application.data_provider.percentages or len(self.application.data_provider.percentages) <= 0:
+            self.center_text("System Monitoring Offline".upper())
 
         return super(PerformancePage, self).render()
 
