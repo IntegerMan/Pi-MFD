@@ -6,7 +6,7 @@ This file contains a data provider for system data
 import psutil
 
 from PiMFD.DataProvider import DataProvider
-from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus
+from PiMFD.UI.Widgets.DashboardWidget import DashboardStatus, BarChartDashboardWidget
 
 
 __author__ = 'Matt Eland'
@@ -60,13 +60,13 @@ class SystemDataProvider(DataProvider):
                 else:
                     label = "CPU"
 
-                widget = TextDashboardWidget(display, page, label, percentage)
+                widget = BarChartDashboardWidget(display, page, label, value=percentage)
                 self.cpu_widgets.append(widget)
 
         # Populate and refresh the CPU widgets
         if self.cpu_widgets:
             for cpu_widget, percentage in zip(self.cpu_widgets, self.percentages):
-                cpu_widget.value = '{} %'.format(percentage)
+                cpu_widget.value = percentage
                 widgets.append(cpu_widget)
 
                 if percentage > 95:

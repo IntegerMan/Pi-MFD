@@ -109,6 +109,8 @@ class BarChart(UIWidget):
     width = 100
     height = 8
 
+    color = None
+
     def __init__(self, display, page, value=0, range_low=0, range_high=100, width=100, height=8):
         super(BarChart, self).__init__(display, page)
 
@@ -124,6 +126,17 @@ class BarChart(UIWidget):
 
         return super(BarChart, self).arrange()
 
+    def get_color(self):
+
+        if self.color:
+            return self.color
+
+        if self.is_highlighted:
+            return self.display.color_scheme.highlight
+        else:
+            return self.display.color_scheme.foreground
+        
+
     def render(self):
         """
         Renders the widget to the screen
@@ -134,10 +147,7 @@ class BarChart(UIWidget):
         self.rect = Rect(self.pos[0], self.pos[1], self.width, self.height)
         self.set_dimensions_from_rect(self.rect)
 
-        color = self.display.color_scheme.foreground
-
-        if self.is_highlighted:
-            color = self.display.color_scheme.highlight
+        color = self.get_color()
 
         # Draw the basic skeleton of the control
         render_rectangle(self.display, color, self.rect)
