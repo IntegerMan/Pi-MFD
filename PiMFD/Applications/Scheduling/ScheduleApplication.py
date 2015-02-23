@@ -38,9 +38,6 @@ class ScheduleApp(MFDApplication):
 
         self.pages = list([self.task_page, self.mail_page, self.calendar_page, self.weather_page])
 
-        # TODO: There's no automatic mechanism to refresh weather data.
-        self.weather_data_provider.get_weather()
-
     def get_default_page(self):
         """
         Gets the default page within the application.

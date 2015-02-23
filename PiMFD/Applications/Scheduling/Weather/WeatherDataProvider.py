@@ -3,9 +3,12 @@
 """
 This file contains data provider for weather information
 """
+from datetime import datetime
+
 from PiMFD.Applications.Scheduling.Weather.WeatherAPIWrapper import WeatherAPI
 from PiMFD.DataProvider import DataProvider
 from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus
+
 
 __author__ = 'Matt Eland'
 
@@ -14,7 +17,9 @@ class WeatherDataProvider(DataProvider):
 
     weather_data = None
     weather_api = None
-
+    last_request = None
+    refresh_interval_minutes = 15
+    
     def __init__(self, application, options):
         super(WeatherDataProvider, self).__init__("Weather Data Provider")
 
@@ -24,6 +29,12 @@ class WeatherDataProvider(DataProvider):
         self.current_conditions_widget = None
 
     def update(self):
+
+        # Auto-Fetch Weather
+        now = datetime.now()
+        if not self.last_request or (now - self.last_request).seconds > (60 * self.refresh_interval_minutes):
+            self.get_weather()
+
         super(WeatherDataProvider, self).update()
 
     def get_weather(self, consumer=None):
@@ -35,6 +46,8 @@ class WeatherDataProvider(DataProvider):
             consumer = self
 
         if self.options.location:
+            now = datetime.now()
+            self.last_request = now
             self.weather_api.get_yahoo_weather_async(self.options.location, consumer)
 
     def get_weather_for_zip(self, zip, consumer=None, updateError=False):
