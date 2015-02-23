@@ -1,11 +1,14 @@
 # coding=utf-8
 import psutil
+
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.System.DiskPages import DiskDrivesPage
 from PiMFD.Applications.System.NetworkPages import NetworkPage
 from PiMFD.Applications.System.PerformancePages import PerformancePage
 from PiMFD.Applications.System.ProcessPages import ProcessPage, ProcessDetailsPage
+from PiMFD.Applications.System.SystemDataProvider import SystemDataProvider
 from PiMFD.Applications.System.WMIServicesPages import WMIServicesPage
+
 
 __author__ = 'Matt Eland'
 
@@ -29,6 +32,7 @@ class SysApplication(MFDApplication):
         self.disk_page = DiskDrivesPage(controller, self)
         self.net_page = NetworkPage(controller, self)
         self.services_page = WMIServicesPage(controller, self)
+        self.system_data_provider = SystemDataProvider("System Data Provider", self)
 
         self.pages = list([self.perf_page, self.disk_page, self.services_page, self.proc_page, self.net_page])
 
@@ -63,5 +67,10 @@ class SysApplication(MFDApplication):
 
             if proc:
                 self.select_page(ProcessDetailsPage(self.controller, self, proc))
+
+    def initialize(self):
+        super(SysApplication, self).initialize()
+
+        self.controller.register_data_provider(self.system_data_provider)
 
 
