@@ -6,6 +6,7 @@ This file contains a data provider for system data
 import psutil
 
 from PiMFD.DataProvider import DataProvider
+from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus
 
 
 __author__ = 'Matt Eland'
@@ -22,6 +23,8 @@ class SystemDataProvider(DataProvider):
     perf_update_interval = 1
     drives_update_interval = 10
     conn_update_interval = 60
+
+    cpu_widgets = None
 
     def __init__(self, name, application):
         super(SystemDataProvider, self).__init__(name)
@@ -41,7 +44,39 @@ class SystemDataProvider(DataProvider):
             self.has_psutil = False
 
     def get_dashboard_widgets(self, display, page):
-        return []
+
+        widgets = []
+
+        # Build CPU Widgets as necessary
+        if not self.cpu_widgets and self.percentages and len(self.percentages) > 0:
+            self.cpu_widgets = []
+            index = 0
+            for percentage in self.percentages:
+
+                index += 1
+
+                if len(self.percentages) > 1:
+                    label = "CPU {}".format(index)
+                else:
+                    label = "CPU"
+
+                widget = TextDashboardWidget(display, page, label, percentage)
+                self.cpu_widgets.append(widget)
+
+        # Populate and refresh the CPU widgets
+        if self.cpu_widgets:
+            for cpu_widget, percentage in zip(self.cpu_widgets, self.percentages):
+                cpu_widget.value = '{} %'.format(percentage)
+                widgets.append(cpu_widget)
+
+                if percentage > 95:
+                    cpu_widget.status = DashboardStatus.Critical
+                elif percentage > 90:
+                    cpu_widget.status = DashboardStatus.Caution
+                else:
+                    cpu_widget.status = DashboardStatus.Passive
+
+        return widgets
 
     def update(self, now):
 
