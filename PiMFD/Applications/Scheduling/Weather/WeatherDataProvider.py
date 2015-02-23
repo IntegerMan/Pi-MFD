@@ -30,14 +30,13 @@ class WeatherDataProvider(DataProvider):
         self.tomorrow_conditions_widget = None
         self.today_forecast_widget = None
 
-    def update(self):
+    def update(self, now):
 
         # Auto-Fetch Weather
-        now = datetime.now()
         if not self.last_request or (now - self.last_request).seconds > (60 * self.refresh_interval_minutes):
             self.get_weather()
 
-        super(WeatherDataProvider, self).update()
+        super(WeatherDataProvider, self).update(now)
 
     def get_weather(self, consumer=None):
         """

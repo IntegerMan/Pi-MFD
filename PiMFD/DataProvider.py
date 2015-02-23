@@ -12,7 +12,7 @@ class DataProvider(object):
 
         self.name = name
 
-    def update(self):
+    def update(self, now):
         pass
 
     def get_dashboard_widgets(self, display, page):

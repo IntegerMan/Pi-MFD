@@ -3,6 +3,7 @@
 """
 Contains application control logic for Pi-MFD.
 """
+from datetime import datetime
 
 import pygame
 
@@ -263,8 +264,9 @@ class MFDController(object):
         self.update_application()
 
         # Request each data provider update itself
+        now = datetime.now()
         for provider in self.data_providers:
-            provider.update()
+            provider.update(now)
 
         # Render the current page
         if self.active_app is not None and self.active_app.active_page:

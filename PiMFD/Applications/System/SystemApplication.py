@@ -20,6 +20,7 @@ class SysApplication(MFDApplication):
     perf_page = None
     services_page = None
     sys_info_page = None
+    data_provider = None
 
     def __init__(self, controller):
         """
@@ -27,12 +28,12 @@ class SysApplication(MFDApplication):
         """
         super(SysApplication, self).__init__(controller)
 
+        self.data_provider = SystemDataProvider("System Data Provider", self)
         self.perf_page = PerformancePage(controller, self)
         self.proc_page = ProcessPage(controller, self)
         self.disk_page = DiskDrivesPage(controller, self)
         self.net_page = NetworkPage(controller, self)
         self.services_page = WMIServicesPage(controller, self)
-        self.system_data_provider = SystemDataProvider("System Data Provider", self)
 
         self.pages = list([self.perf_page, self.disk_page, self.services_page, self.proc_page, self.net_page])
 
@@ -71,6 +72,6 @@ class SysApplication(MFDApplication):
     def initialize(self):
         super(SysApplication, self).initialize()
 
-        self.controller.register_data_provider(self.system_data_provider)
+        self.controller.register_data_provider(self.data_provider)
 
 

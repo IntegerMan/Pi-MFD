@@ -168,8 +168,6 @@ class ProcessDetailsPage(MFDPage):
 
 class ProcessPage(MFDPage):
 
-    processes = None
-
     def __init__(self, controller, application, auto_scroll=True):
         super(ProcessPage, self).__init__(controller, application, auto_scroll)
 
@@ -180,13 +178,12 @@ class ProcessPage(MFDPage):
         if not psutil:
             return
 
-        self.processes = psutil.get_process_list()
-
-        self.panel.children = [self.get_header_label('Processes ({})'.format(len(self.processes)))]
+        self.panel.children = [
+            self.get_header_label('Processes ({})'.format(len(self.application.data_provider.processes)))]
 
         is_first_control = True
-        
-        for p in self.processes:
+
+        for p in self.application.data_provider.processes:
 
             try:
                 name = p.name()

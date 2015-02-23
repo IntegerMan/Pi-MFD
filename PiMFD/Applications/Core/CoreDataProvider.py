@@ -31,8 +31,8 @@ class CoreDataProvider(DataProvider):
         self.system_time = ''
         self.time_widget = None
 
-    def update(self):
-        super(CoreDataProvider, self).update()
+    def update(self, now):
+        super(CoreDataProvider, self).update(now)
 
         self.system_time = strftime(self.time_format)
 
