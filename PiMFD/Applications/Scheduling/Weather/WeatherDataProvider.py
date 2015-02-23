@@ -6,8 +6,8 @@ This file contains data provider for weather information
 from datetime import datetime
 
 from PiMFD.Applications.Scheduling.Weather.WeatherAPIWrapper import WeatherAPI
+from PiMFD.Applications.Scheduling.Weather.WeatherDashboardWidget import WeatherForecastDashboardWidget
 from PiMFD.DataProvider import DataProvider
-from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus
 
 
 __author__ = 'Matt Eland'
@@ -70,30 +70,17 @@ class WeatherDataProvider(DataProvider):
 
     def get_dashboard_widgets(self, display, page):
 
-        weather_status = DashboardStatus.Passive
-
-        if self.weather_data:
-            weather_text = u"{}{} {}".format(self.weather_data.temperature, self.weather_data.temp_units, self.weather_data.conditions)
-            
-            # Certain Temperatures should function as alerts
-            numeric_temp = float(self.weather_data.temperature)
-            if numeric_temp <= 10 or numeric_temp >= 100:
-                weather_status = DashboardStatus.Critical
-            elif numeric_temp <= 32 or numeric_temp >= 90:
-                weather_status = DashboardStatus.Caution
-                
-        else:
-            # We may be loading
-            weather_text = "Offline"
-            weather_status = DashboardStatus.Inactive
-
         if not self.current_conditions_widget:
             # Build out the widget
-            self.current_conditions_widget = TextDashboardWidget(display, page, "Current Weather", weather_text)
+            self.current_conditions_widget = WeatherForecastDashboardWidget(display, page, "Current Weather",
+                                                                            self.weather_data)
         else:
             # Update with current system time
-            self.current_conditions_widget.value = weather_text
-            
-        self.current_conditions_widget.status = weather_status
+            self.current_conditions_widget.weather = self.weather_data
+
+        if self.weather_data and self.weather_data.forecasts and len(self.weather_data.forecasts) > 0:
+            self.current_conditions_widget.forecast = self.weather_data.forecasts[0]
+        else:
+            self.current_conditions_widget.forecast = None
 
         return [self.current_conditions_widget]

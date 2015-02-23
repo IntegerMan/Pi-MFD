@@ -27,7 +27,6 @@ class WeatherPage(MFDPage):
     lbl_pressure = None
     lbl_daylight = None
     lbl_gps = None
-    lbl_updated = None
 
     # These two are really arrays
     lbl_forecast = None
@@ -60,7 +59,6 @@ class WeatherPage(MFDPage):
         self.lbl_pressure = self.get_label(u"  Pressure: {} {}")
         self.lbl_daylight = self.get_label(u"  Daylight: {} - {}")
         self.lbl_gps = self.get_label(u"       GPS: {}, {}")
-        self.lbl_updated = self.get_label(u"   Updated: {}")
 
         self.pnl_today.children = (
             self.lbl_today_header,
@@ -113,7 +111,7 @@ class WeatherPage(MFDPage):
         self.content_panel.children = (self.pnl_today, self.pnl_forecast)
 
         # Set up the master panel
-        self.panel.children = (self.content_panel, self.lbl_updated)
+        self.panel.children = [self.content_panel]
         self.panel.pad_last_item = False
 
     def get_button_text(self):
@@ -140,7 +138,6 @@ class WeatherPage(MFDPage):
             self.lbl_pressure.text_data = (weather.pressure, weather.pressure_units)
             self.lbl_daylight.text_data = (weather.sunrise, weather.sunset)
             self.lbl_gps.text_data = (weather.lat, weather.long)
-            self.lbl_updated.text_data = weather.last_result
 
             # Update Forecasts
             i = 0

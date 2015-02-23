@@ -22,7 +22,43 @@ class DashboardStatus(object):
     Caution = 2
     Critical = 3
 
-class TextDashboardWidget(UIWidget):
+
+class DashboardWidget(UIWidget):
+    padding = 8
+
+    def __init__(self, display, page, status=DashboardStatus.Passive):
+        super(DashboardWidget, self).__init__(display, page)
+
+        self.status = status
+
+    def get_title_color(self):
+
+        if self.status in [DashboardStatus.Passive, DashboardStatus.Notification]:
+            return self.display.color_scheme.highlight
+        elif self.status == DashboardStatus.Inactive:
+            return self.display.color_scheme.disabled
+        elif self.status == DashboardStatus.Caution:
+            return self.display.color_scheme.highlight
+        elif self.status == DashboardStatus.Critical:
+            return self.display.color_scheme.critical
+
+        return self.display.color_scheme.highlight
+
+    def get_color(self):
+
+        if self.status in [DashboardStatus.Passive, DashboardStatus.Notification]:
+            return self.display.color_scheme.foreground
+        elif self.status == DashboardStatus.Inactive:
+            return self.display.color_scheme.disabled
+        elif self.status == DashboardStatus.Caution:
+            return self.display.color_scheme.caution
+        elif self.status == DashboardStatus.Critical:
+            return self.display.color_scheme.critical
+
+        return self.display.color_scheme.foreground
+
+
+class TextDashboardWidget(DashboardWidget):
     """
     A simple labeled dashboard widget
     :type display: PiMFD.UI.DisplayManager.DisplayManager
@@ -30,11 +66,9 @@ class TextDashboardWidget(UIWidget):
     :type title: str The name of the widget
     :type value: str The value used in the widget
     """
-    
-    padding = 8
-    
+
     def __init__(self, display, page, title, value, status=DashboardStatus.Passive):
-        super(TextDashboardWidget, self).__init__(display, page)
+        super(TextDashboardWidget, self).__init__(display, page, status)
 
         self.title = title
         self.value = value
@@ -48,34 +82,6 @@ class TextDashboardWidget(UIWidget):
         self.lbl_value = TextBlock(display, page, value)
         self.lbl_value.font = display.fonts.list
         self.panel.children.append(self.lbl_value)
-        
-        self.status = status
-        
-    def get_title_color(self):
-
-        if self.status in [DashboardStatus.Passive, DashboardStatus.Notification]:
-            return self.display.color_scheme.highlight
-        elif self.status == DashboardStatus.Inactive:
-            return self.display.color_scheme.disabled
-        elif self.status == DashboardStatus.Caution:
-            return self.display.color_scheme.highlight
-        elif self.status == DashboardStatus.Critical:
-            return self.display.color_scheme.critical
-
-        return self.display.color_scheme.highlight       
-        
-    def get_color(self):
-        
-        if self.status in [DashboardStatus.Passive, DashboardStatus.Notification]:
-            return self.display.color_scheme.foreground
-        elif self.status == DashboardStatus.Inactive:
-            return self.display.color_scheme.disabled
-        elif self.status == DashboardStatus.Caution:
-            return self.display.color_scheme.caution
-        elif self.status == DashboardStatus.Critical:
-            return self.display.color_scheme.critical
-
-        return self.display.color_scheme.foreground
 
     def render(self):
 
