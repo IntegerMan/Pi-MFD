@@ -27,6 +27,7 @@ class WeatherDataProvider(DataProvider):
         self.weather_api = WeatherAPI()
         self.options = options
         self.current_conditions_widget = None
+        self.tomorrow_conditions_widget = None
 
     def update(self):
 
@@ -68,19 +69,26 @@ class WeatherDataProvider(DataProvider):
     def weather_received(self, location, weather):
         self.weather_data = weather
 
+    def build_weather(self, display, page, widget, label, forecast_index):
+        # Update the current weather widget
+        if not widget:
+            widget = WeatherForecastDashboardWidget(display, 
+                                                    page, 
+                                                    label,
+                                                    self.weather_data, 
+                                                    is_today=(forecast_index == 0))
+        else:
+            widget.weather = self.weather_data
+        if self.weather_data and self.weather_data.forecasts and len(self.weather_data.forecasts) > forecast_index:
+            widget.forecast = self.weather_data.forecasts[forecast_index]
+        else:
+            widget.forecast = None
+            
+        return widget
+
     def get_dashboard_widgets(self, display, page):
 
-        if not self.current_conditions_widget:
-            # Build out the widget
-            self.current_conditions_widget = WeatherForecastDashboardWidget(display, page, "Current Weather",
-                                                                            self.weather_data)
-        else:
-            # Update with current system time
-            self.current_conditions_widget.weather = self.weather_data
+        self.current_conditions_widget = self.build_weather(display, page, self.current_conditions_widget, "Current Weather", 0)
+        self.tomorrow_conditions_widget = self.build_weather(display, page, self.tomorrow_conditions_widget, "Tomorrow's Weather", 1)
 
-        if self.weather_data and self.weather_data.forecasts and len(self.weather_data.forecasts) > 0:
-            self.current_conditions_widget.forecast = self.weather_data.forecasts[0]
-        else:
-            self.current_conditions_widget.forecast = None
-
-        return [self.current_conditions_widget]
+        return [self.current_conditions_widget, self.tomorrow_conditions_widget]

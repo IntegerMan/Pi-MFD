@@ -23,9 +23,13 @@ class BoxChart(UIWidget):
     range_high = 100
     value_low = 0
     value_high = 0
+    value_current = None
+    
+    color = None
 
     width = 100
     height = 8
+    box_width = 0
 
     ticks = None
 
@@ -38,7 +42,14 @@ class BoxChart(UIWidget):
         self.desired_size = self.width, self.height
 
         return super(BoxChart, self).arrange()
+    
+    def get_color(self):
 
+        if self.color:
+            return self.color
+
+        return self.display.color_scheme.foreground
+    
     def render(self):
         """
         Renders the widget to the screen
@@ -49,7 +60,7 @@ class BoxChart(UIWidget):
         self.rect = Rect(self.pos[0], self.pos[1], self.width, self.height)
         self.set_dimensions_from_rect(self.rect)
 
-        color = self.display.color_scheme.foreground
+        color = self.get_color()
 
         if self.is_highlighted:
             highlight = self.display.color_scheme.highlight
@@ -70,12 +81,18 @@ class BoxChart(UIWidget):
             draw_vertical_line(self.display, color, self.left + tick_offset, self.top, self.bottom)
 
         # Draw the box of the control
-        low_x = (self.value_low - self.range_low) * range_increment
-        high_x = (self.value_high - self.range_low) * range_increment
-        chart_rect = Rect(self.left + low_x, self.top + 2, high_x - low_x, self.height - 3)
-        render_rectangle(self.display, highlight, chart_rect, width=0)
+        if self.box_width >= 0:
+            low_x = (self.value_low - self.range_low) * range_increment
+            high_x = (self.value_high - self.range_low) * range_increment
+            chart_rect = Rect(self.left + low_x, self.top + 2, high_x - low_x, self.height - 3)
+            render_rectangle(self.display, highlight, chart_rect, width=self.box_width)
 
-        # Return our dimensions
+        # If we have a value, render it
+        if self.value_current:
+            x = (self.value_current - self.range_low) * range_increment
+            draw_vertical_line(self.display, self.display.color_scheme.highlight, self.left + x, self.top, self.bottom)
+
+    # Return our dimensions
         return self.rect
 
 

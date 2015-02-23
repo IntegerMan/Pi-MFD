@@ -43,9 +43,11 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         self.panel.children.append(self.lbl_value)
 
         self.chart = BoxChart(display, page)
-        self.chart.width = 225
+        self.chart.width = 200
         self.chart.range_low = -20
         self.chart.range_high = 120
+        self.chart.is_highlighted = False
+        self.chart.box_width = 0
         self.chart.ticks = (0, 32, 100)
         self.panel.children.append(self.chart)
 
@@ -55,6 +57,7 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         color = self.get_color()
         self.lbl_value.color = color
         self.lbl_title.color = self.get_title_color()
+        self.chart.color = color
 
         # Render an outline around the entire control
         rect = Rect(self.pos[0], self.pos[1], self.panel.desired_size[0] + (self.padding * 2),
@@ -95,22 +98,28 @@ class WeatherForecastDashboardWidget(DashboardWidget):
 
             if self.is_today:
                 self.chart.value_current = float(self.weather.temperature)
+                self.chart.box_width = -1
 
         self.panel.arrange()
-        self.desired_size = self.panel.desired_size[0] + (self.padding * 2), self.panel.desired_size[1] + (
-        self.padding * 2)
+        self.desired_size = self.panel.desired_size[0] + (self.padding * 2), self.panel.desired_size[1] + (self.padding * 2)
         return self.desired_size
 
     def get_status(self):
 
-        if not self.weather:
+        if not self.weather or not self.forecast:
             return DashboardStatus.Inactive
-
+           
         # Certain Temperatures should function as alerts
-        numeric_temp = float(self.weather.temperature)
-        if numeric_temp <= 10 or numeric_temp >= 100:
+        low = self.forecast.low
+        high = self.forecast.high
+
+        # If it's today, we don't care about forecast - go off of current temperature
+        if self.is_today:
+            low = high = float(self.weather.temperature)
+        
+        if low <= 10 or high >= 100:
             return DashboardStatus.Critical
-        elif numeric_temp <= 32 or numeric_temp >= 90:
+        elif low <= 32 or high >= 90:
             return DashboardStatus.Caution
         else:
             return DashboardStatus.Passive
