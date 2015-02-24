@@ -182,12 +182,12 @@ class DoubleWideStackPanel(UIPanel):
     A vertical-only variant of a Stack Panel that populates left then right then down
     """      
     
-    padding = 8
+    padding = 8, 8
     
     def __init__(self, display, page, keep_together=False):
         super(DoubleWideStackPanel, self).__init__(display, page, keep_together)
-        
-        self.padding = display.padding_y
+
+        self.padding = display.padding_x, display.padding_y
 
     def arrange(self):
 
@@ -226,10 +226,102 @@ class DoubleWideStackPanel(UIPanel):
                 x = start_x
                 row_height = max(row_height, child.desired_size[1])
                 height += row_height
-                y += row_height + self.padding
+                y += row_height + self.padding[1]
         
         # If we have an odd number, take into the last row's height
         if column_index == 1:
+            height += row_height
+
+        # Update size and return
+        self.desired_size = width, height
+        return self.desired_size
+
+    def render(self):
+        self.width = 0
+        self.height = 0
+
+        x, y = self.pos
+
+        self.top = y
+        self.left = x
+        self.width = self.desired_size[0]
+        self.height = self.desired_size[1]
+
+        min_y = self.display.get_content_start_y()
+        max_y = self.display.get_content_end_y()
+
+        # Render children where arrange told us to
+        for child in self.children:
+
+            # Only render nodes that will be visible
+            if child.pos[1] < max_y and (child.pos[1] + child.desired_size[1]) > min_y:
+                child.render()
+
+        # Update and return our bounds
+        self.rect = Rect(self.left, self.top, self.width, self.height)
+        return self.set_dimensions_from_rect(self.rect)
+
+
+class WrapPanel(UIPanel):
+    
+    """
+    A panel that wraps left to right top to bottom
+    """
+
+    padding = 8, 8
+
+    def __init__(self, display, page, keep_together=False):
+        super(WrapPanel, self).__init__(display, page, keep_together)
+
+        self.padding = display.padding_x, display.padding_y
+
+    def arrange(self):
+
+        x, y = self.pos
+
+        start_x = x
+
+        width = self.display.get_content_size()[0]
+        remaining_x = width
+        height = 0
+
+        # Cause all children to arrange so we have valid sizes
+        for child in self.children:
+            child.parent = self
+            child.arrange()
+            if self.is_highlighted is not None:
+                child.is_highlighted = self.is_highlighted
+
+        row_height = 0
+
+        # Put each child where it should be
+        for child in self.children:
+
+            if remaining_x == width or remaining_x >= child.desired_size[0]:
+                pass
+            else:
+                remaining_x = width
+                y += row_height + self.padding[1]
+                x = start_x
+                height += row_height
+                row_height = 0
+
+            # Set position. Some things use abstract positioning, so we'll need to invalidate arrange if our position
+            # has changed since initial arrange.
+            if child.pos[0] != x or child.pos[1] != y:
+                child.pos = x, y
+                child.arrange()
+
+            row_height = max(row_height, child.desired_size[1])
+            
+            # Move to our next X spot
+            if child.desired_size[0] > 0:
+                amount = child.desired_size[0] + self.padding[0]
+                x += amount
+                remaining_x -= amount
+
+        # Take the last row into account
+        if row_height > 0:
             height += row_height
 
         # Update size and return

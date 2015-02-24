@@ -4,7 +4,7 @@
 This file contains dashboard pages
 """
 from PiMFD.Applications.MFDPage import MFDPage
-from PiMFD.UI.Panels import StackPanel, DoubleWideStackPanel
+from PiMFD.UI.Panels import StackPanel, DoubleWideStackPanel, WrapPanel
 
 __author__ = 'Matt Eland'
 
@@ -19,7 +19,7 @@ class DashboardPage(MFDPage):
 
         header = self.get_header_label("Pi-MFD System Dashboard")
 
-        self.pnl_alerts = DoubleWideStackPanel(controller.display, self)
+        self.pnl_alerts = WrapPanel(controller.display, self)
 
         self.time_data_provider = time_data_provider
 
