@@ -34,24 +34,43 @@ class CpuDashboardWidget(DashboardWidget):
         self.pnl_charts.padding = 2, 0
         self.panel.children.append(self.pnl_charts)
 
+    def get_percent_status(self, percentage):
+
+        if percentage > 95:
+            return DashboardStatus.Critical
+        elif percentage > 80:
+            return DashboardStatus.Caution
+        elif percentage < 0:
+            return DashboardStatus.Inactive
+        else:
+            return DashboardStatus.Passive
+
     def arrange(self):
+        
+        max_value = -1
 
         if not self.charts and self.values and len(self.values) > 0:
             self.charts = []
 
-            chart_width = (150 - (len(self.values) * 2)) / len(self.values)
+            chart_width = (150 - (len(self.values) * 1)) / len(self.values)
 
             for value in self.values:
                 chart = BarChart(self.display, self.page, value=value)
                 chart.width = chart_width
-                chart.height = 12
+                chart.height = 15
+                chart.color = self.get_status_color(self.get_percent_status(value))
                 self.charts.append(chart)
                 self.pnl_charts.children.append(chart)
+                max_value = max(value, max_value)
 
         elif self.charts and self.values and len(self.values) > 0:
 
             for chart, value in zip(self.charts, self.values):
                 chart.value = value
+                chart.color = self.get_status_color(self.get_percent_status(value))
+                max_value = max(value, max_value)
+
+        self.status = self.get_percent_status(max_value)
 
         self.lbl_title.text = self.title
 

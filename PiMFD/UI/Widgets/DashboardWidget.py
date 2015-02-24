@@ -45,19 +45,22 @@ class DashboardWidget(UIWidget):
 
         return self.display.color_scheme.highlight
 
-    def get_color(self):
+    def get_status_color(self, status):
 
-        if self.status in [DashboardStatus.Passive, DashboardStatus.Notification]:
+        if status in [DashboardStatus.Passive, DashboardStatus.Notification]:
             return self.display.color_scheme.foreground
-        elif self.status == DashboardStatus.Inactive:
+        elif status == DashboardStatus.Inactive:
             return self.display.color_scheme.disabled
-        elif self.status == DashboardStatus.Caution:
+        elif status == DashboardStatus.Caution:
             return self.display.color_scheme.caution
-        elif self.status == DashboardStatus.Critical:
+        elif status == DashboardStatus.Critical:
             return self.display.color_scheme.critical
 
         return self.display.color_scheme.foreground
 
+    def get_color(self):
+        
+        return self.get_status_color(self.status)
 
 class BarChartDashboardWidget(DashboardWidget):
     def __init__(self, display, page, title, value=0, range_low=0, range_high=100, status=DashboardStatus.Passive):
