@@ -29,6 +29,7 @@ class UIPanel(UIWidget):
     
     def child_focused(self, widget):
         pass
+    
 
 class StackPanel(UIPanel):
     """
@@ -151,6 +152,91 @@ class StackPanel(UIPanel):
         :return: A rect indicating the dimensions of the panel
         """
 
+        self.width = 0
+        self.height = 0
+
+        x, y = self.pos
+
+        self.top = y
+        self.left = x
+        self.width = self.desired_size[0]
+        self.height = self.desired_size[1]
+
+        min_y = self.display.get_content_start_y()
+        max_y = self.display.get_content_end_y()
+
+        # Render children where arrange told us to
+        for child in self.children:
+
+            # Only render nodes that will be visible
+            if child.pos[1] < max_y and (child.pos[1] + child.desired_size[1]) > min_y:
+                child.render()
+
+        # Update and return our bounds
+        self.rect = Rect(self.left, self.top, self.width, self.height)
+        return self.set_dimensions_from_rect(self.rect)
+
+
+class DoubleWideStackPanel(UIPanel):
+    """
+    A vertical-only variant of a Stack Panel that populates left then right then down
+    """      
+    
+    padding = 8
+    
+    def __init__(self, display, page, keep_together=False):
+        super(DoubleWideStackPanel, self).__init__(display, page, keep_together)
+        
+        self.padding = display.padding_y
+
+    def arrange(self):
+
+        x, y = self.pos
+
+        start_x = x
+
+        width = self.display.get_content_size()[0]
+        height = 0
+
+        # Cause all children to arrange so we have valid sizes
+        for child in self.children:
+            child.parent = self
+            child.arrange()
+            if self.is_highlighted is not None:
+                child.is_highlighted = self.is_highlighted
+
+        column_index = 0
+        row_height = 0
+
+        # Put each child where it should be
+        for child in self.children:
+
+            # Set position. Some things use abstract positioning, so we'll need to invalidate arrange if our position
+            # has changed since initial arrange.
+            if child.pos[0] != x or child.pos[1] != y:
+                child.pos = x, y
+                child.arrange()
+                
+            if column_index == 0:
+                column_index = 1
+                x = start_x + (width / 2)
+                row_height = child.desired_size[1]
+            else:
+                column_index = 0
+                x = start_x
+                row_height = max(row_height, child.desired_size[1])
+                height += row_height
+                y += row_height + self.padding
+        
+        # If we have an odd number, take into the last row's height
+        if column_index == 1:
+            height += row_height
+
+        # Update size and return
+        self.desired_size = width, height
+        return self.desired_size
+
+    def render(self):
         self.width = 0
         self.height = 0
 
