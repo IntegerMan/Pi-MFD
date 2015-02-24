@@ -9,7 +9,7 @@ from PiMFD.Applications.System.CpuDashboardWidget import CpuDashboardWidget
 from PiMFD.Applications.System.DiskPages import DiskDrive
 
 from PiMFD.DataProvider import DataProvider
-from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, BarChartDashboardWidget
+from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, BarChartDashboardWidget, DashboardStatus
 
 
 __author__ = 'Matt Eland'
@@ -29,6 +29,7 @@ class SystemDataProvider(DataProvider):
 
     cpu_widget = None
     drive_widgets = None
+    mem_widget = None
 
     def __init__(self, name, application):
         super(SystemDataProvider, self).__init__(name)
@@ -75,9 +76,28 @@ class SystemDataProvider(DataProvider):
             for drive_widget in self.drive_widgets:
                 drive = drive_widget.data_context
                 drive_widget.value = drive.usage_percent
-                # drive_widget.title = "{} ({} %)".format(drive.device, drive.usage_percent)
                 drive_widget.status = drive.get_dashboard_status()
                 widgets.append(drive_widget)
+                
+        # Instantiate Memory Widget as Needed
+        if not self.mem_widget and self.virt_mem:
+            self.mem_widget = BarChartDashboardWidget(display, page, 'Virt. Memory', value=self.virt_mem.percent)
+            
+        # Update the values in the memory widget
+        if self.mem_widget and self.virt_mem:
+            
+            # Set Value
+            self.mem_widget.value = self.virt_mem.percent
+            
+            # Update Mem Widget Status
+            if self.virt_mem.percent >= 90:
+                self.mem_widget.status = DashboardStatus.Critical
+            elif self.virt_mem.percent >= 75:
+                self.mem_widget.status = DashboardStatus.Caution
+            else:
+                self.mem_widget.status = DashboardStatus.Passive
+                
+            widgets.append(self.mem_widget)
 
         return widgets
 
