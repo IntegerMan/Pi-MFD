@@ -79,6 +79,7 @@ class BarChartDashboardWidget(DashboardWidget):
 
         self.chart = BarChart(display, page, value=value, range_low=range_low, range_high=range_high)
         self.chart.width = self.width
+        self.chart.height = 15
         self.panel.children.append(self.chart)
 
     def arrange(self):
