@@ -8,6 +8,7 @@ from datetime import datetime
 from PiMFD.Applications.System.ByteFormatting import format_size
 from PiMFD.UI.Widgets.Charts import BarChart
 from PiMFD.UI.Panels import StackPanel
+from PiMFD.UI.Widgets.DashboardWidget import DashboardStatus
 
 
 try:
@@ -48,6 +49,17 @@ class DiskDrive(object):
         else:
             self.usage = None
             self.usage_percent = 0.0
+
+    def get_dashboard_status(self):
+        
+        if not self.can_get_usage():
+            return DashboardStatus.Inactive
+        elif self.usage_percent >= 90:
+            return DashboardStatus.Critical
+        elif self.usage_percent >= 60:
+            return DashboardStatus.Caution
+        else:
+            return DashboardStatus.Passive
 
     def can_get_usage(self):
         return not ('CDROM' in self.options or self.file_system == '')

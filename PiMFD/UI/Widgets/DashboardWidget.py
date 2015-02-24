@@ -83,6 +83,7 @@ class BarChartDashboardWidget(DashboardWidget):
 
     def arrange(self):
 
+        self.lbl_title.text = self.title
         self.chart.value = self.value
         self.panel.arrange()
         self.desired_size = 150 + (self.padding * 2), self.panel.desired_size[1] + (self.padding * 2)
