@@ -61,6 +61,8 @@ class MapLocationAddPage(MFDPage):
 
         self.panel.children = [self.lbl_header, self.txt_name, self.txt_lat, self.txt_lng]
 
+        self.data_provider = application.data_provider
+
         self.set_focus(self.txt_name)
         
     def set_values_from_context(self, context):
@@ -85,7 +87,7 @@ class MapLocationAddPage(MFDPage):
             # Actually add the thing
             location = MapLocation(self.txt_name.text, self.txt_lat.text, self.txt_lng.text)
             location.id = self.id
-            self.application.add_location(location)
+            self.data_provider.add_location(location)
 
             self.application.select_page(self.back_page)
             return True
@@ -207,7 +209,9 @@ class MapLocationsPage(MFDPage):
 
     def __init__(self, controller, application, map_context, back_page):
         super(MapLocationsPage, self).__init__(controller, application)
+        
         self.map_context = map_context
+        self.data_provider = application.data_provider
 
         self.btn_back = MFDButton("BACK")
         self.btn_edit_location = MFDButton("EDIT")
@@ -219,11 +223,11 @@ class MapLocationsPage(MFDPage):
         is_first = True
 
         self.clear_focusables()
-        if self.application.locations and len(self.application.locations) > 0:
+        if self.data_provider.locations and len(self.data_provider.locations) > 0:
 
-            self.panel.children = [self.get_header_label('Locations ({})'.format(len(self.application.locations)))]
+            self.panel.children = [self.get_header_label('Locations ({})'.format(len(self.data_provider.locations)))]
 
-            for l in self.application.locations:
+            for l in self.data_provider.locations:
 
                 item = TextMenuItem(self.display, self, '{}: {}, {}'.format(l.name, l.lat, l.lng))
                 item.font = self.display.fonts.list
@@ -274,7 +278,7 @@ class MapLocationsPage(MFDPage):
 
     def render(self):
 
-        if not self.application.locations or len(self.application.locations) < 0:
+        if not self.data_provider.locations or len(self.data_provider.locations) < 0:
             self.center_text("NO LOCATIONS DEFINED")
         else:
             return super(MapLocationsPage, self).render()

@@ -100,7 +100,7 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
                 shape.render(self.display, map_context)
 
         # Render locations
-        for loc in self.map_context.app.locations:
+        for loc in self.map_context.data_provider.locations:
             sym = self.build_symbol(float(loc.lat), float(loc.lng))
             sym.name = loc.name
             pos = self.map.set_screen_position(sym, self.size, self.center)
