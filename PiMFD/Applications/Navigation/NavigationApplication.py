@@ -6,7 +6,6 @@ import pickle
 import traceback
 
 from PiMFD.Applications.Application import MFDApplication
-from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
 from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage, MapLocation, MapLocationAddPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
@@ -33,7 +32,6 @@ class NavigationApp(MFDApplication):
     locations = []
 
     map = None
-    map_context = None
     traffic = None
     btn_map = None
     btn_page = None
@@ -43,17 +41,16 @@ class NavigationApp(MFDApplication):
         super(NavigationApp, self).__init__(controller)
 
         self.map = Maps(self)
-        self.map_context = MapContext(self, self.map)
         self.traffic = MapTraffic(controller.options)
 
-        self.data_provider = NavigationDataProvider()
+        self.data_provider = NavigationDataProvider(self, self.map)
 
         self.map.output_file = controller.options.map_output_file
 
         self.map_page = MapPage(controller, self)
         self.info_page = MapInfoPage(controller, self)
-        self.locations_page = MapLocationsPage(controller, self, self.map_context, self.map_page)
-        self.weather_page = WeatherPage(controller, self, self.map_context)
+        self.locations_page = MapLocationsPage(controller, self, self.data_provider.map_context, self.map_page)
+        self.weather_page = WeatherPage(controller, self, self.data_provider.map_context)
         self.always_render_background = True
 
         # Load locations
@@ -61,7 +58,7 @@ class NavigationApp(MFDApplication):
         
         self.pages = list([self.map_page])
         self.btn_map = MFDButton(None, selected=True)
-        self.btn_page = MFDButton(self.map_context.get_page_mode_text())
+        self.btn_page = MFDButton(self.data_provider.map_context.get_page_mode_text())
         self.btn_info = MFDButton("INFO", enabled=False)
         self.btn_goto = MFDButton("GOTO")
         self.btn_back = MFDButton("BACK")
@@ -73,8 +70,8 @@ class NavigationApp(MFDApplication):
         if self.active_page is self.map_page:
 
             self.btn_map.text = self.map_page.get_button_text()
-            self.btn_page.text = self.map_context.get_page_mode_text()
-            self.btn_info.enabled = self.map_context.cursor_context
+            self.btn_page.text = self.data_provider.map_context.get_page_mode_text()
+            self.btn_info.enabled = self.data_provider.map_context.cursor_context
 
             return [self.btn_map, self.btn_page, self.btn_info, self.btn_goto]
 
@@ -98,12 +95,12 @@ class NavigationApp(MFDApplication):
         if self.active_page is self.map_page:
 
             if index == 0:
-                self.map_context.next_map_mode()
+                self.data_provider.map_context.next_map_mode()
             elif index == 1:
-                self.map_context.next_page_mode()
+                self.data_provider.map_context.next_page_mode()
             elif index == 2:
-                if self.map_context.cursor_context:
-                    if not self.map_context.cursor_context.has_tag('weather'):
+                if self.data_provider.map_context.cursor_context:
+                    if not self.data_provider.map_context.cursor_context.has_tag('weather'):
                         self.select_page(self.info_page)
                     else:
                         self.select_page(self.weather_page)
@@ -121,7 +118,7 @@ class NavigationApp(MFDApplication):
 
             elif index == 2:  # Save
                 add_page = MapLocationAddPage(self.controller, self, self.map_page)
-                add_page.set_values_from_context(self.map_context.cursor_context)
+                add_page.set_values_from_context(self.data_provider.map_context.cursor_context)
                 self.select_page(add_page)
 
     def get_default_page(self):
@@ -175,7 +172,7 @@ class NavigationApp(MFDApplication):
                     lat = self.controller.options.lat
                     lng = self.controller.options.lng
 
-            self.map.fetch_by_coordinate(lat, lng, self.map_context.map_zoom)
+            self.map.fetch_by_coordinate(lat, lng, self.data_provider.map_context.map_zoom)
 
         self.initialized = True
 
@@ -209,27 +206,27 @@ class NavigationApp(MFDApplication):
         offset = self.display.get_content_center()
 
         # Figure out the Lat / Lng
-        pos = self.map_context.cursor_pos
+        pos = self.data_provider.map_context.cursor_pos
         lat, lng = self.map.translate_x_y_to_lat_lng(pos[0], pos[1], dim_coef=dim_coef, offset=offset)
 
         # Get the map data
         self.get_map_data(lat=lat, lng=lng)
 
         # Recenter the Cursor
-        self.map_context.cursor_pos = self.display.get_content_center()
+        self.data_provider.map_context.cursor_pos = self.display.get_content_center()
 
     def zoom_in(self):
 
-        if self.map_context.zoom_in():
+        if self.data_provider.map_context.zoom_in():
             self.get_map_data_on_current_cursor_pos()
 
     def zoom_out(self):
 
-        if self.map_context.zoom_out():
+        if self.data_provider.map_context.zoom_out():
             self.get_map_data()
 
     def next_map_mode(self):
-        self.map_context.next_map_mode()
+        self.data_provider.map_context.next_map_mode()
         
     def add_location(self, location):
         self.locations.append(location)

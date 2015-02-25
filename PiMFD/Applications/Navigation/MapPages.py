@@ -21,11 +21,11 @@ class MapPage(MFDPage):
     def __init__(self, controller, application):
         super(MapPage, self).__init__(controller, application)
 
-        self.map_renderer = MapRenderer(application.map, controller.display, application.map_context)
-        self.context = application.map_context
+        self.map_renderer = MapRenderer(application.map, controller.display, application.data_provider)
+        self.context = application.data_provider.map_context
 
     def get_button_text(self):
-        return self.application.map_context.active_filter.get_button_text()
+        return self.application.data_provider.map_context.active_filter.get_button_text()
 
     def render(self):
 
@@ -99,7 +99,7 @@ class MapInfoPage(MFDPage):
     def __init__(self, controller, application):
         super(MapInfoPage, self).__init__(controller, application)
 
-        self.map_context = application.map_context
+        self.map_context = application.data_provider.map_context
         self.lbl_header = self.get_header_label('{}')
         self.lbl_pos = self.get_label("GPS: {}, {}")
         self.pnl_tags = StackPanel(controller.display, self)
