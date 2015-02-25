@@ -21,6 +21,7 @@ class NavigationDataProvider(DataProvider):
 
         self.application = application
         self.options = application.controller.options
+        self.display = application.display
 
         self.map = Maps(self)
         self.map.output_file = self.options.map_output_file
@@ -52,3 +53,23 @@ class NavigationDataProvider(DataProvider):
             self.map.fetch_by_coordinate(lat, lng, self.map_context.map_zoom)
 
         self.initialized = True
+
+    def next_map_mode(self):
+        self.map_context.next_map_mode()
+
+    def get_map_data_on_current_cursor_pos(self):
+
+        # Build precursors that are needed for the map
+        dim_coef = self.map.get_dimension_coefficients(
+            (self.display.bounds.width, self.display.bounds.height))
+        offset = self.display.get_content_center()
+
+        # Figure out the Lat / Lng
+        pos = self.map_context.cursor_pos
+        lat, lng = self.map.translate_x_y_to_lat_lng(pos[0], pos[1], dim_coef=dim_coef, offset=offset)
+
+        # Get the map data
+        self.get_map_data(lat=lat, lng=lng)
+
+        # Recenter the Cursor
+        self.map_context.cursor_pos = self.display.get_content_center()

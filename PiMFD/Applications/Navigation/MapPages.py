@@ -22,14 +22,15 @@ class MapPage(MFDPage):
         super(MapPage, self).__init__(controller, application)
 
         self.map_renderer = MapRenderer(controller.display, application.data_provider)
-        self.context = application.data_provider.map_context
+        self.data_provider = application.data_provider
+        self.context = self.data_provider.map_context
 
     def get_button_text(self):
         return self.application.data_provider.map_context.active_filter.get_button_text()
 
     def render(self):
 
-        if self.application.data_provider.map.has_data:
+        if self.data_provider.map.has_data:
             self.map_renderer.render()
         else:
             self.center_text(self.context.map.status_text.upper())
@@ -37,7 +38,7 @@ class MapPage(MFDPage):
         return super(MapPage, self).render()
 
     def handle_reselected(self):
-        self.application.next_map_mode()
+        self.context.next_map_mode()
         super(MapPage, self).handle_reselected()
 
     def handle_mouse_left_click(self, pos):
@@ -52,11 +53,11 @@ class MapPage(MFDPage):
     def handle_key(self, key):
 
         if key == Keycodes.KEY_KP_PLUS or key == Keycodes.KEY_PLUS or key == Keycodes.KEY_PAGEUP:
-            self.application.zoom_in()
+            self.context.zoom_in()
             return True
 
         elif key == Keycodes.KEY_KP_MINUS or key == Keycodes.KEY_MINUS or key == Keycodes.KEY_PAGEDOWN:
-            self.application.zoom_out()
+            self.context.zoom_out()
             return True
 
         elif is_up_key(key):

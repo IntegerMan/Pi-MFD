@@ -176,36 +176,6 @@ class NavigationApp(MFDApplication):
     def weather_received(self, location, weather):
         self.data_provider.map.weather_data = weather
 
-    def get_map_data_on_current_cursor_pos(self):
-
-        # Build precursors that are needed for the map
-        dim_coef = self.data_provider.map.get_dimension_coefficients(
-            (self.display.bounds.width, self.display.bounds.height))
-        offset = self.display.get_content_center()
-
-        # Figure out the Lat / Lng
-        pos = self.data_provider.map_context.cursor_pos
-        lat, lng = self.data_provider.map.translate_x_y_to_lat_lng(pos[0], pos[1], dim_coef=dim_coef, offset=offset)
-
-        # Get the map data
-        self.data_provider.get_map_data(lat=lat, lng=lng)
-
-        # Recenter the Cursor
-        self.data_provider.map_context.cursor_pos = self.display.get_content_center()
-
-    def zoom_in(self):
-
-        if self.data_provider.map_context.zoom_in():
-            self.get_map_data_on_current_cursor_pos()
-
-    def zoom_out(self):
-
-        if self.data_provider.map_context.zoom_out():
-            self.data_provider.get_map_data()
-
-    def next_map_mode(self):
-        self.data_provider.map_context.next_map_mode()
-        
     def add_location(self, location):
         self.locations.append(location)
         self.save_locations()

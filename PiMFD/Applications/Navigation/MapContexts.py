@@ -81,6 +81,8 @@ class MapContext(object):
         else:
             return False
 
+        self.data_provider.get_map_data_on_current_cursor_pos()
+
         return True
 
     def zoom_out(self):
@@ -92,6 +94,8 @@ class MapContext(object):
             self.map_zoom = self.zooms.large
         else:
             return False
+
+        self.data_provider.get_map_data()
 
         return True
 
