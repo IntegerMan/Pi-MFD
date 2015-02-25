@@ -21,7 +21,7 @@ class MapPage(MFDPage):
     def __init__(self, controller, application):
         super(MapPage, self).__init__(controller, application)
 
-        self.map_renderer = MapRenderer(application.map, controller.display, application.data_provider)
+        self.map_renderer = MapRenderer(controller.display, application.data_provider)
         self.context = application.data_provider.map_context
 
     def get_button_text(self):
@@ -29,7 +29,7 @@ class MapPage(MFDPage):
 
     def render(self):
 
-        if self.application.map.has_data:
+        if self.application.data_provider.map.has_data:
             self.map_renderer.render()
         else:
             self.center_text(self.context.map.status_text.upper())

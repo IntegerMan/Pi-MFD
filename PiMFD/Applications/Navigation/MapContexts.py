@@ -41,11 +41,12 @@ class MapContext(object):
 
     tag_handlers = None
 
-    def __init__(self, app, map):
+    def __init__(self, app, map, data_provider):
         super(MapContext, self).__init__()
 
         self.app = app
         self.map = map
+        self.data_provider = data_provider
         self.filters = (StandardMapFilter(self),
                         GasMapFilter(self),
                         FoodMapFilter(self),
@@ -154,7 +155,7 @@ class MapContext(object):
         if self.map.has_data and self.allow_move:
             bounds = self.map.bounds
             size = (bounds[3] - bounds[1]) * self.y_page_multiplier * self.move_multiplier
-            self.app.get_map_data([bounds[0], bounds[1] + size, bounds[2], bounds[3] + size])
+            self.data_provider.get_map_data([bounds[0], bounds[1] + size, bounds[2], bounds[3] + size])
         elif self.should_show_cursor():
             self.cursor_pos = self.cursor_pos[0], self.cursor_pos[1] - self.cursor_speed
 
@@ -162,7 +163,7 @@ class MapContext(object):
         if self.map.has_data and self.allow_move:
             bounds = self.map.bounds
             size = (bounds[2] - bounds[0]) * self.x_page_multiplier * self.move_multiplier
-            self.app.get_map_data([bounds[0] + size, bounds[1], bounds[2] + size, bounds[3]])
+            self.data_provider.get_map_data([bounds[0] + size, bounds[1], bounds[2] + size, bounds[3]])
         elif self.should_show_cursor():
             self.cursor_pos = self.cursor_pos[0] + self.cursor_speed, self.cursor_pos[1]
 
@@ -170,7 +171,7 @@ class MapContext(object):
         if self.map.has_data and self.allow_move:
             bounds = self.map.bounds
             size = (bounds[2] - bounds[0]) * self.x_page_multiplier * self.move_multiplier
-            self.app.get_map_data([bounds[0] - size, bounds[1], bounds[2] - size, bounds[3]])
+            self.data_provider.get_map_data([bounds[0] - size, bounds[1], bounds[2] - size, bounds[3]])
         elif self.should_show_cursor():
             self.cursor_pos = self.cursor_pos[0] - self.cursor_speed, self.cursor_pos[1]
 
@@ -178,7 +179,7 @@ class MapContext(object):
         if self.map.has_data and self.allow_move:
             bounds = self.map.bounds
             size = (bounds[3] - bounds[1]) * self.y_page_multiplier * self.move_multiplier
-            self.app.get_map_data([bounds[0], bounds[1] - size, bounds[2], bounds[3] - size])
+            self.data_provider.get_map_data([bounds[0], bounds[1] - size, bounds[2], bounds[3] - size])
         elif self.should_show_cursor():
             self.cursor_pos = self.cursor_pos[0], self.cursor_pos[1] + self.cursor_speed
 

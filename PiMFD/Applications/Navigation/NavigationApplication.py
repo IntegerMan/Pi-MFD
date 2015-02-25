@@ -8,7 +8,6 @@ import traceback
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
 from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage, MapLocation, MapLocationAddPage
-from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 from PiMFD.Applications.Navigation.NavigationDataProvider import NavigationDataProvider
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
@@ -31,7 +30,6 @@ class NavigationApp(MFDApplication):
 
     locations = []
 
-    map = None
     traffic = None
     btn_map = None
     btn_page = None
@@ -40,12 +38,9 @@ class NavigationApp(MFDApplication):
     def __init__(self, controller):
         super(NavigationApp, self).__init__(controller)
 
-        self.map = Maps(self)
         self.traffic = MapTraffic(controller.options)
 
-        self.data_provider = NavigationDataProvider(self, self.map)
-
-        self.map.output_file = controller.options.map_output_file
+        self.data_provider = NavigationDataProvider(self)
 
         self.map_page = MapPage(controller, self)
         self.info_page = MapInfoPage(controller, self)
@@ -143,47 +138,29 @@ class NavigationApp(MFDApplication):
         super(NavigationApp, self).page_reselected(page)
 
     def handle_reselected(self):
-        self.get_map_data()
+        self.data_provider.get_map_data()
         super(NavigationApp, self).handle_reselected()
 
     def handle_selected(self):
         """
         Handles the selected event for this application.
         """
-        if not self.initialized:
-            self.get_map_data()
+        if not self.data_provider.initialized:
+            self.data_provider.get_map_data()
             
     def show_map(self, lat, lng):
         
         self.select_page(self.map_page)
-        self.get_map_data(lat=lat, lng=lng)
-
-    def get_map_data(self, bounds=None, lat=None, lng=None):
-
-        if bounds:
-            self.map.fetch_area([bounds[0], bounds[1], bounds[2], bounds[3]])
-        else:
-
-            if not lat or not lng:
-                if self.map.bounds:
-                    lat = ((self.map.bounds[3] - self.map.bounds[1]) / 2.0) + self.map.bounds[1]
-                    lng = ((self.map.bounds[2] - self.map.bounds[0]) / 2.0) + self.map.bounds[0]
-                else:
-                    lat = self.controller.options.lat
-                    lng = self.controller.options.lng
-
-            self.map.fetch_by_coordinate(lat, lng, self.data_provider.map_context.map_zoom)
-
-        self.initialized = True
+        self.data_provider.get_map_data(lat=lat, lng=lng)
 
     def map_loaded(self, bounds):
 
         if bounds:
-            self.traffic.get_traffic(bounds, self.map)
+            self.traffic.get_traffic(bounds, self.data_provider.map)
 
         # Find the first zip code
         zipcode = None
-        for shape in self.map.shapes:
+        for shape in self.data_provider.map.shapes:
             zipcode = shape.get_tag_value('addr:postcode')
             if not zipcode:
                 zipcode = shape.get_tag_value('tiger:zip_left')
@@ -197,20 +174,21 @@ class NavigationApp(MFDApplication):
             self.controller.get_weather_data(zipcode, consumer=self)
 
     def weather_received(self, location, weather):
-        self.map.weather_data = weather
+        self.data_provider.map.weather_data = weather
 
     def get_map_data_on_current_cursor_pos(self):
 
         # Build precursors that are needed for the map
-        dim_coef = self.map.get_dimension_coefficients((self.display.bounds.width, self.display.bounds.height))
+        dim_coef = self.data_provider.map.get_dimension_coefficients(
+            (self.display.bounds.width, self.display.bounds.height))
         offset = self.display.get_content_center()
 
         # Figure out the Lat / Lng
         pos = self.data_provider.map_context.cursor_pos
-        lat, lng = self.map.translate_x_y_to_lat_lng(pos[0], pos[1], dim_coef=dim_coef, offset=offset)
+        lat, lng = self.data_provider.map.translate_x_y_to_lat_lng(pos[0], pos[1], dim_coef=dim_coef, offset=offset)
 
         # Get the map data
-        self.get_map_data(lat=lat, lng=lng)
+        self.data_provider.get_map_data(lat=lat, lng=lng)
 
         # Recenter the Cursor
         self.data_provider.map_context.cursor_pos = self.display.get_content_center()
@@ -223,7 +201,7 @@ class NavigationApp(MFDApplication):
     def zoom_out(self):
 
         if self.data_provider.map_context.zoom_out():
-            self.get_map_data()
+            self.data_provider.get_map_data()
 
     def next_map_mode(self):
         self.data_provider.map_context.next_map_mode()

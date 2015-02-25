@@ -122,13 +122,14 @@ class Maps(object):
     lat = None
     lng = None
 
-    def __init__(self, application):
+    def __init__(self, data_provider):
         super(Maps, self).__init__()
 
         self.shapes = []
         self.annotations = []
         self.nodes = []
-        self.application = application
+        self.application = data_provider.application
+        self.data_provider = data_provider
 
     def float_floor_to_precision(self, value, precision):
         for i in range(precision):

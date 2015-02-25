@@ -12,8 +12,8 @@ class MapRenderer(object):  # TODO: Maybe this should be a UIWidget?
     A class used to render a Map object
     """
 
-    def __init__(self, map, display, data_provider, size=(200, 200)):
-        self.map = map
+    def __init__(self, display, data_provider, size=(200, 200)):
+        self.map = data_provider.map
         self.display = display
         self.center = display.get_content_center()
         self.size = size
