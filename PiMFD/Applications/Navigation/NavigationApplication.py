@@ -11,6 +11,7 @@ from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
 from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage, MapLocation, MapLocationAddPage
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
+from PiMFD.Applications.Navigation.NavigationDataProvider import NavigationDataProvider
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
 from PiMFD.UI.Button import MFDButton
 
@@ -44,6 +45,8 @@ class NavigationApp(MFDApplication):
         self.map = Maps(self)
         self.map_context = MapContext(self, self.map)
         self.traffic = MapTraffic(controller.options)
+
+        self.data_provider = NavigationDataProvider()
 
         self.map.output_file = controller.options.map_output_file
 
@@ -264,6 +267,12 @@ class NavigationApp(MFDApplication):
             default_location = MapLocation('Default Location', self.controller.options.lat, self.controller.options.lng)
             self.locations = [default_location]
 
+    def initialize(self):
 
-        
+        self.controller.register_data_provider(self.data_provider)
+
+        super(NavigationApp, self).initialize()
+
+
+    
 
