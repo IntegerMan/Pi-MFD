@@ -26,6 +26,8 @@ class MapPage(MFDPage):
         self.context = self.data_provider.map_context
 
     def get_button_text(self):
+        
+        # TODO: Oh my gosh...
         return self.application.data_provider.map_context.active_filter.get_button_text()
 
     def render(self):
@@ -36,10 +38,6 @@ class MapPage(MFDPage):
             self.center_text(self.context.map.status_text.upper())
 
         return super(MapPage, self).render()
-
-    def handle_reselected(self):
-        self.context.next_map_mode()
-        super(MapPage, self).handle_reselected()
 
     def handle_mouse_left_click(self, pos):
 
