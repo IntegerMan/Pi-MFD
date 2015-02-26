@@ -4,10 +4,14 @@
 This file contains a data provider for navigation-related items.
 """
 import pickle
+import traceback
+
 from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapLoading import Maps
+from PiMFD.Applications.Navigation.MapLocations import MapLocation
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 from PiMFD.DataProvider import DataProvider
+
 
 __author__ = 'Matt Eland'
 
@@ -123,5 +127,5 @@ class NavigationDataProvider(DataProvider):
 
         # set some default values
         if not self.locations or len(self.locations) <= 0:
-            default_location = MapLocation('Default Location', self.controller.options.lat, self.controller.options.lng)
+            default_location = MapLocation('Default Location', self.options.lat, self.options.lng)
             self.locations = [default_location]
