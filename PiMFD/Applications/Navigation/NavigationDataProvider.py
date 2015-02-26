@@ -35,6 +35,8 @@ class NavigationDataProvider(DataProvider):
         self.traffic = MapTraffic(self.options)
         self.traffic_incidents = None
         self.traffic_widgets = None
+        
+        self.loading_maps_widget = None
 
         self.requested_data = False
         
@@ -61,7 +63,6 @@ class NavigationDataProvider(DataProvider):
 
     def get_dashboard_widgets(self, display, page):
 
-
         if self.traffic_incidents and not self.traffic_widgets:
 
             widgets = []
@@ -74,10 +75,25 @@ class NavigationDataProvider(DataProvider):
 
                 widget = TextDashboardWidget(display, page, incident.name, desc)
                 widget.data_context = incident
-                widget.status = DashboardStatus.Critical
+
+                widget.status = DashboardStatus.Caution
+                if incident.severity:
+                    sev = float(incident.severity) 
+                    if sev <= 1:
+                        widget.status = DashboardStatus.Passive
+                    elif sev >= 4:
+                        widget.status = DashboardStatus.Critical
+                    
                 widgets.append(widget)
 
             self.traffic_widgets = widgets
+            
+        if not self.traffic_widgets:
+            
+            if not self.loading_maps_widget:
+                self.loading_maps_widget = TextDashboardWidget(display, page, "Maps", "Loading Data...")
+                
+            return [self.loading_maps_widget]
 
         return self.traffic_widgets
 
