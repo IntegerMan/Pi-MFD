@@ -133,6 +133,7 @@ class TextDashboardWidget(DashboardWidget):
         self.title = title
         self.value = value
         self.width = 150
+        self.value_font = display.fonts.list
 
         self.panel = StackPanel(display, page)
 
@@ -173,6 +174,7 @@ class TextDashboardWidget(DashboardWidget):
     def arrange(self):
         self.lbl_title.text = self.title
         self.lbl_value.text = self.value
+        self.lbl_value.font = self.value_font
 
         self.panel.arrange()
         self.desired_size = 150 + (self.padding * 2), self.panel.desired_size[1] + (self.padding * 2)

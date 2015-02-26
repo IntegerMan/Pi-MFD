@@ -31,12 +31,13 @@ class TrafficIncident(MapSymbol):
 
 
 class TrafficFetchThread(Thread):
-    def __init__(self, bounds, map, options, group=None, target=None, name=None, args=(), kwargs=None, verbose=None):
+    def __init__(self, bounds, data_provider, options, group=None, target=None, name=None, args=(), kwargs=None,
+                 verbose=None):
         super(TrafficFetchThread, self).__init__(group, target, name, args, kwargs, verbose)
 
         self.bounds = bounds
-        self.map = map
         self.options = options
+        self.data_provider = data_provider
 
     def run(self):
         super(TrafficFetchThread, self).run()
@@ -44,10 +45,10 @@ class TrafficFetchThread(Thread):
         bounds = self.bounds
 
         url = "http://dev.virtualearth.net/REST/v1/Traffic/Incidents/%f,%f,%f,%f?key=%s" % (
-            bounds[1],
-            bounds[2],
-            bounds[3],
-            bounds[0],
+            bounds[1] - 0.1,
+            bounds[2] - 0.1,
+            bounds[3] + 0.1,
+            bounds[0] + 0.1,
             self.options.bing_maps_key
         )
 
@@ -116,15 +117,23 @@ class TrafficFetchThread(Thread):
 
                     incident.add_tag('incident', incident.incident_type)
                     if incident.end:
-                        incident.add_tag('end_date', strftime('%m/%d/%Y', incident.end))
+                        incident.end_date = strftime('%m/%d/%Y', incident.end)
+                        incident.add_tag('end_date', incident.end_date)
+                    else:
+                        incident.end_date = 'No End Date'
+                        
                     if incident.start:
-                        incident.add_tag('start_date', strftime('%m/%d/%Y', incident.start))
+                        incident.start_date = strftime('%m/%d/%Y', incident.start)
+                        incident.add_tag('start_date', incident.start_date)
+                    else:
+                        incident.start_date = 'No Start Date'
+                        
                     incident.add_tag('note', incident.description)
                     incident.add_tag('severity', incident.severity)
 
                     incidents.append(incident)
 
-        self.map.handle_traffic_data(incidents)
+        self.data_provider.handle_traffic_data(incidents)
 
     @staticmethod
     def get_safe_value(res, key):
@@ -150,10 +159,10 @@ class MapTraffic(object):
 
         self.options = options
 
-    def get_traffic(self, bounds, map):
+    def get_traffic(self, bounds, data_provider):
         if not self.options.bing_maps_key:
             return None
 
-        fetch = TrafficFetchThread(bounds, map, self.options)
+        fetch = TrafficFetchThread(bounds, data_provider, self.options)
         fetch.start()
 

@@ -11,6 +11,7 @@ from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.MapLocations import MapLocation
 from PiMFD.Applications.Navigation.NavLayers.TrafficLoading import MapTraffic
 from PiMFD.DataProvider import DataProvider
+from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus
 
 
 __author__ = 'Matt Eland'
@@ -32,6 +33,8 @@ class NavigationDataProvider(DataProvider):
         self.display = application.display
         
         self.traffic = MapTraffic(self.options)
+        self.traffic_incidents = None
+        self.traffic_widgets = None
         
         self.locations = None
         
@@ -51,7 +54,26 @@ class NavigationDataProvider(DataProvider):
         super(NavigationDataProvider, self).update(now)
 
     def get_dashboard_widgets(self, display, page):
-        super(NavigationDataProvider, self).get_dashboard_widgets(display, page)
+
+
+        if self.traffic_incidents and not self.traffic_widgets:
+
+            widgets = []
+
+            for incident in self.traffic_incidents:
+                if incident.description:
+                    desc = incident.description[0:15]
+                else:
+                    desc = 'End: ' + incident.end_date
+
+                widget = TextDashboardWidget(display, page, incident.name, desc)
+                widget.data_context = incident
+                widget.status = DashboardStatus.Critical
+                widgets.append(widget)
+
+            self.traffic_widgets = widgets
+
+        return self.traffic_widgets
 
     def get_map_data(self, bounds=None, lat=None, lng=None):
 
@@ -92,7 +114,13 @@ class NavigationDataProvider(DataProvider):
         self.map_context.cursor_pos = self.display.get_content_center()
 
     def get_traffic(self, bounds):
-        self.traffic.get_traffic(bounds, self.map)
+        self.traffic.get_traffic(bounds, self)
+
+    def handle_traffic_data(self, incidents):
+
+        self.traffic_widgets = None
+        self.traffic_incidents = incidents
+        self.map.handle_traffic_data(incidents)
 
     def add_location(self, location):
         self.locations.append(location)
