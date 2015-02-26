@@ -35,6 +35,8 @@ class NavigationDataProvider(DataProvider):
         self.traffic = MapTraffic(self.options)
         self.traffic_incidents = None
         self.traffic_widgets = None
+
+        self.requested_data = False
         
         self.locations = None
         
@@ -50,6 +52,10 @@ class NavigationDataProvider(DataProvider):
         # Load locations if needed
         if not self.locations:
             self.load_locations()
+
+        if not self.map.has_data and not self.requested_data:
+            self.get_map_data()
+            self.requested_data = True
 
         super(NavigationDataProvider, self).update(now)
 

@@ -139,20 +139,6 @@ class Maps(object):
             value /= 10
         return value
 
-    def fetch_grid(self, coords):
-        # lat = self.float_floor_to_precision(coords[0], self.SIG_PLACES)
-        # lng = self.float_floor_to_precision(coords[1], self.SIG_PLACES)
-        # print lat, lng
-        lat = coords[0]
-        lng = coords[1]
-
-        return self.fetch_area([
-            lat - self.GRID_SIZE,
-            lng - self.GRID_SIZE,
-            lat + self.GRID_SIZE,
-            lng + self.GRID_SIZE
-        ])
-
     def fetch_area(self, bounds):
         self.status_text = "Loading Map Data..."
 
