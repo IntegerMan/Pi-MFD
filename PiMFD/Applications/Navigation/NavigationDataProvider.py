@@ -35,8 +35,6 @@ class NavigationDataProvider(DataProvider):
         self.traffic = MapTraffic(self.options)
         self.traffic_incidents = None
         self.traffic_widgets = None
-        
-        self.loading_maps_widget = None
 
         self.requested_data = False
         
@@ -88,13 +86,6 @@ class NavigationDataProvider(DataProvider):
 
             self.traffic_widgets = widgets
             
-        if not self.traffic_widgets:
-            
-            if not self.loading_maps_widget:
-                self.loading_maps_widget = TextDashboardWidget(display, page, "Maps", "Loading Data...")
-                
-            return [self.loading_maps_widget]
-
         return self.traffic_widgets
 
     def get_map_data(self, bounds=None, lat=None, lng=None):
