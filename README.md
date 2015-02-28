@@ -59,6 +59,12 @@ The top row relates to the current application or application silo and allows us
 The bottom row relates to pages inside the current application stack.
 Pressing on a page when it is already selected will allow the user to 
 
+### Left Side
+The left side buttons are currently unsupported
+
+### Right Side
+The right side buttons are currently unsupported
+
 ### Number Pad
 The number pad allows for interaction with the current page, including navigating up, down, left, right, and selecting items.
 The keypad will not allow users to select items on the top or bottom row.
@@ -68,23 +74,37 @@ Pi-MFD is planned to integrate several disparate application modules and display
 
 Applications and their pages are listed as follows:
 
-### System (SYS)
+### Core (CORE)
+Contains core application functionality intertwining the entire system.
 
-#### System Time (TIME)
-Displays the current time in system and GMT time.
+#### Home (HOME)
+Contains information dashboard widgets from all applications.
 
-#### Performance (PERF)  - Planned
-Displays performance metrics for the WMI computer being monitored.
+#### Info (INFO)
+Displays system information.
 
-#### Service (SRVC)
-Lists active services on the WMI computer being monitored.
-
-#### Network (NET) - Planned
 #### Options (OPTS)
 Allows you to customize application options.
 
 #### Exit (EXIT)
 Exits the application
+
+### System (SYS)
+
+#### Performance (PERF)
+Displays performance metrics for the application.
+
+#### Drives (DRVS)
+Displays disk drives detected and allows you to drill down into a drive.
+
+#### Service (SRVC)
+Lists active services on the WMI computer being monitored. This requires a workable WMI. 
+
+#### Processes (PROC)
+Lists active process on the machine and allows the user to drill down into more details.
+
+#### Connections (CONN)
+Lists active network connections on the machine and allows the user to jump to the process associated with the connection.
 
 ### Navigation (NAV)
 Displays a representation of the world map using OpenStreetMaps data based on the Lat / Long configured in the settings
@@ -99,30 +119,13 @@ interval tag will auto-refresh (useful for traffic and weather cameras).
 
 Traffic accidents and construction from Bing Maps will be displayed.
 
+GOTO allows the user to manage locations and jump to specific locations as well as add, delete, and edit locations.
+
 ### Scheduling (SCH)
+The scheduling application contains components related to scheduling, communication, and notification.
+
 #### Tasks (TASK) - Planned
 #### Mail (MAIL) - Planned
 #### Calendar (CAL) - Planned
 #### Weather (WTHR)
 Displays current weather conditions and a 5 day forecast.
-
-## Future Integrations
-
-### Raspberry Pi
-
-Pi-MFD is currently planned to expand to allow handling of GPIO devices as button handlers and to allow for deployment 
-to Android.
-
-Hardware buttons are currently simulated as F1-F5 for top row buttons and F8-F12 for bottom row buttons. F6 and F7 are
-reserved for future expansion.
-
-### Resolution Support
-
-The application is currently designed for 800 x 480 as this is the prime deployment target, but support for smaller
-displays is planned (down to 320 x 320) as is dynamic resizing.
-
-### User Interface Improvements
-
-The UI framework is very basic at the moment and has notable shortcomings, including mouse, clipboard, and standard
-input convention support such as cursors for text boxes and similar touches. This is since mouse and keyboard are
-currently treated as second class citizens compared to the hardware buttons that will be in the initial deployment.
