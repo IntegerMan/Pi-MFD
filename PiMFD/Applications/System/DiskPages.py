@@ -180,6 +180,8 @@ class DiskDrivesPage(MFDPage):
             elif self.selected_device and self.selected_device == drive.device:
                 self.set_focus(mi, play_sound=False)
 
+        self.last_refresh = datetime.now()
+
     def set_focus(self, widget, play_sound=True):
         
         if widget and widget.data_context:
@@ -194,6 +196,10 @@ class DiskDrivesPage(MFDPage):
         Arranges the control to the page
         :return: The desired size of the page
         """
+
+        if (len(self.panel.children) <= 1 and self.application.data_provider.partitions) or (
+            datetime.now() - self.last_refresh).seconds > 60:
+            self.refresh()
             
         return super(DiskDrivesPage, self).arrange()
 

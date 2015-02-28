@@ -171,6 +171,7 @@ class ProcessPage(MFDPage):
     def __init__(self, controller, application, auto_scroll=True):
         super(ProcessPage, self).__init__(controller, application, auto_scroll)
 
+        self.last_refresh = datetime.now()
         self.refresh()
 
     def refresh(self,):
@@ -204,6 +205,8 @@ class ProcessPage(MFDPage):
                 self.set_focus(lbl)
                 is_first_control = False
 
+        self.last_refresh = datetime.now()
+
     def handle_control_state_changed(self, widget):
 
         process = widget.data_context
@@ -214,6 +217,11 @@ class ProcessPage(MFDPage):
         super(ProcessPage, self).handle_control_state_changed(widget)
 
     def arrange(self):
+
+        if (len(self.panel.children) <= 1 and self.application.data_provider.processes) or (
+            datetime.now() - self.last_refresh).seconds > 15:
+            self.refresh()
+        
         return super(ProcessPage, self).arrange()
 
     def render(self):

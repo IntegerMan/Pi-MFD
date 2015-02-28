@@ -1,6 +1,7 @@
 # coding=utf-8
 from _socket import SOCK_STREAM, SOCK_DGRAM, SOCK_RAW, SOCK_RDM, SOCK_SEQPACKET, AF_INET, AF_INET6, AF_APPLETALK, \
     AF_DECnet, AF_IPX, AF_IRDA, AF_SNA, AF_UNSPEC
+from datetime import datetime
 
 try:
     from psutil._common import AF_UNIX
@@ -29,6 +30,7 @@ class NetworkPage(MFDPage):
     def __init__(self, controller, application, auto_scroll=True):
         super(NetworkPage, self).__init__(controller, application, auto_scroll)
 
+        self.last_refresh = datetime.now()
         self.refresh()
 
     def refresh(self, ):
@@ -63,6 +65,8 @@ class NetworkPage(MFDPage):
             if is_first_control:
                 self.set_focus(lbl)
                 is_first_control = False
+
+        self.last_refresh = datetime.now()
 
     def handle_control_state_changed(self, widget):
 
@@ -157,6 +161,14 @@ class NetworkPage(MFDPage):
             return "SEQ Packet"
 
         return "UNK: " + str(conn_type)
+
+    def arrange(self):
+
+        if (len(self.panel.children) <= 1 and self.application.data_provider.partitions) or (
+            datetime.now() - self.last_refresh).seconds > 60:
+            self.refresh()
+
+        return super(NetworkPage, self).arrange()
 
     def render(self):
 
