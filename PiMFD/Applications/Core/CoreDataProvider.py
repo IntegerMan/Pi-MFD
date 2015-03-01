@@ -7,7 +7,7 @@ from datetime import datetime
 from time import strftime
 
 from PiMFD.DataProvider import DataProvider
-from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus
+from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, DashboardStatus, BarChartDashboardWidget
 
 
 __author__ = 'Matt Eland'
@@ -30,6 +30,7 @@ class CoreDataProvider(DataProvider):
         
         self.system_time = ''
         self.time_widget = None
+        self.fps_widget = None
 
     def update(self, now):
         super(CoreDataProvider, self).update(now)
@@ -56,4 +57,24 @@ class CoreDataProvider(DataProvider):
             
         self.time_widget.status = status
         
-        return [self.time_widget]
+        # Prepare the Frames Per Second Widget
+        
+        fps = display.clock.get_fps()
+        
+        if not self.fps_widget:
+            #  Pad a bit extra on to the Max FPS since some machines seem to render (or at least record) a bit over target
+            self.fps_widget = BarChartDashboardWidget(display, page, "FPS", value=fps, range_high=display.frames_per_second + 5)
+        else:
+            self.fps_widget.value = fps
+            
+        # Calculate Status of FPS. Keep in mind that we can target 30 or 60 FPS depending on platform
+        if fps <= 0:
+            self.fps_widget.status = DashboardStatus.Inactive
+        elif fps <= (display.frames_per_second * 0.5):
+            self.fps_widget.status = DashboardStatus.Critical
+        elif fps <= (display.frames_per_second - 5):
+            self.fps_widget.status = DashboardStatus.Caution
+        else:
+            self.fps_widget.status = DashboardStatus.Passive
+        
+        return [self.time_widget, self.fps_widget]
