@@ -31,17 +31,16 @@ class NetworkPage(MFDPage):
         super(NetworkPage, self).__init__(controller, application, auto_scroll)
 
         self.last_refresh = datetime.now()
+        self.data_provider = application.data_provider
         self.refresh()
 
     def refresh(self, ):
 
-        provider = self.application.data_provider
-
-        self.panel.children = [self.get_header_label('Connections ({})'.format(len(provider.connections))) ]
+        self.panel.children = [self.get_header_label('Connections ({})'.format(len(self.data_provider.connections)))]
 
         is_first_control = True
 
-        for c in provider.connections:
+        for c in self.data_provider.connections:
 
             family = self.get_connection_family_text(c.family)
             conn_type = self.get_connection_type_text(c.type)
@@ -50,11 +49,11 @@ class NetworkPage(MFDPage):
             status = c.status
             pid = self.get_process_text(c.pid)
 
-            if local_address == remote_address:                
+            if local_address == remote_address:
                 address_text = remote_address
             else:
                 address_text = "{}({})".format(remote_address, local_address)
-                
+
             text = "{} {} {}/{} {}".format(status, address_text, conn_type, family, pid)
 
             lbl = TextMenuItem(self.controller.display, self, text)
@@ -73,9 +72,9 @@ class NetworkPage(MFDPage):
         conn = widget.data_context
         if conn:
             self.application.navigate_to_process(conn.pid)
-            
+
         super(NetworkPage, self).handle_control_state_changed(widget)
-        
+
     @staticmethod
     def get_address_text(address):
         """
@@ -85,14 +84,14 @@ class NetworkPage(MFDPage):
         """
         if address is None:
             return ""
-        
+
         if isinstance(address, tuple):
             if len(address) <= 0:
                 return ""
-            
+
             if len(address) >= 2:
                 return "{}:{}".format(address[0], address[1])
-        
+
         return str(address)
 
     @staticmethod
@@ -116,7 +115,7 @@ class NetworkPage(MFDPage):
         """
         if family is None:
             return "UNK"
-        
+
         if family == AF_INET:
             return "INET"
         elif family == AF_INET6:
@@ -135,9 +134,9 @@ class NetworkPage(MFDPage):
             return "SNA"
         elif family == AF_UNSPEC:
             return "UNSPEC"
-        
+
         return "UNK:" + str(family)
-    
+
     @staticmethod
     def get_connection_type_text(conn_type):
         """
@@ -145,7 +144,7 @@ class NetworkPage(MFDPage):
         :param conn_type: The connection type
         :return: The connection type
         """
-        
+
         if conn_type is None:
             return "None"
 
@@ -164,17 +163,17 @@ class NetworkPage(MFDPage):
 
     def arrange(self):
 
-        if (len(self.panel.children) <= 1 and self.application.data_provider.partitions) or (
-            datetime.now() - self.last_refresh).seconds > 60:
+        num_children = len(self.panel.children)
+        if (num_children <= 1 and self.data_provider.partitions) or (datetime.now() - self.last_refresh).seconds > 60:
             self.refresh()
 
         return super(NetworkPage, self).arrange()
 
     def render(self):
 
-        if not self.application.data_provider.has_psutil:
+        if not self.data_provider.has_psutil:
             self.center_text("System Monitoring Offline")
-        elif not self.application.data_provider.connections:
+        elif not self.data_provider.connections:
             self.center_text("ACCESS DENIED")
 
         return super(NetworkPage, self).render()
