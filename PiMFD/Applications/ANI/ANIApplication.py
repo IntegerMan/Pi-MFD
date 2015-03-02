@@ -4,6 +4,7 @@
 This file contains a definition for the ANI application
 """
 from PiMFD.Applications.ANI.ANIDataProvider import ANIDataProvider
+from PiMFD.Applications.ANI.DataCategoriesPage import DataCategoriesPage
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 
@@ -21,8 +22,8 @@ class ANIApplication(MFDApplication):
         super(ANIApplication, self).__init__(controller)
         
         self.data_provider = ANIDataProvider("ANI Data Provider")
-        
-        self.data_page = SimpleMessagePage(controller, self, "DATA")
+
+        self.data_page = DataCategoriesPage(controller, self)
         self.options_page = SimpleMessagePage(controller, self, "OPTS")
 
     def handle_reselected(self):
