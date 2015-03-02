@@ -46,5 +46,3 @@ class ANIApplication(MFDApplication):
             self.select_page(self.options_page)
         
         super(ANIApplication, self).select_page_by_index(index)
-    
-    
