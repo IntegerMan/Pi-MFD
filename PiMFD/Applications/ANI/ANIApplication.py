@@ -9,9 +9,11 @@ from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 
 __author__ = 'Matt Eland'
 
+
 class ANIApplication(MFDApplication):
 
     data_provider = None
+    
     data_page = None
     options_page = None
 
