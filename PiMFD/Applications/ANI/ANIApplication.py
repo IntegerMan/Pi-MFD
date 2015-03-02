@@ -39,7 +39,11 @@ class ANIApplication(MFDApplication):
         return self.data_page
 
     def get_buttons(self):
-        return [self.data_page.get_button(), self.options_page.get_button()]
+        
+        if self.active_page in [self.data_page, self.options_page, None] or not self.active_page:
+            return [self.data_page.get_button(), self.options_page.get_button()]
+        else:
+            return self.active_page.get_lower_buttons()
 
     def select_page_by_index(self, index):
         

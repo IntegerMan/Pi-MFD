@@ -4,7 +4,7 @@
 This file contains a definition for the data categories page
 """
 from PiMFD.Applications.MFDPage import MFDPage
-from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
+from PiMFD.Applications.Navigation.TrafficDataPage import TrafficDataPage
 from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Widgets.MenuItem import TextMenuItem
 
@@ -29,14 +29,16 @@ class DataCategoriesPage(MFDPage):
 
         self.panel.children = [self.lbl_header, self.pnl_items]
 
+    def handle_selected(self):
         self.set_focus(self.mnu_traffic)
+        super(DataCategoriesPage, self).handle_selected()
 
     def get_button_text(self):
         return "DATA"
 
     def handle_control_state_changed(self, widget):
         if widget is self.mnu_traffic:
-            self.application.select_page(SimpleMessagePage(self.controller, self.application, "TRFC"))
+            self.application.select_page(TrafficDataPage(self.controller, self.application, back_page=self))
             return
 
         super(DataCategoriesPage, self).handle_control_state_changed(widget)
