@@ -6,6 +6,7 @@ Contains application control logic for Pi-MFD.
 from datetime import datetime
 
 import pygame
+from PiMFD.Applications.ANI.ANIApplication import ANIApplication
 
 from PiMFD.Applications.Core.CoreApplication import CoreApplication
 from PiMFD.Applications.Navigation.NavigationApplication import NavigationApp
@@ -74,6 +75,9 @@ class MFDController(object):
 
         # Core App
         self.core_app = CoreApplication(self)
+        
+        # ANI App
+        self.ani_app = ANIApplication(self)
 
         # Navigation app
         self.nav_app = NavigationApp(self)
@@ -91,7 +95,7 @@ class MFDController(object):
 
         self.sys_app = SysApplication(self)
 
-        self.applications = list([self.core_app, self.sys_app, self.nav_app, self.sch_app])
+        self.applications = list([self.core_app, self.ani_app, self.sys_app, self.nav_app, self.sch_app])
         
         self.active_app = self.applications[0]
 

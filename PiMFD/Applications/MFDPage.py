@@ -7,6 +7,7 @@ import traceback
 import pygame
 
 from PiMFD.UI import Keycodes
+from PiMFD.UI.Button import MFDButton
 from PiMFD.UI.ImageRendering import ImageRenderer, WebImageRenderer
 from PiMFD.UI.Pages import UIPage
 from PiMFD.UI.Rendering import render_text_centered, render_triangle_down, render_triangle_up
@@ -28,6 +29,8 @@ class MFDPage(UIPage):
     application = None
     controller = None
 
+    page_button = None
+    
     auto_scroll = True
 
     page_y = 1
@@ -54,6 +57,19 @@ class MFDPage(UIPage):
         self.panel.top = self.panel.pos[1]
 
         self.auto_scroll = auto_scroll
+
+    def get_button(self):
+        
+        # Construct Button as needed
+        if not self.page_button:
+            self.page_button = MFDButton(self.get_button_text())
+        else:
+            self.page_button.text = self.get_button_text()
+            
+        # Selected / Not Selected
+        self.page_button.selected = self.application.active_page is self
+            
+        return self.page_button
 
     def handle_lower_button(self, index):
         return False
