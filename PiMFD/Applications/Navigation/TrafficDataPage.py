@@ -36,5 +36,3 @@ class TrafficDataPage(MFDPage):
             return
         
         return super(TrafficDataPage, self).handle_lower_button(index)
-                
-    

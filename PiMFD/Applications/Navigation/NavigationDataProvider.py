@@ -5,6 +5,7 @@ This file contains a data provider for navigation-related items.
 """
 import pickle
 import traceback
+from PiMFD.Applications.Navigation.TrafficDataPage import TrafficDataPage
 
 from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapLoading import Maps
@@ -170,3 +171,8 @@ class NavigationDataProvider(DataProvider):
         if not self.locations or len(self.locations) <= 0:
             default_location = MapLocation('Default Location', self.options.lat, self.options.lng)
             self.locations = [default_location]
+
+    def get_data_details_page(self, controller, application, back_page=None):
+        return TrafficDataPage(controller, application, back_page=back_page)
+            
+

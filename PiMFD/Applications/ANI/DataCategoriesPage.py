@@ -23,22 +23,41 @@ class DataCategoriesPage(MFDPage):
 
         self.pnl_items = StackPanel(self.display, self)
 
-        self.mnu_traffic = TextMenuItem(self.display, self, "Traffic Incidents")
-        self.mnu_traffic.font = self.controller.display.fonts.list
-        self.pnl_items.children.append(self.mnu_traffic)
-
         self.panel.children = [self.lbl_header, self.pnl_items]
+        
+    def refresh_list(self):
+
+        self.pnl_items.children = []
+
+        for provider in self.controller.data_providers:
+            menu_item = TextMenuItem(self.display, self, provider.name)
+            menu_item.font = self.controller.display.fonts.list
+            menu_item.data_context = provider
+            self.pnl_items.children.append(menu_item)
+
 
     def handle_selected(self):
-        self.set_focus(self.mnu_traffic)
+        
+        self.refresh_list()
+        
+        if len(self.pnl_items.children) > 0:            
+            self.set_focus(self.pnl_items.children[0])
+            
         super(DataCategoriesPage, self).handle_selected()
 
     def get_button_text(self):
         return "DATA"
 
     def handle_control_state_changed(self, widget):
-        if widget is self.mnu_traffic:
-            self.application.select_page(TrafficDataPage(self.controller, self.application, back_page=self))
-            return
-
+        
+        if widget:
+            data_provider = widget.data_context
+        
+            if data_provider:
+                page = data_provider.get_data_details_page(self.controller, self.application, back_page=self)
+                
+                if page:
+                    self.application.select_page(page)
+                    return
+                    
         super(DataCategoriesPage, self).handle_control_state_changed(widget)
