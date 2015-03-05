@@ -4,7 +4,6 @@
 This file contains a definition for the data categories page
 """
 from PiMFD.Applications.MFDPage import MFDPage
-from PiMFD.Applications.Navigation.TrafficDataPage import TrafficDataPage
 from PiMFD.UI.Panels import StackPanel
 from PiMFD.UI.Widgets.MenuItem import TextMenuItem
 
@@ -30,10 +29,12 @@ class DataCategoriesPage(MFDPage):
         self.pnl_items.children = []
 
         for provider in self.controller.data_providers:
-            menu_item = TextMenuItem(self.display, self, provider.name)
-            menu_item.font = self.controller.display.fonts.list
-            menu_item.data_context = provider
-            self.pnl_items.children.append(menu_item)
+            
+            for page in provider.get_data_pages():
+                menu_item = TextMenuItem(self.display, self, page.name)
+                menu_item.font = self.controller.display.fonts.list
+                menu_item.data_context = page
+                self.pnl_items.children.append(menu_item)
 
 
     def handle_selected(self):

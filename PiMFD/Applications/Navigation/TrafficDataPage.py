@@ -3,10 +3,20 @@
 """
 This file contains a traffic data page
 """
+from PiMFD.Applications.ANI.DataPageProvider import DataPageProvider
 from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Button import MFDButton
 
 __author__ = 'Matt Eland'
+
+
+class TrafficDataPageProvider(DataPageProvider):
+    
+    def __init__(self):
+        super(TrafficDataPageProvider, self).__init__("Traffic Data Provider")
+
+    def get_data_details_page(self, controller, application, back_page=None):
+        return TrafficDataPage(controller, application, back_page)
 
 
 class TrafficDataPage(MFDPage):

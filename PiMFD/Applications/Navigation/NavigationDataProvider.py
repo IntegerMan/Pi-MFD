@@ -5,7 +5,8 @@ This file contains a data provider for navigation-related items.
 """
 import pickle
 import traceback
-from PiMFD.Applications.Navigation.TrafficDataPage import TrafficDataPage
+from PiMFD.Applications.ANI.DataPageProvider import DataPageProvider
+from PiMFD.Applications.Navigation.TrafficDataPage import TrafficDataPage, TrafficDataPageProvider
 
 from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapLoading import Maps
@@ -25,6 +26,9 @@ class NavigationDataProvider(DataProvider):
     """
 
     my_locations_file = 'mylocations.pickle'
+    
+    traffic_data_page = None
+    
 
     def __init__(self, application, name="Navigation Data Provider"):
         super(NavigationDataProvider, self).__init__(name)
@@ -36,6 +40,8 @@ class NavigationDataProvider(DataProvider):
         self.traffic = MapTraffic(self.options)
         self.traffic_incidents = None
         self.traffic_widgets = None
+        
+        self.traffic_data_provider = TrafficDataPageProvider()
 
         self.requested_data = False
         
@@ -174,5 +180,9 @@ class NavigationDataProvider(DataProvider):
 
     def get_data_details_page(self, controller, application, back_page=None):
         return TrafficDataPage(controller, application, back_page=back_page)
+    
+    def get_data_pages(self):
+        return [self.traffic_data_provider]
+        
             
 
