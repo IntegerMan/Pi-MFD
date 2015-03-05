@@ -71,7 +71,10 @@ class NavigationDataProvider(DataProvider):
 
             widgets = []
 
-            for incident in self.traffic_incidents:
+            for incident_key in self.traffic_incidents:
+                
+                incident = self.traffic_incidents[incident_key]
+                
                 if incident.description:
                     desc = incident.description[0:15]
                 else:
@@ -138,7 +141,13 @@ class NavigationDataProvider(DataProvider):
     def handle_traffic_data(self, incidents):
 
         self.traffic_widgets = None
-        self.traffic_incidents = incidents
+        if not self.traffic_incidents:
+            self.traffic_incidents = dict()
+            
+        if incidents:
+            for incident in incidents:
+                self.traffic_incidents[incident.id] = incident
+
         self.map.handle_traffic_data(incidents)
 
     def add_location(self, location):

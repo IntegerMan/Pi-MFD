@@ -38,7 +38,10 @@ class TrafficDataPage(DataPage):
         incidents = self.data_provider.traffic_incidents
 
         if incidents:
-            for incident in incidents:
+            for incident_key in incidents:
+                
+                incident = incidents[incident_key]
+                
                 title = '{} ({}, {})'.format(incident.name, incident.lat, incident.lng)
                 menu_item = TextMenuItem(self.display, self, title)
                 menu_item.font = self.controller.display.fonts.list
