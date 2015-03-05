@@ -178,7 +178,7 @@ class NavigationDataProvider(DataProvider):
             self.locations = [default_location]
 
     def get_data_details_page(self, controller, application, back_page=None):
-        return TrafficDataPage(controller, application, back_page=back_page)
+        return TrafficDataPage(controller, application, back_page=back_page, page_provider=self.traffic_data_provider, data_provider=self)
     
     def get_data_pages(self):
         return [self.traffic_data_provider]

@@ -6,6 +6,7 @@ This file contains a traffic data page
 from PiMFD.Applications.ANI.DataCategoriesPage import DataPage
 from PiMFD.Applications.ANI.DataPageProvider import DataPageProvider
 from PiMFD.UI.Button import MFDButton
+from PiMFD.UI.Widgets.MenuItem import TextMenuItem
 
 __author__ = 'Matt Eland'
 
@@ -24,17 +25,25 @@ class TrafficDataPageProvider(DataPageProvider):
 
 class TrafficDataPage(DataPage):
     def __init__(self, controller, application, back_page, page_provider, data_provider, auto_scroll=True):
-        super(TrafficDataPage, self).__init__(controller, application, page_provider, auto_scroll)
         
         self.back_page = back_page
         self.btn_back = MFDButton("BACK")
         self.data_provider = data_provider
         
-    def arrange(self):
-        return super(TrafficDataPage, self).arrange()
+        super(TrafficDataPage, self).__init__(controller, application, page_provider, auto_scroll)
 
-    def render(self):
-        return super(TrafficDataPage, self).render()
+    def refresh_children(self):
+        self.pnl_data.children = []
+        
+        for incident in self.data_provider.traffic_incidents:
+            title = '{} ({}, {})'.format(incident.name, incident.lat, incident.lng)
+            menu_item = TextMenuItem(self.display, self, title)
+            menu_item.font = self.controller.display.fonts.list
+            menu_item.data_context = incident
+            self.pnl_data.children.append(menu_item)
+            
+        if len(self.pnl_data.children) > 0:
+            self.set_focus(self.pnl_data.children[0])
 
     def get_button_text(self):
         return "TRFC"
