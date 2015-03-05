@@ -3,29 +3,32 @@
 """
 This file contains a traffic data page
 """
+from PiMFD.Applications.ANI.DataCategoriesPage import DataPage
 from PiMFD.Applications.ANI.DataPageProvider import DataPageProvider
-from PiMFD.Applications.MFDPage import MFDPage
 from PiMFD.UI.Button import MFDButton
 
 __author__ = 'Matt Eland'
 
 
 class TrafficDataPageProvider(DataPageProvider):
-    
-    def __init__(self):
+    data_provider = None
+
+    def __init__(self, data_provider):
         super(TrafficDataPageProvider, self).__init__("Traffic Data Provider")
 
+        self.data_provider = data_provider
+
     def get_data_details_page(self, controller, application, back_page=None):
-        return TrafficDataPage(controller, application, back_page)
+        return TrafficDataPage(controller, application, back_page, self, self.data_provider)
 
 
-class TrafficDataPage(MFDPage):
-
-    def __init__(self, controller, application, back_page, auto_scroll=True):
-        super(TrafficDataPage, self).__init__(controller, application, auto_scroll)
+class TrafficDataPage(DataPage):
+    def __init__(self, controller, application, back_page, page_provider, data_provider, auto_scroll=True):
+        super(TrafficDataPage, self).__init__(controller, application, page_provider, auto_scroll)
         
         self.back_page = back_page
         self.btn_back = MFDButton("BACK")
+        self.data_provider = data_provider
         
     def arrange(self):
         return super(TrafficDataPage, self).arrange()

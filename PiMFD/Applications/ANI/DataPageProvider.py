@@ -7,6 +7,7 @@ from PiMFD.Applications.PlaceholderPage import SimpleMessagePage
 
 __author__ = 'Matt Eland'
 
+
 class DataPageProvider(object):
     
     def __init__(self, name):

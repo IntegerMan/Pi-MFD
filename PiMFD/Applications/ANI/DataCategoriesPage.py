@@ -10,6 +10,33 @@ from PiMFD.UI.Widgets.MenuItem import TextMenuItem
 __author__ = 'Matt Eland'
 
 
+class DataPage(MFDPage):
+    def __init__(self, controller, application, data_page_provider, auto_scroll=True):
+        super(DataPage, self).__init__(controller, application, auto_scroll)
+
+        self.data_page_provider = data_page_provider
+        self.lbl_header = self.get_header_label(data_page_provider.name)
+        self.pnl_data = StackPanel(controller.display, self)
+
+        self.refresh_children()
+
+        self.panel.children = [self.lbl_header, self.pnl_data]
+
+    def handle_selected(self):
+        self.refresh_children()
+
+        super(DataPage, self).handle_selected()
+
+    def refresh_children(self):
+        pass
+
+    def arrange(self):
+        return super(DataPage, self).arrange()
+
+    def render(self):
+        return super(DataPage, self).render()
+
+
 class DataCategoriesPage(MFDPage):
     """
     The data categories page
