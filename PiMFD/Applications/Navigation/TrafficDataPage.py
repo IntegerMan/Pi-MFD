@@ -34,16 +34,36 @@ class TrafficDataPage(DataPage):
 
     def refresh_children(self):
         self.pnl_data.children = []
-        
-        for incident in self.data_provider.traffic_incidents:
-            title = '{} ({}, {})'.format(incident.name, incident.lat, incident.lng)
-            menu_item = TextMenuItem(self.display, self, title)
-            menu_item.font = self.controller.display.fonts.list
-            menu_item.data_context = incident
-            self.pnl_data.children.append(menu_item)
+
+        incidents = self.data_provider.traffic_incidents
+
+        if incidents:
+            for incident in incidents:
+                title = '{} ({}, {})'.format(incident.name, incident.lat, incident.lng)
+                menu_item = TextMenuItem(self.display, self, title)
+                menu_item.font = self.controller.display.fonts.list
+                menu_item.data_context = incident
+                self.pnl_data.children.append(menu_item)
             
         if len(self.pnl_data.children) > 0:
             self.set_focus(self.pnl_data.children[0])
+
+    def handle_control_state_changed(self, widget):
+
+        if widget:
+            incident = widget.data_context
+            if incident:
+                self.application.show_map(incident.lat, incident.lng)
+                return
+
+        super(TrafficDataPage, self).handle_control_state_changed(widget)
+
+    def arrange(self):
+
+        if self.data_provider.traffic_incidents and len(self.pnl_data.children) <= 0:
+            self.refresh_children()
+
+        return super(TrafficDataPage, self).arrange()
 
     def get_button_text(self):
         return "TRFC"

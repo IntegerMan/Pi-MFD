@@ -53,3 +53,7 @@ class ANIApplication(MFDApplication):
             self.select_page(self.options_page)
         
         super(ANIApplication, self).select_page_by_index(index)
+
+    def show_map(self, lat, lng):
+        self.controller.nav_app.show_map(lat, lng)
+        self.controller.active_app = self.controller.nav_app
