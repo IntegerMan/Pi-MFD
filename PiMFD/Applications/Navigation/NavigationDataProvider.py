@@ -6,7 +6,7 @@ This file contains a data provider for navigation-related items.
 import pickle
 import traceback
 
-from PiMFD.Applications.Navigation.TrafficDataPage import TrafficDataPage, TrafficDataPageProvider
+from PiMFD.Applications.Navigation.TrafficDataPage import TrafficDataPageProvider
 from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapLoading import Maps
 from PiMFD.Applications.Navigation.MapLocations import MapLocation
@@ -40,6 +40,11 @@ class NavigationDataProvider(DataProvider):
         self.traffic_incidents = None
         self.traffic_widgets = None
 
+        self.food_nodes = dict()
+        self.surveillance_nodes = dict()
+        self.gas_nodes = dict()
+        self.shop_nodes = dict()
+
         self.traffic_data_provider = TrafficDataPageProvider(self)
 
         self.requested_data = False
@@ -64,6 +69,21 @@ class NavigationDataProvider(DataProvider):
             self.requested_data = True
 
         super(NavigationDataProvider, self).update(now)
+
+    def register_shape(self, shape):
+
+        if shape.has_tag_value("man_made", "surveillance"):
+            self.surveillance_nodes[shape.id] = shape
+
+        if shape.has_tag("shop"):
+            self.shop_nodes[shape.id] = shape
+
+        if shape.has_tag_value('amenity', 'restaurant') or shape.has_tag_value('amenity', 'fast_food') or shape.has_tag(
+                'cuisine'):
+            self.food_nodes[shape.id] = shape
+
+        if shape.has_tag_value('amenity', 'fuel'):
+            self.gas_nodes[shape.id] = shape
 
     def get_dashboard_widgets(self, display, page):
 
@@ -186,9 +206,6 @@ class NavigationDataProvider(DataProvider):
             default_location = MapLocation('Default Location', self.options.lat, self.options.lng)
             self.locations = [default_location]
 
-    def get_data_details_page(self, controller, application, back_page=None):
-        return TrafficDataPage(controller, application, back_page=back_page, page_provider=self.traffic_data_provider, data_provider=self)
-    
     def get_data_pages(self):
         return [self.traffic_data_provider]
         

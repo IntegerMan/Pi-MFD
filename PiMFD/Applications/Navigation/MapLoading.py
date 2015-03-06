@@ -374,7 +374,7 @@ class Maps(object):
             error_message = "Unhandled error parsing map data {0}\n".format(str(traceback.format_exc()))
             print(error_message)
 
-        self.has_data = self.nodes and len(self.nodes) > 0
-        self.status_text = "Loaded {} Nodes of Map Data".format(len(self.nodes))
+        self.has_data = True
+        self.status_text = None
 
         self.application.map_loaded(self.bounds)

@@ -2,12 +2,10 @@
 """
 The navigation application
 """
-import pickle
-import traceback
 
 from PiMFD.Applications.Application import MFDApplication
 from PiMFD.Applications.Navigation.MapPages import MapPage, MapInfoPage
-from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage, MapLocation, MapLocationAddPage
+from PiMFD.Applications.Navigation.MapLocations import MapLocationsPage, MapLocationAddPage
 from PiMFD.Applications.Navigation.NavigationDataProvider import NavigationDataProvider
 from PiMFD.Applications.Scheduling.Weather.WeatherPages import WeatherPage
 from PiMFD.UI.Button import MFDButton
@@ -151,13 +149,16 @@ class NavigationApp(MFDApplication):
         # Find the first zip code
         zipcode = None
         for shape in self.data_provider.map.shapes:
-            zipcode = shape.get_tag_value('addr:postcode')
+
+            self.data_provider.register_shape(shape)
+
+            # Find first zipcode in the area for weather fetch purposes
             if not zipcode:
-                zipcode = shape.get_tag_value('tiger:zip_left')
-            if not zipcode:
-                zipcode = shape.get_tag_value('tiger:zip_right')
-            if zipcode:
-                break
+                zipcode = shape.get_tag_value('addr:postcode')
+                if not zipcode:
+                    zipcode = shape.get_tag_value('tiger:zip_left')
+                if not zipcode:
+                    zipcode = shape.get_tag_value('tiger:zip_right')
 
         # Get Weather Data for our current location
         if zipcode:
