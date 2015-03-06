@@ -50,7 +50,12 @@ class NavigationDataProvider(DataProvider):
         self.tourism_nodes = dict()
 
         self.traffic_data_provider = TrafficDataPageProvider(self)
+        self.food_data_provider = MapDataPageProvider("Restaurant Data Provider", self.food_nodes)
         self.camera_data_provider = MapDataPageProvider("Camera Data Provider", self.camera_nodes)
+        self.gas_data_provider = MapDataPageProvider("Gas Data Provider", self.gas_nodes)
+        self.shop_data_provider = MapDataPageProvider("Shop Data Provider", self.shop_nodes)
+        self.leisure_data_provider = MapDataPageProvider("Leisure Data Provider", self.leisure_nodes)
+        self.tourism_data_provider = MapDataPageProvider("Tourism Data Provider", self.tourism_nodes)
 
         self.requested_data = False
         
@@ -218,7 +223,13 @@ class NavigationDataProvider(DataProvider):
             self.locations = [default_location]
 
     def get_data_pages(self):
-        return [self.traffic_data_provider, self.camera_data_provider]
+        return [self.traffic_data_provider,
+                self.food_data_provider,
+                self.gas_data_provider,
+                self.shop_data_provider,
+                self.leisure_data_provider,
+                self.tourism_data_provider,
+                self.camera_data_provider]
         
             
 
