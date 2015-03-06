@@ -140,6 +140,10 @@ class MapEntity(object):
                 name = 'Shop ({})'.format(self.get_tag_value('shop'))
             elif self.has_tag('amenity'):
                 name = 'Amenity ({})'.format(self.get_tag_value('amenity'))
+            elif self.has_tag('leisure'):
+                name = 'Leisure ({})'.format(self.get_tag_value('leisure'))
+            elif self.has_tag('tourism'):
+                name = 'Tourism ({})'.format(self.get_tag_value('tourism'))
             elif self.has_tag('man_made'):
                 name = '{}'.format(self.get_tag_value('man_made'))
             else:

@@ -46,6 +46,8 @@ class NavigationDataProvider(DataProvider):
         self.camera_nodes = dict()
         self.gas_nodes = dict()
         self.shop_nodes = dict()
+        self.leisure_nodes = dict()
+        self.tourism_nodes = dict()
 
         self.traffic_data_provider = TrafficDataPageProvider(self)
         self.camera_data_provider = MapDataPageProvider("Camera Data Provider", self.camera_nodes)
@@ -87,6 +89,12 @@ class NavigationDataProvider(DataProvider):
 
         if shape.has_tag_value('amenity', 'fuel'):
             self.gas_nodes[shape.id] = shape
+
+        if shape.has_tag('leisure'):
+            self.leisure_nodes[shape.id] = shape
+            
+        if shape.has_tag('tourism'):
+            self.tourism_nodes[shape.id] = shape
 
     def get_dashboard_widgets(self, display, page):
 
