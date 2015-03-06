@@ -40,3 +40,12 @@ class MapNodesDataPage(DataPage):
         if len(self.pnl_data.children) > 0:
             self.set_focus(self.pnl_data.children[0])
 
+    def handle_control_state_changed(self, widget):
+
+        if widget:
+            incident = widget.data_context
+            if incident:
+                self.application.show_map(incident.lat, incident.lng)
+                return
+
+        super(MapNodesDataPage, self).handle_control_state_changed(widget)

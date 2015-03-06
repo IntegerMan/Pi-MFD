@@ -35,6 +35,11 @@ class DataPage(MFDPage):
 
     def render(self):
         return super(DataPage, self).render()
+    
+    def focus_first_child(self):
+        if len(self.pnl_data.children) > 0:
+            self.set_focus(self.pnl_data.children[0])
+
 
 
 class DataCategoriesPage(MFDPage):

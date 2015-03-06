@@ -48,8 +48,7 @@ class TrafficDataPage(DataPage):
                 menu_item.data_context = incident
                 self.pnl_data.children.append(menu_item)
 
-        if len(self.pnl_data.children) > 0:
-            self.set_focus(self.pnl_data.children[0])
+        self.focus_first_child()
 
     def handle_control_state_changed(self, widget):
 
