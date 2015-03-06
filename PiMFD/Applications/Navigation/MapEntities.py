@@ -131,6 +131,22 @@ class MapEntity(object):
 
         return cs.map_unknown
 
+    def get_menu_name(self):
+
+        name = self.get_display_name()
+
+        if not name:
+            if self.has_tag('shop'):
+                name = 'Shop ({})'.format(self.get_tag_value('shop'))
+            elif self.has_tag('amenity'):
+                name = 'Amenity ({})'.format(self.get_tag_value('amenity'))
+            elif self.has_tag('man_made'):
+                name = '{}'.format(self.get_tag_value('man_made'))
+            else:
+                name = 'Unknown'
+
+        return "{} ({}, {})".format(name, self.lat, self.lng)
+
     def get_display_name(self, abbreviate=True):
 
         """

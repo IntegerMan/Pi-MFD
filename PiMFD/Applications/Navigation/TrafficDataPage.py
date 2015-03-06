@@ -47,7 +47,7 @@ class TrafficDataPage(DataPage):
                 menu_item.font = self.controller.display.fonts.list
                 menu_item.data_context = incident
                 self.pnl_data.children.append(menu_item)
-            
+
         if len(self.pnl_data.children) > 0:
             self.set_focus(self.pnl_data.children[0])
 

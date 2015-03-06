@@ -6,6 +6,8 @@ This file contains a data provider for navigation-related items.
 import pickle
 import traceback
 
+from PiMFD.Applications.Navigation.MapDataPage import MapDataPageProvider
+
 from PiMFD.Applications.Navigation.TrafficDataPage import TrafficDataPageProvider
 from PiMFD.Applications.Navigation.MapContexts import MapContext
 from PiMFD.Applications.Navigation.MapLoading import Maps
@@ -41,11 +43,12 @@ class NavigationDataProvider(DataProvider):
         self.traffic_widgets = None
 
         self.food_nodes = dict()
-        self.surveillance_nodes = dict()
+        self.camera_nodes = dict()
         self.gas_nodes = dict()
         self.shop_nodes = dict()
 
         self.traffic_data_provider = TrafficDataPageProvider(self)
+        self.camera_data_provider = MapDataPageProvider("Camera Data Provider", self.camera_nodes)
 
         self.requested_data = False
         
@@ -73,7 +76,7 @@ class NavigationDataProvider(DataProvider):
     def register_shape(self, shape):
 
         if shape.has_tag_value("man_made", "surveillance"):
-            self.surveillance_nodes[shape.id] = shape
+            self.camera_nodes[shape.id] = shape
 
         if shape.has_tag("shop"):
             self.shop_nodes[shape.id] = shape
@@ -207,7 +210,7 @@ class NavigationDataProvider(DataProvider):
             self.locations = [default_location]
 
     def get_data_pages(self):
-        return [self.traffic_data_provider]
+        return [self.traffic_data_provider, self.camera_data_provider]
         
             
 
