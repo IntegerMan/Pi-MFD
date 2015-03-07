@@ -39,6 +39,7 @@ class MFDAppOptions(object):
     force_square_resolution = False
     mfd_controller_rotation = CougarMFDInputHandler.rotation_left
     save_map_to_disk = True
+    profile = False
 
     def load_from_settings(self, filename='settings.ini'):
         """

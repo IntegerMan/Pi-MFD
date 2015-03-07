@@ -1,9 +1,12 @@
 # coding=utf-8
 
 from __future__ import print_function
+import cProfile
 from datetime import datetime
+import pstats
 from threading import Thread
 import traceback
+from StringIO import StringIO
 
 from PiMFD.Applications.Navigation.MapLines import MapLine
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
@@ -76,6 +79,19 @@ class MapLoadThread(Thread):
     def run(self):
         super(MapLoadThread, self).run()
 
+        if self.map_loader.profile:
+            pr = cProfile.Profile()
+            pr.enable()
+            self.load_data()
+            pr.disable()
+            stream = open('map_load.txt', 'w')
+            stats = pstats.Stats(pr, stream=stream)
+            stats.sort_stats('time').print_stats()
+            stream.close()
+        else:
+            self.load_data()
+
+    def load_data(self):
         self.map_loader.status_text = 'Requesting Data...'
 
         data = self.request_map_data(self.bounds, self.map_loader)
@@ -111,6 +127,7 @@ class Maps(object):
     height = 0
     bounds = None
     last_data_received = None
+    profile = False
 
     has_data = False
     status_text = "Loading Map Data..."

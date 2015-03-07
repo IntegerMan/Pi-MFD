@@ -62,6 +62,10 @@ class NavigationDataProvider(DataProvider):
         self.locations = None
         
         self.map = Maps(self)
+        
+        if self.options.profile:
+            self.map.profile = True
+            
         self.map.output_file = self.options.map_output_file
 
         self.map_context = MapContext(self.application, self.map, self)
