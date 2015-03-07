@@ -181,6 +181,25 @@ class NavigationDataProvider(DataProvider):
                 self.camera_widget.status = DashboardStatus.Passive
                 widgets.append(self.camera_widget)
 
+        # Create a Restaurants Widget
+        if self.food_data_provider and not self.food_widget:
+            self.food_widget = TextDashboardWidget(display, page, 'Food & Drink', '')
+
+        # Populate Restaurant Data
+        if self.food_data_provider and self.food_widget:
+            count = len(self.food_data_provider.data_source)
+            if count <= 0:
+                self.food_widget.value = 'No Restaurants'
+                self.food_widget.status = DashboardStatus.Inactive
+            elif count == 1:
+                self.food_widget.value = '1 Restaurant'
+                self.food_widget.status = DashboardStatus.Passive
+                widgets.append(self.food_widget)
+            else:
+                self.food_widget.value = '{} Restaurants'.format(count)
+                self.food_widget.status = DashboardStatus.Passive
+                widgets.append(self.food_widget)
+
         return widgets
 
     def get_map_data(self, bounds=None, lat=None, lng=None):
