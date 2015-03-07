@@ -28,6 +28,7 @@ __author__ = 'Multiple'
 
 
 class MapLoadThread(Thread):
+
     def __init__(self, map_loader, bounds, group=None, target=None, name=None, args=(), kwargs=None, verbose=None):
         super(MapLoadThread, self).__init__(group, target, name, args, kwargs, verbose)
 
@@ -122,6 +123,11 @@ class Maps(object):
     lat = None
     lng = None
 
+    last_width = 0
+    last_height = 0
+    w_coef = 0
+    h_coef = 0
+
     def __init__(self, data_provider):
         super(Maps, self).__init__()
 
@@ -188,10 +194,14 @@ class Maps(object):
         width = dimensions[0]
         height = dimensions[1]
 
-        w_coef = width / self.width / 2
-        h_coef = height / self.height / 2
+        if self.last_width != width or self.last_height != height:
+            self.w_coef = width / self.width / 2
+            self.h_coef = height / self.height / 2
 
-        return w_coef, h_coef
+            self.last_width = width
+            self.last_height = height
+
+        return self.w_coef, self.h_coef
 
     def translate_shapes(self, dimensions, offset):
 
