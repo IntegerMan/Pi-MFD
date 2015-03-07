@@ -50,6 +50,8 @@ class NavigationDataProvider(DataProvider):
         self.tourism_nodes = dict()
         
         self.gas_widget = None
+        self.camera_widget = None
+        self.food_widget = None
 
         self.traffic_data_provider = TrafficDataPageProvider(self)
         self.food_data_provider = MapDataPageProvider("Restaurant Data Provider", self.food_nodes)
@@ -111,6 +113,7 @@ class NavigationDataProvider(DataProvider):
 
         widgets = []
 
+        # Build out the widgets
         if self.traffic_incidents and not self.traffic_widgets:
             
             traffic_widgets = []
@@ -140,9 +143,11 @@ class NavigationDataProvider(DataProvider):
 
             self.traffic_widgets = traffic_widgets
             
+        # Create a Gas Widget
         if self.gas_data_provider and not self.gas_widget:
             self.gas_widget = TextDashboardWidget(display, page, 'Gas Stations', '')
             
+        # Populate Gas Data
         if self.gas_data_provider and self.gas_widget:
             count = len(self.gas_data_provider.data_source)
             if count <= 0:
@@ -156,6 +161,25 @@ class NavigationDataProvider(DataProvider):
                 self.gas_widget.value = '{} Gas Stations'.format(count)
                 self.gas_widget.status = DashboardStatus.Passive
                 widgets.append(self.gas_widget)
+
+        # Create a Cameras Widget
+        if self.camera_data_provider and not self.camera_widget:
+            self.camera_widget = TextDashboardWidget(display, page, 'Surveillance', '')
+
+        # Populate Camera Data
+        if self.camera_data_provider and self.camera_widget:
+            count = len(self.camera_data_provider.data_source)
+            if count <= 0:
+                self.camera_widget.value = 'No Cameras'
+                self.camera_widget.status = DashboardStatus.Inactive
+            elif count == 1:
+                self.camera_widget.value = '1 Camera'
+                self.camera_widget.status = DashboardStatus.Passive
+                widgets.append(self.camera_widget)
+            else:
+                self.camera_widget.value = '{} Cameras'.format(count)
+                self.camera_widget.status = DashboardStatus.Passive
+                widgets.append(self.camera_widget)
 
         return widgets
 
