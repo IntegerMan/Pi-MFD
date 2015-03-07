@@ -48,6 +48,8 @@ class NavigationDataProvider(DataProvider):
         self.shop_nodes = dict()
         self.leisure_nodes = dict()
         self.tourism_nodes = dict()
+        
+        self.gas_widget = None
 
         self.traffic_data_provider = TrafficDataPageProvider(self)
         self.food_data_provider = MapDataPageProvider("Restaurant Data Provider", self.food_nodes)
@@ -107,9 +109,11 @@ class NavigationDataProvider(DataProvider):
 
     def get_dashboard_widgets(self, display, page):
 
-        if self.traffic_incidents and not self.traffic_widgets:
+        widgets = []
 
-            widgets = []
+        if self.traffic_incidents and not self.traffic_widgets:
+            
+            traffic_widgets = []
 
             for incident_key in self.traffic_incidents:
                 
@@ -130,12 +134,30 @@ class NavigationDataProvider(DataProvider):
                         widget.status = DashboardStatus.Passive
                     elif sev >= 4:
                         widget.status = DashboardStatus.Critical
-                    
+
+                traffic_widgets.append(widget)
                 widgets.append(widget)
 
-            self.traffic_widgets = widgets
+            self.traffic_widgets = traffic_widgets
             
-        return self.traffic_widgets
+        if self.gas_data_provider and not self.gas_widget:
+            self.gas_widget = TextDashboardWidget(display, page, 'Gas Stations', '')
+            
+        if self.gas_data_provider and self.gas_widget:
+            count = len(self.gas_data_provider.data_source)
+            if count <= 0:
+                self.gas_widget.value = 'No Gas Stations'
+                self.gas_widget.status = DashboardStatus.Inactive
+            elif count == 1:
+                self.gas_widget.value = '1 Gas Station'
+                self.gas_widget.status = DashboardStatus.Passive
+                widgets.append(self.gas_widget)
+            else:
+                self.gas_widget.value = '{} Gas Stations'.format(count)
+                self.gas_widget.status = DashboardStatus.Passive
+                widgets.append(self.gas_widget)
+
+        return widgets
 
     def get_map_data(self, bounds=None, lat=None, lng=None):
 

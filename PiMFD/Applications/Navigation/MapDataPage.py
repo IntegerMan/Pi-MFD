@@ -12,6 +12,7 @@ __author__ = 'Matt Eland'
 
 
 class MapDataPageProvider(DataPageProvider):
+    
     def __init__(self, name, data_source):
         super(MapDataPageProvider, self).__init__(name)
 
@@ -22,6 +23,7 @@ class MapDataPageProvider(DataPageProvider):
 
 
 class MapNodesDataPage(DataPage):
+    
     def __init__(self, controller, application, data_page_provider, back_page=None, auto_scroll=True):
         super(MapNodesDataPage, self).__init__(controller, application, data_page_provider, auto_scroll)
 
@@ -45,7 +47,6 @@ class MapNodesDataPage(DataPage):
             return
 
         return super(MapNodesDataPage, self).handle_lower_button(index)
-
 
     def refresh_children(self):
 

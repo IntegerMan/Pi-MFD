@@ -25,6 +25,7 @@ class MapZooms(object):
     large = 0.02
     medium = 0.0125
     local = 0.0075
+    semi_local = 0.005
     neighborhood = 0.0025
 
 class MapContext(object):
@@ -58,8 +59,11 @@ class MapContext(object):
 
         # If we're on a small display, start out at a small zoom
         size = app.display.get_content_size()
-        if min(size[0], size[1]) <= 480:
-            self.map_zoom = MapZooms.neighborhood
+        min_size = min(size[0], size[1])
+        if min_size <= 320:
+            self.map_zoom = MapZooms.local
+        if min_size <= 480:
+            self.map_zoom = MapZooms.semi_local
 
         self.tag_handlers = TagHandlerManager(self)
         self.tag_handlers.add_handler('highway', HighwayTagHandler(self))

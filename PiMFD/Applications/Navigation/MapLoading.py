@@ -6,7 +6,6 @@ from datetime import datetime
 import pstats
 from threading import Thread
 import traceback
-from StringIO import StringIO
 
 from PiMFD.Applications.Navigation.MapLines import MapLine
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
