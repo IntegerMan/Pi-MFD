@@ -240,21 +240,21 @@ class Maps(object):
 
         return rel_lat, rel_lng
 
-    def translate_lat_lng_to_x_y(self, rel_lat, rel_lng, dim_coef, offset, multiplier=-1):
+    def translate_lat_lng_to_x_y(self, rel_lat, rel_lng, dim_coef, offset):
 
         # Scale the location accordingly
         y = (rel_lat * dim_coef[1]) + offset[1]
-        x = (rel_lng * dim_coef[0] * multiplier) + offset[0]
+        x = (rel_lng * -dim_coef[0]) + offset[0]
 
         return x, y
 
-    def translate_x_y_to_rel_lat_lng(self, x, y, dim_coef, offset, multiplier=-1):
+    def translate_x_y_to_rel_lat_lng(self, x, y, dim_coef, offset):
 
         if dim_coef[0] == 0 or dim_coef[1] == 0:
             return 0, 0
 
         rel_lat = (y - offset[1]) / dim_coef[1]
-        rel_lng = (x - offset[0]) / multiplier / dim_coef[0]
+        rel_lng = (x - offset[0]) / -dim_coef[0]
 
         return rel_lat, rel_lng
 
@@ -265,9 +265,9 @@ class Maps(object):
 
         return lat, lng
 
-    def translate_x_y_to_lat_lng(self, x, y, dim_coef, offset, multiplier=-1):
+    def translate_x_y_to_lat_lng(self, x, y, dim_coef, offset):
 
-        rel_lat, rel_lng = self.translate_x_y_to_rel_lat_lng(x, y, dim_coef, offset, multiplier)
+        rel_lat, rel_lng = self.translate_x_y_to_rel_lat_lng(x, y, dim_coef, offset)
 
         return self.translate_rel_to_absolute_gps(rel_lat, rel_lng)
 
