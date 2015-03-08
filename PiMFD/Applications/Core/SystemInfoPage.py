@@ -33,7 +33,6 @@ class SysInfoPage(MFDPage):
             SpacerLine(self.display, self),
             lbl_sys_header,
             self.lbl_sys_name,
-            self.lbl_sys_processor,
             self.lbl_sys_net_id,
             self.lbl_sys_display,
             self.lbl_sys_python
