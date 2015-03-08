@@ -153,7 +153,7 @@ class MapLocationDetailsPage(MFDPage):
             self.location.name = self.txt_name.text
             self.location.lat = self.txt_lat.text
             self.location.lng = self.txt_lng.text
-            self.application.save_locations()
+            self.application.data_provider.save_locations()
 
             self.application.select_page(self.back_page)
             return True

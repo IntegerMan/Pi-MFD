@@ -244,19 +244,6 @@ def get_weather_from_weather_com(location_id, units = 'metric'):
     dom.unlink()
     return weather_data
 
-def get_weather_from_google(location_id, hl = ''): 		
-    """Fetches weather report from Google. No longer functional,
-    since Google discontinued their Weather API as of Sep 2012.
-    Method retained for backwards compatibility.
-
-    Returns:
-    weather_data: a dictionary containing only the key 'error'
-
-    """
-    weather_data = {'error': 'The Google Weather API has been ' + \
-                             'discontinued as of September 2012.'}
-    return weather_data
-
 def get_countries_from_google(hl = ''):
     """Get list of countries in specified language from Google
     
