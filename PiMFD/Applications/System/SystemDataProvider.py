@@ -3,13 +3,16 @@
 """
 This file contains a data provider for system data
 """
-import psutil
+try:
+    import psutil
+except:
+    psutil = None
 
 from PiMFD.Applications.System.CpuDashboardWidget import CpuDashboardWidget
 from PiMFD.Applications.System.DiskPages import DiskDrive
 
 from PiMFD.DataProvider import DataProvider
-from PiMFD.UI.Widgets.DashboardWidget import TextDashboardWidget, BarChartDashboardWidget, DashboardStatus
+from PiMFD.UI.Widgets.DashboardWidget import BarChartDashboardWidget, DashboardStatus
 
 
 __author__ = 'Matt Eland'
