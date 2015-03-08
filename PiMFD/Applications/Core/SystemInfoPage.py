@@ -56,7 +56,7 @@ class SysInfoPage(MFDPage):
         self.lbl_app_legal.text_data = opts.app_author, opts.copyright_year
         self.lbl_sys_name.text_data = platform.platform(), platform.release(), platform.machine()
         self.lbl_sys_processor.text_data = platform.processor()
-        self.lbl_sys_processor.visible = self.lbl_sys_processor.text_data
+        self.lbl_sys_processor.visible = self.lbl_sys_processor.text_data and len(self.lbl_sys_processor.text_data) > 0
         self.lbl_sys_net_id.text_data = platform.node()
         self.lbl_sys_display.text_data = self.display.bounds.right, self.display.bounds.bottom
         self.lbl_sys_python.text_data = platform.python_version(), platform.python_implementation(), platform.python_compiler()
