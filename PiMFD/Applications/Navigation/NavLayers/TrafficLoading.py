@@ -3,7 +3,10 @@ from threading import Thread
 from time import gmtime, strftime
 import traceback
 
-import requests
+try:
+    import requests
+except:
+    requests = None
 
 from PiMFD.Applications.Navigation.MapSymbols import MapSymbol
 
@@ -41,6 +44,10 @@ class TrafficFetchThread(Thread):
 
     def run(self):
         super(TrafficFetchThread, self).run()
+
+        if not requests:
+            print("Requests not installed.")
+            return
 
         bounds = self.bounds
 
