@@ -7,6 +7,7 @@ from datetime import datetime
 
 from PiMFD.Applications.Scheduling.Weather.WeatherAPIWrapper import WeatherAPI
 from PiMFD.Applications.Scheduling.Weather.WeatherDashboardWidget import WeatherForecastDashboardWidget
+from PiMFD.Applications.Scheduling.Weather.WeatherFrostPredictor import WeatherFrostPredictor
 from PiMFD.DataProvider import DataProvider
 
 
@@ -17,6 +18,7 @@ class WeatherDataProvider(DataProvider):
     weather_data = None
     weather_api = None
     last_request = None
+    frost = None
     refresh_interval_minutes = 15
 
     def __init__(self, application, options):
@@ -28,6 +30,7 @@ class WeatherDataProvider(DataProvider):
         self.current_conditions_widget = None
         self.tomorrow_conditions_widget = None
         self.today_forecast_widget = None
+        self.frost = WeatherFrostPredictor()
 
     def update(self, now):
 
@@ -49,6 +52,7 @@ class WeatherDataProvider(DataProvider):
             now = datetime.now()
             self.last_request = now
             self.weather_api.get_yahoo_weather_async(self.options.location, consumer)
+            self.frost.GetFrostPredictions()
 
     def get_weather_for_zip(self, zip, consumer=None, updateError=False):
 
@@ -104,6 +108,8 @@ class WeatherDataProvider(DataProvider):
                 self.tomorrow_conditions_widget = self.build_weather(display, page, self.tomorrow_conditions_widget,
                                                                      "Tomorrow", 1, True)
             else:
-                self.current_conditions_widget.forecast = self.weather_data.forecasts[1]
+                self.tomorrow_conditions_widget.forecast = self.weather_data.forecasts[1]
+
+            self.tomorrow_conditions_widget.minutes_to_clean_frost = self.frost.minutes_to_clean_frost
 
         return [self.current_conditions_widget, self.today_forecast_widget, self.tomorrow_conditions_widget]

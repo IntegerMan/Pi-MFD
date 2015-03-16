@@ -32,6 +32,7 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         self.forecast = forecast
         self.weather = weather
         self.is_forecast = is_forecast
+        self.minutes_to_clean_frost = None
 
         self.panel = StackPanel(display, page)
 
@@ -47,7 +48,7 @@ class WeatherForecastDashboardWidget(DashboardWidget):
 
         self.lbl_value = TextBlock(display, page, "Offline")
         self.lbl_value.font = display.fonts.list
-        
+
         pnl_value.children = [self.lbl_value, self.lbl_condition]
         
         self.panel.children.append(pnl_value)
@@ -60,6 +61,10 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         self.chart.box_width = 0
         self.chart.ticks = (0, 32, 100)
         self.panel.children.append(self.chart)
+
+        self.lbl_frost = TextBlock(display, page, None)
+        self.lbl_frost.font = display.fonts.list
+        self.panel.children.append(self.lbl_frost)
 
     def render(self):
 
@@ -104,6 +109,13 @@ class WeatherForecastDashboardWidget(DashboardWidget):
         else:
             self.lbl_condition.text_data = None
             self.lbl_value.text = 'Offline'
+
+        if self.minutes_to_clean_frost and self.minutes_to_clean_frost > 0.1:
+            self.lbl_frost.visible = True
+            self.lbl_frost.text = '{} Minutes Frost'.format(round(self.minutes_to_clean_frost, 1))
+        else:
+            self.lbl_frost.visible = False
+            self.lbl_frost.text = None
 
         if self.forecast:
 
