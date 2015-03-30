@@ -20,6 +20,7 @@ class ForecastData(object):
     precipitation_chance = 'UKN'
     conditions = 'Unknown'
     code = -1
+    minutes_to_clean_frost = None
 
     def parse_yahoo_data(self, data, temp_suffix):
         self.data = data
@@ -30,6 +31,17 @@ class ForecastData(object):
         self.date = data["date"]
         self.day = data["day"]
         self.code = int(data["code"])
+
+    def parse_ani_data(self, data, temp_suffix):
+        self.data = data
+        self.conditions = data.Description
+        self.high = data.High
+        self.low = data.Low
+        self.temp_range = str(data.Low) + '-' + str(data.High) + temp_suffix
+        self.date = data.ForecastDate
+        self.day = data.ForecastDate.strftime('%a')
+        self.code = data.WeatherCode
+        self.minutes_to_clean_frost = data.MinutesToDefrost
 
 
 class WeatherData(object):
@@ -118,36 +130,36 @@ class WeatherData(object):
 
         degree_sign = u'\N{DEGREE SIGN}'
 
-        self.conditions = ani_data.Condition.Description
-        self.code = ani_data.Condition.WeatherCode
-        self.temperature = ani_data.Condition.Temperature
-        self.temp_units = degree_sign + 'F'
-        self.sunrise = ani_data.Condition.Sunrise
-        self.sunset = ani_data.Condition.Sunset
-        self.wind_speed = ani_data.Condition.WindSpeed
-        self.wind_units = 'mph'
-        self.wind_direction = ani_data.Condition.WindDirection + degree_sign
-        self.wind_numeric_direction = ani_data.Condition.WindDirection
-        self.wind_cardinal_direction = ani_data.Condition.WindCardinalDirection
-        self.windchill = ani_data.Condition.WindChill
+        self.conditions = ani_data.Conditions.Description
+        self.code = ani_data.Conditions.WeatherCode
+        self.temperature = ani_data.Conditions.Temperature
+        self.temp_units = degree_sign + ani_data.TemperatureUnits
+        self.sunrise = ani_data.Conditions.Sunrise
+        self.sunset = ani_data.Conditions.Sunset
+        self.wind_speed = ani_data.Conditions.WindSpeed
+        self.wind_units = ani_data.WindUnits
+        self.wind_direction = str(ani_data.Conditions.WindDirection) + degree_sign
+        self.wind_numeric_direction = ani_data.Conditions.WindDirection
+        self.wind_cardinal_direction = ani_data.Conditions.WindCardinalDirection
+        self.windchill = ani_data.Conditions.WindChill
         self.city = ani_data.City
-        self.humidity = ani_data.Condition.Humidity
-        self.pressure = ani_data.Condition.Pressure
-        self.pressure_units = 'in'
-        self.visibility_units = 'mi'
-        self.visibility = ani_data.Condition.Visibility
-        self.last_result = ani_data.Condition.WeatherDate
-        self.gps = float(ani_data.Condition.Lat), float(ani_data.Condition.Long)
+        self.humidity = ani_data.Conditions.Humidity
+        self.pressure = ani_data.Conditions.Pressure
+        self.pressure_units = ani_data.PressureUnits
+        self.visibility_units = ani_data.VisibilityUnits
+        self.visibility = ani_data.Conditions.Visibility
+        self.last_result = ani_data.Conditions.WeatherDate
+        self.gps = float(ani_data.Lat), float(ani_data.Long)
         self.lat = str(ani_data.Lat) + degree_sign
         self.long = str(ani_data.Long) + degree_sign
 
         # Interpret forecasts
         self.forecasts = list()
-        for forecast_data in ani_data.Forecasts:
+
+        for index in range(0, len(ani_data.Forecasts[0])):
             forecast = ForecastData()
-            i = 35
-            # forecast.parse_yahoo_data(forecast_data, degree_sign + degree_symbol)
-            # self.forecasts.append(forecast)
+            forecast.parse_ani_data(ani_data.Forecasts[0][index], degree_sign + ani_data.TemperatureUnits)
+            self.forecasts.append(forecast)
 
     def parse_yahoo_data(self, yahoo_data):
         """

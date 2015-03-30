@@ -25,7 +25,10 @@ class WeatherFetchThread(Thread):
         super(WeatherFetchThread, self).run()
 
         if self.consumer:
-            weather = WeatherAPI.get_yahoo_weather(self.location)
+            weather = WeatherAPI.get_ani_weather(self.location)
+
+            if not weather:
+                weather = WeatherAPI.get_yahoo_weather(self.location)
 
             if weather:
                 self.consumer.weather_received(self.location, weather)
@@ -35,9 +38,8 @@ class WeatherAPI(object):
 
     @staticmethod
     def get_ani_weather(location):
-        print('fetching ANI weather data for ' + location)
         client = Client("http://www.matteland.com/ANIServices/AniService.svc?wsdl")
-        data = client.service.GetWeatherData(location)
+        data = client.service.GetWeatherData('username', 'userapikey', location)  # TODO: Grab these from somewhere
 
         weather_data = WeatherData()
         weather_data.parse_ani_data(data)
@@ -49,8 +51,6 @@ class WeatherAPI(object):
 
         if not pywapi:
             return None
-
-        print('fetching Yahoo weather data for ' + location)
 
         weather_data = WeatherData()
         weather_data.parse_yahoo_data(pywapi.get_weather_from_yahoo(str(location), units='imperial'))
