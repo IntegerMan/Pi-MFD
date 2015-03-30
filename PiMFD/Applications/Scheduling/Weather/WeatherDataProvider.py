@@ -51,14 +51,14 @@ class WeatherDataProvider(DataProvider):
         if self.options.location:
             now = datetime.now()
             self.last_request = now
-            self.weather_api.get_yahoo_weather_async(self.options.location, consumer)
+            self.weather_api.get_weather_async(self.options.location, consumer)
             self.frost.GetFrostPredictions()
 
     def get_weather_for_zip(self, zip, consumer=None, updateError=False):
 
         try:
             if consumer:
-                self.weather_api.get_yahoo_weather_async(zip, consumer)
+                self.weather_api.get_weather_async(zip, consumer)
             else:
                 return self.weather_api.get_yahoo_weather(zip)
 

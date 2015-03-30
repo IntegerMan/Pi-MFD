@@ -1,5 +1,8 @@
 from threading import Thread
 
+from suds.client import Client
+
+
 try:
     import pywapi
 except ImportError:
@@ -31,16 +34,29 @@ class WeatherFetchThread(Thread):
 class WeatherAPI(object):
 
     @staticmethod
+    def get_ani_weather(location):
+        print('fetching ANI weather data for ' + location)
+        client = Client("http://www.matteland.com/ANIServices/AniService.svc?wsdl")
+        data = client.service.GetWeatherData(location)
+
+        weather_data = WeatherData()
+        weather_data.parse_ani_data(data)
+
+        return weather_data
+
+    @staticmethod
     def get_yahoo_weather(location):
 
         if not pywapi:
             return None
+
+        print('fetching Yahoo weather data for ' + location)
 
         weather_data = WeatherData()
         weather_data.parse_yahoo_data(pywapi.get_weather_from_yahoo(str(location), units='imperial'))
         return weather_data
 
     @staticmethod
-    def get_yahoo_weather_async(location, consumer):
+    def get_weather_async(location, consumer):
         thread = WeatherFetchThread(location, consumer)
         thread.start()

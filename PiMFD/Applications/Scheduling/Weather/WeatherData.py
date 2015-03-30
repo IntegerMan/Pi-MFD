@@ -108,6 +108,47 @@ class WeatherData(object):
 
         return tags
 
+    def parse_ani_data(self, ani_data):
+        """
+        Takes data from ANI's weather data services and puts them into a weather object
+        :param ani_data: The weather data from ANI services
+        """
+
+        self.data = ani_data
+
+        degree_sign = u'\N{DEGREE SIGN}'
+
+        self.conditions = ani_data.Condition.Description
+        self.code = ani_data.Condition.WeatherCode
+        self.temperature = ani_data.Condition.Temperature
+        self.temp_units = degree_sign + 'F'
+        self.sunrise = ani_data.Condition.Sunrise
+        self.sunset = ani_data.Condition.Sunset
+        self.wind_speed = ani_data.Condition.WindSpeed
+        self.wind_units = 'mph'
+        self.wind_direction = ani_data.Condition.WindDirection + degree_sign
+        self.wind_numeric_direction = ani_data.Condition.WindDirection
+        self.wind_cardinal_direction = ani_data.Condition.WindCardinalDirection
+        self.windchill = ani_data.Condition.WindChill
+        self.city = ani_data.City
+        self.humidity = ani_data.Condition.Humidity
+        self.pressure = ani_data.Condition.Pressure
+        self.pressure_units = 'in'
+        self.visibility_units = 'mi'
+        self.visibility = ani_data.Condition.Visibility
+        self.last_result = ani_data.Condition.WeatherDate
+        self.gps = float(ani_data.Condition.Lat), float(ani_data.Condition.Long)
+        self.lat = str(ani_data.Lat) + degree_sign
+        self.long = str(ani_data.Long) + degree_sign
+
+        # Interpret forecasts
+        self.forecasts = list()
+        for forecast_data in ani_data.Forecasts:
+            forecast = ForecastData()
+            i = 35
+            # forecast.parse_yahoo_data(forecast_data, degree_sign + degree_symbol)
+            # self.forecasts.append(forecast)
+
     def parse_yahoo_data(self, yahoo_data):
         """
         Takes data from Yahoo Weather services, in the form of a dictionary, and parses it into an object that can be
