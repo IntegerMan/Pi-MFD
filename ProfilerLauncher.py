@@ -1,6 +1,7 @@
 # coding=utf-8
 """
-A windowed-mode entry point for Pi-MFD with Profiling active
+A windowed-mode entry point for Pi-MFD with Profiling active.
+The output of the profiler results will be sent to performance.txt
 """
 import pstats
 import traceback
