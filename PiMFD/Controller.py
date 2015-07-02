@@ -6,8 +6,8 @@ Contains application control logic for Pi-MFD.
 from datetime import datetime
 
 import pygame
-from PiMFD.Applications.ANI.ANIApplication import ANIApplication
 
+from PiMFD.Applications.ANI.ANIApplication import ANIApplication
 from PiMFD.Applications.Core.CoreApplication import CoreApplication
 from PiMFD.Applications.Navigation.NavigationApplication import NavigationApp
 from PiMFD.Applications.Scheduling.ScheduleApplication import ScheduleApp
@@ -134,9 +134,6 @@ class MFDController(object):
                 
             elif event.type == pygame.JOYBUTTONDOWN:
                 self.handle_joystick_button_down(event.button)
-                
-            else:
-                print("Event: {}".format(str(event)))
 
     def get_active_page(self):
         """
